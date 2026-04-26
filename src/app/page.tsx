@@ -1,13 +1,21 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
   title: 'MulliganLinks — Your home course, redone right.',
   description: 'The local-first golf membership. Zero booking fees, real rewards, and every dollar goes to the courses you love — not to GolfNow.',
 }
 
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = await createClient()
+  const { data: counter } = await supabase
+    .from('founding_partner_counter')
+    .select('count, cap')
+    .single()
+  const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
@@ -40,41 +48,124 @@ export default function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white border border-[#1B4332]/20 rounded-full px-4 py-1.5">
             <span className="size-2 rounded-full bg-[#1B4332] animate-pulse" />
-            <span className="text-sm font-medium text-[#1B4332]">Now accepting pilot courses</span>
+            <span className="text-sm font-medium text-[#1B4332]">Coming soon to Metro Detroit</span>
           </div>
 
-          {/* Headline */}
           <h1 className="text-5xl sm:text-6xl font-bold text-[#1A1A1A] leading-tight tracking-tight">
-            Your home course,{' '}
-            <span className="text-[#1B4332]">redone right.</span>
+            The Local-First{' '}
+            <span className="text-[#1B4332]">Golf Loyalty Network</span>
           </h1>
 
-          {/* Subhead */}
           <p className="text-xl text-[#6B7770] leading-relaxed max-w-2xl mx-auto">
-            GolfNow takes 20–30% from every tee time. MulliganLinks gives that back —
-            to you and to the courses you play.
+            Free software for courses. Real loyalty for golfers. Zero booking fees, always.
           </p>
 
-          {/* CTAs */}
+          {/* Dual CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
-              href="/signup"
+              href="/waitlist/golfer"
               className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-7 py-3 text-base font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
             >
-              Start Free
+              ⛳ I&apos;m a Golfer — Join the Waitlist
             </Link>
             <Link
-              href="/contact"
-              className="inline-flex items-center justify-center rounded-lg border border-[#1B4332] px-7 py-3 text-base font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
+              href="/waitlist/course"
+              className="inline-flex flex-col items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-7 py-3 text-base font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
             >
-              For Courses
+              <span>I Run a Course — Claim a Founding Spot</span>
+              <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+                {spotsRemaining > 0
+                  ? `${spotsRemaining} of 10 spots remaining`
+                  : 'All Founding spots claimed — join the Core waitlist'}
+              </span>
             </Link>
           </div>
 
-          {/* Trust line */}
-          <p className="text-sm text-[#6B7770]">
-            No credit card required · Cancel anytime
-          </p>
+          <p className="text-sm text-[#6B7770]">No credit card required · Metro Detroit launch</p>
+        </div>
+      </section>
+
+      {/* ── Two-Column Value Props ──────────────────────────────── */}
+      <section className="px-6 py-20 bg-white">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
+
+          {/* Golfer column */}
+          <div className="space-y-6">
+            <div className="inline-block bg-[#1B4332]/10 text-[#1B4332] text-sm font-semibold px-3 py-1 rounded-full">
+              For Golfers
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+              Eagle beats GolfPass+ on every metric — for $40 less.
+            </h2>
+            <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-[#1B4332] text-[#FAF7F2]">
+                    <th className="text-left px-4 py-3 font-medium">Perk</th>
+                    <th className="text-center px-4 py-3 font-medium text-[#FAF7F2]/70">GolfPass+ $119</th>
+                    <th className="text-center px-4 py-3 font-medium">Eagle $79</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-black/5">
+                  {[
+                    ['Monthly credits', '$10/mo', '$15/mo'],
+                    ['Free rounds/yr', '0', '2'],
+                    ['Booking fee waiver', '12×/yr', 'Always'],
+                    ['Points multiplier', '1×', '2×'],
+                    ['Priority booking', 'None', '48hr early'],
+                    ['Guest passes', 'None', '12/yr'],
+                    ['Green fee discount', 'None', '10% off'],
+                    ['Birthday credit', 'None', '$25'],
+                  ].map(([perk, them, us]) => (
+                    <tr key={perk} className="even:bg-[#FAF7F2]">
+                      <td className="px-4 py-3 font-medium text-[#1A1A1A]">{perk}</td>
+                      <td className="px-4 py-3 text-center text-[#6B7770]">{them}</td>
+                      <td className="px-4 py-3 text-center font-semibold text-[#1B4332]">{us}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <Link
+              href="/waitlist/golfer"
+              className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-6 py-3 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
+            >
+              Join the Golfer Waitlist →
+            </Link>
+          </div>
+
+          {/* Course column */}
+          <div className="space-y-6">
+            <div className="inline-block bg-[#E0A800]/20 text-[#8B6F00] text-sm font-semibold px-3 py-1 rounded-full">
+              For Courses — {spotsRemaining} of 10 Founding Spots Left
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
+              GolfNow costs you ~$94,500/year in barter. We charge $0.
+            </h2>
+            <div className="bg-[#FAF7F2] rounded-xl p-6 space-y-4 ring-1 ring-black/5">
+              <p className="text-[#1A1A1A] text-sm leading-relaxed">
+                GolfNow takes 2 tee times per day in barter at your rack rate.
+                At $175/round × 2 slots × 300 days: <strong className="text-[#1A1A1A]">$105,000/year</strong> in lost revenue.
+              </p>
+              <p className="text-[#1A1A1A] text-sm leading-relaxed">
+                MulliganLinks charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
+                Course #11 onward pays $249/mo.
+              </p>
+              <p className="text-sm text-[#6B7770] italic">
+                The only ask: tell your golfers about the Mulligan Links membership at booking.
+              </p>
+            </div>
+            <Link
+              href="/waitlist/course"
+              className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
+            >
+              Claim a Founding Partner Spot →
+              <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+                {spotsRemaining > 0 ? `${spotsRemaining} of 10 spots remaining` : 'Join the Core waitlist — $249/mo'}
+              </span>
+            </Link>
+          </div>
+
         </div>
       </section>
 
@@ -287,7 +378,7 @@ export default function HomePage() {
           </div>
 
           <p className="text-center text-[#6B7770] text-lg mt-10 font-medium">
-            "GolfNow made tee times a commodity. We made them a community."
+            &ldquo;GolfNow made tee times a commodity. We made them a community.&rdquo;
           </p>
         </div>
       </section>
