@@ -145,7 +145,7 @@ export default async function HomePage() {
             <div className="bg-[#FAF7F2] rounded-xl p-6 space-y-4 ring-1 ring-black/5">
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
                 GolfNow takes 2 tee times per day in barter at your rack rate.
-                At $175/round × 2 slots × 300 days: <strong className="text-[#1A1A1A]">$105,000/year</strong> in lost revenue.
+                Two barter slots per day, 300 operating days a year: <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue.
               </p>
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
                 MulliganLinks charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
