@@ -11,26 +11,26 @@ export default async function AdminUsersPage() {
 
   const { data: { user: me } } = await supabase.auth.getUser()
 
-  // Fetch members — try with is_admin first, fall back without if column not yet in schema cache
   const { data: waitlist } = await admin
     .from('waitlist').select('*').order('created_at', { ascending: false })
 
-  let members: any[] | null = null
-  const withAdmin = await admin
-    .from('profiles')
-    .select('id, full_name, email, is_admin, created_at, memberships(tier, status)')
-    .order('created_at', { ascending: false })
-
-  if (!withAdmin.error) {
-    members = withAdmin.data
-  } else {
-    // Schema cache may not include is_admin yet — retry without it
-    const fallback = await admin
+  // profiles has no email column — email lives in auth.users
+  const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
+    admin
       .from('profiles')
-      .select('id, full_name, email, created_at, memberships(tier, status)')
-      .order('created_at', { ascending: false })
-    members = fallback.data
-  }
+      .select('id, full_name, phone, is_admin, created_at, memberships(tier, status)')
+      .order('created_at', { ascending: false }),
+    admin.auth.admin.listUsers({ perPage: 1000 }),
+  ])
+
+  // Build email lookup from auth
+  const emailMap = Object.fromEntries((authUsers ?? []).map(u => [u.id, u.email ?? '']))
+
+  // Merge email into profiles
+  const members = (profilesResult.data ?? []).map(p => ({
+    ...p,
+    email: emailMap[p.id] ?? '',
+  }))
 
   const tierColor: Record<string, string> = {
     ace: 'bg-[#1B4332] text-[#FAF7F2]',
