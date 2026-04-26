@@ -1,6 +1,10 @@
 import { Resend } from 'resend'
 
-export const resend = new Resend(process.env.RESEND_API_KEY)
+function getResend() {
+  const key = process.env.RESEND_API_KEY
+  if (!key || key === 're_placeholder') return null
+  return new Resend(key)
+}
 
 export async function sendAdminNotification({
   subject,
@@ -9,12 +13,13 @@ export async function sendAdminNotification({
   subject: string
   html: string
 }) {
-  if (!process.env.RESEND_API_KEY || process.env.RESEND_API_KEY === 're_placeholder') {
+  const client = getResend()
+  if (!client) {
     console.log('[notify] Resend not configured — skipping email:', subject)
     return
   }
 
-  await resend.emails.send({
+  await client.emails.send({
     from: 'MulliganLinks <notifications@mulliganlinks.com>',
     to: 'mulliganlinksgolf@gmail.com',
     subject,
