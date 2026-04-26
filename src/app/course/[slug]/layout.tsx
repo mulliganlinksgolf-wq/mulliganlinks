@@ -34,6 +34,7 @@ export default async function CourseAdminLayout({
 
   const navItems = [
     { href: `/course/${slug}`, label: 'Tee Sheet' },
+    { href: `/course/${slug}/check-in`, label: 'Check-in' },
     { href: `/course/${slug}/bookings`, label: 'Bookings' },
     { href: `/course/${slug}/members`, label: 'Members' },
     { href: `/course/${slug}/dashboard`, label: 'Dashboard' },

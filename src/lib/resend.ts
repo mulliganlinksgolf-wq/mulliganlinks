@@ -27,6 +27,58 @@ export async function sendAdminNotification({
   })
 }
 
+export async function sendWelcomeEmail({
+  email,
+  fullName,
+}: {
+  email: string
+  fullName?: string
+}) {
+  const client = getResend()
+  if (!client) return
+
+  const firstName = fullName?.split(' ')[0] ?? 'there'
+
+  await client.emails.send({
+    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    to: email,
+    subject: 'Welcome to MulliganLinks — confirm your email to get started',
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">Welcome to MulliganLinks ⛳</h2>
+        <p>Hey ${firstName},</p>
+        <p>You're in. MulliganLinks is the local-first golf membership built for golfers
+        who actually play — at their home course, with their regular group, without
+        paying extra for the privilege.</p>
+
+        <p>Once you confirm your email, here's what you get on the Fairway (free) tier:</p>
+        <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
+          <li>Book tee times at partner courses with zero booking fees</li>
+          <li>Earn 1× Fairway Points on every dollar played</li>
+          <li>Free cancellation up to 1 hour out — always</li>
+        </ul>
+
+        <p>Ready to earn more? Upgrade to Eagle ($79/yr) for 2× points, priority booking,
+        and $15/mo in tee time credits. Or go Ace ($149/yr) for 3× points, 72hr early
+        access, and $25/mo in credits.</p>
+
+        <p style="margin: 24px 0;">
+          <a href="https://mulliganlinks.com/app"
+             style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+            Go to my dashboard →
+          </a>
+        </p>
+
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">
+          MulliganLinks · Your home course, redone right.<br />
+          Questions? Reply to this email or reach us at support@mulliganlinks.com
+        </p>
+      </div>
+    `,
+  })
+}
+
 export async function sendGolferWaitlistConfirmation({
   email,
   firstName,

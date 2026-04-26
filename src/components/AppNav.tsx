@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
 
@@ -9,6 +10,7 @@ const navItems = [
   { href: '/app/courses', label: 'Courses' },
   { href: '/app/bookings', label: 'Bookings' },
   { href: '/app/points', label: 'Points' },
+  { href: '/app/card', label: 'My Card' },
   { href: '/app/profile', label: 'Profile' },
 ]
 
@@ -22,8 +24,8 @@ export function AppNav() {
   return (
     <header className="bg-white border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/app" className="text-[#1B4332] font-bold text-xl tracking-wide lowercase">
-          mulliganlinks
+        <Link href="/app">
+          <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-16 w-auto" priority />
         </Link>
 
         {/* Desktop nav */}

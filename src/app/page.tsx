@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
@@ -22,9 +23,9 @@ export default async function HomePage() {
       {/* ── Header / Nav ──────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <span className="text-[#1B4332] font-bold text-xl tracking-wide lowercase font-sans">
-            mulliganlinks
-          </span>
+          <Link href="/">
+            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-20 w-auto" priority />
+          </Link>
           <nav className="flex items-center gap-4">
             <Link
               href="/login"
@@ -284,7 +285,7 @@ export default async function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/signup?tier=eagle"
+                  href="/signup?next=/app/membership"
                   className="block w-full text-center rounded-lg bg-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
                 >
                   Get Eagle
@@ -324,7 +325,7 @@ export default async function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/signup?tier=ace"
+                  href="/signup?next=/app/membership"
                   className="block w-full text-center rounded-lg border border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
                 >
                   Get Ace
@@ -386,9 +387,7 @@ export default async function HomePage() {
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-12">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
-          <span className="text-[#1B4332] font-bold text-xl tracking-wide lowercase">
-            mulliganlinks
-          </span>
+          <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-24 w-auto" />
           <p className="text-sm text-[#6B7770]">Your home course, redone right.</p>
           <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
