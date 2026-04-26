@@ -1,4 +1,14 @@
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
+
+const TZ = 'America/Detroit'
+
+function fmtDateTime(iso: string) {
+  const d = new Date(iso)
+  const date = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: TZ })
+  const time = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ })
+  return { date, time }
+}
 
 export async function sendBookingConfirmation({
   userId,
@@ -35,9 +45,7 @@ export async function sendBookingConfirmation({
     if (!email) return
 
     const course = (teeTime as any)?.courses
-    const scheduledAt = new Date(teeTime?.scheduled_at ?? '')
-    const dateStr = scheduledAt.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-    const timeStr = scheduledAt.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+    const { date: dateStr, time: timeStr } = fmtDateTime(teeTime?.scheduled_at ?? '')
     const firstName = profile?.full_name?.split(' ')[0] ?? 'there'
 
     const { Resend } = await import('resend')
@@ -69,5 +77,75 @@ export async function sendBookingConfirmation({
     })
   } catch (err) {
     console.error('[booking-email]', err)
+  }
+}
+
+export async function sendCourseBookingAlert({
+  courseId,
+  memberName,
+  memberEmail,
+  players,
+  total,
+  teeTimeIso,
+  courseName,
+}: {
+  courseId: string
+  memberName: string
+  memberEmail: string
+  players: number
+  total: number
+  teeTimeIso: string
+  courseName: string
+}) {
+  try {
+    const { date: dateStr, time: timeStr } = fmtDateTime(teeTimeIso)
+
+    const resendKey = process.env.RESEND_API_KEY
+    if (!resendKey || resendKey === 're_placeholder') return
+
+    // Get all course admin emails
+    const admin = createAdminClient()
+    const { data: admins } = await admin
+      .from('course_admins')
+      .select('profiles(email, full_name)')
+      .eq('course_id', courseId)
+
+    const adminEmails = (admins ?? [])
+      .map((a: any) => a.profiles?.email)
+      .filter(Boolean) as string[]
+
+    if (adminEmails.length === 0) return
+
+    const { Resend } = await import('resend')
+    const resend = new Resend(resendKey)
+
+    await resend.emails.send({
+      from: 'MulliganLinks <notifications@mulliganlinks.com>',
+      to: adminEmails,
+      subject: `New booking — ${timeStr} ${dateStr.split(',')[0]}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+          <h2 style="color: #1B4332;">New tee time booking ⛳</h2>
+          <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Course</td><td style="padding: 8px 0; font-weight: 600; border-bottom: 1px solid #eee;">${courseName}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Date</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${dateStr}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Tee time</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timeStr}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Member</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${memberName} (${memberEmail})</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Players</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${players}</td></tr>
+            <tr><td style="padding: 8px 0; color: #1B4332;">Total paid</td><td style="padding: 8px 0; color: #1B4332; font-weight: 600;">$${total.toFixed(2)}</td></tr>
+          </table>
+          <p style="margin: 0;">
+            <a href="https://mulliganlinks.com/course/fieldstone-golf-club/bookings"
+               style="background: #1B4332; color: #FAF7F2; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
+              View in tee sheet →
+            </a>
+          </p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+          <p style="color: #6B7770; font-size: 12px;">MulliganLinks &middot; Course portal</p>
+        </div>
+      `,
+    })
+  } catch (err) {
+    console.error('[course-booking-alert]', err)
   }
 }

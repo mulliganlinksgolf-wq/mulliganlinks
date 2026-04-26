@@ -1,7 +1,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { sendBookingConfirmation } from '@/lib/emails'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
 
 export async function confirmBooking({
   teeTimeId,
@@ -87,15 +88,26 @@ export async function confirmBooking({
     })
   }
 
-  // Fire-and-forget confirmation email — never block booking confirmation
-  sendBookingConfirmation({
-    userId,
-    bookingId: booking.id,
-    teeTimeId,
-    players,
-    total,
-    pointsEarned,
-  }).catch(() => {})
+  // Fire-and-forget emails — never block booking confirmation
+  const adminClient = createAdminClient()
+  const [, { data: memberProfile }, { data: teeTimeFull }] = await Promise.all([
+    sendBookingConfirmation({ userId, bookingId: booking.id, teeTimeId, players, total, pointsEarned }).catch(() => {}),
+    adminClient.from('profiles').select('full_name, email').eq('id', userId).single(),
+    adminClient.from('tee_times').select('scheduled_at, courses(id, name)').eq('id', teeTimeId).single(),
+  ])
+
+  const course = (teeTimeFull as any)?.courses
+  if (course && memberProfile) {
+    sendCourseBookingAlert({
+      courseId: course.id,
+      memberName: memberProfile.full_name ?? 'Member',
+      memberEmail: memberProfile.email ?? '',
+      players,
+      total,
+      teeTimeIso: teeTimeFull?.scheduled_at ?? '',
+      courseName: course.name,
+    }).catch(() => {})
+  }
 
   return { bookingId: booking.id }
 }
