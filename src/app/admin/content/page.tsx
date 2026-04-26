@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
@@ -6,7 +6,7 @@ export const metadata = { title: 'Edit Content' }
 
 async function saveBlock(formData: FormData) {
   'use server'
-  const supabase = await createClient()
+  const supabase = createAdminClient()
   const key = formData.get('key') as string
   const value = formData.get('value') as string
   await supabase.from('content_blocks').update({ value }).eq('key', key)
@@ -21,7 +21,7 @@ export default async function ContentPage({
   searchParams: Promise<{ saved?: string }>
 }) {
   const { saved } = await searchParams
-  const supabase = await createClient()
+  const supabase = createAdminClient()
   const { data: blocks } = await supabase
     .from('content_blocks')
     .select('*')

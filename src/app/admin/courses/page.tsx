@@ -1,20 +1,20 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 
 export const metadata = { title: 'Courses' }
 
 async function toggleCourse(formData: FormData) {
   'use server'
-  const supabase = await createClient()
+  const admin = createAdminClient()
   const id = formData.get('id') as string
   const active = formData.get('active') === 'true'
-  await supabase.from('courses').update({ active: !active }).eq('id', id)
+  await admin.from('courses').update({ active: !active }).eq('id', id)
   revalidatePath('/admin/courses')
 }
 
 export default async function AdminCoursesPage() {
-  const supabase = await createClient()
-  const { data: courses } = await supabase
+  const admin = createAdminClient()
+  const { data: courses } = await admin
     .from('courses')
     .select('id, name, city, state, active, created_at')
     .order('created_at', { ascending: false })

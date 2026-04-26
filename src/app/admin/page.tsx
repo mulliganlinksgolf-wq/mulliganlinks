@@ -1,36 +1,40 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
 export const metadata = { title: 'Admin Dashboard' }
 
 export default async function AdminDashboardPage() {
-  const supabase = await createClient()
+  const admin = createAdminClient()
 
   const [
     { count: waitlistCount },
     { count: memberCount },
     { count: courseCount },
     { count: bookingCount },
-    { data: recentSignups },
+    { data: recentMembers },
     { data: recentBookings },
   ] = await Promise.all([
-    supabase.from('waitlist').select('*', { count: 'exact', head: true }),
-    supabase.from('profiles').select('*', { count: 'exact', head: true }),
-    supabase.from('courses').select('*', { count: 'exact', head: true }).eq('active', true),
-    supabase.from('bookings').select('*', { count: 'exact', head: true }).neq('status', 'canceled'),
-    supabase.from('waitlist').select('email, created_at').order('created_at', { ascending: false }).limit(5),
-    supabase.from('bookings')
+    admin.from('waitlist').select('*', { count: 'exact', head: true }),
+    admin.from('profiles').select('*', { count: 'exact', head: true }),
+    admin.from('courses').select('*', { count: 'exact', head: true }).eq('active', true),
+    admin.from('bookings').select('*', { count: 'exact', head: true }).neq('status', 'canceled'),
+    admin.from('profiles').select('id, full_name, created_at').order('created_at', { ascending: false }).limit(5),
+    admin.from('bookings')
       .select('id, created_at, status, total_amount, profiles(full_name), tee_times(scheduled_at, courses(name))')
       .neq('status', 'canceled')
       .order('created_at', { ascending: false })
       .limit(5),
   ])
 
+  // Get emails for recent members from auth
+  const { data: { users: authUsers } } = await admin.auth.admin.listUsers({ perPage: 1000 })
+  const emailMap = Object.fromEntries((authUsers ?? []).map(u => [u.id, u.email ?? '']))
+
   const stats = [
-    { label: 'Waitlist signups', value: waitlistCount ?? 0, href: '/admin/users', color: 'text-[#1B4332]' },
-    { label: 'Registered members', value: memberCount ?? 0, href: '/admin/users', color: 'text-[#1B4332]' },
-    { label: 'Active courses', value: courseCount ?? 0, href: '/admin/courses', color: 'text-[#1B4332]' },
-    { label: 'Total bookings', value: bookingCount ?? 0, href: null, color: 'text-[#1B4332]' },
+    { label: 'Waitlist signups', value: waitlistCount ?? 0, href: '/admin/users' },
+    { label: 'Registered members', value: memberCount ?? 0, href: '/admin/users' },
+    { label: 'Active courses', value: courseCount ?? 0, href: '/admin/courses' },
+    { label: 'Total bookings', value: bookingCount ?? 0, href: null },
   ]
 
   return (
@@ -45,7 +49,7 @@ export default async function AdminDashboardPage() {
         {stats.map((s) => (
           <div key={s.label} className="bg-white rounded-xl p-6 ring-1 ring-black/5">
             <p className="text-sm text-[#6B7770]">{s.label}</p>
-            <p className={`text-3xl font-bold mt-1 ${s.color}`}>{s.value.toLocaleString()}</p>
+            <p className="text-3xl font-bold mt-1 text-[#1B4332]">{s.value.toLocaleString()}</p>
             {s.href && (
               <Link href={s.href} className="text-xs text-[#1B4332] hover:underline mt-2 inline-block">
                 View all →
@@ -56,25 +60,28 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent signups */}
+        {/* Recent members */}
         <div className="bg-white rounded-xl ring-1 ring-black/5 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="font-bold text-[#1A1A1A]">Recent waitlist signups</h2>
+            <h2 className="font-bold text-[#1A1A1A]">Recent members</h2>
             <Link href="/admin/users" className="text-xs text-[#1B4332] hover:underline">View all</Link>
           </div>
-          {recentSignups && recentSignups.length > 0 ? (
+          {recentMembers && recentMembers.length > 0 ? (
             <div className="space-y-3">
-              {recentSignups.map((s: any) => (
-                <div key={s.email} className="flex items-center justify-between text-sm">
-                  <span className="text-[#1A1A1A]">{s.email}</span>
+              {recentMembers.map((m: any) => (
+                <div key={m.id} className="flex items-center justify-between text-sm">
+                  <div>
+                    <span className="text-[#1A1A1A] font-medium">{m.full_name || '—'}</span>
+                    <span className="text-[#6B7770] text-xs ml-2">{emailMap[m.id] ?? ''}</span>
+                  </div>
                   <span className="text-[#6B7770] text-xs">
-                    {new Date(s.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                    {new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-sm text-[#6B7770]">No signups yet.</p>
+            <p className="text-sm text-[#6B7770]">No members yet.</p>
           )}
         </div>
 

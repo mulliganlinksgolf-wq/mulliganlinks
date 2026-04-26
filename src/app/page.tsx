@@ -11,11 +11,20 @@ export const metadata = {
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const { data: counter } = await supabase
-    .from('founding_partner_counter')
-    .select('count, cap')
-    .single()
+  const [{ data: counter }, { data: contentRows }] = await Promise.all([
+    supabase.from('founding_partner_counter').select('count, cap').single(),
+    supabase.from('content_blocks').select('key, value').in('key', [
+      'home.headline', 'home.subhead', 'home.badge', 'home.tagline',
+    ]),
+  ])
   const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+  const content: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
+  const headline = content['home.headline'] ?? 'The Local-First Golf Loyalty Network'
+  const subhead = content['home.subhead'] ?? 'Free software for courses. Real loyalty for golfers. Zero booking fees, always.'
+  const badge = content['home.badge'] ?? 'Coming soon to Metro Detroit'
+  const tagline = content['home.tagline'] ?? 'No credit card required · Metro Detroit launch'
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -49,16 +58,15 @@ export default async function HomePage() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white border border-[#1B4332]/20 rounded-full px-4 py-1.5">
             <span className="size-2 rounded-full bg-[#1B4332] animate-pulse" />
-            <span className="text-sm font-medium text-[#1B4332]">Coming soon to Metro Detroit</span>
+            <span className="text-sm font-medium text-[#1B4332]">{badge}</span>
           </div>
 
           <h1 className="text-5xl sm:text-6xl font-bold text-[#1A1A1A] leading-tight tracking-tight">
-            The Local-First{' '}
-            <span className="text-[#1B4332]">Golf Loyalty Network</span>
+            {headline}
           </h1>
 
           <p className="text-xl text-[#6B7770] leading-relaxed max-w-2xl mx-auto">
-            Free software for courses. Real loyalty for golfers. Zero booking fees, always.
+            {subhead}
           </p>
 
           {/* Dual CTAs */}
@@ -82,7 +90,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <p className="text-sm text-[#6B7770]">No credit card required · Metro Detroit launch</p>
+          <p className="text-sm text-[#6B7770]">{tagline}</p>
         </div>
       </section>
 
