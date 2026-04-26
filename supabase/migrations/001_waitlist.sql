@@ -7,6 +7,7 @@ create table if not exists public.waitlist (
 alter table public.waitlist enable row level security;
 
 -- Allow anyone to insert their email (public signup)
+drop policy if exists "Anyone can join waitlist" on public.waitlist;
 create policy "Anyone can join waitlist"
   on public.waitlist for insert
   with check (true);

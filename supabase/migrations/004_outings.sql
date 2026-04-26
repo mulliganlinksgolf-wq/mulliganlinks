@@ -17,17 +17,7 @@ create policy "Organizers can manage their outings"
   on public.outings for all
   using (auth.uid() = organizer_id);
 
-create policy "Participants can view their outings"
-  on public.outings for select
-  using (
-    exists (
-      select 1 from public.outing_participants
-      where outing_participants.outing_id = outings.id
-      and outing_participants.user_id = auth.uid()
-    )
-  );
-
--- Outing participants
+-- Outing participants (must exist before the cross-referencing policy on outings)
 create table public.outing_participants (
   id uuid primary key default gen_random_uuid(),
   outing_id uuid not null references public.outings(id) on delete cascade,
@@ -55,6 +45,17 @@ create policy "Organizers can manage participants"
 create policy "Participants can view their own record"
   on public.outing_participants for select
   using (auth.uid() = user_id);
+
+-- Now safe to add the cross-referencing policy on outings
+create policy "Participants can view their outings"
+  on public.outings for select
+  using (
+    exists (
+      select 1 from public.outing_participants
+      where outing_participants.outing_id = outings.id
+      and outing_participants.user_id = auth.uid()
+    )
+  );
 
 -- Waitlist alerts
 create table public.waitlist_alerts (
