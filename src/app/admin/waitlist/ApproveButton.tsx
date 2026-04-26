@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { approveFoundingPartner, rejectCourseApplication } from './actions'
+import { approveFoundingPartner, rejectCourseApplication, sendBarterReceiptAction } from './actions'
 
 export function ApproveButton({
   courseId,
@@ -59,5 +59,29 @@ export function ApproveButton({
         Reject
       </button>
     </div>
+  )
+}
+
+export function BarterReceiptButton({ courseId }: { courseId: number }) {
+  const [status, setStatus] = useState<'idle' | 'pending' | 'sent' | 'error'>('idle')
+  const [, startTransition] = useTransition()
+
+  function handleSend() {
+    if (!confirm('Send this Founding Partner their Barter Receipt email?')) return
+    setStatus('pending')
+    startTransition(async () => {
+      const result = await sendBarterReceiptAction(courseId)
+      setStatus(result.success ? 'sent' : 'error')
+    })
+  }
+
+  return (
+    <button
+      onClick={handleSend}
+      disabled={status === 'pending' || status === 'sent'}
+      className="text-xs px-3 py-1.5 rounded-lg border border-[#E0A800]/50 text-[#8B6F00] hover:bg-[#E0A800]/10 disabled:opacity-50 transition-colors"
+    >
+      {status === 'pending' ? 'Sending…' : status === 'sent' ? '✓ Sent' : status === 'error' ? 'Error' : '📊 Barter Receipt'}
+    </button>
   )
 }

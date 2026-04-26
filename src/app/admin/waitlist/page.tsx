@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { ApproveButton } from './ApproveButton'
+import { ApproveButton, BarterReceiptButton } from './ApproveButton'
 
 export const metadata = { title: 'Waitlist — Admin' }
 
@@ -175,6 +175,9 @@ export default async function AdminWaitlistPage({
                       <td className="px-4 py-3">
                         {c.status === 'pending' && (
                           <ApproveButton courseId={c.id} spotsRemaining={spotsCap - spotsUsed} />
+                        )}
+                        {c.is_founding_partner && c.estimated_barter_cost && (
+                          <BarterReceiptButton courseId={c.id} />
                         )}
                       </td>
                     </tr>

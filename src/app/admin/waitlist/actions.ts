@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { sendFoundingPartnerApproval } from '@/lib/resend'
+import { sendFoundingPartnerApproval, sendBarterReceipt } from '@/lib/resend'
 
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
 
@@ -55,6 +55,33 @@ export async function approveFoundingPartner(courseId: number) {
   })
 
   return { success: true, partnerNumber }
+}
+
+export async function sendBarterReceiptAction(courseId: number) {
+  await requireAdmin()
+
+  const adminClient = createAdminClient()
+  const { data: course, error } = await adminClient
+    .from('course_waitlist')
+    .select('course_name, contact_name, email, founding_partner_number, estimated_barter_cost, approved_at')
+    .eq('id', courseId)
+    .eq('is_founding_partner', true)
+    .single()
+
+  if (error || !course) return { error: 'Course not found or not a Founding Partner.' }
+  if (!course.estimated_barter_cost) return { error: 'No barter cost estimate on file.' }
+  if (!course.approved_at) return { error: 'No approval date on record.' }
+
+  await sendBarterReceipt({
+    email: course.email,
+    contactName: course.contact_name,
+    courseName: course.course_name,
+    partnerNumber: course.founding_partner_number,
+    estimatedAnnualBarterCost: course.estimated_barter_cost,
+    approvedAt: new Date(course.approved_at),
+  })
+
+  return { success: true }
 }
 
 export async function rejectCourseApplication(courseId: number) {

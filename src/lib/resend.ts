@@ -223,6 +223,85 @@ export async function sendCourseAdminAlert({
   })
 }
 
+export async function sendBarterReceipt({
+  email,
+  contactName,
+  courseName,
+  partnerNumber,
+  estimatedAnnualBarterCost,
+  approvedAt,
+}: {
+  email: string
+  contactName: string
+  courseName: string
+  partnerNumber: number
+  estimatedAnnualBarterCost: number
+  approvedAt: Date
+}) {
+  const client = getResend()
+  if (!client) {
+    console.log('[notify] Resend not configured — skipping barter receipt')
+    return
+  }
+
+  const firstName = contactName.split(' ')[0]
+  const now = new Date()
+  const msPerMonth = 1000 * 60 * 60 * 24 * 30.44
+  const monthsSince = Math.max(0, Math.floor((now.getTime() - approvedAt.getTime()) / msPerMonth))
+  const monthlyValue = Math.round(estimatedAnnualBarterCost / 12)
+  const cumulativeSaved = monthlyValue * monthsSince
+
+  const approvedMonth = approvedAt.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+  const nowMonth = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+
+  await client.emails.send({
+    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    to: email,
+    subject: `Your MulliganLinks Barter Receipt — ${nowMonth}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 520px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">Your MulliganLinks Barter Receipt ⛳</h2>
+        <p>Hey ${firstName},</p>
+        <p>Here's what <strong>${courseName}</strong> has avoided in GolfNow barter costs since joining
+        as Founding Partner #${partnerNumber} in ${approvedMonth}.</p>
+
+        <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 20px; margin: 20px 0;">
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 6px 0; color: #166534;">Estimated annual GolfNow barter cost</td>
+              <td style="padding: 6px 0; text-align: right; font-weight: 600; color: #166534;">$${estimatedAnnualBarterCost.toLocaleString()}/yr</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #166534;">Monthly barter value avoided</td>
+              <td style="padding: 6px 0; text-align: right; font-weight: 600; color: #166534;">$${monthlyValue.toLocaleString()}/mo</td>
+            </tr>
+            <tr>
+              <td style="padding: 6px 0; color: #166534;">Months as a Founding Partner</td>
+              <td style="padding: 6px 0; text-align: right; font-weight: 600; color: #166534;">${monthsSince}</td>
+            </tr>
+            <tr style="border-top: 1px solid #BBF7D0;">
+              <td style="padding: 10px 0 6px; font-weight: 700; font-size: 16px; color: #166534;">Cumulative barter saved</td>
+              <td style="padding: 10px 0 6px; text-align: right; font-weight: 700; font-size: 18px; color: #166534;">$${cumulativeSaved.toLocaleString()}</td>
+            </tr>
+          </table>
+        </div>
+
+        <p style="font-size: 13px; color: #6B7770;">
+          Estimate based on 2 barter tee times per day × 300 operating days × your average green fee,
+          which is what GolfNow's standard barter agreement costs partner courses annually.
+          MulliganLinks charges you $0 — for life.
+        </p>
+
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">
+          MulliganLinks · Your home course, redone right.<br />
+          Questions? Reply to this email.
+        </p>
+      </div>
+    `,
+  })
+}
+
 export async function sendFoundingPartnerApproval({
   email,
   contactName,
