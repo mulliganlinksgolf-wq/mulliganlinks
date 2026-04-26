@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { sendBookingConfirmation } from '@/lib/emails'
 
 export async function confirmBooking({
   teeTimeId,
@@ -85,6 +86,16 @@ export async function confirmBooking({
       reason: 'Points redeemed at booking',
     })
   }
+
+  // Fire-and-forget confirmation email — never block booking confirmation
+  sendBookingConfirmation({
+    userId,
+    bookingId: booking.id,
+    teeTimeId,
+    players,
+    total,
+    pointsEarned,
+  }).catch(() => {})
 
   return { bookingId: booking.id }
 }

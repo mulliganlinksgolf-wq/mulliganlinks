@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
+import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
 
 interface Booking {
   id: string
@@ -22,6 +23,7 @@ interface TeeTime {
 
 export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [, startTransition] = useTransition()
 
   const formatTime = (iso: string) =>
     new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
@@ -29,7 +31,17 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
   const statusColors: Record<string, string> = {
     open: 'bg-green-50 border-green-200',
     booked: 'bg-blue-50 border-blue-200',
-    blocked: 'bg-gray-100 border-gray-300',
+    blocked: 'bg-red-50 border-red-200',
+  }
+
+  function handleBlock(id: string) {
+    startTransition(() => updateTeeTimeStatus(id, 'blocked'))
+  }
+  function handleUnblock(id: string) {
+    startTransition(() => updateTeeTimeStatus(id, 'open'))
+  }
+  function handleBookingStatus(id: string, status: 'completed' | 'no_show') {
+    startTransition(() => updateBookingStatus(id, status))
   }
 
   return (
@@ -58,6 +70,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                 <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                   tt.status === 'open' ? 'bg-green-100 text-green-700' :
                   tt.status === 'booked' ? 'bg-blue-100 text-blue-700' :
+                  tt.status === 'blocked' ? 'bg-red-100 text-red-700' :
                   'bg-gray-200 text-gray-600'
                 }`}>
                   {tt.status}
@@ -94,6 +107,42 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                     </div>
                   ))
                 )}
+
+                {/* Tee time actions */}
+                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200">
+                  {tt.status === 'open' && (
+                    <button
+                      onClick={() => handleBlock(tt.id)}
+                      className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
+                    >
+                      Block slot
+                    </button>
+                  )}
+                  {tt.status === 'blocked' && (
+                    <button
+                      onClick={() => handleUnblock(tt.id)}
+                      className="text-xs px-3 py-1 border border-[#1B4332] rounded hover:bg-[#1B4332]/5 text-[#1B4332]"
+                    >
+                      Unblock slot
+                    </button>
+                  )}
+                  {tt.bookings.map(b => b.status === 'confirmed' && (
+                    <div key={b.id} className="flex gap-2">
+                      <button
+                        onClick={() => handleBookingStatus(b.id, 'completed')}
+                        className="text-xs px-3 py-1 bg-[#1B4332] text-[#FAF7F2] rounded hover:bg-[#1B4332]/90"
+                      >
+                        Mark complete
+                      </button>
+                      <button
+                        onClick={() => handleBookingStatus(b.id, 'no_show')}
+                        className="text-xs px-3 py-1 border border-yellow-400 text-yellow-700 rounded hover:bg-yellow-50"
+                      >
+                        No show
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>

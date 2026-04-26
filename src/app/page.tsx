@@ -140,6 +140,7 @@ export default function HomePage() {
                     'Book tee times at partner courses',
                     'Zero booking fees',
                     '1x Fairway Points per dollar',
+                    'Free cancellation (1hr policy)',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
@@ -175,10 +176,15 @@ export default function HomePage() {
                 </div>
                 <ul className="space-y-2 text-sm text-[#1A1A1A]">
                   {[
-                    'Everything in Fairway',
-                    '$180 in annual tee time credits',
+                    '$15/mo in tee time credits ($180/yr)',
+                    '2 free rounds per year',
+                    'Always-on booking fee waiver',
+                    'Free cancellation unlimited (1hr)',
                     '2x Fairway Points',
-                    'Priority booking window',
+                    'Priority booking: 48hr early access',
+                    '12 guest passes per year',
+                    '10% green fee discount',
+                    '$25 birthday credit',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
@@ -210,11 +216,15 @@ export default function HomePage() {
                 </div>
                 <ul className="space-y-2 text-sm text-[#1A1A1A]">
                   {[
-                    'Everything in Eagle',
-                    '$300 in annual tee time credits',
+                    '$25/mo in tee time credits ($300/yr)',
+                    '4 free rounds per year',
+                    'Always-on booking fee waiver',
+                    'Free cancellation unlimited (1hr)',
                     '3x Fairway Points',
-                    'Guest passes (2/yr)',
-                    'Early access to new courses',
+                    'Priority booking: 72hr early access',
+                    'Unlimited guest passes',
+                    '15% green fee discount',
+                    '$50 birthday credit',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2">
                       <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
@@ -247,23 +257,29 @@ export default function HomePage() {
               <thead>
                 <tr className="bg-[#1B4332] text-[#FAF7F2]">
                   <th className="text-left px-6 py-4 font-semibold">Feature</th>
-                  <th className="text-center px-6 py-4 font-semibold">MulliganLinks Eagle</th>
                   <th className="text-center px-6 py-4 font-semibold text-[#FAF7F2]/70">GolfPass+ ($119/yr)</th>
+                  <th className="text-center px-6 py-4 font-semibold">Eagle ($79/yr)</th>
+                  <th className="text-center px-6 py-4 font-semibold">Ace ($149/yr)</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
                 {[
-                  { feature: 'Annual cost', us: '$79', them: '$119' },
-                  { feature: 'Booking fees', us: 'None', them: 'Up to $3/round' },
-                  { feature: 'Tee time credits', us: '$180', them: '~$120' },
-                  { feature: 'Points multiplier', us: '2x', them: '1x' },
-                  { feature: 'Course gets full revenue', us: '✅', them: '❌' },
-                  { feature: 'Local course focus', us: '✅', them: '❌' },
+                  { feature: 'Annual price', them: '$119/yr', eagle: '$79/yr', ace: '$149/yr' },
+                  { feature: 'Monthly tee time credits', them: '$10/mo ($120)', eagle: '$15/mo ($180)', ace: '$25/mo ($300)' },
+                  { feature: 'Free rounds included', them: '0', eagle: '2/year', ace: '4/year' },
+                  { feature: 'Booking fees waived', them: '12×/year only', eagle: 'Always, unlimited', ace: 'Always, unlimited' },
+                  { feature: 'Free cancellation', them: '12×/year', eagle: 'Unlimited (1hr)', ace: 'Unlimited (1hr)' },
+                  { feature: 'Points multiplier', them: '1× base', eagle: '2×', ace: '3×' },
+                  { feature: 'Priority booking', them: 'None', eagle: '48hr early', ace: '72hr early' },
+                  { feature: 'Guest passes', them: 'None', eagle: '12×/year', ace: 'Unlimited' },
+                  { feature: 'Green fee discount', them: 'None', eagle: '10% off', ace: '15% off' },
+                  { feature: 'Birthday credit', them: 'None', eagle: '$25', ace: '$50' },
                 ].map((row, i) => (
                   <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
                     <td className="px-6 py-4 font-medium text-[#1A1A1A]">{row.feature}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.us}</td>
                     <td className="px-6 py-4 text-center text-[#6B7770]">{row.them}</td>
+                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.eagle}</td>
+                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.ace}</td>
                   </tr>
                 ))}
               </tbody>
