@@ -32,6 +32,12 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
     } else {
+      // Fire-and-forget admin notification — don't await, never block signup
+      fetch('/api/auth/signup-notification', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, fullName }),
+      }).catch(() => {}) // Swallow errors silently
       setDone(true)
     }
   }
