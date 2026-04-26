@@ -3,6 +3,58 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
+import { platformFeeCents } from '@/lib/stripe/fees'
+
+export async function createPendingBooking({
+  teeTimeId,
+  players,
+  tier,
+}: {
+  teeTimeId: string
+  players: number
+  tier: string
+}): Promise<{ bookingId?: string; error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  const admin = createAdminClient()
+
+  const { data: teeTime } = await admin
+    .from('tee_times')
+    .select('id, available_players, status, base_price, course_id')
+    .eq('id', teeTimeId)
+    .single()
+
+  if (!teeTime || teeTime.status !== 'open' || teeTime.available_players < players) {
+    return { error: 'This tee time is no longer available.' }
+  }
+
+  const greenFeeCents = Math.round((teeTime.base_price as number) * players * 100)
+  const appFeeCents = platformFeeCents(tier)
+  const totalCents = greenFeeCents + appFeeCents
+
+  const { data: booking, error } = await admin
+    .from('bookings')
+    .insert({
+      tee_time_id: teeTimeId,
+      user_id: user.id,
+      players,
+      total_paid: totalCents / 100,
+      status: 'pending_payment',
+      payment_status: 'pending',
+      green_fee_cents: greenFeeCents,
+      platform_fee_cents: appFeeCents,
+      total_charged_cents: totalCents,
+      points_awarded: 0,
+    })
+    .select('id')
+    .single()
+
+  if (error || !booking) return { error: 'Failed to create booking.' }
+
+  return { bookingId: booking.id }
+}
 
 export async function confirmBooking({
   teeTimeId,

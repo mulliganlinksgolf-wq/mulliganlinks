@@ -117,9 +117,6 @@ export default async function MembershipPage({
               ) : (
                 <form action={`/api/membership/checkout`} method="POST">
                   <input type="hidden" name="tier" value={tier.id} />
-                  {/* TODO: Wire to Stripe — replace this form action with a server action
-                      that calls stripe.checkout.sessions.create() with the correct price ID
-                      and returns a redirect to session.url */}
                   <button
                     type="submit"
                     className="w-full rounded-lg bg-[#1B4332] py-2.5 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
@@ -133,20 +130,7 @@ export default async function MembershipPage({
         })}
       </div>
 
-      {/* Stripe placeholder notice */}
-      <div className="bg-[#FAF7F2] border border-black/10 rounded-xl p-5 text-sm text-[#6B7770]">
-        <p className="font-medium text-[#1A1A1A] mb-1">Payment coming soon</p>
-        <p>
-          Membership purchases will be processed securely via Stripe. Payments are launching imminently —
-          if you&apos;d like to lock in your membership now, email us at{' '}
-          <a href="mailto:support@mulliganlinks.com" className="text-[#1B4332] underline">
-            support@mulliganlinks.com
-          </a>
-          .
-        </p>
-      </div>
-
-      <Link href="/app" className="inline-flex text-sm text-[#6B7770] hover:text-[#1A1A1A]">
+<Link href="/app" className="inline-flex text-sm text-[#6B7770] hover:text-[#1A1A1A]">
         ← Back to dashboard
       </Link>
     </div>

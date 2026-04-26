@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
+import { BookingPaymentForm } from '@/components/BookingPaymentForm'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export default async function BookPage({
   params,
@@ -13,9 +15,10 @@ export default async function BookPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: teeTime } = await supabase
+  const admin = createAdminClient()
+  const { data: teeTime } = await admin
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price, status, courses(id, name, slug, city, state)')
+    .select('id, scheduled_at, available_players, base_price, status, courses(id, name, slug, city, state, stripe_account_id, stripe_charges_enabled)')
     .eq('id', teeTimeId)
     .single()
 
@@ -26,9 +29,12 @@ export default async function BookPage({
     .select('tier')
     .eq('user_id', user.id)
     .eq('status', 'active')
-    .single()
+    .maybeSingle()
 
   const tier = membership?.tier ?? 'free'
+
+  const course = teeTime.courses as any
+  const stripeEnabled = course?.stripe_charges_enabled === true
 
   const { data: pointsRows } = await supabase
     .from('fairway_points')
@@ -40,19 +46,30 @@ export default async function BookPage({
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Confirm Booking</h1>
+        <h1 className="text-2xl font-bold text-[#1A1A1A]">
+          {stripeEnabled ? 'Complete Booking' : 'Confirm Booking'}
+        </h1>
         <p className="text-[#6B7770] mt-1">
-          {(teeTime.courses as any)?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
-            weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit'
+          {course?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
+            weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
           })}
         </p>
       </div>
-      <BookingForm
-        teeTime={teeTime as any}
-        tier={tier}
-        pointsBalance={pointsBalance}
-        userId={user.id}
-      />
+
+      {stripeEnabled ? (
+        <BookingPaymentForm
+          teeTime={teeTime as any}
+          tier={tier}
+          userId={user.id}
+        />
+      ) : (
+        <BookingForm
+          teeTime={teeTime as any}
+          tier={tier}
+          pointsBalance={pointsBalance}
+          userId={user.id}
+        />
+      )}
     </div>
   )
 }

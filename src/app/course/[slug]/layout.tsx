@@ -37,6 +37,7 @@ export default async function CourseAdminLayout({
     { href: `/course/${slug}/check-in`, label: 'Check-in' },
     { href: `/course/${slug}/bookings`, label: 'Bookings' },
     { href: `/course/${slug}/members`, label: 'Members' },
+    { href: `/course/${slug}/payments`, label: 'Payments' },
     { href: `/course/${slug}/dashboard`, label: 'Dashboard' },
     { href: `/course/${slug}/settings`, label: 'Settings' },
   ]
