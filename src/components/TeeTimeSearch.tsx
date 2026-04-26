@@ -27,37 +27,40 @@ function formatDate(s: string) {
 function TeeTimeCard({
   tt,
   discountPct,
-  isHot,
+  isMovingFast,
   compact = false,
 }: {
   tt: TeeTime
   discountPct: number
-  isHot: boolean
+  isMovingFast: boolean
   compact?: boolean
 }) {
   const price = tt.base_price * (1 - discountPct / 100)
   const spotsLeft = tt.available_players
   const lastSpot = spotsLeft === 1
-  const twoLeft = spotsLeft === 2
 
   return (
     <Link
       href={`/app/book/${tt.id}`}
       className={`
         relative flex flex-col items-center text-center rounded-xl border-2 transition-all
-        ${compact ? 'p-3' : 'p-5'}
-        ${isHot && lastSpot
-          ? 'border-orange-400 bg-orange-50 hover:bg-orange-100 shadow-sm'
-          : isHot && twoLeft
-          ? 'border-yellow-300 bg-yellow-50 hover:bg-yellow-100'
+        ${compact ? 'p-3 pt-5' : 'p-5 pt-6'}
+        ${isMovingFast && lastSpot
+          ? 'border-[#1B4332] bg-[#1B4332]/5 hover:bg-[#1B4332]/10 shadow-sm'
+          : isMovingFast
+          ? 'border-[#E0A800] bg-[#E0A800]/5 hover:bg-[#E0A800]/10'
           : 'border-gray-200 bg-white hover:border-[#1B4332] hover:shadow-sm'
         }
       `}
     >
-      {isHot && (
-        <div className={`absolute -top-2.5 left-1/2 -translate-x-1/2 text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap
-          ${lastSpot ? 'bg-orange-500 text-white' : 'bg-yellow-400 text-[#1A1A1A]'}`}>
-          {lastSpot ? '🔥 LAST SPOT' : '🔥 2 LEFT'}
+      {isMovingFast && (
+        <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap
+          ${lastSpot
+            ? 'bg-[#1B4332] text-[#FAF7F2]'
+            : 'bg-[#E0A800] text-[#1A1A1A]'
+          }`}
+        >
+          {lastSpot ? '1 spot left' : `${spotsLeft} left`}
         </div>
       )}
       <p className={`font-bold text-[#1A1A1A] ${compact ? 'text-base' : 'text-xl'}`}>
@@ -69,9 +72,11 @@ function TeeTimeCard({
       {discountPct > 0 && (
         <p className="text-xs text-[#6B7770] line-through">${tt.base_price.toFixed(2)}</p>
       )}
-      <p className={`text-[#6B7770] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'} ${lastSpot ? 'text-orange-600 font-semibold' : ''}`}>
-        {spotsLeft} spot{spotsLeft !== 1 ? 's' : ''} left
-      </p>
+      {!isMovingFast && (
+        <p className={`text-[#6B7770] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
+          {spotsLeft} spot{spotsLeft !== 1 ? 's' : ''} left
+        </p>
+      )}
     </Link>
   )
 }
@@ -79,7 +84,6 @@ function TeeTimeCard({
 export function TeeTimeSearch({
   teeTimes,
   courseName,
-  courseSlug,
   selectedDate,
   discountPct,
   tier,
@@ -93,35 +97,35 @@ export function TeeTimeSearch({
 }) {
   const [golfers, setGolfers] = useState<number | null>(null)
   const [timeOfDay, setTimeOfDay] = useState<'any' | 'early' | 'morning' | 'afternoon'>('any')
-  const [hotOnly, setHotOnly] = useState(false)
+  const [fastOnly, setFastOnly] = useState(false)
 
   const prevDate = (() => { const d = new Date(selectedDate + 'T12:00:00'); d.setDate(d.getDate() - 1); return d.toISOString().split('T')[0] })()
   const nextDate = (() => { const d = new Date(selectedDate + 'T12:00:00'); d.setDate(d.getDate() + 1); return d.toISOString().split('T')[0] })()
 
-  const hotDeals = useMemo(() => teeTimes.filter(tt => tt.available_players <= 2), [teeTimes])
+  const movingFast = useMemo(() => teeTimes.filter(tt => tt.available_players <= 2), [teeTimes])
 
   const filtered = useMemo(() => {
     return teeTimes.filter(tt => {
       if (golfers !== null && tt.available_players < golfers) return false
-      if (hotOnly && tt.available_players > 2) return false
+      if (fastOnly && tt.available_players > 2) return false
       const h = localHour(tt.scheduled_at)
       if (timeOfDay === 'early' && h >= 9) return false
       if (timeOfDay === 'morning' && (h < 9 || h >= 12)) return false
       if (timeOfDay === 'afternoon' && h < 12) return false
       return true
     })
-  }, [teeTimes, golfers, timeOfDay, hotOnly])
+  }, [teeTimes, golfers, timeOfDay, fastOnly])
 
   const morning = filtered.filter(tt => localHour(tt.scheduled_at) < 12)
   const afternoon = filtered.filter(tt => localHour(tt.scheduled_at) >= 12)
 
-  const isHot = (tt: TeeTime) => tt.available_players <= 2
+  const isMovingFast = (tt: TeeTime) => tt.available_players <= 2
 
   return (
     <div className="space-y-6">
       {/* Date navigator */}
       <div className="flex items-center justify-between bg-white rounded-xl border border-gray-200 px-4 py-3">
-        <Link href={`?date=${prevDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors">
+        <Link href={`?date=${prevDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors text-lg">
           ←
         </Link>
         <div className="text-center">
@@ -129,23 +133,30 @@ export function TeeTimeSearch({
           <p className="font-bold text-[#1A1A1A]">{courseName}</p>
           <p className="text-sm font-medium text-[#1B4332]">{formatDate(selectedDate)}</p>
         </div>
-        <Link href={`?date=${nextDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors">
+        <Link href={`?date=${nextDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors text-lg">
           →
         </Link>
       </div>
 
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2">
-        {/* Hot deals toggle */}
+        {/* Moving Fast toggle */}
         <button
-          onClick={() => setHotOnly(v => !v)}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
-            hotOnly
-              ? 'border-orange-400 bg-orange-50 text-orange-700'
+          onClick={() => setFastOnly(v => !v)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
+            fastOnly
+              ? 'border-[#1B4332] bg-[#1B4332]/5 text-[#1B4332]'
               : 'border-gray-200 bg-white text-[#6B7770] hover:border-gray-300'
           }`}
         >
-          🔥 Hot Deals {hotDeals.length > 0 && <span className="bg-orange-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">{hotDeals.length}</span>}
+          <span>Moving Fast</span>
+          {movingFast.length > 0 && (
+            <span className={`text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold ${
+              fastOnly ? 'bg-[#1B4332] text-[#FAF7F2]' : 'bg-[#6B7770] text-white'
+            }`}>
+              {movingFast.length}
+            </span>
+          )}
         </button>
 
         {/* Time */}
@@ -182,7 +193,6 @@ export function TeeTimeSearch({
           ))}
         </div>
 
-        {/* Tier badge */}
         {tier !== 'free' && (
           <span className="ml-auto text-xs px-3 py-1.5 rounded-full bg-[#E0A800]/20 text-[#8B6F00] font-semibold">
             {discountPct}% {tier} discount applied
@@ -190,16 +200,16 @@ export function TeeTimeSearch({
         )}
       </div>
 
-      {/* Hot Deals carousel */}
-      {hotDeals.length > 0 && !hotOnly && (
+      {/* Moving Fast carousel */}
+      {movingFast.length > 0 && !fastOnly && (
         <div>
-          <h2 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wide mb-3">
-            🔥 Hot Deals at {courseName}
+          <h2 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wide mb-4">
+            Moving Fast at {courseName}
           </h2>
-          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-            {hotDeals.slice(0, 8).map(tt => (
-              <div key={tt.id} className="flex-shrink-0 w-28">
-                <TeeTimeCard tt={tt} discountPct={discountPct} isHot compact />
+          <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide">
+            {movingFast.slice(0, 8).map(tt => (
+              <div key={tt.id} className="flex-shrink-0 w-32">
+                <TeeTimeCard tt={tt} discountPct={discountPct} isMovingFast compact />
               </div>
             ))}
           </div>
@@ -211,7 +221,7 @@ export function TeeTimeSearch({
         <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
           <p className="text-[#6B7770]">No tee times match your filters.</p>
           <button
-            onClick={() => { setGolfers(null); setTimeOfDay('any'); setHotOnly(false) }}
+            onClick={() => { setGolfers(null); setTimeOfDay('any'); setFastOnly(false) }}
             className="mt-3 text-sm text-[#1B4332] underline"
           >
             Clear filters
@@ -222,16 +232,16 @@ export function TeeTimeSearch({
           {morning.length > 0 && (
             <div>
               <h2 className="text-sm font-semibold text-[#6B7770] uppercase tracking-wide mb-3">Morning</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isHot={isHot(tt)} />)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
               </div>
             </div>
           )}
           {afternoon.length > 0 && (
             <div>
               <h2 className="text-sm font-semibold text-[#6B7770] uppercase tracking-wide mb-3">Afternoon</h2>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isHot={isHot(tt)} />)}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
               </div>
             </div>
           )}
