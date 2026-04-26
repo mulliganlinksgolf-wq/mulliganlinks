@@ -16,7 +16,7 @@ export default async function AdminDashboardPage() {
   ] = await Promise.all([
     admin.from('waitlist').select('*', { count: 'exact', head: true }),
     admin.from('profiles').select('*', { count: 'exact', head: true }),
-    admin.from('courses').select('*', { count: 'exact', head: true }).eq('active', true),
+    admin.from('courses').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     admin.from('bookings').select('*', { count: 'exact', head: true }).neq('status', 'canceled'),
     admin.from('profiles').select('id, full_name, created_at').order('created_at', { ascending: false }).limit(5),
     admin.from('bookings')

@@ -1,6 +1,7 @@
 'use client'
 
 import { useTransition, useState } from 'react'
+import Link from 'next/link'
 import { setAdminStatus, setMemberTier, deleteMember } from '@/app/actions/admin'
 
 interface Props {
@@ -31,6 +32,14 @@ export function UserActions({ userId, currentTier, isAdmin, isSelf }: Props) {
   return (
     <td className="px-4 py-3">
       <div className="flex items-center gap-2 flex-wrap">
+        {/* View as member */}
+        <Link
+          href={`/admin/users/${userId}/view`}
+          className="text-xs text-[#1B4332] hover:underline font-medium"
+        >
+          View as member →
+        </Link>
+
         {/* Tier selector */}
         <select
           defaultValue={currentTier}

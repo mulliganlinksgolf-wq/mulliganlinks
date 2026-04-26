@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
+import Link from 'next/link'
 
 export const metadata = { title: 'Courses' }
 
@@ -7,8 +8,8 @@ async function toggleCourse(formData: FormData) {
   'use server'
   const admin = createAdminClient()
   const id = formData.get('id') as string
-  const active = formData.get('active') === 'true'
-  await admin.from('courses').update({ active: !active }).eq('id', id)
+  const isActive = formData.get('status') === 'active'
+  await admin.from('courses').update({ status: isActive ? 'archived' : 'active' }).eq('id', id)
   revalidatePath('/admin/courses')
 }
 
@@ -16,7 +17,7 @@ export default async function AdminCoursesPage() {
   const admin = createAdminClient()
   const { data: courses } = await admin
     .from('courses')
-    .select('id, name, city, state, active, created_at')
+    .select('id, name, slug, city, state, status, created_at')
     .order('created_at', { ascending: false })
 
   return (
@@ -24,7 +25,7 @@ export default async function AdminCoursesPage() {
       <div>
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
         <p className="text-[#6B7770] text-sm mt-1">
-          Active courses appear in the member booking flow. Inactive courses are hidden from members.
+          Active courses appear in the member booking flow.
         </p>
       </div>
 
@@ -47,25 +48,30 @@ export default async function AdminCoursesPage() {
                   <td className="px-5 py-3 text-[#6B7770]">{c.city}, {c.state}</td>
                   <td className="px-5 py-3">
                     <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-                      c.active ? 'bg-[#1B4332]/10 text-[#1B4332]' : 'bg-black/5 text-[#6B7770]'
+                      c.status === 'active' ? 'bg-[#1B4332]/10 text-[#1B4332]' : 'bg-black/5 text-[#6B7770]'
                     }`}>
-                      {c.active ? 'Active' : 'Inactive'}
+                      {c.status}
                     </span>
                   </td>
                   <td className="px-5 py-3 text-[#6B7770]">
                     {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
                   <td className="px-5 py-3">
-                    <form action={toggleCourse}>
-                      <input type="hidden" name="id" value={c.id} />
-                      <input type="hidden" name="active" value={String(c.active)} />
-                      <button
-                        type="submit"
+                    <div className="flex items-center gap-3">
+                      <Link
+                        href={`/admin/courses/${c.slug}/view`}
                         className="text-xs text-[#1B4332] hover:underline font-medium"
                       >
-                        {c.active ? 'Deactivate' : 'Activate'}
-                      </button>
-                    </form>
+                        View as course →
+                      </Link>
+                      <form action={toggleCourse}>
+                        <input type="hidden" name="id" value={c.id} />
+                        <input type="hidden" name="status" value={c.status} />
+                        <button type="submit" className="text-xs text-[#6B7770] hover:underline">
+                          {c.status === 'active' ? 'Deactivate' : 'Activate'}
+                        </button>
+                      </form>
+                    </div>
                   </td>
                 </tr>
               )) : (
