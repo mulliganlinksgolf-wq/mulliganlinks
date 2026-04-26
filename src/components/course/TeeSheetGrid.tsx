@@ -26,7 +26,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
   const [, startTransition] = useTransition()
 
   const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+    new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/Detroit' })
 
   const statusColors: Record<string, string> = {
     open: 'bg-green-50 border-green-200',

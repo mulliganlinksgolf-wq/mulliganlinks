@@ -43,7 +43,7 @@ export default async function BookPage({
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Confirm Booking</h1>
         <p className="text-[#6B7770] mt-1">
           {(teeTime.courses as any)?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
-            weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit'
+            weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit'
           })}
         </p>
       </div>

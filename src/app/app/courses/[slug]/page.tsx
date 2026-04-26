@@ -51,16 +51,17 @@ export default async function CourseDetailPage({
     .gt('available_players', 0)
     .order('scheduled_at')
 
+  const TZ = 'America/Detroit'
   const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })
+    new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: TZ })
 
   const formatDate = (s: string) =>
     new Date(s + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
-  // Group by morning/afternoon/evening
+  // Group by morning/afternoon/evening (in course local time)
   const groups: Record<string, typeof teeTimes> = { Morning: [], Afternoon: [], Evening: [] }
   for (const tt of teeTimes ?? []) {
-    const hour = new Date(tt.scheduled_at).getHours()
+    const hour = parseInt(new Date(tt.scheduled_at).toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: TZ }))
     if (hour < 12) groups.Morning!.push(tt)
     else if (hour < 17) groups.Afternoon!.push(tt)
     else groups.Evening!.push(tt)
