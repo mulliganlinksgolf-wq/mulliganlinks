@@ -11,16 +11,26 @@ export default async function AdminUsersPage() {
 
   const { data: { user: me } } = await supabase.auth.getUser()
 
-  const [
-    { data: waitlist },
-    { data: members },
-  ] = await Promise.all([
-    admin.from('waitlist').select('*').order('created_at', { ascending: false }),
-    admin
+  // Fetch members — try with is_admin first, fall back without if column not yet in schema cache
+  const { data: waitlist } = await admin
+    .from('waitlist').select('*').order('created_at', { ascending: false })
+
+  let members: any[] | null = null
+  const withAdmin = await admin
+    .from('profiles')
+    .select('id, full_name, email, is_admin, created_at, memberships(tier, status)')
+    .order('created_at', { ascending: false })
+
+  if (!withAdmin.error) {
+    members = withAdmin.data
+  } else {
+    // Schema cache may not include is_admin yet — retry without it
+    const fallback = await admin
       .from('profiles')
-      .select('id, full_name, email, is_admin, created_at, memberships(tier, status)')
-      .order('created_at', { ascending: false }),
-  ])
+      .select('id, full_name, email, created_at, memberships(tier, status)')
+      .order('created_at', { ascending: false })
+    members = fallback.data
+  }
 
   const tierColor: Record<string, string> = {
     ace: 'bg-[#1B4332] text-[#FAF7F2]',
