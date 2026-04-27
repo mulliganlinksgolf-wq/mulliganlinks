@@ -179,6 +179,43 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Social Proof ──────────────────────────────────────── */}
+      <section className="px-6 py-20 bg-[#FAF7F2]">
+        <div className="max-w-5xl mx-auto text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] mb-4">
+            The exodus is real.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+            {[
+              {
+                stat: '100+',
+                label: 'courses left GolfNow in Q1 2025 alone',
+                source: 'NGCOA data',
+              },
+              {
+                stat: '382%',
+                label: 'online revenue increase at Windsor Parke after leaving GolfNow',
+                source: '$81K → $393K',
+              },
+              {
+                stat: '$94,500',
+                label: 'average annual barter cost per GolfNow course',
+                source: 'industry analyst data, 2025',
+              },
+            ].map(({ stat, label, source }) => (
+              <div key={stat} className="bg-white rounded-xl p-8 space-y-3 ring-1 ring-black/5 text-center">
+                <div className="text-4xl font-bold text-[#0F3D2E]">{stat}</div>
+                <p className="text-sm text-[#1A1A1A] font-medium leading-snug">{label}</p>
+                <p className="text-xs text-[#6B7770]">{source}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-10 text-sm text-[#6B7770]">
+            TeeAhead is built to give those courses — and their golfers — a better option.
+          </p>
+        </div>
+      </section>
+
       {/* ── How It Works ──────────────────────────────────────── */}
       <section id="how-it-works" className="px-6 py-20 bg-white">
         <div className="max-w-5xl mx-auto">
