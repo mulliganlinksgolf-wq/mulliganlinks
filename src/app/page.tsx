@@ -119,7 +119,7 @@ export default async function HomePage() {
                 <div className="text-2xl">🏌️</div>
                 <div>
                   <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free forever for Founding Partners. No barter. No commissions. No data extraction.</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free forever for Founding Partners. No barter. No data extraction. No commissions. Ever.</p>
                 </div>
                 <Link
                   href="/waitlist/course"
@@ -200,6 +200,7 @@ export default async function HomePage() {
               { num: '100+', label: 'courses left GolfNow in Q1 2025 alone' },
               { num: '382%', label: 'revenue increase at Windsor Parke after leaving' },
               { num: '$0', label: 'what TeeAhead charges Founding Partner courses' },
+              { num: '100%', label: 'of your golfer data owned by you, not TeeAhead' },
             ].map(({ num, label }) => (
               <div key={num} className="space-y-1">
                 <p className="font-display font-extrabold text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
@@ -222,7 +223,8 @@ export default async function HomePage() {
                 The better way to play — and to run a course.
               </h2>
               <p className="text-[#F4F1EA]/60 text-base leading-relaxed max-w-md mx-auto">
-                Free for courses. Fair for golfers. Built in Metro Detroit for the people who show up every week.
+                Free for courses. Fair for golfers. Built in Metro Detroit for the people who show up every week.{' '}
+                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>Your golfers, your data. Always.</em>
               </p>
             </div>
 
@@ -267,6 +269,7 @@ export default async function HomePage() {
                 <ul className="space-y-2.5">
                   {[
                     'Free for Founding Partners — forever',
+                    '📋 Your Data, Always — every golfer who books through TeeAhead is added to your database, not ours. Full profiles, contact info, and booking history. Export anytime. We never use your golfers to market a competitor course.',
                     'No barter tee times, ever',
                     'No commissions on bookings',
                     'Full tee sheet control stays with you',
