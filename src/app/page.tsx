@@ -48,7 +48,7 @@ export default async function HomePage() {
           <nav className="flex items-center gap-3">
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors hidden sm:inline-flex"
+              className="whitespace-nowrap inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors hidden md:inline-flex"
             >
               Join the Waitlist
             </Link>
