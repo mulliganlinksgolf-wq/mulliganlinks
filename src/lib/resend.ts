@@ -153,7 +153,7 @@ export async function sendCourseWaitlistConfirmation({
         what happens next.</p>
         <p>As a quick reminder, Founding Partners get:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>The full TeeAhead platform — free for life</li>
+          <li>The full TeeAhead platform — free for your first year</li>
           <li>Direct tee sheet connection (we handle the tech)</li>
           <li>Featured placement in our marketing to Metro Detroit golfers</li>
         </ul>
@@ -289,7 +289,7 @@ export async function sendBarterReceipt({
         <p style="font-size: 13px; color: #6B7770;">
           Estimate based on 2 barter tee times per day × 300 operating days × your average green fee,
           which is what GolfNow's standard barter agreement costs partner courses annually.
-          TeeAhead charges you $0 — for life.
+          TeeAhead charges you $0 — for your first year.
         </p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
@@ -330,7 +330,7 @@ export async function sendFoundingPartnerApproval({
         <h2 style="color: #1B4332;">Welcome, Founding Partner #${partnerNumber} of 10 ⛳</h2>
         <p>Hey ${firstName},</p>
         <p><strong>${courseName}</strong> is officially a TeeAhead Founding Partner.
-        You're locked in free for life — no catches.</p>
+        You're locked in free for your first year — no catches.</p>
         <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600; color: #166534;">Your Founding Partner agreement (short version):</p>
           <ol style="color: #166534; padding-left: 20px; line-height: 2; margin: 8px 0 0;">

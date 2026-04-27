@@ -278,7 +278,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 Ready to stop paying GolfNow to take your tee times?
               </h2>
               <p className="text-[#6B7770] text-base leading-relaxed">
-                TeeAhead is free for Founding Partner courses — forever. No barter. No commissions.
+                TeeAhead is free for Founding Partner courses — your first year on us. No barter. No commissions.
                 The only ask: tell your golfers about TeeAhead at booking.
               </p>
               <div className="space-y-3">

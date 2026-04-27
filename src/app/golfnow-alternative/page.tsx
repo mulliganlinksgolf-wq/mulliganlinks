@@ -102,7 +102,7 @@ export default function GolfNowAlternativePage() {
               </p>
             </div>
             <p className="text-[#6B7770] leading-relaxed">
-              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for life — no barter, no commissions, no data extraction. Course #11 onward pays a flat $299/month, which for a course losing $94,500/year to GolfNow represents an immediate 97% cost reduction.
+              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for their first year — no barter, no commissions, no data extraction. Course #11 onward pays a flat $299/month, which for a course losing $94,500/year to GolfNow represents an immediate 97% cost reduction.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -204,7 +204,7 @@ export default function GolfNowAlternativePage() {
               href="/waitlist/course"
               className="inline-flex items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
             >
-              Claim a Founding Partner Spot — Free for Life →
+              Claim a Founding Partner Spot — First Year Free →
             </Link>
           </div>
         </section>
@@ -300,7 +300,7 @@ export default function GolfNowAlternativePage() {
               </div>
               <h3 className="text-2xl font-bold text-[#1A1A1A]">Ready to cancel GolfNow?</h3>
               <p className="text-[#6B7770] leading-relaxed">
-                The first 10 Founding Partner courses in Metro Detroit get TeeAhead free for life. No barter. No commissions. No data extraction.
+                The first 10 Founding Partner courses in Metro Detroit get TeeAhead free for their first year. No barter. No commissions. No data extraction.
               </p>
               <Link
                 href="/waitlist/course"

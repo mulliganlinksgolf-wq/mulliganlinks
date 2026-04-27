@@ -119,7 +119,7 @@ export default async function HomePage() {
                 <div className="text-2xl">🏌️</div>
                 <div>
                   <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free forever for Founding Partners. No barter. No data extraction. No commissions. Ever.</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free for your first year for Founding Partners. No barter. No data extraction. No commissions.</p>
                 </div>
                 <Link
                   href="/waitlist/course"
@@ -160,7 +160,7 @@ export default async function HomePage() {
               slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
             </p>
             <p className="text-base text-[#6B7770]">
-              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for life. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$299/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for your first year. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$299/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
             </p>
 
             {/* Barter callout — visually distinct, not just a text link */}
@@ -268,7 +268,7 @@ export default async function HomePage() {
                 </h3>
                 <ul className="space-y-2.5">
                   {[
-                    'Free for Founding Partners — forever',
+                    'Free for Founding Partners — first year on us',
                     '📋 Your Data, Always — every golfer who books through TeeAhead is added to your database, not ours. Full profiles, contact info, and booking history. Export anytime. We never use your golfers to market a competitor course.',
                     'No barter tee times, ever',
                     'No commissions on bookings',

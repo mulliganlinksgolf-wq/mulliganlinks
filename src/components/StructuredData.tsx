@@ -78,7 +78,7 @@ export function StructuredData() {
             name: 'Is TeeAhead free for golf courses?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'Yes. TeeAhead is completely free for the first 10 Founding Partner courses — free for life. There are no barter tee times, no commissions, and no data extraction. TeeAhead makes money from golfer memberships, not from courses.',
+              text: 'Yes. TeeAhead is completely free for the first 10 Founding Partner courses — free for your first year. There are no barter tee times, no commissions, and no data extraction. TeeAhead makes money from golfer memberships, not from courses.',
             },
           },
           {
@@ -94,7 +94,7 @@ export function StructuredData() {
             name: 'What is the TeeAhead Founding Partner program?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for life. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $299/month.',
+              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $299/month.',
             },
           },
           {
