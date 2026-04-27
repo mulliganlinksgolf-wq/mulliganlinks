@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
     if (!userId || !tier) return NextResponse.json({ error: 'Missing metadata' }, { status: 400 })
 
     const sub = session.subscription as string
-    const stripeSubscription = await stripe.subscriptions.retrieve(sub) as any
+    const stripeSubscription = await stripe.subscriptions.retrieve(sub) as Stripe.Subscription
     const periodEnd = new Date(stripeSubscription.current_period_end * 1000).toISOString()
 
     await admin.from('memberships').upsert({
@@ -36,6 +36,16 @@ export async function POST(req: NextRequest) {
       stripe_subscription_id: sub,
       current_period_end: periodEnd,
     }, { onConflict: 'user_id' })
+
+    // Mark founding_member permanently on the profile when payment is confirmed
+    if (session.metadata?.founding_golfer === 'true') {
+      const { error } = await admin.from('profiles')
+        .update({ founding_member: true })
+        .eq('id', userId)
+      if (error) {
+        console.error('[webhook] Failed to set founding_member on profile:', error)
+      }
+    }
   }
 
   if (event.type === 'customer.subscription.deleted') {
