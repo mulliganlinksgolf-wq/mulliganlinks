@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { FadeIn } from '@/components/FadeIn'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
@@ -51,6 +52,7 @@ export default async function HomePage() {
 
       {/* ── Hero ──────────────────────────────────────────────── */}
       <section className="bg-[#FAF7F2] px-6 py-24 text-center">
+        <FadeIn>
         <div className="max-w-3xl mx-auto space-y-8">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-white border border-[#1B4332]/20 rounded-full px-4 py-1.5">
@@ -89,10 +91,12 @@ export default async function HomePage() {
 
           <p className="text-sm text-[#6B7770]">{tagline}</p>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── Two-Column Value Props ──────────────────────────────── */}
       <section className="px-6 py-20 bg-white">
+        <FadeIn>
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
 
           {/* Golfer column */}
@@ -177,10 +181,12 @@ export default async function HomePage() {
           </div>
 
         </div>
+        </FadeIn>
       </section>
 
       {/* ── Social Proof ──────────────────────────────────────── */}
       <section className="px-6 py-20 bg-[#FAF7F2]">
+        <FadeIn>
         <div className="max-w-5xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] mb-4">
             The exodus is real.
@@ -214,10 +220,12 @@ export default async function HomePage() {
             TeeAhead is built to give those courses — and their golfers — a better option.
           </p>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── How It Works ──────────────────────────────────────── */}
       <section id="how-it-works" className="px-6 py-20 bg-white">
+        <FadeIn>
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
             Golf the way it should be.
@@ -250,10 +258,12 @@ export default async function HomePage() {
             ))}
           </div>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── Pricing ───────────────────────────────────────────── */}
       <section id="pricing" className="px-6 py-20 bg-[#FAF7F2]">
+        <FadeIn>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14 space-y-3">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">Pick your game.</h2>
@@ -263,7 +273,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
 
             {/* Fairway — Free */}
-            <Card className="bg-white ring-black/10">
+            <Card className="bg-white ring-black/10 pricing-card">
               <CardHeader className="pt-8 pb-2">
                 <CardTitle className="text-xl font-bold text-[#1A1A1A]">Fairway</CardTitle>
                 <CardDescription className="text-[#6B7770]">The foundation</CardDescription>
@@ -296,7 +306,7 @@ export default async function HomePage() {
             </Card>
 
             {/* Eagle — Most Popular */}
-            <Card className="bg-white ring-[#E0A800]/40 ring-2 relative">
+            <Card className="bg-white ring-[#E0A800]/40 ring-2 relative pricing-card">
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                 <span className="inline-block bg-[#E0A800] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full">
                   Most Popular
@@ -341,7 +351,7 @@ export default async function HomePage() {
             </Card>
 
             {/* Ace */}
-            <Card className="bg-white ring-[#1B4332]/40 ring-2">
+            <Card className="bg-white ring-[#1B4332]/40 ring-2 pricing-card">
               <CardHeader className="pt-8 pb-2">
                 <CardTitle className="text-xl font-bold text-[#1A1A1A]">Ace</CardTitle>
                 <CardDescription className="text-[#6B7770]">All-in members</CardDescription>
@@ -385,10 +395,12 @@ export default async function HomePage() {
             earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
           </p>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── vs. GolfNow Comparison ────────────────────────────── */}
       <section className="px-6 py-20 bg-white">
+        <FadeIn>
         <div className="max-w-3xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-12">
             Why not just use GolfNow?
@@ -432,10 +444,12 @@ export default async function HomePage() {
             &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
           </p>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── Founder Section ───────────────────────────────────── */}
       <section className="px-6 py-20 bg-[#FAF7F2]">
+        <FadeIn>
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
             Built by golfers. For golfers.
@@ -481,6 +495,7 @@ export default async function HomePage() {
             now and launching in 2026.
           </p>
         </div>
+        </FadeIn>
       </section>
 
       {/* ── Footer ────────────────────────────────────────────── */}
