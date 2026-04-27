@@ -18,6 +18,23 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
   const [barterTeeTimes, setBarterTeeTimes] = useState(2)
   const [copied, setCopied] = useState(false)
 
+  const [presetKey, setPresetKey] = useState<'municipal' | 'dailyfee' | 'semiprivate' | 'custom'>('dailyfee')
+
+  const presets = {
+    municipal:   { label: 'Municipal ($45)',      greenFee: 45,  days: 280 },
+    dailyfee:    { label: 'Daily Fee ($85)',       greenFee: 85,  days: 280 },
+    semiprivate: { label: 'Semi-Private ($120)',   greenFee: 120, days: 260 },
+    custom:      { label: 'My own numbers',        greenFee: greenFee, days: operatingDays },
+  } as const
+
+  const handlePreset = (key: typeof presetKey) => {
+    setPresetKey(key)
+    if (key !== 'custom') {
+      setGreenFee(presets[key].greenFee)
+      setOperatingDays(presets[key].days)
+    }
+  }
+
   const annualBarterCost = greenFee * operatingDays * barterTeeTimes
 
   const [displayedCost, setDisplayedCost] = useState(annualBarterCost)
@@ -74,33 +91,73 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
       {/* ── Header ────────────────────────────────────────────── */}
-      <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
-        <div className="max-w-3xl mx-auto">
+      <header className="bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8 px-6 py-4">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto" />
+            <TeeAheadLogo className="h-12 w-auto brightness-0 invert" />
           </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-sm text-[#F4F1EA]/65 hover:text-[#F4F1EA] transition-colors hidden sm:block">
+              ← Back to Home
+            </Link>
+            <Link
+              href="/waitlist/course"
+              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-4 py-2 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+            >
+              Claim a Founding Spot
+            </Link>
+          </div>
         </div>
       </header>
 
       <main className="flex-1">
 
         {/* ── Hero ──────────────────────────────────────────────── */}
-        <section className="px-6 py-20 bg-[#FAF7F2]">
+        <section className="px-6 py-20 text-center relative overflow-hidden" style={{ background: '#071f17' }}>
+          {/* Gold radial glow */}
+          <div className="absolute inset-0 pointer-events-none"
+               style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(224,168,0,0.08) 0%, transparent 65%)' }} />
           <FadeIn>
-            <div className="max-w-3xl mx-auto space-y-6">
-              <div className="inline-block bg-[#0F3D2E]/10 text-[#0F3D2E] text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-                For golf course operators
+            <div className="max-w-2xl mx-auto space-y-7 relative z-10">
+              <div className="inline-flex items-center gap-2 bg-[#E0A800]/12 border border-[#E0A800]/30 rounded-full px-4 py-1.5">
+                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">For Golf Course Operators</span>
               </div>
-              <h1 className="text-4xl sm:text-5xl font-bold text-[#1A1A1A] leading-tight tracking-tight">
-                What has GolfNow actually cost you?
+
+              <h1 className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
+                See exactly what GolfNow has cost you.{' '}
+                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>In dollars.</em>
               </h1>
-              <p className="text-lg text-[#6B7770] leading-relaxed max-w-2xl">
-                Drop in your numbers. We&apos;ll show you the exact dollars GolfNow&apos;s barter model has cost
-                your course this year. No login. No email required (until you want one).
+
+              <p className="text-base leading-relaxed max-w-md mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
+                Drop in your numbers. We&apos;ll calculate the exact revenue GolfNow&apos;s barter model has
+                extracted from your course — this year alone. No login. No email required.
               </p>
-              <p className="text-xs text-[#6B7770] max-w-lg leading-relaxed">
-                Calculator based on NGCOA member survey data and Golf Inc. industry analysis
-                (2024–2025). Actual costs vary by GolfNow contract terms.
+
+              {/* Preset chips */}
+              <div className="space-y-3">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase" style={{ color: 'rgba(244,241,234,0.35)' }}>
+                  Quick-start with a course type
+                </p>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {(Object.keys(presets) as Array<keyof typeof presets>).map((key) => (
+                    <button
+                      key={key}
+                      onClick={() => handlePreset(key)}
+                      className="rounded-full px-4 py-2 text-sm font-semibold transition-colors"
+                      style={presetKey === key
+                        ? { background: 'rgba(224,168,0,0.15)', border: '1px solid rgba(224,168,0,0.40)', color: '#E0A800' }
+                        : { background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.15)', color: 'rgba(244,241,234,0.65)' }
+                      }
+                    >
+                      {presets[key].label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <p className="text-xs" style={{ color: 'rgba(244,241,234,0.30)' }}>
+                Calculator based on NGCOA member survey data and Golf Inc. industry analysis (2024–2025). Actual costs vary by contract terms.
               </p>
             </div>
           </FadeIn>
