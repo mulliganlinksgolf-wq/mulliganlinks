@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0F3D2E"/>
+
+  <!-- Eyebrow label -->
+  <rect x="420" y="72" width="360" height="36" rx="18" fill="#F4F1EA" opacity="0.1"/>
+  <text x="600" y="96" font-family="Inter, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#F4F1EA" opacity="0.7" text-anchor="middle" letter-spacing="2">FOR GOLF COURSE OPERATORS</text>
+
+  <!-- Big number -->
+  <text x="600" y="300" font-family="Inter, -apple-system, sans-serif" font-size="240" font-weight="700" fill="#F4F1EA" text-anchor="middle" letter-spacing="-8">$94,500</text>
+
+  <!-- Description -->
+  <text x="600" y="380" font-family="Inter, -apple-system, sans-serif" font-size="30" font-weight="400" fill="#F4F1EA" opacity="0.8" text-anchor="middle">GolfNow&#39;s barter cost the average course this year.</text>
+
+  <!-- Divider -->
+  <rect x="200" y="420" width="800" height="1" fill="#F4F1EA" opacity="0.15"/>
+
+  <!-- Footer row -->
+  <!-- TeeAhead mini wordmark left -->
+  <text x="220" y="480" font-family="Inter, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#F4F1EA" opacity="0.5" letter-spacing="-0.5">TeeAhead</text>
+
+  <!-- URL right -->
+  <text x="980" y="480" font-family="Inter, -apple-system, sans-serif" font-size="18" font-weight="400" fill="#F4F1EA" opacity="0.4" text-anchor="end">teeahead.com/barter</text>
+
+  <!-- Bottom tagline centered -->
+  <text x="600" y="560" font-family="Inter, -apple-system, sans-serif" font-size="16" font-weight="500" fill="#E0A800" text-anchor="middle" letter-spacing="0.5">What has GolfNow actually cost YOUR course? Drop in your numbers →</text>
+</svg>

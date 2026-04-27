@@ -1,9 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Caveat } from 'next/font/google'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
+
+const caveat = Caveat({ subsets: ['latin'], weight: ['400'] })
 
 export const metadata: Metadata = {
   title: 'TeeAhead — Book ahead. Play more. Own your golf.',
@@ -49,20 +52,30 @@ export default async function HomePage() {
       </header>
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="bg-[#FAF7F2] px-6 py-24 text-center">
+      <section className="relative px-6 py-28 text-center overflow-hidden">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
+        />
+        {/* Green overlay */}
+        <div className="absolute inset-0 bg-[#0F3D2E] opacity-65" />
+        {/* Vignette */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)' }} />
+        {/* Content — needs relative z-10 */}
         <FadeIn>
-        <div className="max-w-3xl mx-auto space-y-8">
+        <div className="max-w-3xl mx-auto space-y-8 relative z-10">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white border border-[#1B4332]/20 rounded-full px-4 py-1.5">
-            <span className="size-2 rounded-full bg-[#1B4332] animate-pulse" />
-            <span className="text-sm font-medium text-[#1B4332]">{badge}</span>
+          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
+            <span className="size-2 rounded-full bg-[#F4F1EA] animate-pulse" />
+            <span className="text-sm font-medium text-[#F4F1EA]">{badge}</span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl font-bold text-[#1A1A1A] leading-tight tracking-tight">
+          <h1 className="text-5xl sm:text-6xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
             {headline}
           </h1>
 
-          <p className="text-xl text-[#6B7770] leading-relaxed max-w-2xl mx-auto">
+          <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-2xl mx-auto">
             {subhead}
           </p>
 
@@ -70,16 +83,16 @@ export default async function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-7 py-3 text-base font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
+              className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3 text-base font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
             >
               ⛳ I&apos;m a Golfer — Join the Waitlist
             </Link>
             <Link
               href="/waitlist/course"
-              className="inline-flex flex-col items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-7 py-3 text-base font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
+              className="inline-flex flex-col items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 backdrop-blur-sm px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors"
             >
               <span>I Run a Course — Claim a Founding Spot</span>
-              <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+              <span className="text-xs font-normal text-[#F4F1EA]/70 mt-0.5">
                 {spotsRemaining > 0
                   ? `${spotsRemaining} of 10 spots remaining`
                   : 'All Founding spots claimed — join the Core waitlist'}
@@ -87,7 +100,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <p className="text-sm text-[#6B7770]">{tagline}</p>
+          <p className="text-sm text-[#F4F1EA]/60">{tagline}</p>
         </div>
         </FadeIn>
       </section>
@@ -162,20 +175,28 @@ export default async function HomePage() {
               <p className="text-sm text-[#6B7770] italic">
                 The only ask: tell your golfers about the TeeAhead membership at booking.
               </p>
+              <Link href="/barter" className="text-xs font-medium text-[#0F3D2E] hover:underline">
+                Want your real number? Use the barter calculator →
+              </Link>
             </div>
-            <Link
-              href="/waitlist/course"
-              className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
-            >
-              {spotsRemaining > 0
-                ? 'Claim a Founding Partner Spot →'
-                : 'Join the Course Waitlist →'}
-              <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+            <div className="flex flex-col items-start gap-2">
+              <Link
+                href="/waitlist/course"
+                className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
+              >
                 {spotsRemaining > 0
-                  ? `${spotsRemaining} of 10 spots remaining`
-                  : 'Next 10 spots release Q2 2027'}
-              </span>
-            </Link>
+                  ? 'Claim a Founding Partner Spot →'
+                  : 'Join the Course Waitlist →'}
+                <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+                  {spotsRemaining > 0
+                    ? `${spotsRemaining} of 10 spots remaining`
+                    : 'Next 10 spots release Q2 2027'}
+                </span>
+              </Link>
+              <Link href="/barter" className="text-xs text-[#0F3D2E] hover:underline">
+                or see what GolfNow has cost you →
+              </Link>
+            </div>
           </div>
 
         </div>
@@ -496,6 +517,48 @@ export default async function HomePage() {
         </FadeIn>
       </section>
 
+      {/* ── Manifesto ─────────────────────────────────────────── */}
+      <section className="bg-[#0F3D2E] px-6 py-40 text-center">
+        <p className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#F4F1EA] leading-tight tracking-[-0.03em] max-w-4xl mx-auto">
+          Local golf, returned to the people who actually play it.
+        </p>
+      </section>
+
+      {/* ── Founder Note ──────────────────────────────────────── */}
+      <section className="bg-[#0F3D2E] px-6 py-24">
+        <FadeIn>
+        <div className="max-w-2xl mx-auto text-center space-y-8">
+          <p className="text-sm font-semibold text-[#E0A800] uppercase tracking-wider italic">
+            A note from Neil
+          </p>
+          <div className="space-y-5 text-[#F4F1EA]/90 text-xl leading-[1.75]">
+            <p>
+              I&apos;ve spent the last few years inside golf, building{' '}
+              <a href="https://outing.golf" className="text-[#E0A800] hover:underline">Outing.golf</a>{' '}
+              and watching local courses I love get squeezed every day by a company that&apos;s
+              never set foot on their property.
+            </p>
+            <p>
+              I&apos;m not building TeeAhead because the market is hot. I&apos;m building it because
+              I&apos;m tired of watching it happen.
+            </p>
+            <p>
+              If you run a course in Metro Detroit, I want to talk. My email is{' '}
+              <a href="mailto:neil@teeahead.com" className="text-[#E0A800] hover:underline">
+                neil@teeahead.com
+              </a>
+              . Not a contact form. My actual inbox.
+            </p>
+            <p>
+              If you&apos;re a golfer who&apos;s tired of paying booking fees on every round and
+              watching credits expire, I&apos;d love to hear from you too.
+            </p>
+          </div>
+          <p className={`${caveat.className} text-[#F4F1EA] text-4xl`}>— Neil</p>
+        </div>
+        </FadeIn>
+      </section>
+
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
@@ -516,6 +579,7 @@ export default async function HomePage() {
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
                 <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
                 <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
+                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
                 <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
                 <Link href="#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
               </nav>
