@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Application Received — MulliganLinks',
+  title: 'Application Received — TeeAhead',
 }
 
 export default function CourseConfirmedPage() {

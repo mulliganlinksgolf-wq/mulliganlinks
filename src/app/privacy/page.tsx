@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'MulliganLinks Privacy Policy — how we collect, use, and protect your information.',
+  description: 'TeeAhead Privacy Policy — how we collect, use, and protect your information.',
 }
 
 export default function PrivacyPage() {
@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-16 w-auto" />
+            <TeeAheadLogo className="h-10 w-auto" />
           </Link>
         </div>
       </header>
@@ -63,7 +63,7 @@ export default function PrivacyPage() {
               they can prepare for your visit; (b) Stripe, for payment processing; (c) Resend,
               for transactional email delivery; (d) Vercel, for platform hosting and analytics.
               All third-party providers are contractually bound to use your data only to provide
-              services to MulliganLinks.
+              services to TeeAhead.
             </p>
           </section>
 
@@ -82,8 +82,8 @@ export default function PrivacyPage() {
             <p className="text-[#6B7770] leading-relaxed">
               You have the right to access, correct, or delete your personal data at any time.
               Email{' '}
-              <a href="mailto:support@mulliganlinks.com" className="text-[#1B4332] underline">
-                support@mulliganlinks.com
+              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
+                support@teeahead.com
               </a>{' '}
               to make a data request. We will respond within 30 days.
             </p>
@@ -111,8 +111,8 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">9. Contact</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Privacy questions or data requests:{' '}
-              <a href="mailto:support@mulliganlinks.com" className="text-[#1B4332] underline">
-                support@mulliganlinks.com
+              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
+                support@teeahead.com
               </a>
             </p>
           </section>
@@ -121,7 +121,7 @@ export default function PrivacyPage() {
 
       <footer className="border-t border-black/5 px-6 py-8 mt-12">
         <div className="max-w-3xl mx-auto flex items-center justify-between text-sm text-[#6B7770]">
-          <span>© 2026 MulliganLinks</span>
+          <span>© 2026 TeeAhead</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-[#1B4332] transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>

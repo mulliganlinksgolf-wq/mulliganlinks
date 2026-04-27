@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" role="img" aria-label="TeeAhead">
+  <!-- Outer T with two separate inner voids (crossbar + stem) via evenodd -->
+  <path
+    fill-rule="evenodd"
+    fill="#0F3D2E"
+    d="M 0,0 H 100 V 38 H 75 V 120 H 25 V 38 H 0 Z
+       M 13,13 H 87 V 25 H 13 Z
+       M 38,51 H 62 V 107 H 38 Z"
+  />
+  <!-- Flag pennant inside stem void -->
+  <path fill="#0F3D2E" d="M 40,71 L 62,79 L 40,87 Z"/>
+</svg>

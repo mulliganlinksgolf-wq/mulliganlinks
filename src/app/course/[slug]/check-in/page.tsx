@@ -25,7 +25,7 @@ export default async function CheckInPage({
       <div>
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Member check-in</h1>
         <p className="text-[#6B7770] text-sm mt-1">
-          Search by name or email to find a MulliganLinks member and award Fairway Points for their round.
+          Search by name or email to find a TeeAhead member and award Fairway Points for their round.
         </p>
       </div>
 

@@ -30,7 +30,7 @@ export default async function MemberCardPage() {
   const shortId = user.id.slice(0, 8).toUpperCase()
 
   // Generate QR encoding the member lookup URL
-  const qrData = `https://mulliganlinks.com/checkin/${user.id}`
+  const qrData = `https://teeahead.com/checkin/${user.id}`
   const qrDataUrl = await QRCode.toDataURL(qrData, {
     width: 200,
     margin: 1,
@@ -54,7 +54,7 @@ export default async function MemberCardPage() {
           {/* Header */}
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-[#FAF7F2]/60 text-xs uppercase tracking-widest font-medium">MulliganLinks</p>
+              <p className="text-[#FAF7F2]/60 text-xs uppercase tracking-widest font-medium">TeeAhead</p>
               <p className="text-2xl font-bold mt-1">{profile?.full_name ?? 'Member'}</p>
             </div>
             <div className="text-right">

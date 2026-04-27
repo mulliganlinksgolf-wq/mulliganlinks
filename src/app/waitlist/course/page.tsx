@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { createClient } from '@/lib/supabase/server'
 import { CourseWaitlistForm } from './CourseWaitlistForm'
 
 export const metadata = {
-  title: 'Founding Partner Application — MulliganLinks',
+  title: 'Founding Partner Application — TeeAhead',
   description: 'Claim one of 10 Founding Partner spots. Free platform for life.',
 }
 
@@ -23,7 +23,7 @@ export default async function CourseWaitlistPage() {
       <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={140} height={42} className="h-9 w-auto" priority />
+            <TeeAheadLogo className="h-9 w-auto" />
           </Link>
           <Link href="/" className="text-sm text-[#6B7770] hover:text-[#1B4332] transition-colors">
             ← Back
@@ -50,7 +50,7 @@ export default async function CourseWaitlistPage() {
           <p className="text-sm text-[#6B7770] leading-relaxed">
             {allClaimed
               ? 'All 10 Founding Partner spots have been claimed. You can still join the waitlist as a Core Partner at $249/month — same software, no barter.'
-              : "The only obligation: promote the Mulligan Links membership to your golfers at the point of booking, and allow us to feature your course in our marketing. Course #11 onward pays $249/month."}
+              : "The only obligation: promote the Tee Ahead membership to your golfers at the point of booking, and allow us to feature your course in our marketing. Course #11 onward pays $249/month."}
           </p>
         </div>
 

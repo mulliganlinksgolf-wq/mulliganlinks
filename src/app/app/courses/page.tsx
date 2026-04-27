@@ -22,7 +22,7 @@ export default async function CoursesPage() {
         <Card className="bg-white border-0 shadow-sm">
           <CardContent className="py-16 text-center">
             <p className="text-[#6B7770]">No courses in your area yet — we&apos;re growing.</p>
-            <p className="text-sm text-[#6B7770] mt-2">Check back soon or tell your home course about MulliganLinks.</p>
+            <p className="text-sm text-[#6B7770] mt-2">Check back soon or tell your home course about TeeAhead.</p>
           </CardContent>
         </Card>
       ) : (

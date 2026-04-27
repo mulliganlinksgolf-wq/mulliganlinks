@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { submitCourseInquiry } from '@/app/actions/contact'
 
 export const metadata: Metadata = {
   title: 'For Courses',
-  description: 'Bring MulliganLinks to your course. Free software, zero barter, zero commissions — your tee sheet stays yours.',
+  description: 'Bring TeeAhead to your course. Free software, zero barter, zero commissions — your tee sheet stays yours.',
 }
 
 export default function ContactPage() {
@@ -14,7 +14,7 @@ export default function ContactPage() {
       <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-20 w-auto" />
+            <TeeAheadLogo className="h-10 w-auto" />
           </Link>
           <Link
             href="/signup"
@@ -36,7 +36,7 @@ export default function ContactPage() {
             Your tee sheet.<br />Your customers.<br />Your revenue.
           </h1>
           <p className="text-lg text-[#FAF7F2]/80 max-w-2xl mx-auto leading-relaxed">
-            MulliganLinks gives your course a complete management platform at zero cost.
+            TeeAhead gives your course a complete management platform at zero cost.
             No barter tee times. No commissions. No data extraction. The software works
             for you — not against you.
           </p>
@@ -80,7 +80,7 @@ export default function ContactPage() {
           </p>
           <div className="bg-[#1B4332] text-[#FAF7F2] rounded-xl p-8 text-center">
             <p className="text-4xl font-bold">$0</p>
-            <p className="text-[#FAF7F2]/80 mt-2">What MulliganLinks costs your course. Forever.</p>
+            <p className="text-[#FAF7F2]/80 mt-2">What TeeAhead costs your course. Forever.</p>
           </div>
         </div>
       </section>
@@ -178,13 +178,13 @@ export default function ContactPage() {
 
       <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-3">
-          <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-16 w-auto" />
+          <TeeAheadLogo className="h-10 w-auto" />
           <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
             <span>·</span>
             <Link href="/privacy" className="hover:text-[#1B4332] transition-colors">Privacy</Link>
           </nav>
-          <p className="text-xs text-[#6B7770]">© 2026 MulliganLinks</p>
+          <p className="text-xs text-[#6B7770]">© 2026 TeeAhead</p>
         </div>
       </footer>
     </div>

@@ -1,4 +1,4 @@
-# MulliganLinks — Environment Setup Guide
+# TeeAhead — Environment Setup Guide
 
 This guide walks you through filling in the environment variables your app needs to run. You will copy values from three services (Supabase, Stripe, and Resend) into a file called `.env.local` in the root of this project.
 
@@ -96,7 +96,7 @@ Resend sends transactional emails (e.g., your waitlist confirmation email).
 
 1. Go to [https://resend.com](https://resend.com) and sign in (or create a free account).
 2. In the left sidebar, click **API Keys**.
-3. Click **Create API Key**, give it a name (e.g., "MulliganLinks Dev"), and click **Add**.
+3. Click **Create API Key**, give it a name (e.g., "TeeAhead Dev"), and click **Add**.
 4. Copy the key that appears — it starts with `re_`.
 5. Paste it as the value for `RESEND_API_KEY`.
 
@@ -119,7 +119,7 @@ This variable tells the app what its own web address is.
 
 - **When you deploy to production** (e.g., on Vercel), change it to your real domain:
   ```
-  NEXT_PUBLIC_APP_URL=https://mulliganlinks.com
+  NEXT_PUBLIC_APP_URL=https://teeahead.com
   ```
 
 You will need to update this value before going live.

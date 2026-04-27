@@ -1,9 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 const navItems = [
   { href: '/app', label: 'Dashboard', exact: true },
@@ -25,7 +25,7 @@ export function AppNav() {
     <header className="bg-white border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/app">
-          <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-16 w-auto" priority />
+          <TeeAheadLogo className="h-10 w-auto" />
         </Link>
 
         {/* Desktop nav */}

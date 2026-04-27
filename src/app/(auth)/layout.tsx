@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-8">
           <a href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-32 w-auto" priority />
+            <TeeAheadLogo className="h-10 w-auto" />
           </a>
         </div>
         {children}

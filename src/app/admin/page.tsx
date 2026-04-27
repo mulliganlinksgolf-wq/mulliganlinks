@@ -41,7 +41,7 @@ export default async function AdminDashboardPage() {
     <div className="space-y-10">
       <div>
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Dashboard</h1>
-        <p className="text-[#6B7770] text-sm mt-1">MulliganLinks at a glance</p>
+        <p className="text-[#6B7770] text-sm mt-1">TeeAhead at a glance</p>
       </div>
 
       {/* Stats */}

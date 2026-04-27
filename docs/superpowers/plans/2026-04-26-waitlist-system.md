@@ -13,7 +13,7 @@
 ## Context for the executing agent
 
 - **Database client:** Use `createClient()` from `@/lib/supabase/server` (already wraps cookie handling). For admin ops (bypassing RLS), use `createAdminClient()` from `@/lib/supabase/admin`. Never use raw `pg` or Neon — this project is on Supabase.
-- **Auth / Admin gate:** `/admin` is already protected by `src/app/admin/layout.tsx`, which checks `user.email` against `['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com']`. No separate `ADMIN_PASSWORD` env var is needed.
+- **Auth / Admin gate:** `/admin` is already protected by `src/app/admin/layout.tsx`, which checks `user.email` against `['teeaheadgolf@gmail.com', 'nbarris11@gmail.com']`. No separate `ADMIN_PASSWORD` env var is needed.
 - **Colors:** Follow existing codebase — `#1B4332` (primary green), `#E0A800` (gold), `#FAF7F2` (bg), `#1A1A1A` (text), `#6B7770` (muted).
 - **Components:** `Button`, `Card`, `CardContent`, `CardHeader`, `CardTitle`, `CardDescription`, `CardFooter`, `Input`, `Label` are all in `@/components/ui/`.
 - **Next.js version:** 16.2.4 — read `node_modules/next/dist/docs/` if anything seems off. The App Router and Server Actions work the same as Next.js 14/15 for this feature set.
@@ -326,11 +326,11 @@ Insert this **after** the hero section and **before** the "How It Works" section
           At $175/round × 2 slots × 300 days: <strong className="text-[#1A1A1A]">$105,000/year</strong> in lost revenue.
         </p>
         <p className="text-[#1A1A1A] text-sm leading-relaxed">
-          MulliganLinks charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
+          TeeAhead charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
           Course #11 onward pays $249/mo.
         </p>
         <p className="text-sm text-[#6B7770] italic">
-          The only ask: tell your golfers about the Mulligan Links membership at booking.
+          The only ask: tell your golfers about the Tee Ahead membership at booking.
         </p>
       </div>
       <Link
@@ -467,8 +467,8 @@ import { Label } from '@/components/ui/label'
 import { joinGolferWaitlist } from './actions'
 
 export const metadata = {
-  title: 'Join the Golfer Waitlist — MulliganLinks',
-  description: 'Get early access to MulliganLinks, the local-first golf loyalty network coming to Metro Detroit.',
+  title: 'Join the Golfer Waitlist — TeeAhead',
+  description: 'Get early access to TeeAhead, the local-first golf loyalty network coming to Metro Detroit.',
 }
 
 export default function GolferWaitlistPage() {
@@ -487,7 +487,7 @@ export default function GolferWaitlistPage() {
       <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={140} height={42} className="h-9 w-auto" priority />
+            <Image src="/logo.png" alt="TeeAhead" width={140} height={42} className="h-9 w-auto" priority />
           </Link>
           <Link href="/" className="text-sm text-[#6B7770] hover:text-[#1B4332] transition-colors">
             ← Back
@@ -500,7 +500,7 @@ export default function GolferWaitlistPage() {
           <div className="inline-block bg-[#1B4332]/10 text-[#1B4332] text-sm font-semibold px-3 py-1 rounded-full mb-2">
             ⛳ Golfer Waitlist
           </div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Join the MulliganLinks Waitlist</h1>
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">Join the TeeAhead Waitlist</h1>
           <p className="text-[#6B7770]">
             Be first in line when we launch in Metro Detroit. No credit card, no commitment.
           </p>
@@ -669,8 +669,8 @@ import Image from 'next/image'
 import { GolferWaitlistForm } from './GolferWaitlistForm'
 
 export const metadata = {
-  title: 'Join the Golfer Waitlist — MulliganLinks',
-  description: 'Get early access to MulliganLinks, the local-first golf loyalty network coming to Metro Detroit.',
+  title: 'Join the Golfer Waitlist — TeeAhead',
+  description: 'Get early access to TeeAhead, the local-first golf loyalty network coming to Metro Detroit.',
 }
 
 export default function GolferWaitlistPage() {
@@ -679,7 +679,7 @@ export default function GolferWaitlistPage() {
       <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={140} height={42} className="h-9 w-auto" priority />
+            <Image src="/logo.png" alt="TeeAhead" width={140} height={42} className="h-9 w-auto" priority />
           </Link>
           <Link href="/" className="text-sm text-[#6B7770] hover:text-[#1B4332] transition-colors">
             ← Back
@@ -691,7 +691,7 @@ export default function GolferWaitlistPage() {
           <div className="inline-block bg-[#1B4332]/10 text-[#1B4332] text-sm font-semibold px-3 py-1 rounded-full mb-2">
             ⛳ Golfer Waitlist
           </div>
-          <h1 className="text-3xl font-bold text-[#1A1A1A]">Join the MulliganLinks Waitlist</h1>
+          <h1 className="text-3xl font-bold text-[#1A1A1A]">Join the TeeAhead Waitlist</h1>
           <p className="text-[#6B7770]">
             Be first in line when we launch in Metro Detroit. No credit card, no commitment.
           </p>
@@ -712,7 +712,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 export const metadata = {
-  title: "You're on the list — MulliganLinks",
+  title: "You're on the list — TeeAhead",
 }
 
 export default function GolferConfirmedPage({
@@ -730,7 +730,7 @@ export default function GolferConfirmedPage({
           {position ? `You're #${position} on the list!` : "You're on the list!"}
         </h1>
         <p className="text-[#6B7770] leading-relaxed">
-          We&apos;ll email you when MulliganLinks launches in Metro Detroit.
+          We&apos;ll email you when TeeAhead launches in Metro Detroit.
           {position && position <= 100 && (
             <> You&apos;re in the first {position <= 10 ? '10' : position <= 50 ? '50' : '100'} — early access guaranteed.</>
           )}
@@ -739,7 +739,7 @@ export default function GolferConfirmedPage({
         <div className="bg-white rounded-xl p-6 ring-1 ring-black/5 text-left space-y-3">
           <p className="text-sm font-semibold text-[#1A1A1A]">While you wait:</p>
           <ul className="text-sm text-[#6B7770] space-y-2">
-            <li>• Know a course that should partner with us? Send them to <strong className="text-[#1A1A1A]">mulliganlinks.com/waitlist/course</strong></li>
+            <li>• Know a course that should partner with us? Send them to <strong className="text-[#1A1A1A]">teeahead.com/waitlist/course</strong></li>
             <li>• Share your spot with golf friends — more local golfers = more partner courses</li>
           </ul>
         </div>
@@ -1080,8 +1080,8 @@ import { createClient } from '@/lib/supabase/server'
 import { CourseWaitlistForm } from './CourseWaitlistForm'
 
 export const metadata = {
-  title: 'Founding Partner Application — MulliganLinks',
-  description: 'Claim one of 10 Founding Partner spots. Free platform for life in exchange for promoting Mulligan Links to your golfers.',
+  title: 'Founding Partner Application — TeeAhead',
+  description: 'Claim one of 10 Founding Partner spots. Free platform for life in exchange for promoting Tee Ahead to your golfers.',
 }
 
 export default async function CourseWaitlistPage() {
@@ -1099,7 +1099,7 @@ export default async function CourseWaitlistPage() {
       <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={140} height={42} className="h-9 w-auto" priority />
+            <Image src="/logo.png" alt="TeeAhead" width={140} height={42} className="h-9 w-auto" priority />
           </Link>
           <Link href="/" className="text-sm text-[#6B7770] hover:text-[#1B4332] transition-colors">
             ← Back
@@ -1128,7 +1128,7 @@ export default async function CourseWaitlistPage() {
           <p className="text-sm text-[#6B7770] leading-relaxed">
             {allClaimed
               ? 'All 10 Founding Partner spots have been claimed. You can still join the waitlist as a Core Partner at $249/month — same software, no barter.'
-              : 'The only obligation: promote the Mulligan Links membership to your golfers at the point of booking, and allow us to feature your course in our marketing. That\'s it. Course #11 onward pays $249/month.'}
+              : 'The only obligation: promote the Tee Ahead membership to your golfers at the point of booking, and allow us to feature your course in our marketing. That\'s it. Course #11 onward pays $249/month.'}
           </p>
         </div>
 
@@ -1148,7 +1148,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 
 export const metadata = {
-  title: 'Application Received — MulliganLinks',
+  title: 'Application Received — TeeAhead',
 }
 
 export default function CourseConfirmedPage() {
@@ -1227,14 +1227,14 @@ export async function sendGolferWaitlistConfirmation({
   }
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
-    subject: `You're #${position} on the MulliganLinks waitlist ⛳`,
+    subject: `You're #${position} on the TeeAhead waitlist ⛳`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">You're #${position} on the list ⛳</h2>
         <p>Hey ${firstName},</p>
-        <p>You're officially on the MulliganLinks waitlist. We're launching in Metro Detroit and you'll be
+        <p>You're officially on the TeeAhead waitlist. We're launching in Metro Detroit and you'll be
         among the first to know when we go live.</p>
 
         <p>Here's what you're waiting for:</p>
@@ -1245,12 +1245,12 @@ export async function sendGolferWaitlistConfirmation({
         </ul>
 
         <p>Know a golf course that should partner with us? Send them to
-        <a href="https://mulliganlinks.com/waitlist/course" style="color: #1B4332;">mulliganlinks.com/waitlist/course</a>.
+        <a href="https://teeahead.com/waitlist/course" style="color: #1B4332;">teeahead.com/waitlist/course</a>.
         More partner courses = more value for you on day one.</p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email — we read every one.
         </p>
       </div>
@@ -1276,7 +1276,7 @@ export async function sendCourseWaitlistConfirmation({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
     subject: `${courseName} — Founding Partner application received`,
     html: `
@@ -1289,17 +1289,17 @@ export async function sendCourseWaitlistConfirmation({
 
         <p>As a quick reminder, Founding Partners get:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>The full MulliganLinks platform — free for life</li>
+          <li>The full TeeAhead platform — free for life</li>
           <li>Direct tee sheet connection (we handle the tech)</li>
           <li>Featured placement in our marketing to Metro Detroit golfers</li>
         </ul>
 
-        <p>The only ask: tell your golfers about the MulliganLinks membership at booking.
+        <p>The only ask: tell your golfers about the TeeAhead membership at booking.
         That's the whole deal.</p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email or call Neil at (248) 555-0100.
         </p>
       </div>
@@ -1341,8 +1341,8 @@ export async function sendCourseAdminAlert({
     : ''
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
-    to: ['neil@mulliganlinks.com', 'billy@mulliganlinks.com'],
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: ['neil@teeahead.com', 'billy@teeahead.com'],
     subject: `New course application: ${courseName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
@@ -1356,7 +1356,7 @@ export async function sendCourseAdminAlert({
         ${barterLine}
         ${biggestFrustration ? `<p><strong>Biggest frustration:</strong><br /><em>${biggestFrustration}</em></p>` : ''}
         <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
-        <p><a href="https://mulliganlinks.com/admin/waitlist" style="color: #1B4332;">Review and approve in admin panel →</a></p>
+        <p><a href="https://teeahead.com/admin/waitlist" style="color: #1B4332;">Review and approve in admin panel →</a></p>
       </div>
     `,
   })
@@ -1382,20 +1382,20 @@ export async function sendFoundingPartnerApproval({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
     subject: `Welcome, Founding Partner #${partnerNumber} of 10 — ${courseName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Welcome, Founding Partner #${partnerNumber} of 10 ⛳</h2>
         <p>Hey ${firstName},</p>
-        <p><strong>${courseName}</strong> is officially a MulliganLinks Founding Partner.
+        <p><strong>${courseName}</strong> is officially a TeeAhead Founding Partner.
         You're locked in free for life — no catches.</p>
 
         <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600; color: #166534;">Your Founding Partner agreement (short version):</p>
           <ol style="color: #166534; padding-left: 20px; line-height: 2; margin: 8px 0 0;">
-            <li>Promote the MulliganLinks membership to your golfers at booking.</li>
+            <li>Promote the TeeAhead membership to your golfers at booking.</li>
             <li>Allow us to feature ${courseName} in our marketing materials.</li>
           </ol>
         </div>
@@ -1409,7 +1409,7 @@ export async function sendFoundingPartnerApproval({
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email directly.
         </p>
       </div>
@@ -1454,7 +1454,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendFoundingPartnerApproval } from '@/lib/resend'
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com']
+const ADMIN_EMAILS = ['teeaheadgolf@gmail.com', 'nbarris11@gmail.com']
 
 async function requireAdmin() {
   const supabase = await createClient()
@@ -1871,7 +1871,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com']
+const ADMIN_EMAILS = ['teeaheadgolf@gmail.com', 'nbarris11@gmail.com']
 
 function toCSV(rows: Record<string, unknown>[]): string {
   if (rows.length === 0) return ''
@@ -1990,7 +1990,7 @@ git commit -m "chore: final waitlist system integration"
 - ✓ Golfer form: all 8 fields, position auto-assigned, redirect to confirmed
 - ✓ Course form: all fields, GolfNow barter calculator, redirect to confirmed
 - ✓ Do NOT auto-assign Founding Partner status on submit — manual admin approval only
-- ✓ Alert email to neil@mulliganlinks.com and billy@mulliganlinks.com on course submit
+- ✓ Alert email to neil@teeahead.com and billy@teeahead.com on course submit
 - ✓ 3 email templates: golfer confirmation, course pending, founding partner approval
 - ✓ Admin panel: Golfers table (sortable by position), Courses table with Approve/Reject
 - ✓ Cap enforcement: Approve button disabled when `spotsRemaining <= 0`

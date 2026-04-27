@@ -20,7 +20,7 @@ export async function sendAdminNotification({
   }
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: 'mulliganlinksgolf@gmail.com',
     subject,
     html,
@@ -40,14 +40,14 @@ export async function sendWelcomeEmail({
   const firstName = fullName?.split(' ')[0] ?? 'there'
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
-    subject: 'Welcome to MulliganLinks — confirm your email to get started',
+    subject: 'Welcome to TeeAhead — confirm your email to get started',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
-        <h2 style="color: #1B4332;">Welcome to MulliganLinks ⛳</h2>
+        <h2 style="color: #1B4332;">Welcome to TeeAhead ⛳</h2>
         <p>Hey ${firstName},</p>
-        <p>You're in. MulliganLinks is the local-first golf membership built for golfers
+        <p>You're in. TeeAhead is the local-first golf membership built for golfers
         who actually play — at their home course, with their regular group, without
         paying extra for the privilege.</p>
 
@@ -63,7 +63,7 @@ export async function sendWelcomeEmail({
         access, and $25/mo in credits.</p>
 
         <p style="margin: 24px 0;">
-          <a href="https://mulliganlinks.com/app"
+          <a href="https://teeahead.com/app"
              style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
             Go to my dashboard →
           </a>
@@ -71,8 +71,8 @@ export async function sendWelcomeEmail({
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
-          Questions? Reply to this email or reach us at support@mulliganlinks.com
+          TeeAhead · Your home course, redone right.<br />
+          Questions? Reply to this email or reach us at support@teeahead.com
         </p>
       </div>
     `,
@@ -95,14 +95,14 @@ export async function sendGolferWaitlistConfirmation({
   }
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
-    subject: `You're #${position} on the MulliganLinks waitlist ⛳`,
+    subject: `You're #${position} on the TeeAhead waitlist ⛳`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">You're #${position} on the list ⛳</h2>
         <p>Hey ${firstName},</p>
-        <p>You're officially on the MulliganLinks waitlist. We're launching in Metro Detroit and you'll be
+        <p>You're officially on the TeeAhead waitlist. We're launching in Metro Detroit and you'll be
         among the first to know when we go live.</p>
         <p>Here's what you're waiting for:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
@@ -111,11 +111,11 @@ export async function sendGolferWaitlistConfirmation({
           <li>Real Fairway Points on every dollar played at local courses</li>
         </ul>
         <p>Know a golf course that should partner with us? Send them to
-        <a href="https://mulliganlinks.com/waitlist/course" style="color: #1B4332;">mulliganlinks.com/waitlist/course</a>.
+        <a href="https://teeahead.com/waitlist/course" style="color: #1B4332;">teeahead.com/waitlist/course</a>.
         More partner courses = more value for you on day one.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email — we read every one.
         </p>
       </div>
@@ -141,7 +141,7 @@ export async function sendCourseWaitlistConfirmation({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
     subject: `${courseName} — Founding Partner application received`,
     html: `
@@ -153,14 +153,14 @@ export async function sendCourseWaitlistConfirmation({
         what happens next.</p>
         <p>As a quick reminder, Founding Partners get:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>The full MulliganLinks platform — free for life</li>
+          <li>The full TeeAhead platform — free for life</li>
           <li>Direct tee sheet connection (we handle the tech)</li>
           <li>Featured placement in our marketing to Metro Detroit golfers</li>
         </ul>
-        <p>The only ask: tell your golfers about the MulliganLinks membership at booking.</p>
+        <p>The only ask: tell your golfers about the TeeAhead membership at booking.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email.
         </p>
       </div>
@@ -202,8 +202,8 @@ export async function sendCourseAdminAlert({
     : ''
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
-    to: ['neil@mulliganlinks.com', 'billy@mulliganlinks.com'],
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: ['neil@teeahead.com', 'billy@teeahead.com'],
     subject: `New course application: ${courseName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
@@ -217,7 +217,7 @@ export async function sendCourseAdminAlert({
         ${barterLine}
         ${biggestFrustration ? `<p><strong>Biggest frustration:</strong><br /><em>${biggestFrustration}</em></p>` : ''}
         <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
-        <p><a href="https://mulliganlinks.com/admin/waitlist" style="color: #1B4332;">Review and approve in admin panel →</a></p>
+        <p><a href="https://teeahead.com/admin/waitlist" style="color: #1B4332;">Review and approve in admin panel →</a></p>
       </div>
     `,
   })
@@ -255,12 +255,12 @@ export async function sendBarterReceipt({
   const nowMonth = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
-    subject: `Your MulliganLinks Barter Receipt — ${nowMonth}`,
+    subject: `Your TeeAhead Barter Receipt — ${nowMonth}`,
     html: `
       <div style="font-family: sans-serif; max-width: 520px; color: #1A1A1A;">
-        <h2 style="color: #1B4332;">Your MulliganLinks Barter Receipt ⛳</h2>
+        <h2 style="color: #1B4332;">Your TeeAhead Barter Receipt ⛳</h2>
         <p>Hey ${firstName},</p>
         <p>Here's what <strong>${courseName}</strong> has avoided in GolfNow barter costs since joining
         as Founding Partner #${partnerNumber} in ${approvedMonth}.</p>
@@ -289,12 +289,12 @@ export async function sendBarterReceipt({
         <p style="font-size: 13px; color: #6B7770;">
           Estimate based on 2 barter tee times per day × 300 operating days × your average green fee,
           which is what GolfNow's standard barter agreement costs partner courses annually.
-          MulliganLinks charges you $0 — for life.
+          TeeAhead charges you $0 — for life.
         </p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email.
         </p>
       </div>
@@ -322,19 +322,19 @@ export async function sendFoundingPartnerApproval({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'MulliganLinks <notifications@mulliganlinks.com>',
+    from: 'TeeAhead <notifications@teeahead.com>',
     to: email,
     subject: `Welcome, Founding Partner #${partnerNumber} of 10 — ${courseName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Welcome, Founding Partner #${partnerNumber} of 10 ⛳</h2>
         <p>Hey ${firstName},</p>
-        <p><strong>${courseName}</strong> is officially a MulliganLinks Founding Partner.
+        <p><strong>${courseName}</strong> is officially a TeeAhead Founding Partner.
         You're locked in free for life — no catches.</p>
         <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600; color: #166534;">Your Founding Partner agreement (short version):</p>
           <ol style="color: #166534; padding-left: 20px; line-height: 2; margin: 8px 0 0;">
-            <li>Promote the MulliganLinks membership to your golfers at booking.</li>
+            <li>Promote the TeeAhead membership to your golfers at booking.</li>
             <li>Allow us to feature ${courseName} in our marketing materials.</li>
           </ol>
         </div>
@@ -346,7 +346,7 @@ export async function sendFoundingPartnerApproval({
         </ol>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
-          MulliganLinks · Your home course, redone right.<br />
+          TeeAhead · Your home course, redone right.<br />
           Questions? Reply to this email directly.
         </p>
       </div>

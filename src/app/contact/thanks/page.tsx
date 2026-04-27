@@ -10,7 +10,7 @@ export default function ContactThanksPage() {
         <h1 className="text-3xl font-bold text-[#1A1A1A]">We got it.</h1>
         <p className="text-[#6B7770] leading-relaxed">
           Thanks for reaching out. We&apos;ll be in touch within one business day to
-          set up a quick call and walk you through what MulliganLinks looks like for
+          set up a quick call and walk you through what TeeAhead looks like for
           your course.
         </p>
         <Link

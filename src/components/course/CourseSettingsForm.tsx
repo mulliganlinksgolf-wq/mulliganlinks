@@ -130,7 +130,7 @@ export function CourseSettingsForm({ course, admins }: { course: Course; admins:
               </div>
             ))}
           </div>
-          <p className="text-xs text-[#6B7770] mt-4">To add or remove team members, contact MulliganLinks support.</p>
+          <p className="text-xs text-[#6B7770] mt-4">To add or remove team members, contact TeeAhead support.</p>
         </CardContent>
       </Card>
     </div>

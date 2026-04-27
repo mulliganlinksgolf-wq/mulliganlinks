@@ -54,7 +54,7 @@ export async function sendBookingConfirmation({
 
     const resend = new Resend(resendKey)
     await resend.emails.send({
-      from: 'MulliganLinks <notifications@mulliganlinks.com>',
+      from: 'TeeAhead <notifications@teeahead.com>',
       to: email,
       subject: `You're on the tee — ${course?.name} ${dateStr}`,
       html: `
@@ -69,9 +69,9 @@ export async function sendBookingConfirmation({
             <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Total paid</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">$${total.toFixed(2)}</td></tr>
             <tr><td style="padding: 8px 0; color: #1B4332;">Points earned</td><td style="padding: 8px 0; color: #1B4332; font-weight: 600;">+${pointsEarned}</td></tr>
           </table>
-          <p style="color: #6B7770; font-size: 13px;">Free cancellation up to 1 hour before your tee time at mulliganlinks.com</p>
+          <p style="color: #6B7770; font-size: 13px;">Free cancellation up to 1 hour before your tee time at teeahead.com</p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-          <p style="color: #6B7770; font-size: 12px;">MulliganLinks &middot; Your home course, redone right.</p>
+          <p style="color: #6B7770; font-size: 12px;">TeeAhead &middot; Your home course, redone right.</p>
         </div>
       `,
     })
@@ -120,7 +120,7 @@ export async function sendCourseBookingAlert({
     const resend = new Resend(resendKey)
 
     await resend.emails.send({
-      from: 'MulliganLinks <notifications@mulliganlinks.com>',
+      from: 'TeeAhead <notifications@teeahead.com>',
       to: adminEmails,
       subject: `New booking — ${timeStr} ${dateStr.split(',')[0]}`,
       html: `
@@ -135,13 +135,13 @@ export async function sendCourseBookingAlert({
             <tr><td style="padding: 8px 0; color: #1B4332;">Total paid</td><td style="padding: 8px 0; color: #1B4332; font-weight: 600;">$${total.toFixed(2)}</td></tr>
           </table>
           <p style="margin: 0;">
-            <a href="https://mulliganlinks.com/course/fieldstone-golf-club/bookings"
+            <a href="https://teeahead.com/course/fieldstone-golf-club/bookings"
                style="background: #1B4332; color: #FAF7F2; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-size: 14px; font-weight: 600; display: inline-block;">
               View in tee sheet →
             </a>
           </p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-          <p style="color: #6B7770; font-size: 12px;">MulliganLinks &middot; Course portal</p>
+          <p style="color: #6B7770; font-size: 12px;">TeeAhead &middot; Course portal</p>
         </div>
       `,
     })

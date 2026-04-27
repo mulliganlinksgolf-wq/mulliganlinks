@@ -30,7 +30,7 @@ export default async function BookingDetailPage({
   const canCancel = booking.status === 'confirmed' && scheduledAt.getTime() - Date.now() > 60 * 60 * 1000
 
   const calendarDate = scheduledAt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-  const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tee+Time+at+${encodeURIComponent(course?.name ?? '')}&dates=${calendarDate}/${calendarDate}&details=Booked+via+MulliganLinks`
+  const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tee+Time+at+${encodeURIComponent(course?.name ?? '')}&dates=${calendarDate}/${calendarDate}&details=Booked+via+TeeAhead`
 
   return (
     <div className="max-w-lg space-y-6">

@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'MulliganLinks Terms of Service — the rules of the road for using our platform.',
+  description: 'TeeAhead Terms of Service — the rules of the road for using our platform.',
 }
 
 export default function TermsPage() {
@@ -13,7 +13,7 @@ export default function TermsPage() {
       <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-16 w-auto" />
+            <TeeAheadLogo className="h-10 w-auto" />
           </Link>
         </div>
       </header>
@@ -27,7 +27,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">1. Acceptance of Terms</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              By creating a MulliganLinks account or using any part of our platform, you agree to
+              By creating a TeeAhead account or using any part of our platform, you agree to
               these Terms of Service. If you do not agree, do not use the platform. These terms
               apply to all users — golfers, course operators, and visitors.
             </p>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">2. The Service</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              MulliganLinks provides a golf membership platform that connects golfers with partner
+              TeeAhead provides a golf membership platform that connects golfers with partner
               courses. We offer tee time booking, a loyalty points program (Fairway Points), and
               paid membership tiers (Eagle and Ace). Course management tools are provided free of
               charge to partner courses.
@@ -49,8 +49,8 @@ export default function TermsPage() {
               You must be 18 or older to create an account. You are responsible for keeping your
               login credentials secure and for all activity that occurs under your account. Notify
               us immediately at{' '}
-              <a href="mailto:support@mulliganlinks.com" className="text-[#1B4332] underline">
-                support@mulliganlinks.com
+              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
+                support@teeahead.com
               </a>{' '}
               if you suspect unauthorized access.
             </p>
@@ -70,8 +70,8 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">5. Fairway Points</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              Fairway Points are earned on bookings made through the MulliganLinks platform.
-              Points have no cash value and cannot be transferred to another account. MulliganLinks
+              Fairway Points are earned on bookings made through the TeeAhead platform.
+              Points have no cash value and cannot be transferred to another account. TeeAhead
               reserves the right to modify the points program with 30 days' notice.
             </p>
           </section>
@@ -80,7 +80,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold mb-3">6. Bookings and Cancellations</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Tee time availability is managed by partner courses and is not guaranteed by
-              MulliganLinks. Cancellations must be made at least 1 hour before the scheduled tee
+              TeeAhead. Cancellations must be made at least 1 hour before the scheduled tee
               time to receive a full refund. Late cancellations and no-shows are subject to the
               individual course's policies.
             </p>
@@ -90,9 +90,9 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold mb-3">7. Course Operators</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Course management software is provided free of charge. Courses agree to honor
-              MulliganLinks member benefits (zero booking fees, points accrual, member discounts)
+              TeeAhead member benefits (zero booking fees, points accrual, member discounts)
               for all bookings made through the platform. Courses own all booking data generated
-              on their property. MulliganLinks does not sell or share course customer data with
+              on their property. TeeAhead does not sell or share course customer data with
               third parties.
             </p>
           </section>
@@ -110,7 +110,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">9. Limitation of Liability</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              MulliganLinks is not liable for any indirect, incidental, or consequential damages
+              TeeAhead is not liable for any indirect, incidental, or consequential damages
               arising from use of the platform, including but not limited to missed tee times,
               course closures, or errors in booking confirmation. Our total liability to you for
               any claim shall not exceed the amount you paid us in the 12 months preceding the
@@ -131,8 +131,8 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold mb-3">11. Contact</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Questions about these terms?{' '}
-              <a href="mailto:support@mulliganlinks.com" className="text-[#1B4332] underline">
-                support@mulliganlinks.com
+              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
+                support@teeahead.com
               </a>
             </p>
           </section>
@@ -141,7 +141,7 @@ export default function TermsPage() {
 
       <footer className="border-t border-black/5 px-6 py-8 mt-12">
         <div className="max-w-3xl mx-auto flex items-center justify-between text-sm text-[#6B7770]">
-          <span className="text-[#1B4332] font-semibold">© 2026 MulliganLinks</span>
+          <span className="text-[#1B4332] font-semibold">© 2026 TeeAhead</span>
           <div className="flex gap-4">
             <Link href="/privacy" className="hover:text-[#1B4332] transition-colors">Privacy</Link>
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>

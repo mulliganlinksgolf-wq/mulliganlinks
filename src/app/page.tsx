@@ -1,11 +1,12 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
-  title: 'MulliganLinks — Your home course, redone right.',
+  title: 'TeeAhead — Your home course, redone right.',
   description: 'The local-first golf membership. Zero booking fees, real rewards, and every dollar goes to the courses you love — not to GolfNow.',
 }
 
@@ -33,7 +34,7 @@ export default async function HomePage() {
       <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
-            <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-20 w-auto" priority />
+            <TeeAheadLogo className="h-10 w-auto" />
           </Link>
           <nav className="flex items-center gap-4">
             <Link
@@ -157,11 +158,11 @@ export default async function HomePage() {
                 Two barter slots per day, 300 operating days a year: <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue.
               </p>
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                MulliganLinks charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
+                TeeAhead charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
                 Course #11 onward pays $249/mo.
               </p>
               <p className="text-sm text-[#6B7770] italic">
-                The only ask: tell your golfers about the Mulligan Links membership at booking.
+                The only ask: tell your golfers about the Tee Ahead membership at booking.
               </p>
             </div>
             <Link
@@ -189,7 +190,7 @@ export default async function HomePage() {
               {
                 icon: '🏌️',
                 title: 'Join free',
-                body: 'Create your MulliganLinks account. No card needed to start.',
+                body: 'Create your TeeAhead account. No card needed to start.',
               },
               {
                 icon: '📍',
@@ -395,7 +396,7 @@ export default async function HomePage() {
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-12">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
-          <Image src="/logo.png" alt="MulliganLinks" width={566} height={496} className="h-24 w-auto" />
+          <TeeAheadLogo className="h-10 w-auto" />
           <p className="text-sm text-[#6B7770]">Your home course, redone right.</p>
           <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
@@ -404,7 +405,7 @@ export default async function HomePage() {
             <span>·</span>
             <Link href="/contact" className="hover:text-[#1B4332] transition-colors">For Courses</Link>
           </nav>
-          <p className="text-xs text-[#6B7770]">© 2026 MulliganLinks</p>
+          <p className="text-xs text-[#6B7770]">© 2026 TeeAhead</p>
         </div>
       </footer>
 

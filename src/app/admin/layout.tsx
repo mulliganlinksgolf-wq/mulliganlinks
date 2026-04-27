@@ -29,7 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link href="/admin" className="font-bold text-lg tracking-wide lowercase">
-              mulliganlinks <span className="text-[#FAF7F2]/60 font-normal text-sm ml-1">admin</span>
+              teeahead <span className="text-[#FAF7F2]/60 font-normal text-sm ml-1">admin</span>
             </Link>
             <nav className="hidden sm:flex items-center gap-4 text-sm">
               <Link href="/admin" className="text-[#FAF7F2]/80 hover:text-[#FAF7F2] transition-colors">Dashboard</Link>

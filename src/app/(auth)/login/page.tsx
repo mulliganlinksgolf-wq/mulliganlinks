@@ -35,7 +35,7 @@ export default function LoginPage() {
     <Card className="bg-white border-0 shadow-sm">
       <CardHeader>
         <CardTitle className="text-[#1A1A1A]">Welcome back</CardTitle>
-        <CardDescription className="text-[#6B7770]">Sign in to your MulliganLinks account</CardDescription>
+        <CardDescription className="text-[#6B7770]">Sign in to your TeeAhead account</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
