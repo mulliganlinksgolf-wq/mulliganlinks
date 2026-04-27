@@ -434,6 +434,55 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Founder Section ───────────────────────────────────── */}
+      <section className="px-6 py-20 bg-[#FAF7F2]">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
+            Built by golfers. For golfers.
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
+
+            {/* Neil */}
+            <div className="flex flex-col gap-4">
+              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
+                N
+              </div>
+              <div>
+                <p className="font-bold text-[#1A1A1A] text-lg">Neil Barris</p>
+                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
+              </div>
+              <p className="text-sm text-[#6B7770] leading-relaxed">
+                Golf entrepreneur. Founder of{' '}
+                <a href="https://outing.golf" className="text-[#0F3D2E] hover:underline">Outing.golf</a>.
+                Spent years watching GolfNow extract value from the courses and golfers I was trying to
+                serve. TeeAhead is the fix.
+              </p>
+            </div>
+
+            {/* Billy */}
+            <div className="flex flex-col gap-4">
+              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
+                B
+              </div>
+              <div>
+                <p className="font-bold text-[#1A1A1A] text-lg">Billy Beslock</p>
+                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
+              </div>
+              <p className="text-sm text-[#6B7770] leading-relaxed">
+                Lifelong golfer. Career operations background at Ford. The exact recreational golfer
+                TeeAhead is built for — and the one keeping the product grounded in what real members
+                actually want.
+              </p>
+            </div>
+
+          </div>
+          <p className="mt-10 text-center text-xs text-[#6B7770]">
+            TeeAhead is being built by Neil and Billy in Metro Detroit. We&apos;re talking to local courses
+            now and launching in 2026.
+          </p>
+        </div>
+      </section>
+
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
