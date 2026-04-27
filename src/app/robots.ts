@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/app/', '/admin/', '/course/', '/api/'],
       },
     ],
-    sitemap: 'https://teeahead.com/sitemap.xml',
+    sitemap: 'https://www.teeahead.com/sitemap.xml',
   }
 }

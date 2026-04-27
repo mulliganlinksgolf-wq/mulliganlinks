@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { StructuredData } from "@/components/StructuredData";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,26 +12,37 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "TeeAhead — Book ahead. Play more. Own your golf.",
+    default: "TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit",
     template: "%s | TeeAhead",
   },
   description:
-    "The local-first golf platform. Free software for courses. Real loyalty for golfers. Zero booking fees, always. Coming to Metro Detroit.",
-  metadataBase: new URL("https://teeahead.com"),
+    "Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. Free for courses, always.",
+  metadataBase: new URL("https://www.teeahead.com"),
   openGraph: {
     type: "website",
-    siteName: "TeeAhead",
-    title: "TeeAhead — Book ahead. Play more. Own your golf.",
+    url: "https://www.teeahead.com",
+    title: "TeeAhead | Free Golf Tee Time Booking & Loyalty — Metro Detroit",
     description:
-      "The local-first golf platform. Free software for courses. Real loyalty for golfers. Zero booking fees, always. Coming to Metro Detroit.",
-    url: "https://teeahead.com",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "TeeAhead" }],
+      "Book tee times at Metro Detroit golf courses with zero booking fees. Beat GolfPass+ with Eagle membership at $79/yr.",
+    siteName: "TeeAhead",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "TeeAhead — Free golf tee time booking and loyalty for Metro Detroit",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TeeAhead — Book ahead. Play more. Own your golf.",
-    description: "The local-first golf platform. Coming to Metro Detroit.",
+    title: "TeeAhead | Golf Tee Times & Loyalty — Metro Detroit",
+    description:
+      "Zero booking fees. Beat GolfPass+ for $40 less. Free for partner courses.",
     images: ["/og-image.png"],
+  },
+  alternates: {
+    canonical: "https://www.teeahead.com",
   },
   icons: {
     icon: [
@@ -58,6 +70,7 @@ export default function RootLayout({
       className={`${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <StructuredData />
         {children}
         <Analytics />
       </body>

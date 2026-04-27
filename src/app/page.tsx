@@ -12,9 +12,9 @@ import { createClient } from '@/lib/supabase/server'
 const caveat = Caveat({ subsets: ['latin'], weight: ['400', '600', '700'] })
 
 export const metadata: Metadata = {
-  title: 'TeeAhead — Book ahead. Play more. Own your golf.',
+  title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
   description:
-    'The local-first golf platform. Free software for courses. Real loyalty for golfers. Zero booking fees, always. Coming to Metro Detroit.',
+    'Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. Free for courses, always.',
 }
 
 export default async function HomePage() {
@@ -75,8 +75,12 @@ export default async function HomePage() {
           </div>
 
           <h1 className="text-5xl sm:text-6xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
-            {headline}
+            Book Golf Tee Times with Zero Booking Fees
           </h1>
+
+          <p className="text-2xl sm:text-3xl font-semibold text-[#F4F1EA]/90 leading-tight max-w-2xl mx-auto">
+            {headline}
+          </p>
 
           <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-2xl mx-auto">
             {subhead}
@@ -104,6 +108,14 @@ export default async function HomePage() {
           </div>
 
           <p className="text-sm text-[#F4F1EA]/60">{tagline}</p>
+
+          <p className="text-sm text-[#F4F1EA]/50 leading-relaxed max-w-2xl mx-auto pt-2">
+            TeeAhead is Metro Detroit&apos;s alternative to GolfNow — built for golfers who play at the same
+            2–3 courses all season and want to be treated like a regular, not a transaction. Book tee times
+            directly at partner courses in Oakland County, Macomb County, and Wayne County with zero booking
+            fees, ever. Earn Fairway Points on every round and upgrade to Eagle or Ace membership for credits,
+            free rounds, and discounts that actually apply to the courses you already play.
+          </p>
         </div>
         </FadeIn>
       </section>
