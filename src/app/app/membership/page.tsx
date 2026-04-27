@@ -61,20 +61,13 @@ export default async function MembershipPage({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: membership } = await supabase
-    .from('memberships')
-    .select('tier')
-    .eq('user_id', user.id)
-    .single()
-
-  const { data: counter } = await supabase
-    .from('founding_golfer_counter')
-    .select('claimed, limit')
-    .eq('id', 1)
-    .single()
+  const [{ data: membership }, { data: counter }] = await Promise.all([
+    supabase.from('memberships').select('tier').eq('user_id', user.id).single(),
+    supabase.from('founding_golfer_counter').select('claimed, limit').eq('id', 1).single(),
+  ])
 
   const spotsRemaining = counter
-    ? (counter as { claimed: number; limit: number }).limit - counter.claimed
+    ? counter.limit - counter.claimed
     : 0
 
   const currentTier = membership?.tier ?? 'fairway'
