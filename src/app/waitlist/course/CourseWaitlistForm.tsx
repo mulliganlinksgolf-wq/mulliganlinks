@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,6 +9,9 @@ import { joinCourseWaitlist } from './actions'
 
 export function CourseWaitlistForm() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const tier = searchParams.get('tier') ?? 'founding'
+
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [onGolfnow, setOnGolfnow] = useState<boolean | null>(null)
@@ -35,6 +38,9 @@ export function CourseWaitlistForm() {
 
   return (
     <form action={handleSubmit} className="space-y-6">
+      {/* Hidden tier field — captures which pricing tier the applicant wants */}
+      <input type="hidden" name="applied_tier" value={tier} />
+
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
           {error}

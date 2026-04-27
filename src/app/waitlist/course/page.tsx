@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { createClient } from '@/lib/supabase/server'
@@ -45,16 +46,18 @@ export default async function CourseWaitlistPage() {
 
         <div className="bg-white rounded-xl p-5 ring-1 ring-[#E0A800]/30 mb-8 space-y-3">
           <p className="text-sm font-semibold text-[#1A1A1A]">
-            {allClaimed ? 'Core Partner — $299/month' : 'Founding Partners get the full platform free for life.'}
+            {allClaimed ? 'Core Partner — $249/month' : 'Founding Partners get the full platform free for life.'}
           </p>
           <p className="text-sm text-[#6B7770] leading-relaxed">
             {allClaimed
-              ? 'All 10 Founding Partner spots have been claimed. You can still join the waitlist as a Core Partner at $299/month — same software, no barter.'
-              : "The only obligation: promote the Tee Ahead membership to your golfers at the point of booking, and allow us to feature your course in our marketing. Course #11 onward pays $299/month."}
+              ? 'All 10 Founding Partner spots have been claimed. You can still join the waitlist as a Core Partner at $249/month — same software, no barter.'
+              : "The only obligation: promote the Tee Ahead membership to your golfers at the point of booking, and allow us to feature your course in our marketing. Course #11 onward pays $249/month."}
           </p>
         </div>
 
-        <CourseWaitlistForm />
+        <Suspense fallback={null}>
+          <CourseWaitlistForm />
+        </Suspense>
       </main>
     </div>
   )

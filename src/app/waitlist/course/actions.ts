@@ -17,12 +17,13 @@ export async function joinCourseWaitlist(formData: FormData) {
   const onGolfnow = formData.get('on_golfnow') === 'yes'
   const avgGreenFee = formData.get('avg_green_fee') ? parseInt(formData.get('avg_green_fee') as string, 10) : null
   const biggestFrustration = (formData.get('biggest_frustration') as string)?.trim() || null
+  const rawTier = (formData.get('applied_tier') as string)?.trim() || null
+  const appliedTier = rawTier === 'standard' ? 'standard' : 'founding'
 
   if (!courseName || !contactName || !email || !email.includes('@')) {
     return { error: 'Course name, contact name, and a valid email are required.' }
   }
 
-  // Barter cost estimate: 2 tee times/day × avg green fee × 300 days
   const estimatedBarterCost =
     onGolfnow && avgGreenFee && !isNaN(avgGreenFee) ? 2 * avgGreenFee * 300 : null
 
@@ -42,6 +43,7 @@ export async function joinCourseWaitlist(formData: FormData) {
     on_golfnow: onGolfnow,
     estimated_barter_cost: estimatedBarterCost,
     biggest_frustration: biggestFrustration,
+    applied_tier: appliedTier,
     status: 'pending',
   })
 
