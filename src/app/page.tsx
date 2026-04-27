@@ -129,19 +129,33 @@ export default async function HomePage() {
           {/* Course column */}
           <div className="space-y-6">
             <div className="inline-block bg-[#E0A800]/20 text-[#8B6F00] text-sm font-semibold px-3 py-1 rounded-full">
-              For Courses — {spotsRemaining} of 10 Founding Spots Left
+              For Courses —{' '}
+              <span className="text-[#E0A800] font-bold">
+                {spotsRemaining <= 5 && spotsRemaining > 0
+                  ? `Only ${spotsRemaining} spots left`
+                  : `${spotsRemaining} of 10 Founding Spots Left`}
+              </span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              GolfNow costs you ~$94,500/year in barter. We charge $0.
+              GolfNow costs the average course $94,500/year. We charge $0.
             </h2>
             <div className="bg-[#FAF7F2] rounded-xl p-6 space-y-4 ring-1 ring-black/5">
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                GolfNow takes 2 tee times per day in barter at your rack rate.
-                Two barter slots per day, 300 operating days a year: <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue.
+                The math is brutal once you see it. GolfNow takes 2 prime-time tee times from you per day
+                in barter — at your published rack rate. That&apos;s roughly{' '}
+                <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue per course
+                (industry analyst data, 2025). High-volume courses lose $150K+.
               </p>
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                TeeAhead charges <strong className="text-[#1B4332]">$0</strong> for the first 10 Founding Partner courses — free for life.
-                Course #11 onward pays $249/mo.
+                Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
+                slots. Windsor Parke Golf Club saw a{' '}
+                <strong className="text-[#1A1A1A]">382% increase in online revenue</strong> after leaving
+                GolfNow ($81K → $393K).
+              </p>
+              <p className="text-[#1A1A1A] text-sm leading-relaxed">
+                TeeAhead charges <strong className="text-[#0F3D2E]">$0</strong> for the first 10 Founding
+                Partner courses — free for life. Course #11 onward pays $249/month. That&apos;s it. No
+                barter. No commissions. No data extraction.
               </p>
               <p className="text-sm text-[#6B7770] italic">
                 The only ask: tell your golfers about the TeeAhead membership at booking.
@@ -151,9 +165,13 @@ export default async function HomePage() {
               href="/waitlist/course"
               className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
             >
-              Claim a Founding Partner Spot →
+              {spotsRemaining > 0
+                ? 'Claim a Founding Partner Spot →'
+                : 'Join the Course Waitlist →'}
               <span className="text-xs font-normal text-[#6B7770] mt-0.5">
-                {spotsRemaining > 0 ? `${spotsRemaining} of 10 spots remaining` : 'Join the Core waitlist — $249/mo'}
+                {spotsRemaining > 0
+                  ? `${spotsRemaining} of 10 spots remaining`
+                  : 'Next 10 spots release Q2 2027'}
               </span>
             </Link>
           </div>
