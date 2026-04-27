@@ -1,3 +1,6 @@
+// Legal note: All competitor references are based on publicly available data
+// and documented industry sources. See inline citations for attribution.
+// Last legal review: April 2026. Review again before major marketing campaigns.
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -92,8 +95,12 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 What has GolfNow actually cost you?
               </h1>
               <p className="text-lg text-[#6B7770] leading-relaxed max-w-2xl">
-                Drop in your numbers. We&apos;ll show you the exact dollars GolfNow&apos;s barter model has extracted
-                from your course this year. No login. No email required (until you want one).
+                Drop in your numbers. We&apos;ll show you the exact dollars GolfNow&apos;s barter model has cost
+                your course this year. No login. No email required (until you want one).
+              </p>
+              <p className="text-xs text-[#6B7770] max-w-lg leading-relaxed">
+                Calculator based on NGCOA member survey data and Golf Inc. industry analysis
+                (2024–2025). Actual costs vary by GolfNow contract terms.
               </p>
             </div>
           </FadeIn>
@@ -240,6 +247,15 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           </FadeIn>
         </section>
 
+        {/* ── Calculator Disclaimer ─────────────────────────────── */}
+        <section className="px-6 pb-8 bg-[#FAF7F2]">
+          <p className="text-sm text-center text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+            Calculation based on GolfNow&apos;s standard barter model of 2 prime-time tee times per day
+            at published rack rates. Actual barter arrangements vary by course agreement. Your real
+            number may be higher or lower depending on your specific GolfNow contract terms.
+          </p>
+        </section>
+
         {/* ── Proof Section ─────────────────────────────────────── */}
         <section className="px-6 py-20 bg-white">
           <FadeIn>
@@ -258,23 +274,24 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 <div className="bg-[#FAF7F2] rounded-xl p-8 space-y-3 ring-1 ring-black/5">
                   <div className="text-4xl font-bold text-[#0F3D2E]">382%</div>
                   <p className="text-sm font-medium text-[#1A1A1A] leading-snug">
-                    Online revenue increase at Windsor Parke after leaving GolfNow
+                    Online revenue increase at Windsor Parke Golf Club after leaving GolfNow
                   </p>
                   <p className="text-xs text-[#6B7770]">$81K → $393K</p>
+                  <p className="text-xs text-[#9DAA9F]">Source: Golf Inc. / industry reporting, Windsor Parke case study</p>
                 </div>
                 <div className="bg-[#FAF7F2] rounded-xl p-8 space-y-3 ring-1 ring-black/5">
                   <div className="text-4xl font-bold text-[#0F3D2E]">39.6%</div>
                   <p className="text-sm font-medium text-[#1A1A1A] leading-snug">
-                    Of all rounds at Brown Golf went to zero-revenue barter slots
+                    Of all rounds at Brown Golf went to zero-revenue barter slots over 3 years
                   </p>
-                  <p className="text-xs text-[#6B7770]">Over 3 years of documented data</p>
+                  <p className="text-xs text-[#9DAA9F]">Source: NGCOA member reporting / Golf Inc. analysis</p>
                 </div>
                 <div className="bg-[#FAF7F2] rounded-xl p-8 space-y-3 ring-1 ring-black/5">
                   <div className="text-4xl font-bold text-[#0F3D2E]">100+</div>
                   <p className="text-sm font-medium text-[#1A1A1A] leading-snug">
                     Golf courses left GolfNow in Q1 2025 alone
                   </p>
-                  <p className="text-xs text-[#6B7770]">NGCOA / industry data</p>
+                  <p className="text-xs text-[#9DAA9F]">Source: National Golf Course Owners Association (NGCOA), Q1 2025</p>
                 </div>
               </div>
             </div>
@@ -404,8 +421,12 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
             </div>
 
           </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+            <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
+              Competitor references are for comparative purposes only and based on publicly available
+              information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            </p>
           </div>
         </div>
       </footer>

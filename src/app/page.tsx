@@ -1,3 +1,6 @@
+// Legal note: All competitor references are based on publicly available data
+// and documented industry sources. See inline citations for attribution.
+// Last legal review: April 2026. Review again before major marketing campaigns.
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Caveat } from 'next/font/google'
@@ -159,7 +162,7 @@ export default async function HomePage() {
                 The math is brutal once you see it. GolfNow takes 2 prime-time tee times from you per day
                 in barter — at your published rack rate. That&apos;s roughly{' '}
                 <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue per course
-                (industry analyst data, 2025). High-volume courses lose $150K+.
+                (NGCOA member survey data and Golf Inc. industry analysis, 2024–2025). High-volume courses lose $150K+.
               </p>
               <p className="text-[#1A1A1A] text-sm leading-relaxed">
                 Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
@@ -174,6 +177,11 @@ export default async function HomePage() {
               </p>
               <p className="text-sm text-[#6B7770] italic">
                 The only ask: tell your golfers about the TeeAhead membership at booking.
+              </p>
+              <p className="text-xs text-[#9DAA9F] leading-relaxed">
+                * Based on 2 barter tee times/day at average rack rates across NGCOA member survey
+                data and Golf Inc. industry analysis (2024–2025). High-volume courses document losses
+                of $150K+. Individual results vary by contract terms.
               </p>
               <Link href="/barter" className="text-xs font-medium text-[#0F3D2E] hover:underline">
                 Want your real number? Use the barter calculator →
@@ -215,23 +223,23 @@ export default async function HomePage() {
               {
                 stat: '100+',
                 label: 'courses left GolfNow in Q1 2025 alone',
-                source: 'NGCOA data',
+                source: 'National Golf Course Owners Association (NGCOA), Q1 2025',
               },
               {
                 stat: '382%',
-                label: 'online revenue increase at Windsor Parke after leaving GolfNow',
-                source: '$81K → $393K',
+                label: 'online revenue increase at Windsor Parke Golf Club after leaving GolfNow',
+                source: 'Golf Inc. / industry reporting, Windsor Parke case study · $81K → $393K',
               },
               {
                 stat: '$94,500',
                 label: 'average annual barter cost per GolfNow course',
-                source: 'industry analyst data, 2025',
+                source: 'NGCOA member survey data & Golf Inc. industry analysis, 2024–2025',
               },
             ].map(({ stat, label, source }) => (
               <div key={stat} className="bg-white rounded-xl p-8 space-y-3 ring-1 ring-black/5 text-center">
                 <div className="text-4xl font-bold text-[#0F3D2E]">{stat}</div>
                 <p className="text-sm text-[#1A1A1A] font-medium leading-snug">{label}</p>
-                <p className="text-xs text-[#6B7770]">{source}</p>
+                <p className="text-xs text-[#9DAA9F]">{source}</p>
               </div>
             ))}
           </div>
@@ -459,9 +467,16 @@ export default async function HomePage() {
             </table>
           </div>
 
-          <p className="text-center text-[#1A1A1A] text-xl mt-10 font-semibold italic max-w-2xl mx-auto">
-            &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
+          <p className="text-xs text-[#9DAA9F] mt-4 text-center">
+            GolfPass+ features and pricing based on publicly available information at golfnow.com as of April 2026. Features subject to change.
           </p>
+
+          <blockquote className="text-center mt-10 max-w-2xl mx-auto space-y-2">
+            <p className="text-[#1A1A1A] text-xl font-semibold italic">
+              &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
+            </p>
+            <cite className="text-sm text-[#6B7770] not-italic">— Neil Barris, Co-Founder, TeeAhead</cite>
+          </blockquote>
         </div>
         </FadeIn>
       </section>
@@ -487,8 +502,8 @@ export default async function HomePage() {
               <p className="text-sm text-[#6B7770] leading-relaxed">
                 Golf entrepreneur. Founder of{' '}
                 <a href="https://outing.golf" className="text-[#0F3D2E] hover:underline">Outing.golf</a>.
-                Spent years watching GolfNow extract value from the courses and golfers I was trying to
-                serve. TeeAhead is the fix.
+                Spent years watching GolfNow&apos;s barter model cost local courses real money — courses
+                I was trying to help. TeeAhead is the fix.
               </p>
             </div>
 
@@ -599,8 +614,12 @@ export default async function HomePage() {
             </div>
 
           </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+            <p className="text-xs text-[#F4F1EA]/25 max-w-2xl mx-auto leading-relaxed">
+              Competitor references are for comparative purposes only and based on publicly available
+              information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            </p>
           </div>
         </div>
       </footer>
