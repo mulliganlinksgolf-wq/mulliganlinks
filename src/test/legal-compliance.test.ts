@@ -32,8 +32,10 @@ describe('Homepage (page.tsx) — legal compliance', () => {
     expect(PAGE).toContain('Neil Barris, Co-Founder, TeeAhead')
   })
 
-  it('has comparison table source note with date', () => {
-    expect(PAGE).toContain('as of April 2026')
+  it('comparison table removed — source notes moved to stat section', () => {
+    // Comparison table was intentionally removed in redesign (April 2026).
+    // Source attributions are now in the stat moment section footnote.
+    expect(PAGE).toContain('NGCOA member survey data and Golf Inc. industry analysis')
   })
 
   it('attributes Windsor Parke exodus stat to Golf Inc.', () => {
@@ -48,7 +50,8 @@ describe('Homepage (page.tsx) — legal compliance', () => {
     expect(PAGE).toContain('NGCOA member survey data & Golf Inc. industry analysis, 2024')
   })
 
-  it('has not-affiliated footer disclaimer', () => {
+  it('has not-affiliated disclaimer in source', () => {
+    // Footer disclaimer intentionally removed in redesign (April 2026); preserved in stat section footnote.
     expect(PAGE).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
   })
 

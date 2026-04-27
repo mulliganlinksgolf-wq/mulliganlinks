@@ -38,15 +38,21 @@ export default async function HomePage() {
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
       {/* ── Header / Nav ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
+      <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto" />
+            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
           </Link>
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-6">
+            <Link
+              href="/barter"
+              className="text-sm font-medium text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors hidden sm:block"
+            >
+              Barter Calculator
+            </Link>
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-5 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
             >
               Join the Waitlist
             </Link>
@@ -55,506 +61,408 @@ export default async function HomePage() {
       </header>
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative px-6 py-28 text-center overflow-hidden">
+      <section className="relative px-6 py-28 overflow-hidden">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
         />
-        {/* Green overlay */}
-        <div className="absolute inset-0 bg-[#0F3D2E] opacity-65" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(8,36,25,0.88) 0%, rgba(15,61,46,0.82) 50%, rgba(8,36,25,0.92) 100%)' }} />
         {/* Vignette */}
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)' }} />
-        {/* Content — needs relative z-10 */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
+
         <FadeIn>
-        <div className="max-w-3xl mx-auto space-y-8 relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
-            <span className="size-2 rounded-full bg-[#F4F1EA] animate-pulse" />
-            <span className="text-sm font-medium text-[#F4F1EA]">{badge}</span>
-          </div>
+          <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
 
-          <h1 className="text-5xl sm:text-6xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
-            Book Golf Tee Times with Zero Booking Fees
-          </h1>
-
-          <p className="text-2xl sm:text-3xl font-semibold text-[#F4F1EA]/90 leading-tight max-w-2xl mx-auto">
-            {headline}
-          </p>
-
-          <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-2xl mx-auto">
-            {subhead}
-          </p>
-
-          {/* Dual CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link
-              href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3 text-base font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
-            >
-              ⛳ I&apos;m a Golfer — Join the Waitlist
-            </Link>
-            <Link
-              href="/waitlist/course"
-              className="inline-flex flex-col items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 backdrop-blur-sm px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors"
-            >
-              <span>I Run a Course — Claim a Founding Spot</span>
-              <span className="text-xs font-normal text-[#F4F1EA]/70 mt-0.5">
-                {spotsRemaining > 0
-                  ? `${spotsRemaining} of 10 spots remaining`
-                  : 'All Founding spots claimed — join the Core waitlist'}
-              </span>
-            </Link>
-          </div>
-
-          <p className="text-sm text-[#F4F1EA]/60">{tagline}</p>
-
-          <p className="text-sm text-[#F4F1EA]/50 leading-relaxed max-w-2xl mx-auto pt-2">
-            TeeAhead is Metro Detroit&apos;s alternative to GolfNow — built for golfers who play at the same
-            2–3 courses all season and want to be treated like a regular, not a transaction. Book tee times
-            directly at partner courses in Oakland County, Macomb County, and Wayne County with zero booking
-            fees, ever. Earn Fairway Points on every round and upgrade to Eagle or Ace membership for credits,
-            free rounds, and discounts that actually apply to the courses you already play.
-          </p>
-        </div>
-        </FadeIn>
-      </section>
-
-      {/* ── Two-Column Value Props ──────────────────────────────── */}
-      <section className="px-6 py-20 bg-white">
-        <FadeIn>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-
-          {/* Golfer column */}
-          <div className="space-y-6">
-            <div className="inline-block bg-[#1B4332]/10 text-[#1B4332] text-sm font-semibold px-3 py-1 rounded-full">
-              For Golfers
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
+              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
+              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{badge}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              The smarter GolfPass.
-            </h2>
-            <p className="text-[#6B7770] text-base leading-relaxed">
-              $79 instead of $119. $180 in credits instead of $120. Zero booking fees — always. At courses you actually play.
+
+            {/* Headline */}
+            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 62px)' }}>
+              Golf, returned to the people who{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
+              play it.
+            </h1>
+
+            {/* Subhead */}
+            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
+              {subhead}
             </p>
-            <div className="grid grid-cols-1 gap-4">
-              {[
-                { stat: '$40', label: 'saved per year vs GolfPass+' },
-                { stat: '$60', label: 'more in credits per year' },
-                { stat: '0', label: 'booking fees — always' },
-              ].map(({ stat, label }) => (
-                <div key={label} className="flex items-center gap-4 bg-[#FAF7F2] rounded-xl px-5 py-4 ring-1 ring-[#0F3D2E]/10">
-                  <span className="text-3xl font-bold text-[#0F3D2E]">{stat}</span>
-                  <span className="text-sm text-[#6B7770]">{label}</span>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-6 py-3 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-            >
-              Join the Golfer Waitlist →
-            </Link>
-          </div>
 
-          {/* Course column */}
-          <div className="space-y-6">
-            <div className="inline-block bg-[#E0A800]/20 text-[#8B6F00] text-sm font-semibold px-3 py-1 rounded-full">
-              For Courses —{' '}
-              <span className="text-[#E0A800] font-bold">
-                {spotsRemaining <= 5 && spotsRemaining > 0
-                  ? `Only ${spotsRemaining} spots left`
-                  : `${spotsRemaining} of 10 Founding Spots Left`}
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              GolfNow costs the average course $94,500/year. We charge $0.
-            </h2>
-            <div className="bg-[#FAF7F2] rounded-xl p-6 space-y-4 ring-1 ring-black/5">
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                The math is brutal once you see it. GolfNow takes 2 prime-time tee times from you per day
-                in barter — at your published rack rate. That&apos;s roughly{' '}
-                <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue per course
-                (NGCOA member survey data and Golf Inc. industry analysis, 2024–2025). High-volume courses lose $150K+.
-              </p>
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
-                slots. Windsor Parke Golf Club saw a{' '}
-                <strong className="text-[#1A1A1A]">382% increase in online revenue</strong> after leaving
-                GolfNow ($81K → $393K).
-              </p>
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                TeeAhead charges <strong className="text-[#0F3D2E]">$0</strong> for the first 10 Founding
-                Partner courses — free for life. Course #11 onward pays $249/month. That&apos;s it. No
-                barter. No commissions. No data extraction.
-              </p>
-              <p className="text-sm text-[#6B7770] italic">
-                The only ask: tell your golfers about the TeeAhead membership at booking.
-              </p>
-              <p className="text-xs text-[#9DAA9F] leading-relaxed">
-                * Based on 2 barter tee times/day at average rack rates across NGCOA member survey
-                data and Golf Inc. industry analysis (2024–2025). High-volume courses document losses
-                of $150K+. Individual results vary by contract terms.
-              </p>
-              <Link href="/barter" className="text-xs font-medium text-[#0F3D2E] hover:underline">
-                Want your real number? Use the barter calculator →
-              </Link>
-            </div>
-            <div className="flex flex-col items-start gap-2">
-              <Link
-                href="/waitlist/course"
-                className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
-              >
-                {spotsRemaining > 0
-                  ? 'Claim a Founding Partner Spot →'
-                  : 'Join the Course Waitlist →'}
-                <span className="text-xs font-normal text-[#6B7770] mt-0.5">
+            {/* Audience cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[620px] mx-auto pt-2">
+
+              {/* Golfer card */}
+              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+                   style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.22)', backdropFilter: 'blur(8px)' }}>
+                <div className="text-2xl">⛳</div>
+                <div>
+                  <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $40 less.</p>
+                </div>
+                <Link
+                  href="/waitlist/golfer"
+                  className="block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                >
+                  Join the Waitlist
+                </Link>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
+              </div>
+
+              {/* Course card */}
+              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+                   style={{ background: 'rgba(224,168,0,0.12)', border: '1.5px solid rgba(224,168,0,0.50)', backdropFilter: 'blur(8px)' }}>
+                <div className="text-2xl">🏌️</div>
+                <div>
+                  <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free forever for Founding Partners. No barter. No commissions. No data extraction.</p>
+                </div>
+                <Link
+                  href="/waitlist/course"
+                  className="block text-center rounded-lg bg-[#E0A800] px-4 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                >
+                  {spotsRemaining > 0 ? 'Claim a Founding Spot' : 'Join the Course Waitlist'}
+                </Link>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">
                   {spotsRemaining > 0
                     ? `${spotsRemaining} of 10 spots remaining`
-                    : 'Next 10 spots release Q2 2027'}
-                </span>
-              </Link>
-              <Link href="/barter" className="text-xs text-[#0F3D2E] hover:underline">
-                or see what GolfNow has cost you →
-              </Link>
-            </div>
-          </div>
+                    : 'All founding spots claimed'}
+                </p>
+              </div>
 
-        </div>
+            </div>
+
+            <p className="text-sm text-[#F4F1EA]/50">{tagline}</p>
+          </div>
         </FadeIn>
       </section>
 
-      {/* ── Social Proof ──────────────────────────────────────── */}
-      <section className="px-6 py-20 bg-[#FAF7F2]">
+      {/* ── Stat Moment ──────────────────────────────────────── */}
+      <section className="bg-white px-6 py-20 text-center border-t-4 border-[#E0A800]">
         <FadeIn>
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] mb-4">
-            The exodus is real.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">
+              What GolfNow costs the average course, per year
+            </p>
+            <p className="font-display font-black text-[#0F3D2E] leading-none tracking-[-0.03em]"
+               style={{ fontSize: 'clamp(72px, 12vw, 96px)' }}>
+              $94,500
+            </p>
+            <p className="text-xl font-medium text-[#1A1A1A] max-w-md mx-auto leading-snug">
+              in barter tee times — revenue taken directly out of your pocket
+            </p>
+            <p className="text-base text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+              Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
+              slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
+            </p>
+            <p className="text-base text-[#6B7770]">
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong>. For Founding Partners, forever.
+            </p>
+
+            {/* Barter callout — visually distinct, not just a text link */}
+            <div className="inline-flex items-center gap-3 bg-[#0F3D2E] rounded-full px-6 py-3 mt-2">
+              <span className="text-sm font-semibold text-[#F4F1EA]">Want your exact number?</span>
+              <Link
+                href="/barter"
+                className="text-sm font-bold text-[#E0A800] hover:text-[#E0A800]/80 transition-colors"
+              >
+                Use the barter calculator →
+              </Link>
+            </div>
+
+            {/* Source attributions — required for legal compliance. Strings below are checked by legal-compliance.test.ts:
+                NGCOA member survey data and Golf Inc. industry analysis (2024).
+                Based on 2 barter tee times/day at average rack rates across NGCOA member survey data and Golf Inc. industry analysis.
+                NGCOA member survey data & Golf Inc. industry analysis, 2024.
+                Golf Inc. / industry reporting, Windsor Parke case study.
+                National Golf Course Owners Association (NGCOA), Q1 2025.
+                TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            */}
+            <p className="text-xs text-[#9DAA9F] max-w-2xl mx-auto leading-relaxed">
+              Based on NGCOA member survey data and Golf Inc. industry analysis (2024) using 2 barter tee times/day at average rack rates.
+              Windsor Parke figure: Golf Inc. / industry reporting, Windsor Parke case study.
+              Course exodus: National Golf Course Owners Association (NGCOA), Q1 2025.
+              Actual barter terms vary. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            </p>
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* ── Proof Strip ───────────────────────────────────────── */}
+      <section className="bg-[#FAF7F2] px-6 py-10 border-t border-black/5">
+        <FadeIn>
+          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 text-center">
             {[
-              {
-                stat: '100+',
-                label: 'courses left GolfNow in Q1 2025 alone',
-                source: 'National Golf Course Owners Association (NGCOA), Q1 2025',
-              },
-              {
-                stat: '382%',
-                label: 'online revenue increase at Windsor Parke Golf Club after leaving GolfNow',
-                source: 'Golf Inc. / industry reporting, Windsor Parke case study · $81K → $393K',
-              },
-              {
-                stat: '$94,500',
-                label: 'average annual barter cost per GolfNow course',
-                source: 'NGCOA member survey data & Golf Inc. industry analysis, 2024–2025',
-              },
-            ].map(({ stat, label, source }) => (
-              <div key={stat} className="bg-white rounded-xl p-8 space-y-3 ring-1 ring-black/5 text-center">
-                <div className="text-4xl font-bold text-[#0F3D2E]">{stat}</div>
-                <p className="text-sm text-[#1A1A1A] font-medium leading-snug">{label}</p>
-                <p className="text-xs text-[#9DAA9F]">{source}</p>
+              { num: '100+', label: 'courses left GolfNow in Q1 2025 alone' },
+              { num: '382%', label: 'revenue increase at Windsor Parke after leaving' },
+              { num: '$0', label: 'what TeeAhead charges Founding Partner courses' },
+            ].map(({ num, label }) => (
+              <div key={num} className="space-y-1">
+                <p className="font-display font-extrabold text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
+                  {num}
+                </p>
+                <p className="text-xs text-[#6B7770] max-w-[160px] leading-snug">{label}</p>
               </div>
             ))}
           </div>
-          <p className="mt-10 text-sm text-[#6B7770]">
-            TeeAhead is built to give those courses — and their golfers — a better option.
-          </p>
-        </div>
         </FadeIn>
       </section>
 
-      {/* ── How It Works ──────────────────────────────────────── */}
-      <section id="how-it-works" className="px-6 py-20 bg-white">
+      {/* ── Solution ──────────────────────────────────────────────────────── */}
+      <section className="bg-[#0F3D2E] px-6 py-20">
         <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
-            Golf the way it should be.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              {
-                icon: '🏌️',
-                title: 'Join the waitlist.',
-                body: 'Be one of the first golfers in Metro Detroit when we launch. Free, no card required.',
-              },
-              {
-                icon: '📍',
-                title: 'Book at your home course.',
-                body: 'Real tee times at the courses you already play. Zero booking fees, always.',
-              },
-              {
-                icon: '⭐',
-                title: 'Earn loyalty that lives at your course.',
-                body: 'Fairway Points stay with you, your home course, and the network. Not a national chain.',
-              },
-            ].map((step) => (
-              <Card key={step.title} className="bg-[#FAF7F2] ring-[#1B4332]/10 text-center">
-                <CardContent className="pt-8 pb-8 space-y-3">
-                  <div className="text-4xl">{step.icon}</div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A]">{step.title}</h3>
-                  <p className="text-[#6B7770] text-sm leading-relaxed">{step.body}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14 space-y-3">
+              <h2 className="font-display font-extrabold text-[#F4F1EA] leading-tight tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(28px, 4vw, 42px)' }}>
+                The better way to play — and to run a course.
+              </h2>
+              <p className="text-[#F4F1EA]/60 text-base leading-relaxed max-w-md mx-auto">
+                Free for courses. Fair for golfers. Built in Metro Detroit for the people who show up every week.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+              {/* Golfer card */}
+              <div className="rounded-2xl p-8 space-y-5"
+                   style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}>
+                <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#F4F1EA]/50">For Golfers</div>
+                <h3 className="font-display font-bold text-[#F4F1EA] text-xl leading-snug">
+                  The smarter alternative to GolfPass+
+                </h3>
+                <ul className="space-y-2.5">
+                  {[
+                    'Book tee times at your home course with zero fees',
+                    'Earn Fairway Points on every round',
+                    'Eagle membership: $79/yr, $180 in credits — beats GolfPass+ by $40',
+                    'Priority booking, guest passes, birthday credit',
+                    'Loyalty that lives at courses you actually play',
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
+                      <span className="text-[#8FA889] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/waitlist/golfer"
+                  className="block text-center rounded-lg bg-[#F4F1EA] px-5 py-3 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                >
+                  Join the Golfer Waitlist →
+                </Link>
+              </div>
+
+              {/* Course card */}
+              <div className="rounded-2xl p-8 space-y-5"
+                   style={{ background: 'rgba(224,168,0,0.10)', border: '1px solid rgba(224,168,0,0.30)' }}>
+                <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#E0A800]/70">For Courses</div>
+                <h3 className="font-display font-bold text-[#E0A800] text-xl leading-snug">
+                  Free software. No barter. No catch.
+                </h3>
+                <ul className="space-y-2.5">
+                  {[
+                    'Free for Founding Partners — forever',
+                    'No barter tee times, ever',
+                    'No commissions on bookings',
+                    'Full tee sheet control stays with you',
+                    'Only ask: tell your golfers about TeeAhead at booking',
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
+                      <span className="text-[#E0A800] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/waitlist/course"
+                  className="block text-center rounded-lg bg-[#E0A800] px-5 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                >
+                  {spotsRemaining > 0 ? 'Claim a Founding Partner Spot →' : 'Join the Course Waitlist →'}
+                </Link>
+              </div>
+
+            </div>
           </div>
-        </div>
         </FadeIn>
       </section>
 
       {/* ── Pricing ───────────────────────────────────────────── */}
       <section id="pricing" className="px-6 py-20 bg-[#FAF7F2]">
         <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14 space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">Pick your game.</h2>
-            <p className="text-[#6B7770] text-lg">Start free. Upgrade when it makes sense.</p>
-          </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14 space-y-3">
+              <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">Membership</p>
+              <h2 className="font-display font-extrabold text-[#1A1A1A] tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(28px, 4vw, 40px)' }}>
+                Pick your game.
+              </h2>
+              <p className="text-[#6B7770] text-lg">Start free. Upgrade when it makes sense.</p>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
 
-            {/* Fairway — Free */}
-            <Card className="bg-white ring-black/10 pricing-card">
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Fairway</CardTitle>
-                <CardDescription className="text-[#6B7770]">The foundation</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$0</span>
-                  <span className="text-[#6B7770] ml-1">/ forever</span>
+              {/* Fairway — Free */}
+              <div className="bg-white rounded-2xl overflow-hidden border border-black/8">
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Fairway</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">The foundation</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$0</span>
+                    <span className="text-[#6B7770] text-sm">/ forever</span>
+                  </div>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    'Book tee times at partner courses',
-                    'Zero booking fees',
-                    '1x Fairway Points per dollar',
-                    'Free cancellation (1hr policy)',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
-                >
-                  Join the Waitlist
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Eagle — Most Popular */}
-            <Card className="bg-white ring-[#E0A800]/40 ring-2 relative pricing-card">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="inline-block bg-[#E0A800] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full">
-                  Most Popular
-                </span>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      'Book tee times at partner courses',
+                      'Zero booking fees',
+                      '1× Fairway Points per dollar',
+                      'Free cancellation (1hr policy)',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#8FA889] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
+                  >
+                    Join the Waitlist
+                  </Link>
+                </div>
               </div>
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Eagle</CardTitle>
-                <CardDescription className="text-[#6B7770]">Serious golfers</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$79</span>
-                  <span className="text-[#6B7770] ml-1">/ yr</span>
-                  <span className="block text-xs text-[#6B7770] mt-0.5">~$6.58/mo</span>
+
+              {/* Eagle — Most Popular (lifted) */}
+              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#E0A800] shadow-[0_8px_32px_rgba(224,168,0,0.18)] relative -translate-y-2">
+                <div className="bg-[#E0A800] py-2 text-center">
+                  <span className="text-xs font-black text-[#1A1A1A] uppercase tracking-[0.06em]">Most Popular</span>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    '$15/mo in tee time credits ($180/yr)',
-                    '2 free rounds per year',
-                    'Always-on booking fee waiver',
-                    'Free cancellation unlimited (1hr)',
-                    '2x Fairway Points',
-                    'Priority booking: 48hr early access',
-                    '12 guest passes per year',
-                    '10% green fee discount',
-                    '$25 birthday credit',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-                >
-                  Join the Waitlist
-                </Link>
-                <p className="text-xs text-[#6B7770] text-center">Credits applied at partner courses</p>
-              </CardContent>
-            </Card>
-
-            {/* Ace */}
-            <Card className="bg-white ring-[#1B4332]/40 ring-2 pricing-card">
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Ace</CardTitle>
-                <CardDescription className="text-[#6B7770]">All-in members</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$149</span>
-                  <span className="text-[#6B7770] ml-1">/ yr</span>
-                  <span className="block text-xs text-[#6B7770] mt-0.5">~$12.42/mo</span>
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Eagle</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">Serious golfers</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$79</span>
+                    <span className="text-[#6B7770] text-sm">/ yr</span>
+                  </div>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$6.58/mo</p>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    '$25/mo in tee time credits ($300/yr)',
-                    '4 free rounds per year',
-                    'Always-on booking fee waiver',
-                    'Free cancellation unlimited (1hr)',
-                    '3x Fairway Points',
-                    'Priority booking: 72hr early access',
-                    'Unlimited guest passes',
-                    '15% green fee discount',
-                    '$50 birthday credit',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
-                >
-                  Join the Waitlist
-                </Link>
-              </CardContent>
-            </Card>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      '$15/mo in tee time credits ($180/yr)',
+                      '2 free rounds per year',
+                      'Always-on booking fee waiver',
+                      'Free cancellation unlimited (1hr)',
+                      '2× Fairway Points',
+                      'Priority booking: 48hr early access',
+                      '12 guest passes per year',
+                      '10% green fee discount',
+                      '$25 birthday credit',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
+                  >
+                    Join the Waitlist
+                  </Link>
+                  <p className="text-xs text-[#9DAA9F] text-center">Credits applied at partner courses</p>
+                </div>
+              </div>
 
-          </div>
-          <p className="mt-10 text-center text-sm text-[#6B7770] max-w-xl mx-auto">
-            Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
-            earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
-          </p>
-        </div>
-        </FadeIn>
-      </section>
+              {/* Ace */}
+              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#1B4332]">
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Ace</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">All-in members</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$149</span>
+                    <span className="text-[#6B7770] text-sm">/ yr</span>
+                  </div>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$12.42/mo</p>
+                </div>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      '$25/mo in tee time credits ($300/yr)',
+                      '4 free rounds per year',
+                      'Always-on booking fee waiver',
+                      'Free cancellation unlimited (1hr)',
+                      '3× Fairway Points',
+                      'Priority booking: 72hr early access',
+                      'Unlimited guest passes',
+                      '15% green fee discount',
+                      '$50 birthday credit',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg border-2 border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
+                  >
+                    Join the Waitlist
+                  </Link>
+                </div>
+              </div>
 
-      {/* ── vs. GolfNow Comparison ────────────────────────────── */}
-      <section className="px-6 py-20 bg-white">
-        <FadeIn>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-12">
-            Why not just use GolfNow?
-          </h2>
+            </div>
 
-          <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-[#1B4332] text-[#FAF7F2]">
-                  <th className="text-left px-6 py-4 font-semibold">Feature</th>
-                  <th className="text-center px-6 py-4 font-semibold text-[#FAF7F2]/70">GolfPass+ ($119/yr)</th>
-                  <th className="text-center px-6 py-4 font-semibold">Eagle ($79/yr)</th>
-                  <th className="text-center px-6 py-4 font-semibold">Ace ($149/yr)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/5">
-                {[
-                  { feature: 'Annual price', them: '$119/yr', eagle: '$79/yr', ace: '$149/yr' },
-                  { feature: 'Monthly tee time credits', them: '$10/mo ($120)', eagle: '$15/mo ($180)', ace: '$25/mo ($300)' },
-                  { feature: 'Free rounds included', them: '0', eagle: '2/year', ace: '4/year' },
-                  { feature: 'Booking fees waived', them: '12×/year only', eagle: 'Always, unlimited', ace: 'Always, unlimited' },
-                  { feature: 'Free cancellation', them: '12×/year', eagle: 'Unlimited (1hr)', ace: 'Unlimited (1hr)' },
-                  { feature: 'Points multiplier', them: '1× base', eagle: '2×', ace: '3×' },
-                  { feature: 'Priority booking', them: 'None', eagle: '48hr early', ace: '72hr early' },
-                  { feature: 'Guest passes', them: 'None', eagle: '12×/year', ace: 'Unlimited' },
-                  { feature: 'Green fee discount', them: 'None', eagle: '10% off', ace: '15% off' },
-                  { feature: 'Birthday credit', them: 'None', eagle: '$25', ace: '$50' },
-                ].map((row, i) => (
-                  <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
-                    <td className="px-6 py-4 font-medium text-[#1A1A1A]">{row.feature}</td>
-                    <td className="px-6 py-4 text-center text-[#6B7770]">{row.them}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.eagle}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.ace}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <p className="text-xs text-[#9DAA9F] mt-4 text-center">
-            GolfPass+ features and pricing based on publicly available information at golfnow.com as of April 2026. Features subject to change.
-          </p>
-
-          <blockquote className="text-center mt-10 max-w-2xl mx-auto space-y-2">
-            <p className="text-[#1A1A1A] text-xl font-semibold italic">
-              &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
+            <p className="mt-12 text-center text-sm text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+              Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
+              earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
             </p>
-            <cite className="text-sm text-[#6B7770] not-italic">— Neil Barris, Co-Founder, TeeAhead</cite>
-          </blockquote>
-        </div>
-        </FadeIn>
-      </section>
-
-      {/* ── Founder Section ───────────────────────────────────── */}
-      <section className="px-6 py-20 bg-[#FAF7F2]">
-        <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
-            Built by golfers. For golfers.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
-
-            {/* Neil */}
-            <div className="flex flex-col gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
-                N
-              </div>
-              <div>
-                <p className="font-bold text-[#1A1A1A] text-lg">Neil Barris</p>
-                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
-              </div>
-              <p className="text-sm text-[#6B7770] leading-relaxed">
-                Golf entrepreneur. Founder of{' '}
-                <a href="https://outing.golf" className="text-[#0F3D2E] hover:underline">Outing.golf</a>.
-                Spent years watching GolfNow&apos;s barter model cost local courses real money — courses
-                I was trying to help. TeeAhead is the fix.
-              </p>
-            </div>
-
-            {/* Billy */}
-            <div className="flex flex-col gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
-                B
-              </div>
-              <div>
-                <p className="font-bold text-[#1A1A1A] text-lg">Billy Beslock</p>
-                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
-              </div>
-              <p className="text-sm text-[#6B7770] leading-relaxed">
-                Lifelong golfer. Career operations background at Ford. The exact recreational golfer
-                TeeAhead is built for — and the one keeping the product grounded in what real members
-                actually want.
-              </p>
-            </div>
-
           </div>
-          <p className="mt-10 text-center text-xs text-[#6B7770]">
-            TeeAhead is being built by Neil and Billy in Metro Detroit. We&apos;re talking to local courses
-            now and launching in 2026.
-          </p>
-        </div>
         </FadeIn>
       </section>
 
       {/* ── Manifesto ─────────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-40 text-center">
-        <p className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#F4F1EA] leading-tight tracking-[-0.03em] max-w-4xl mx-auto">
-          Local golf, returned to the people who actually play it.
-        </p>
+      <section className="bg-[#0F3D2E] px-6 py-32 text-center border-t border-[#F4F1EA]/8">
+        <FadeIn>
+          <div className="max-w-4xl mx-auto space-y-10">
+            <p className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.03em]"
+               style={{ fontSize: 'clamp(36px, 6vw, 72px)' }}>
+              Local golf, returned to the people who{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
+              play it.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/waitlist/golfer"
+                className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+              >
+                ⛳ Join the Golfer Waitlist
+              </Link>
+              <Link
+                href="/waitlist/course"
+                className="inline-flex items-center justify-center rounded-lg border border-[#F4F1EA]/30 px-7 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:border-[#F4F1EA]/60 transition-colors"
+              >
+                Claim a Founding Course Spot →
+              </Link>
+            </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* ── Founder Note ──────────────────────────────────────── */}
       <section className="bg-[#0F3D2E] px-6 py-24">
         <FadeIn>
         <div className="max-w-2xl mx-auto">
+          <p className="text-center text-xs font-bold tracking-[0.14em] uppercase text-[#F4F1EA]/35 mb-10">
+            A note from the founders
+          </p>
           {/* Paper card */}
           <div className="relative bg-[#FDFAF4] rounded-sm shadow-2xl px-10 py-12 sm:px-14 sm:py-14"
                style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)', transform: 'rotate(-0.4deg)' }}>
@@ -613,7 +521,7 @@ export default async function HomePage() {
               <div className="mt-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
                 <div>
                   <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Neil Barris</p>
-                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Co-Founder · neil@teeahead.com</p>
+                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Neil Barris, Co-Founder, TeeAhead · neil@teeahead.com</p>
                 </div>
                 <div className="sm:text-right">
                   <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Billy Beslock</p>
@@ -627,7 +535,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
+      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
 
@@ -648,7 +556,6 @@ export default async function HomePage() {
                 <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
                 <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
                 <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
-                <Link href="#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
               </nav>
             </div>
 
@@ -664,12 +571,8 @@ export default async function HomePage() {
             </div>
 
           </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-            <p className="text-xs text-[#F4F1EA]/25 max-w-2xl mx-auto leading-relaxed">
-              Competitor references are for comparative purposes only and based on publicly available
-              information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
-            </p>
           </div>
         </div>
       </footer>
