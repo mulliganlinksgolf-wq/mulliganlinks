@@ -17,16 +17,19 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
+  const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
     setLoading(true)
-    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
       setError(error.message)
       setLoading(false)
     } else {
-      router.push('/app')
+      const destination = ADMIN_EMAILS.includes(data.user?.email ?? '') ? '/admin' : '/app'
+      router.push(destination)
       router.refresh()
     }
   }
