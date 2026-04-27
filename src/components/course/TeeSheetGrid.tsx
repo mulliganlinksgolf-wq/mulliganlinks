@@ -40,8 +40,10 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
 
   const statusColors: Record<string, string> = {
     open: 'bg-green-50 border-green-200',
+    full: 'bg-blue-50 border-blue-200',
     booked: 'bg-blue-50 border-blue-200',
     blocked: 'bg-red-50 border-red-200',
+    completed: 'bg-gray-50 border-gray-200',
   }
 
   function handleBlock(id: string) {
@@ -74,12 +76,22 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
           const isExpanded = expanded === tt.id
           const booking = tt.bookings?.[0]
           const bookedPlayers = tt.bookings.reduce((sum, b) => sum + b.players, 0)
+          const allCompleted =
+            tt.bookings.length > 0 && tt.bookings.every(b => b.status === 'completed')
+          const displayStatus =
+            tt.status === 'blocked'
+              ? 'blocked'
+              : allCompleted
+              ? 'completed'
+              : bookedPlayers >= tt.max_players
+              ? 'full'
+              : tt.status
 
           return (
             <div key={tt.id} className="rounded border bg-white overflow-hidden">
               <button
                 onClick={() => setExpanded(isExpanded ? null : tt.id)}
-                className={`w-full grid grid-cols-12 gap-2 px-3 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors border ${statusColors[tt.status] ?? 'bg-white border-gray-200'}`}
+                className={`w-full grid grid-cols-12 gap-2 px-3 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors border ${statusColors[displayStatus] ?? 'bg-white border-gray-200'}`}
               >
                 <div className="col-span-2 font-medium text-[#1A1A1A]">
                   {formatTime(tt.scheduled_at)}
@@ -87,16 +99,18 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                 <div className="col-span-2">
                   <span
                     className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                      tt.status === 'open'
+                      displayStatus === 'open'
                         ? 'bg-green-100 text-green-700'
-                        : tt.status === 'booked'
+                        : displayStatus === 'full'
                         ? 'bg-blue-100 text-blue-700'
-                        : tt.status === 'blocked'
+                        : displayStatus === 'completed'
+                        ? 'bg-gray-200 text-gray-600'
+                        : displayStatus === 'blocked'
                         ? 'bg-red-100 text-red-700'
                         : 'bg-gray-200 text-gray-600'
                     }`}
                   >
-                    {tt.status}
+                    {displayStatus}
                   </span>
                 </div>
                 <div className="col-span-2 text-[#6B7770]">
@@ -141,7 +155,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
 
                   {/* Actions */}
                   <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200 flex-wrap">
-                    {tt.status !== 'blocked' && tt.available_players > 0 && (
+                    {bookedPlayers < tt.max_players && displayStatus !== 'completed' && (
                       <button
                         onClick={() => setBookingTeeTime(tt)}
                         className="text-xs px-3 py-1 bg-[#1B4332] text-[#FAF7F2] rounded hover:bg-[#1B4332]/90"
@@ -154,7 +168,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                         onClick={() => handleBlock(tt.id)}
                         className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
                       >
-                        Block slot
+                        Close slot
                       </button>
                     )}
                     {tt.status === 'blocked' && (
@@ -162,7 +176,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                         onClick={() => handleUnblock(tt.id)}
                         className="text-xs px-3 py-1 border border-[#1B4332] rounded hover:bg-[#1B4332]/5 text-[#1B4332]"
                       >
-                        Unblock slot
+                        Open slot
                       </button>
                     )}
                     {tt.bookings.map(

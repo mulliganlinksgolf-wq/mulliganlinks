@@ -294,7 +294,7 @@ export function WalkInBookingModal({
               Payment method
             </p>
             <div className="flex gap-2">
-              {(['cash', 'card', 'unpaid'] as PaymentMethod[]).map(m => (
+              {(['cash', 'card'] as PaymentMethod[]).map(m => (
                 <button
                   key={m}
                   onClick={() => setPaymentMethod(m)}
@@ -304,7 +304,7 @@ export function WalkInBookingModal({
                       : 'text-[#6B7770] border-gray-200 hover:bg-gray-50'
                   }`}
                 >
-                  {m === 'unpaid' ? 'Tab' : m.charAt(0).toUpperCase() + m.slice(1)}
+                  {m.charAt(0).toUpperCase() + m.slice(1)}
                 </button>
               ))}
             </div>
