@@ -197,41 +197,82 @@ export default async function HomePage() {
         </FadeIn>
       </section>
 
-      {/* ── How It Works ──────────────────────────────────────── */}
-      <section id="how-it-works" className="px-6 py-20 bg-white">
+      {/* ── Solution ──────────────────────────────────────────────────────── */}
+      <section className="bg-[#0F3D2E] px-6 py-20">
         <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
-            Golf the way it should be.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {[
-              {
-                icon: '🏌️',
-                title: 'Join the waitlist.',
-                body: 'Be one of the first golfers in Metro Detroit when we launch. Free, no card required.',
-              },
-              {
-                icon: '📍',
-                title: 'Book at your home course.',
-                body: 'Real tee times at the courses you already play. Zero booking fees, always.',
-              },
-              {
-                icon: '⭐',
-                title: 'Earn loyalty that lives at your course.',
-                body: 'Fairway Points stay with you, your home course, and the network. Not a national chain.',
-              },
-            ].map((step) => (
-              <Card key={step.title} className="bg-[#FAF7F2] ring-[#1B4332]/10 text-center">
-                <CardContent className="pt-8 pb-8 space-y-3">
-                  <div className="text-4xl">{step.icon}</div>
-                  <h3 className="text-lg font-bold text-[#1A1A1A]">{step.title}</h3>
-                  <p className="text-[#6B7770] text-sm leading-relaxed">{step.body}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14 space-y-3">
+              <h2 className="font-display font-extrabold text-[#F4F1EA] leading-tight tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(28px, 4vw, 42px)' }}>
+                The better way to play — and to run a course.
+              </h2>
+              <p className="text-[#F4F1EA]/60 text-base leading-relaxed max-w-md mx-auto">
+                Free for courses. Fair for golfers. Built in Metro Detroit for the people who show up every week.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+
+              {/* Golfer card */}
+              <div className="rounded-2xl p-8 space-y-5"
+                   style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}>
+                <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#F4F1EA]/50">For Golfers</div>
+                <h3 className="font-display font-bold text-[#F4F1EA] text-xl leading-snug">
+                  The smarter alternative to GolfPass+
+                </h3>
+                <ul className="space-y-2.5">
+                  {[
+                    'Book tee times at your home course with zero fees',
+                    'Earn Fairway Points on every round',
+                    'Eagle membership: $79/yr, $180 in credits — beats GolfPass+ by $40',
+                    'Priority booking, guest passes, birthday credit',
+                    'Loyalty that lives at courses you actually play',
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
+                      <span className="text-[#8FA889] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/waitlist/golfer"
+                  className="block text-center rounded-lg bg-[#F4F1EA] px-5 py-3 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                >
+                  Join the Golfer Waitlist →
+                </Link>
+              </div>
+
+              {/* Course card */}
+              <div className="rounded-2xl p-8 space-y-5"
+                   style={{ background: 'rgba(224,168,0,0.10)', border: '1px solid rgba(224,168,0,0.30)' }}>
+                <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#E0A800]/70">For Courses</div>
+                <h3 className="font-display font-bold text-[#E0A800] text-xl leading-snug">
+                  Free software. No barter. No catch.
+                </h3>
+                <ul className="space-y-2.5">
+                  {[
+                    'Free for Founding Partners — forever',
+                    'No barter tee times, ever',
+                    'No commissions on bookings',
+                    'Full tee sheet control stays with you',
+                    'Only ask: tell your golfers about TeeAhead at booking',
+                  ].map((f) => (
+                    <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
+                      <span className="text-[#E0A800] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/waitlist/course"
+                  className="block text-center rounded-lg bg-[#E0A800] px-5 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                >
+                  {spotsRemaining > 0 ? 'Claim a Founding Partner Spot →' : 'Join the Course Waitlist →'}
+                </Link>
+              </div>
+
+            </div>
           </div>
-        </div>
         </FadeIn>
       </section>
 
@@ -583,7 +624,6 @@ export default async function HomePage() {
                 <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
                 <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
                 <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
-                <Link href="#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
               </nav>
             </div>
 
