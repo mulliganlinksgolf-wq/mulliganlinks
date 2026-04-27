@@ -61,68 +61,83 @@ export default async function HomePage() {
       </header>
 
       {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative px-6 py-28 text-center overflow-hidden">
+      <section className="relative px-6 py-28 overflow-hidden">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
         />
-        {/* Green overlay */}
-        <div className="absolute inset-0 bg-[#0F3D2E] opacity-65" />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(8,36,25,0.88) 0%, rgba(15,61,46,0.82) 50%, rgba(8,36,25,0.92) 100%)' }} />
         {/* Vignette */}
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4) 100%)' }} />
-        {/* Content — needs relative z-10 */}
+        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
+
         <FadeIn>
-        <div className="max-w-3xl mx-auto space-y-8 relative z-10">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
-            <span className="size-2 rounded-full bg-[#F4F1EA] animate-pulse" />
-            <span className="text-sm font-medium text-[#F4F1EA]">{badge}</span>
+          <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+
+            {/* Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
+              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
+              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{badge}</span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 62px)' }}>
+              Golf, returned to the people who{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
+              play it.
+            </h1>
+
+            {/* Subhead */}
+            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
+              {subhead}
+            </p>
+
+            {/* Audience cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[620px] mx-auto pt-2">
+
+              {/* Golfer card */}
+              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+                   style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.22)', backdropFilter: 'blur(8px)' }}>
+                <div className="text-2xl">⛳</div>
+                <div>
+                  <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $40 less.</p>
+                </div>
+                <Link
+                  href="/waitlist/golfer"
+                  className="block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                >
+                  Join the Waitlist
+                </Link>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
+              </div>
+
+              {/* Course card */}
+              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+                   style={{ background: 'rgba(224,168,0,0.12)', border: '1.5px solid rgba(224,168,0,0.50)', backdropFilter: 'blur(8px)' }}>
+                <div className="text-2xl">🏌️</div>
+                <div>
+                  <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free forever for Founding Partners. No barter. No commissions. No data extraction.</p>
+                </div>
+                <Link
+                  href="/waitlist/course"
+                  className="block text-center rounded-lg bg-[#E0A800] px-4 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                >
+                  {spotsRemaining > 0 ? 'Claim a Founding Spot' : 'Join the Course Waitlist'}
+                </Link>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">
+                  {spotsRemaining > 0
+                    ? `${spotsRemaining} of 10 spots remaining`
+                    : 'All founding spots claimed'}
+                </p>
+              </div>
+
+            </div>
+
+            <p className="text-sm text-[#F4F1EA]/50">{tagline}</p>
           </div>
-
-          <h1 className="text-5xl sm:text-6xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
-            Book Golf Tee Times with Zero Booking Fees
-          </h1>
-
-          <p className="text-2xl sm:text-3xl font-semibold text-[#F4F1EA]/90 leading-tight max-w-2xl mx-auto">
-            {headline}
-          </p>
-
-          <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-2xl mx-auto">
-            {subhead}
-          </p>
-
-          {/* Dual CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Link
-              href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3 text-base font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
-            >
-              ⛳ I&apos;m a Golfer — Join the Waitlist
-            </Link>
-            <Link
-              href="/waitlist/course"
-              className="inline-flex flex-col items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 backdrop-blur-sm px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors"
-            >
-              <span>I Run a Course — Claim a Founding Spot</span>
-              <span className="text-xs font-normal text-[#F4F1EA]/70 mt-0.5">
-                {spotsRemaining > 0
-                  ? `${spotsRemaining} of 10 spots remaining`
-                  : 'All Founding spots claimed — join the Core waitlist'}
-              </span>
-            </Link>
-          </div>
-
-          <p className="text-sm text-[#F4F1EA]/60">{tagline}</p>
-
-          <p className="text-sm text-[#F4F1EA]/50 leading-relaxed max-w-2xl mx-auto pt-2">
-            TeeAhead is Metro Detroit&apos;s alternative to GolfNow — built for golfers who play at the same
-            2–3 courses all season and want to be treated like a regular, not a transaction. Book tee times
-            directly at partner courses in Oakland County, Macomb County, and Wayne County with zero booking
-            fees, ever. Earn Fairway Points on every round and upgrade to Eagle or Ace membership for credits,
-            free rounds, and discounts that actually apply to the courses you already play.
-          </p>
-        </div>
         </FadeIn>
       </section>
 
