@@ -176,7 +176,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── How It Works ──────────────────────────────────────── */}
-      <section className="px-6 py-20 bg-white">
+      <section id="how-it-works" className="px-6 py-20 bg-white">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
             Golf the way it should be.
@@ -212,7 +212,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Pricing ───────────────────────────────────────────── */}
-      <section className="px-6 py-20 bg-[#FAF7F2]">
+      <section id="pricing" className="px-6 py-20 bg-[#FAF7F2]">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14 space-y-3">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">Pick your game.</h2>
@@ -390,18 +390,45 @@ export default async function HomePage() {
       </section>
 
       {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-12">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-4">
-          <TeeAheadLogo className="h-14 w-auto" />
-          <p className="text-sm text-[#6B7770]">Your home course, redone right.</p>
-          <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
-            <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
-            <span>·</span>
-            <Link href="/privacy" className="hover:text-[#1B4332] transition-colors">Privacy</Link>
-            <span>·</span>
-            <Link href="/contact" className="hover:text-[#1B4332] transition-colors">For Courses</Link>
-          </nav>
-          <p className="text-xs text-[#6B7770]">© 2026 TeeAhead</p>
+      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
+
+            {/* Column 1 — Brand */}
+            <div className="space-y-3">
+              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
+              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
+                Book ahead. Play more. Own your golf.
+              </p>
+              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
+            </div>
+
+            {/* Column 2 — Product */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
+                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
+                <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
+                <Link href="#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
+              </nav>
+            </div>
+
+            {/* Column 3 — Company */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
+                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
+                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
+              </nav>
+            </div>
+
+          </div>
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
+            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+          </div>
         </div>
       </footer>
 
