@@ -4,8 +4,8 @@
  * source citations, share buttons, and spots-remaining states.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, act } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { BarterPage } from '@/components/BarterPage'
 
 // Mock next/link — renders as <a> with href
@@ -36,7 +36,7 @@ Object.defineProperty(navigator, 'clipboard', {
 describe('BarterPage — rendering', () => {
   it('renders the hero headline', () => {
     render(<BarterPage spotsRemaining={10} />)
-    expect(screen.getByText(/What has GolfNow actually cost you/i)).toBeInTheDocument()
+    expect(screen.getByText(/See exactly what GolfNow has cost you/i)).toBeInTheDocument()
   })
 
   it('renders all three sliders', () => {
@@ -105,7 +105,7 @@ describe('BarterPage — founding spots states', () => {
 
   it('shows spots remaining when spots > 0', () => {
     render(<BarterPage spotsRemaining={7} />)
-    expect(screen.getByText(/7 of 10 spots are left/i)).toBeInTheDocument()
+    expect(screen.getByText(/7 of 10 founding spots remaining/i)).toBeInTheDocument()
   })
 
   it('switches to waitlist CTA when all spots claimed', () => {
@@ -120,40 +120,35 @@ describe('BarterPage — founding spots states', () => {
   })
 })
 
-describe('BarterPage — share buttons', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
+describe('BarterPage — preset chips', () => {
+  it('renders all four preset chips', () => {
+    render(<BarterPage spotsRemaining={10} />)
+    expect(screen.getByRole('button', { name: /Municipal/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Daily Fee/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Semi-Private/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /My own numbers/i })).toBeInTheDocument()
   })
 
-  it('renders Copy Link button', () => {
-    render(<BarterPage spotsRemaining={5} />)
-    expect(screen.getByRole('button', { name: /Copy Link/i })).toBeInTheDocument()
+  it('clicking Municipal preset sets green fee slider to 45', () => {
+    render(<BarterPage spotsRemaining={10} />)
+    const chip = screen.getByRole('button', { name: /Municipal/i })
+    fireEvent.click(chip)
+    const sliders = screen.getAllByRole('slider')
+    // First slider is green fee
+    expect(sliders[0]).toHaveValue('45')
   })
 
-  it('renders Share via Email link', () => {
-    render(<BarterPage spotsRemaining={5} />)
-    const emailLink = screen.getByRole('link', { name: /Share via Email/i })
-    expect(emailLink).toHaveAttribute('href', expect.stringContaining('mailto:'))
+  it('clicking Daily Fee preset sets green fee slider to 85', () => {
+    render(<BarterPage spotsRemaining={10} />)
+    fireEvent.click(screen.getByRole('button', { name: /Daily Fee/i }))
+    const sliders = screen.getAllByRole('slider')
+    expect(sliders[0]).toHaveValue('85')
   })
 
-  it('email mailto includes correct subject', () => {
-    render(<BarterPage spotsRemaining={5} />)
-    const emailLink = screen.getByRole('link', { name: /Share via Email/i })
-    // encodeURIComponent encodes spaces as %20
-    expect(emailLink.getAttribute('href')).toContain('Worth%20checking')
-  })
-
-  it('Copy Link writes the barter URL to clipboard', async () => {
-    render(<BarterPage spotsRemaining={5} />)
-    const copyBtn = screen.getByRole('button', { name: /Copy Link/i })
-    await act(async () => { fireEvent.click(copyBtn) })
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('https://teeahead.com/barter')
-  })
-
-  it('Copy Link shows "Copied!" after clicking', async () => {
-    render(<BarterPage spotsRemaining={5} />)
-    const copyBtn = screen.getByRole('button', { name: /Copy Link/i })
-    await act(async () => { fireEvent.click(copyBtn) })
-    expect(screen.getByRole('button', { name: /Copied!/i })).toBeInTheDocument()
+  it('clicking Semi-Private preset sets green fee slider to 120', () => {
+    render(<BarterPage spotsRemaining={10} />)
+    fireEvent.click(screen.getByRole('button', { name: /Semi-Private/i }))
+    const sliders = screen.getAllByRole('slider')
+    expect(sliders[0]).toHaveValue('120')
   })
 })
