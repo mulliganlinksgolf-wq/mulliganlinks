@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata = {
-  title: 'TeeAhead — Your home course, redone right.',
-  description: 'The local-first golf membership. Zero booking fees, real rewards, and every dollar goes to the courses you love — not to GolfNow.',
+  title: 'TeeAhead — Book ahead. Play more. Own your golf.',
+  description:
+    'The local-first golf platform. Free software for courses. Real loyalty for golfers. Zero booking fees, always. Coming to Metro Detroit.',
 }
 
 export default async function HomePage() {
