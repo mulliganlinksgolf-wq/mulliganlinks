@@ -413,68 +413,41 @@ export default async function HomePage() {
         </FadeIn>
       </section>
 
-      {/* ── Founder Section ───────────────────────────────────── */}
-      <section className="px-6 py-20 bg-[#FAF7F2]">
-        <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-14">
-            Built by golfers. For golfers.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12">
-
-            {/* Neil */}
-            <div className="flex flex-col gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
-                N
-              </div>
-              <div>
-                <p className="font-bold text-[#1A1A1A] text-lg">Neil Barris</p>
-                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
-              </div>
-              <p className="text-sm text-[#6B7770] leading-relaxed">
-                Golf entrepreneur. Founder of{' '}
-                <a href="https://outing.golf" className="text-[#0F3D2E] hover:underline">Outing.golf</a>.
-                Spent years watching GolfNow&apos;s barter model cost local courses real money — courses
-                I was trying to help. TeeAhead is the fix.
-              </p>
-            </div>
-
-            {/* Billy */}
-            <div className="flex flex-col gap-4">
-              <div className="w-16 h-16 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#F4F1EA] text-2xl font-bold">
-                B
-              </div>
-              <div>
-                <p className="font-bold text-[#1A1A1A] text-lg">Billy Beslock</p>
-                <p className="text-sm text-[#0F3D2E] font-medium">Co-Founder</p>
-              </div>
-              <p className="text-sm text-[#6B7770] leading-relaxed">
-                Lifelong golfer. Career operations background at Ford. The exact recreational golfer
-                TeeAhead is built for — and the one keeping the product grounded in what real members
-                actually want.
-              </p>
-            </div>
-
-          </div>
-          <p className="mt-10 text-center text-xs text-[#6B7770]">
-            TeeAhead is being built by Neil and Billy in Metro Detroit. We&apos;re talking to local courses
-            now and launching in 2026.
-          </p>
-        </div>
-        </FadeIn>
-      </section>
-
       {/* ── Manifesto ─────────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-40 text-center">
-        <p className="text-5xl sm:text-6xl md:text-7xl font-bold text-[#F4F1EA] leading-tight tracking-[-0.03em] max-w-4xl mx-auto">
-          Local golf, returned to the people who actually play it.
-        </p>
+      <section className="bg-[#0F3D2E] px-6 py-32 text-center border-t border-[#F4F1EA]/8">
+        <FadeIn>
+          <div className="max-w-4xl mx-auto space-y-10">
+            <p className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.03em]"
+               style={{ fontSize: 'clamp(36px, 6vw, 72px)' }}>
+              Local golf, returned to the people who{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
+              play it.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/waitlist/golfer"
+                className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+              >
+                ⛳ Join the Golfer Waitlist
+              </Link>
+              <Link
+                href="/waitlist/course"
+                className="inline-flex items-center justify-center rounded-lg border border-[#F4F1EA]/30 px-7 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:border-[#F4F1EA]/60 transition-colors"
+              >
+                Claim a Founding Course Spot →
+              </Link>
+            </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* ── Founder Note ──────────────────────────────────────── */}
       <section className="bg-[#0F3D2E] px-6 py-24">
         <FadeIn>
         <div className="max-w-2xl mx-auto">
+          <p className="text-center text-xs font-bold tracking-[0.14em] uppercase text-[#F4F1EA]/35 mb-10">
+            A note from the founders
+          </p>
           {/* Paper card */}
           <div className="relative bg-[#FDFAF4] rounded-sm shadow-2xl px-10 py-12 sm:px-14 sm:py-14"
                style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)', transform: 'rotate(-0.4deg)' }}>
@@ -547,7 +520,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
+      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
 
@@ -583,12 +556,8 @@ export default async function HomePage() {
             </div>
 
           </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-            <p className="text-xs text-[#F4F1EA]/25 max-w-2xl mx-auto leading-relaxed">
-              Competitor references are for comparative purposes only and based on publicly available
-              information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
-            </p>
           </div>
         </div>
       </footer>
