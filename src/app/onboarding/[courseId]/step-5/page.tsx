@@ -1,5 +1,6 @@
 import { getCourseById } from '@/lib/db/courses'
 import Step5Page from './Step5Page'
+import { notFound } from 'next/navigation'
 
 export default async function Step5ServerPage({
   params,
@@ -8,6 +9,6 @@ export default async function Step5ServerPage({
 }) {
   const { courseId } = await params
   const course = await getCourseById(courseId)
-  const courseSlug = course?.slug ?? courseId
-  return <Step5Page courseId={courseId} courseSlug={courseSlug} />
+  if (!course?.slug) notFound()
+  return <Step5Page courseId={courseId} courseSlug={course.slug} />
 }

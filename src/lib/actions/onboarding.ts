@@ -1,7 +1,6 @@
 'use server'
 
 import { createAdminClient } from '@/lib/supabase/admin'
-import { generateSlug } from '@/lib/utils/generateSlug'
 import { sendGoLiveAlert } from '@/lib/email/sendGoLiveAlert'
 import { sendCourseWelcome } from '@/lib/email/sendCourseWelcome'
 
@@ -55,7 +54,7 @@ export type Step4Data = {
 // ─── Actions ──────────────────────────────────────────────────────────────────
 
 export async function saveStep1(
-  courseId: string | null,
+  courseId: string,
   data: Step1Data,
 ): Promise<{ courseId: string }> {
   const supabase = createAdminClient()
@@ -76,25 +75,13 @@ export async function saveStep1(
     holes: data.holes,
   }
 
-  if (courseId === null) {
-    const slug = generateSlug(data.name)
-    const { data: row, error } = await supabase
-      .from('courses')
-      .insert({ ...fields, slug, status: 'pending', onboarding_step: 2 })
-      .select('id')
-      .single()
+  const { error } = await supabase
+    .from('courses')
+    .update({ ...fields, onboarding_step: 2 })
+    .eq('id', courseId)
 
-    if (error) throw new Error('Failed to save step 1: ' + error.message)
-    return { courseId: row.id }
-  } else {
-    const { error } = await supabase
-      .from('courses')
-      .update({ ...fields, onboarding_step: 2 })
-      .eq('id', courseId)
-
-    if (error) throw new Error('Failed to save step 1: ' + error.message)
-    return { courseId }
-  }
+  if (error) throw new Error('Failed to save step 1: ' + error.message)
+  return { courseId }
 }
 
 export async function saveStep2(courseId: string, data: Step2Data): Promise<void> {
@@ -143,6 +130,10 @@ export async function saveStep2(courseId: string, data: Step2Data): Promise<void
 }
 
 export async function saveStep3(courseId: string, data: Step3Data): Promise<void> {
+  if (data.pricing.length === 0) throw new Error('At least one pricing row is required')
+  if (data.pricing.some((p) => p.greenFeeCents < 0 || p.cartFeeCents < 0))
+    throw new Error('Fees cannot be negative')
+
   const supabase = createAdminClient()
 
   const { error: deleteError } = await supabase
@@ -192,7 +183,7 @@ export async function saveStep4(courseId: string, data: Step4Data): Promise<void
   const { error } = await supabase
     .from('courses')
     .update({
-      description: data.description,
+      description: data.description.trim(),
       amenities: data.amenities,
       onboarding_step: 5,
     })
@@ -206,7 +197,7 @@ export async function goLive(courseId: string): Promise<void> {
 
   const { data: course, error: fetchError } = await supabase
     .from('courses')
-    .select('*')
+    .select('id, name, slug, city, state, gm_name, email, phone, website, holes')
     .eq('id', courseId)
     .single()
 
@@ -216,6 +207,7 @@ export async function goLive(courseId: string): Promise<void> {
     .from('courses')
     .update({
       is_live: true,
+      invite_used: true,
       onboarding_complete: true,
       onboarding_step: 6,
       status: 'active',
@@ -224,5 +216,10 @@ export async function goLive(courseId: string): Promise<void> {
 
   if (updateError) throw new Error('Failed to go live: ' + updateError.message)
 
-  await Promise.all([sendGoLiveAlert(course), sendCourseWelcome(course)])
+  // Email failures must not block the go-live state — DB write is the source of truth
+  try {
+    await Promise.all([sendGoLiveAlert(course), sendCourseWelcome(course)])
+  } catch (err) {
+    console.error('[goLive] email send failed (course is still live):', err)
+  }
 }

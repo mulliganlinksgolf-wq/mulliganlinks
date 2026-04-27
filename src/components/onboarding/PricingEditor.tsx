@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 export type PricingRow = {
   id: string          // client-side uuid for React key
@@ -39,16 +39,22 @@ type DollarInputProps = {
 
 function DollarInput({ cents, onChange, className = '' }: DollarInputProps) {
   const [display, setDisplay] = useState(() => centsToDisplay(cents))
+  const focused = useRef(false)
 
-  // Keep display in sync if cents prop changes externally (e.g. row reset)
-  // We only sync on blur, not on every render, to allow free typing.
+  // Sync display when the cents prop changes externally (e.g. row reset),
+  // but only when the input is not being actively edited.
+  useEffect(() => {
+    if (!focused.current) setDisplay(centsToDisplay(cents))
+  }, [cents])
 
   return (
     <input
       type="text"
       value={display}
+      onFocus={() => { focused.current = true }}
       onChange={(e) => setDisplay(e.target.value)}
       onBlur={() => {
+        focused.current = false
         const newCents = displayToCents(display)
         onChange(newCents)
         setDisplay(centsToDisplay(newCents))

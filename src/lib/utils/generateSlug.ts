@@ -1,5 +1,7 @@
 export function generateSlug(courseName: string): string {
-  const suffix = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
+  // 3 random bytes = 16.7M values, making collisions negligible at scale
+  const { randomBytes } = require('crypto') as typeof import('crypto')
+  const suffix = randomBytes(3).toString('hex') // 6 hex chars
 
   const base = courseName
     .toLowerCase()
