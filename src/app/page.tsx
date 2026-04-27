@@ -287,10 +287,10 @@ export default async function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/signup"
-                  className="block w-full text-center rounded-lg border border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
+                  href="/waitlist/golfer"
+                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
                 >
-                  Start Free
+                  Join the Waitlist
                 </Link>
               </CardContent>
             </Card>
@@ -331,10 +331,10 @@ export default async function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/signup?next=/app/membership"
-                  className="block w-full text-center rounded-lg bg-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
+                  href="/waitlist/golfer"
+                  className="block w-full text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
                 >
-                  Get Eagle
+                  Join the Waitlist
                 </Link>
                 <p className="text-xs text-[#6B7770] text-center">Credits applied at partner courses</p>
               </CardContent>
@@ -371,15 +371,19 @@ export default async function HomePage() {
                   ))}
                 </ul>
                 <Link
-                  href="/signup?next=/app/membership"
-                  className="block w-full text-center rounded-lg border border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
+                  href="/waitlist/golfer"
+                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
                 >
-                  Get Ace
+                  Join the Waitlist
                 </Link>
               </CardContent>
             </Card>
 
           </div>
+          <p className="mt-10 text-center text-sm text-[#6B7770] max-w-xl mx-auto">
+            Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
+            earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
+          </p>
         </div>
       </section>
 
