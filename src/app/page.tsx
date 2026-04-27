@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'TeeAhead — Book ahead. Play more. Own your golf.',
   description:
     'The local-first golf platform. Free software for courses. Real loyalty for golfers. Zero booking fees, always. Coming to Metro Detroit.',
