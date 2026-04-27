@@ -38,15 +38,21 @@ export default async function HomePage() {
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
       {/* ── Header / Nav ──────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
+      <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto" />
+            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
           </Link>
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-6">
+            <Link
+              href="/barter"
+              className="text-sm font-medium text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors hidden sm:block"
+            >
+              Barter Calculator
+            </Link>
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-5 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
             >
               Join the Waitlist
             </Link>
