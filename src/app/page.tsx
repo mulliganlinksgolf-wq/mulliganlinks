@@ -320,8 +320,7 @@ export default async function HomePage() {
                   <ul className="space-y-2 text-sm text-[#1A1A1A]">
                     {[
                       'Book tee times at partner courses',
-                      'Zero booking fees',
-                      '1× Fairway Points per dollar',
+                      '1× Fairway Points per dollar spent (100 pts = $1 toward future tee times or membership renewal)',
                       'Free cancellation (1hr policy)',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
@@ -355,14 +354,14 @@ export default async function HomePage() {
                 <div className="p-7 space-y-5">
                   <ul className="space-y-2 text-sm text-[#1A1A1A]">
                     {[
-                      '$15/mo in tee time credits ($180/yr)',
-                      '2 free rounds per year',
+                      '$10/mo in tee time credits ($120/yr)',
+                      '1 free round per year',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '2× Fairway Points',
+                      '1.5× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
-                      '12 guest passes per year',
-                      '10% green fee discount',
+                      '12 guest fee waivers per year',
+                      '10% off at participating courses',
                       '$25 birthday credit',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
@@ -394,14 +393,14 @@ export default async function HomePage() {
                 <div className="p-7 space-y-5">
                   <ul className="space-y-2 text-sm text-[#1A1A1A]">
                     {[
-                      '$25/mo in tee time credits ($300/yr)',
-                      '4 free rounds per year',
+                      '$20/mo in tee time credits ($240/yr)',
+                      '2 free rounds per year',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '3× Fairway Points',
+                      '2× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
-                      'Unlimited guest passes',
-                      '15% green fee discount',
+                      '24 guest fee waivers per year',
+                      '15% off at participating courses',
                       '$50 birthday credit',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
@@ -420,7 +419,11 @@ export default async function HomePage() {
 
             </div>
 
-            <p className="mt-12 text-center text-sm text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+            <p className="mt-6 text-center text-xs text-[#9DAA9F] max-w-2xl mx-auto">
+              Fairway Points never expire while your account is active. Redeemable toward future tee time bookings or membership renewal.
+            </p>
+
+            <p className="mt-8 text-center text-sm text-[#6B7770] max-w-xl mx-auto leading-relaxed">
               Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
               earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
             </p>
