@@ -320,7 +320,7 @@ export default async function HomePage() {
                 <ul className="space-y-2.5">
                   {[
                     'Free for Founding Partners — first year on us',
-                    '📋 Your Data, Always — every golfer who books through TeeAhead is added to your database, not ours. Full profiles, contact info, and booking history. Export anytime. We never use your golfers to market a competitor course.',
+                    '📋 Your Data, Always — every golfer is added to your database, not ours. Export anytime.',
                     'No barter tee times, ever',
                     'No commissions on bookings',
                     'Full tee sheet control stays with you',
