@@ -137,7 +137,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 </div>
                 <input
                   type="range"
-                  min={150}
+                  min={100}
                   max={360}
                   step={10}
                   value={operatingDays}
@@ -146,7 +146,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   style={{ accentColor: '#0F3D2E' }}
                 />
                 <p className="text-xs text-[#6B7770]">
-                  150 – 360 days, step 10 &nbsp;·&nbsp; How many days per year your course is open
+                  100 – 360 days, step 10 &nbsp;·&nbsp; How many days per year your course is open
                 </p>
               </div>
 

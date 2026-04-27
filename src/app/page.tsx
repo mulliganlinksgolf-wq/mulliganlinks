@@ -529,32 +529,34 @@ export default async function HomePage() {
         <FadeIn>
         <div className="max-w-2xl mx-auto text-center space-y-8">
           <p className="text-sm font-semibold text-[#E0A800] uppercase tracking-wider italic">
-            A note from Neil
+            A note from Neil &amp; Billy
           </p>
           <div className="space-y-5 text-[#F4F1EA]/90 text-xl leading-[1.75]">
             <p>
-              I&apos;ve spent the last few years inside golf, building{' '}
+              Between the two of us, we&apos;ve seen this problem from every angle. Neil spent years
+              building{' '}
               <a href="https://outing.golf" className="text-[#E0A800] hover:underline">Outing.golf</a>{' '}
-              and watching local courses I love get squeezed every day by a company that&apos;s
-              never set foot on their property.
+              inside the golf industry, watching courses get squeezed by a company that&apos;s never
+              set foot on their property. Billy&apos;s been the golfer on the other side — paying
+              booking fees, watching credits expire, feeling like a transaction instead of a regular.
             </p>
             <p>
-              I&apos;m not building TeeAhead because the market is hot. I&apos;m building it because
-              I&apos;m tired of watching it happen.
+              We&apos;re not building TeeAhead because the market is hot. We&apos;re building it
+              because we&apos;re both tired of watching it happen.
             </p>
             <p>
-              If you run a course in Metro Detroit, I want to talk. My email is{' '}
+              If you run a course in Metro Detroit, Neil wants to talk.{' '}
               <a href="mailto:neil@teeahead.com" className="text-[#E0A800] hover:underline">
                 neil@teeahead.com
               </a>
-              . Not a contact form. My actual inbox.
+              . Not a contact form. His actual inbox.
             </p>
             <p>
-              If you&apos;re a golfer who&apos;s tired of paying booking fees on every round and
-              watching credits expire, I&apos;d love to hear from you too.
+              If you&apos;re a golfer who plays every weekend and just wants a fair deal at your
+              home course — Billy built this for you. We both did.
             </p>
           </div>
-          <p className={`${caveat.className} text-[#F4F1EA] text-4xl`}>— Neil</p>
+          <p className={`${caveat.className} text-[#F4F1EA] text-4xl`}>— Neil &amp; Billy</p>
         </div>
         </FadeIn>
       </section>
