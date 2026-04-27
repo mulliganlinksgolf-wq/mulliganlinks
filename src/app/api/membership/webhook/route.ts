@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
 
     const sub = session.subscription as string
     const stripeSubscription = await stripe.subscriptions.retrieve(sub)
-    const periodEnd = new Date(stripeSubscription.current_period_end * 1000).toISOString()
+    const periodEnd = new Date(stripeSubscription.items.data[0].current_period_end * 1000).toISOString()
 
     const { error: upsertError } = await admin.from('memberships').upsert({
       user_id: userId,
