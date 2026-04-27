@@ -593,13 +593,14 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
                 <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
-                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+                <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>
             </div>
           </div>
           <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan · <a href="mailto:billy.teeahead@gmail.com" className="hover:text-[#F4F1EA]/70 transition-colors">billy.teeahead@gmail.com</a></p>
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
             <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
               Competitor references are for comparative purposes only and based on publicly available information.

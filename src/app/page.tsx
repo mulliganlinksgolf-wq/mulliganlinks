@@ -19,11 +19,12 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   const supabase = await createClient()
-  const [{ data: counter }, { data: contentRows }] = await Promise.all([
+  const [{ data: counter }, { data: contentRows }, { count: golferCount }] = await Promise.all([
     supabase.from('founding_partner_counter').select('count, cap').single(),
     supabase.from('content_blocks').select('key, value').in('key', [
       'home.headline', 'home.subhead', 'home.badge', 'home.tagline',
     ]),
+    supabase.from('golfer_waitlist').select('*', { count: 'exact', head: true }),
   ])
   const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
   const content: Record<string, string> = Object.fromEntries(
@@ -93,25 +94,8 @@ export default async function HomePage() {
               {subhead}
             </p>
 
-            {/* Audience cards */}
+            {/* Audience cards — course first, equal weight */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[620px] mx-auto pt-2">
-
-              {/* Golfer card */}
-              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
-                   style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.22)', backdropFilter: 'blur(8px)' }}>
-                <div className="text-2xl">⛳</div>
-                <div>
-                  <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $40 less.</p>
-                </div>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
-                >
-                  Join the Waitlist
-                </Link>
-                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
-              </div>
 
               {/* Course card */}
               <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
@@ -134,7 +118,31 @@ export default async function HomePage() {
                 </p>
               </div>
 
+              {/* Golfer card */}
+              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+                   style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.50)', backdropFilter: 'blur(8px)' }}>
+                <div className="text-2xl">⛳</div>
+                <div>
+                  <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $40 less.</p>
+                </div>
+                <Link
+                  href="/waitlist/golfer"
+                  className="block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                >
+                  Join the Waitlist
+                </Link>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
+              </div>
+
             </div>
+
+            {/* Live golfer counter */}
+            {(golferCount ?? 0) > 0 && (
+              <p className="text-sm text-[#F4F1EA]/60">
+                <span className="font-semibold text-[#F4F1EA]/80">{golferCount?.toLocaleString()}</span> golfers in Metro Detroit on the waitlist. Be next.
+              </p>
+            )}
 
             <p className="text-sm text-[#F4F1EA]/50">{tagline}</p>
           </div>
@@ -188,6 +196,53 @@ export default async function HomePage() {
               Course exodus: National Golf Course Owners Association (NGCOA), Q1 2025.
               Actual barter terms vary. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
             </p>
+          </div>
+        </FadeIn>
+      </section>
+
+      {/* ── How It Works for Courses ─────────────────────────── */}
+      <section className="bg-[#0F3D2E] px-6 py-20" id="how-it-works-courses">
+        <FadeIn>
+          <div className="max-w-3xl mx-auto space-y-10">
+            <div className="text-center space-y-2">
+              <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800]">For Golf Course GMs</p>
+              <h2 className="font-display font-black text-[#F4F1EA] tracking-[-0.02em] leading-tight" style={{ fontSize: 'clamp(28px, 5vw, 40px)' }}>
+                Live in 48 hours. Zero tech headaches.
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              {[
+                {
+                  step: '01',
+                  title: 'Sign the Founding Partner agreement',
+                  body: '10 minutes. One page. No lawyers required.',
+                },
+                {
+                  step: '02',
+                  title: 'Connect your bank via Stripe',
+                  body: '5 minutes. Payments route directly to you — TeeAhead never touches your revenue.',
+                },
+                {
+                  step: '03',
+                  title: 'Go live within 48 hours',
+                  body: 'We handle the tech. Your golfers can book immediately.',
+                },
+              ].map(({ step, title, body }) => (
+                <div key={step} className="rounded-xl p-6 space-y-3" style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}>
+                  <p className="font-display font-black text-[#E0A800] text-3xl leading-none">{step}</p>
+                  <p className="font-semibold text-[#F4F1EA] text-sm leading-snug">{title}</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">{body}</p>
+                </div>
+              ))}
+            </div>
+            <div className="text-center">
+              <Link
+                href="/waitlist/course"
+                className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-8 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+              >
+                {spotsRemaining > 0 ? `Claim a Founding Spot — ${spotsRemaining} of 10 left` : 'Join the Course Waitlist'}
+              </Link>
+            </div>
           </div>
         </FadeIn>
       </section>
@@ -573,14 +628,15 @@ export default async function HomePage() {
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
                 <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
-                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+                <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>
             </div>
 
           </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center">
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan · <a href="mailto:billy.teeahead@gmail.com" className="hover:text-[#F4F1EA]/70 transition-colors">billy.teeahead@gmail.com</a></p>
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
           </div>
         </div>
