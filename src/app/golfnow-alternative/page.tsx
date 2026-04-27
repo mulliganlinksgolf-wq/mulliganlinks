@@ -102,7 +102,7 @@ export default function GolfNowAlternativePage() {
               </p>
             </div>
             <p className="text-[#6B7770] leading-relaxed">
-              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for life — no barter, no commissions, no data extraction. Course #11 onward pays $249/month, which for a course losing $94,500/year to GolfNow represents an immediate 97% cost reduction.
+              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for life — no barter, no commissions, no data extraction. Course #11 onward pays a flat $299/month, which for a course losing $94,500/year to GolfNow represents an immediate 97% cost reduction.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link

@@ -22,7 +22,7 @@ export default async function CourseBookingsPage({
   let query = supabase
     .from('bookings')
     .select(`
-      id, players, total_paid, status, created_at, points_awarded,
+      id, players, total_paid, status, created_at, points_awarded, guest_name, guest_phone, payment_method,
       tee_times!inner(scheduled_at, course_id),
       profiles(full_name, phone)
     `)
@@ -103,10 +103,11 @@ export default async function CourseBookingsPage({
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Member</th>
+              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Golfer</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Tee Time</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Players</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Paid</th>
+              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Method</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Status</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Booked</th>
             </tr>
@@ -117,7 +118,10 @@ export default async function CourseBookingsPage({
             ) : bookings.map((b: any) => (
               <tr key={b.id} className="hover:bg-gray-50">
                 <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">
-                  {b.profiles?.full_name ?? '—'}
+                  {b.profiles?.full_name ?? b.guest_name ?? '—'}
+                  {!b.profiles && b.guest_name && (
+                    <span className="ml-1.5 text-xs text-[#6B7770] font-normal">walk-in</span>
+                  )}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">
                   {new Date(b.tee_times?.scheduled_at).toLocaleString('en-US', {
@@ -126,6 +130,9 @@ export default async function CourseBookingsPage({
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">{b.players}</td>
                 <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">${b.total_paid?.toFixed(2)}</td>
+                <td className="px-4 py-2.5 text-[#6B7770] capitalize text-xs">
+                  {b.payment_method ?? '—'}
+                </td>
                 <td className="px-4 py-2.5">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                     b.status === 'confirmed' ? 'bg-green-100 text-green-700' :

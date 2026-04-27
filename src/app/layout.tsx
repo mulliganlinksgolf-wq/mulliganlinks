@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { StructuredData } from "@/components/StructuredData";
+import { LogRocketProvider } from "@/components/LogRocketProvider";
+import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
 
 const inter = Inter({
@@ -69,11 +71,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <html
       lang="en"
@@ -81,6 +86,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <StructuredData />
+        <LogRocketProvider
+          userId={user?.id}
+          userEmail={user?.email}
+        />
         {children}
         <Analytics />
       </body>

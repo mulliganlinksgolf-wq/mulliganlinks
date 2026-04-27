@@ -14,7 +14,7 @@ const caveat = Caveat({ subsets: ['latin'], weight: ['400', '600', '700'] })
 export const metadata: Metadata = {
   title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
   description:
-    'Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. Free for courses, always.',
+    'Book tee times at Metro Detroit golf courses. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. The local-first alternative to GolfPass+, built for the regulars.',
 }
 
 export default async function HomePage() {
@@ -30,7 +30,7 @@ export default async function HomePage() {
     (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
   )
   const headline = content['home.headline'] ?? 'Golf, redone for the people who actually play it.'
-  const subhead = content['home.subhead'] ?? 'Free software for your home course. Real loyalty for you. Zero booking fees — always. The local-first alternative to GolfNow, built for the regulars.'
+  const subhead = content['home.subhead'] ?? 'The local-first alternative to GolfPass+. A real membership for the courses you actually play. Built for the regulars.'
   const badge = content['home.badge'] ?? 'Coming soon to Metro Detroit'
   const tagline = content['home.tagline'] ?? 'No credit card · Founding members get lifetime perks'
 
@@ -160,7 +160,7 @@ export default async function HomePage() {
               slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
             </p>
             <p className="text-base text-[#6B7770]">
-              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong>. For Founding Partners, forever.
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for life. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$299/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
             </p>
 
             {/* Barter callout — visually distinct, not just a text link */}
@@ -330,6 +330,9 @@ export default async function HomePage() {
                         <span className="text-[#8FA889] font-bold mt-0.5">✓</span>{f}
                       </li>
                     ))}
+                    <li className="flex items-start gap-2 text-[#9DAA9F]">
+                      <span className="font-bold mt-0.5 flex-shrink-0">—</span>Standard booking fee per round (waived on Eagle &amp; Ace)
+                    </li>
                   </ul>
                   <Link
                     href="/waitlist/golfer"

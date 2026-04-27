@@ -94,7 +94,7 @@ export function StructuredData() {
             name: 'What is the TeeAhead Founding Partner program?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for life. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $249/month.',
+              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for life. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $299/month.',
             },
           },
           {

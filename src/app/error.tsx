@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
+import LogRocket from 'logrocket'
 
 export default function GlobalError({
   error,
@@ -12,6 +13,7 @@ export default function GlobalError({
 }) {
   useEffect(() => {
     console.error(error)
+    LogRocket.captureException(error)
   }, [error])
 
   return (
