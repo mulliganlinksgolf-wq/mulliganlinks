@@ -164,77 +164,68 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
         </section>
 
         {/* ── Calculator ────────────────────────────────────────── */}
-        <section className="px-6 pb-8 bg-[#FAF7F2]">
+        <section className="px-6 pb-6 bg-[#FAF7F2]">
           <FadeIn>
-            <div className="max-w-3xl mx-auto space-y-8 bg-white rounded-2xl p-8 ring-1 ring-black/8 shadow-sm">
+            <div className="max-w-2xl mx-auto bg-white rounded-[20px] p-8 border border-black/7"
+                 style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}>
+
+              {/* Card header with running total */}
+              <div className="flex items-start justify-between mb-8 pb-6 border-b border-black/6">
+                <div>
+                  <p className="text-sm font-bold text-[#1A1A1A]">GolfNow Barter Calculator</p>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">Adjust sliders to match your course</p>
+                </div>
+                <div className="text-right">
+                  <p className="font-display font-black text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
+                    ${displayedCost.toLocaleString()}
+                  </p>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">running total</p>
+                </div>
+              </div>
 
               {/* Slider 1: Green Fee */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-7">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">
-                    Your average green fee at peak
-                  </label>
-                  <span className="text-3xl font-bold text-[#0F3D2E]">${greenFee}</span>
+                  <label className="text-sm font-medium text-[#1A1A1A]">Your average green fee at peak</label>
+                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>${greenFee}</span>
                 </div>
                 <input
-                  type="range"
-                  min={20}
-                  max={200}
-                  step={5}
-                  value={greenFee}
-                  onChange={(e) => setGreenFee(Number(e.target.value))}
-                  className="w-full h-2 rounded-full cursor-pointer"
+                  type="range" min={20} max={200} step={5} value={greenFee}
+                  onChange={(e) => { setGreenFee(Number(e.target.value)); setPresetKey('custom') }}
+                  className="w-full h-1.5 rounded-full cursor-pointer"
                   style={{ accentColor: '#0F3D2E' }}
                 />
-                <p className="text-xs text-[#6B7770]">
-                  $20 – $200, step $5 &nbsp;·&nbsp; Use your published weekend or peak-time rate
-                </p>
+                <p className="text-xs text-[#9DAA9F]">$20–$200 · Use your published weekend or peak-time rate</p>
               </div>
 
               {/* Slider 2: Operating Days */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-7">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">
-                    Days your course is open per year
-                  </label>
-                  <span className="text-3xl font-bold text-[#0F3D2E]">{operatingDays}</span>
+                  <label className="text-sm font-medium text-[#1A1A1A]">Days your course is open per year</label>
+                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{operatingDays}</span>
                 </div>
                 <input
-                  type="range"
-                  min={100}
-                  max={360}
-                  step={10}
-                  value={operatingDays}
-                  onChange={(e) => setOperatingDays(Number(e.target.value))}
-                  className="w-full h-2 rounded-full cursor-pointer"
+                  type="range" min={100} max={360} step={10} value={operatingDays}
+                  onChange={(e) => { setOperatingDays(Number(e.target.value)); setPresetKey('custom') }}
+                  className="w-full h-1.5 rounded-full cursor-pointer"
                   style={{ accentColor: '#0F3D2E' }}
                 />
-                <p className="text-xs text-[#6B7770]">
-                  100 – 360 days, step 10 &nbsp;·&nbsp; How many days per year your course is open
-                </p>
+                <p className="text-xs text-[#9DAA9F]">100–360 days</p>
               </div>
 
               {/* Slider 3: Barter Tee Times */}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">
-                    Barter tee times given to GolfNow per day
-                  </label>
-                  <span className="text-3xl font-bold text-[#0F3D2E]">{barterTeeTimes}</span>
+                  <label className="text-sm font-medium text-[#1A1A1A]">Barter tee times given to GolfNow per day</label>
+                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{barterTeeTimes}</span>
                 </div>
                 <input
-                  type="range"
-                  min={1}
-                  max={4}
-                  step={1}
-                  value={barterTeeTimes}
+                  type="range" min={1} max={4} step={1} value={barterTeeTimes}
                   onChange={(e) => setBarterTeeTimes(Number(e.target.value))}
-                  className="w-full h-2 rounded-full cursor-pointer"
+                  className="w-full h-1.5 rounded-full cursor-pointer"
                   style={{ accentColor: '#0F3D2E' }}
                 />
-                <p className="text-xs text-[#6B7770]">
-                  1 – 4, step 1 &nbsp;·&nbsp; GolfNow typically takes 2 prime-time tee times per day in barter
-                </p>
+                <p className="text-xs text-[#9DAA9F]">GolfNow typically takes 2 prime-time tee times per day · 1–4</p>
               </div>
 
             </div>
