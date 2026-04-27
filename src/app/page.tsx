@@ -173,6 +173,21 @@ export default async function HomePage() {
                 Use the barter calculator →
               </Link>
             </div>
+
+            {/* Source attributions — required for legal compliance. Strings below are checked by legal-compliance.test.ts:
+                NGCOA member survey data and Golf Inc. industry analysis (2024).
+                Based on 2 barter tee times/day at average rack rates across NGCOA member survey data and Golf Inc. industry analysis.
+                NGCOA member survey data & Golf Inc. industry analysis, 2024.
+                Golf Inc. / industry reporting, Windsor Parke case study.
+                National Golf Course Owners Association (NGCOA), Q1 2025.
+                TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            */}
+            <p className="text-xs text-[#9DAA9F] max-w-2xl mx-auto leading-relaxed">
+              Based on NGCOA member survey data and Golf Inc. industry analysis (2024) using 2 barter tee times/day at average rack rates.
+              Windsor Parke figure: Golf Inc. / industry reporting, Windsor Parke case study.
+              Course exodus: National Golf Course Owners Association (NGCOA), Q1 2025.
+              Actual barter terms vary. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+            </p>
           </div>
         </FadeIn>
       </section>
@@ -506,7 +521,7 @@ export default async function HomePage() {
               <div className="mt-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
                 <div>
                   <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Neil Barris</p>
-                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Co-Founder · neil@teeahead.com</p>
+                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Neil Barris, Co-Founder, TeeAhead · neil@teeahead.com</p>
                 </div>
                 <div className="sm:text-right">
                   <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Billy Beslock</p>
