@@ -29,7 +29,9 @@ export async function POST(req: NextRequest) {
   if (tier === 'eagle') {
     const admin = createAdminClient()
     const { data, error } = await admin.rpc('claim_founding_spot')
-    if (!error && data === true) {
+    if (error) {
+      console.error('[checkout] claim_founding_spot RPC error:', error)
+    } else if (data === true) {
       isFoundingGolfer = true
     }
   }
