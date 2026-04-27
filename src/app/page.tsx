@@ -24,10 +24,10 @@ export default async function HomePage() {
   const content: Record<string, string> = Object.fromEntries(
     (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
   )
-  const headline = content['home.headline'] ?? 'The Local-First Golf Loyalty Network'
-  const subhead = content['home.subhead'] ?? 'Free software for courses. Real loyalty for golfers. Zero booking fees, always.'
+  const headline = content['home.headline'] ?? 'Golf, redone for the people who actually play it.'
+  const subhead = content['home.subhead'] ?? 'Free software for your home course. Real loyalty for you. Zero booking fees — always. The local-first alternative to GolfNow, built for the regulars.'
   const badge = content['home.badge'] ?? 'Coming soon to Metro Detroit'
-  const tagline = content['home.tagline'] ?? 'No credit card required · Metro Detroit launch'
+  const tagline = content['home.tagline'] ?? 'No credit card · Founding members get lifetime perks'
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -164,7 +164,7 @@ export default async function HomePage() {
                 Course #11 onward pays $249/mo.
               </p>
               <p className="text-sm text-[#6B7770] italic">
-                The only ask: tell your golfers about the Tee Ahead membership at booking.
+                The only ask: tell your golfers about the TeeAhead membership at booking.
               </p>
             </div>
             <Link
