@@ -157,12 +157,55 @@ No changes to the existing palette. All current color tokens remain:
 
 ---
 
+---
+
+## Barter Page (`/barter`) Redesign
+
+Audience: **course owners only**. The page speaks directly to one person and can be more confrontational and direct than the homepage.
+
+### Design system changes (matches homepage)
+- Nav: dark green (`#0F3D2E`), logo white via `brightness-0 invert`, gold CTA button ("Claim a Founding Spot"), "← Back to Home" text link replacing current bare logo-only header
+- All section headlines: Playfair Display
+- Output number + context stat numbers: Playfair Display
+- Footer bg: `#071f17` (matches homepage footer)
+- Footer links: remove stale `/#how-it-works` anchor (section is being cut from homepage)
+
+### Hero (replaces current cream hero)
+- **Background:** `#071f17` with subtle gold radial glow at top center
+- **Tag pill:** gold border/text — "For Golf Course Operators"
+- **Headline:** Playfair Display 900, ~52px — *"See exactly what GolfNow has cost you. In dollars."* (italic "In dollars." in gold)
+- **Subhead:** Inter, `rgba(244,241,234,0.60)` — existing copy, tightened to 2 sentences
+- **Preset chips:** new UI element — quick-start options ("Municipal ($45)", "Daily Fee ($85)", "Semi-Private ($120)", "My own numbers") that pre-fill slider values. Reduces friction for course owners who want a quick answer.
+
+### Calculator card
+- Add a **live running total** in the top-right corner of the card (Playfair Display 900, updates as sliders move) — so the number is visible while adjusting, not just after
+- Card styling elevated: larger border-radius (20px), softer shadow, cleaner slider track styling
+
+### Output section
+- Output number: Playfair Display 900, 96px (up from current inline `fontSize: 80px`)
+- Context cards (5-year, rounds, staff): move inside the dark green output section as a 3-column grid with glass-style cards — currently they're in a separate cream section which breaks the visual impact
+- Keep the animated count-up behavior (unchanged)
+
+### CTA section (replaces current "Offer Section")
+- Headline: Playfair Display — "Ready to stop paying GolfNow to take your tee times?"
+- Body: tightened from current 3 paragraphs to 2 sentences
+- Primary CTA: "Claim a Founding Partner Spot →" (unchanged)
+- Spots remaining: gold text below button (dynamic from DB)
+- Add direct email line: "Questions? Email Neil directly — neil@teeahead.com. Not a contact form."
+- Remove: "Share" section (copy/email/text buttons) — low priority, clutters the bottom
+
+### Proof section
+- Keep the 3 stats (382%, 39.6%, 100+) with Playfair Display numbers
+- Move above the CTA section so the evidence lands before the ask
+
+---
+
 ## What Does NOT Change
 
 - All copy/content (headlines, body text, stats, legal footnotes) — unchanged unless noted
 - Supabase data fetching (founding partner counter, content blocks)
 - Waitlist links and routing
-- `/barter` page itself — untouched, only the homepage links to it more prominently
+- Barter calculator logic (slider ranges, formula, animated count-up) — untouched
 - Founder letter content and Caveat font implementation
 - SEO metadata, structured data, sitemap
 - Mobile responsiveness approach (Tailwind breakpoints)
@@ -171,7 +214,9 @@ No changes to the existing palette. All current color tokens remain:
 
 ## Files Affected
 
-- `src/app/layout.tsx` — add Playfair Display font
-- `src/app/page.tsx` — primary file, all section changes
-- `src/app/globals.css` — add `--font-display` CSS variable if needed
-- No new components required — changes are all in `page.tsx` and `layout.tsx`
+- `src/app/layout.tsx` — add Playfair Display font, expose as `--font-display` CSS variable
+- `src/app/page.tsx` — all homepage section changes
+- `src/app/globals.css` — `--font-display` variable if needed
+- `src/app/barter/page.tsx` — pass preset chip values to BarterPage component
+- `src/components/BarterPage.tsx` — all barter page changes (hero, calc card, output section, CTA)
+- No new components required
