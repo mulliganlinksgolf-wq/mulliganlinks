@@ -428,8 +428,8 @@ export default async function HomePage() {
             </table>
           </div>
 
-          <p className="text-center text-[#6B7770] text-lg mt-10 font-medium">
-            &ldquo;GolfNow made tee times a commodity. We made them a community.&rdquo;
+          <p className="text-center text-[#1A1A1A] text-xl mt-10 font-semibold italic max-w-2xl mx-auto">
+            &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
           </p>
         </div>
       </section>
