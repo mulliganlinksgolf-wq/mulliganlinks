@@ -279,193 +279,137 @@ export default async function HomePage() {
       {/* ── Pricing ───────────────────────────────────────────── */}
       <section id="pricing" className="px-6 py-20 bg-[#FAF7F2]">
         <FadeIn>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14 space-y-3">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">Pick your game.</h2>
-            <p className="text-[#6B7770] text-lg">Start free. Upgrade when it makes sense.</p>
-          </div>
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-14 space-y-3">
+              <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">Membership</p>
+              <h2 className="font-display font-extrabold text-[#1A1A1A] tracking-[-0.02em]"
+                  style={{ fontSize: 'clamp(28px, 4vw, 40px)' }}>
+                Pick your game.
+              </h2>
+              <p className="text-[#6B7770] text-lg">Start free. Upgrade when it makes sense.</p>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
 
-            {/* Fairway — Free */}
-            <Card className="bg-white ring-black/10 pricing-card">
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Fairway</CardTitle>
-                <CardDescription className="text-[#6B7770]">The foundation</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$0</span>
-                  <span className="text-[#6B7770] ml-1">/ forever</span>
+              {/* Fairway — Free */}
+              <div className="bg-white rounded-2xl overflow-hidden border border-black/8">
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Fairway</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">The foundation</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$0</span>
+                    <span className="text-[#6B7770] text-sm">/ forever</span>
+                  </div>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    'Book tee times at partner courses',
-                    'Zero booking fees',
-                    '1x Fairway Points per dollar',
-                    'Free cancellation (1hr policy)',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
-                >
-                  Join the Waitlist
-                </Link>
-              </CardContent>
-            </Card>
-
-            {/* Eagle — Most Popular */}
-            <Card className="bg-white ring-[#E0A800]/40 ring-2 relative pricing-card">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="inline-block bg-[#E0A800] text-[#1A1A1A] text-xs font-bold px-3 py-1 rounded-full">
-                  Most Popular
-                </span>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      'Book tee times at partner courses',
+                      'Zero booking fees',
+                      '1× Fairway Points per dollar',
+                      'Free cancellation (1hr policy)',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#8FA889] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
+                  >
+                    Join the Waitlist
+                  </Link>
+                </div>
               </div>
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Eagle</CardTitle>
-                <CardDescription className="text-[#6B7770]">Serious golfers</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$79</span>
-                  <span className="text-[#6B7770] ml-1">/ yr</span>
-                  <span className="block text-xs text-[#6B7770] mt-0.5">~$6.58/mo</span>
+
+              {/* Eagle — Most Popular (lifted) */}
+              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#E0A800] shadow-[0_8px_32px_rgba(224,168,0,0.18)] relative -translate-y-2">
+                <div className="bg-[#E0A800] py-2 text-center">
+                  <span className="text-xs font-black text-[#1A1A1A] uppercase tracking-[0.06em]">Most Popular</span>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    '$15/mo in tee time credits ($180/yr)',
-                    '2 free rounds per year',
-                    'Always-on booking fee waiver',
-                    'Free cancellation unlimited (1hr)',
-                    '2x Fairway Points',
-                    'Priority booking: 48hr early access',
-                    '12 guest passes per year',
-                    '10% green fee discount',
-                    '$25 birthday credit',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-                >
-                  Join the Waitlist
-                </Link>
-                <p className="text-xs text-[#6B7770] text-center">Credits applied at partner courses</p>
-              </CardContent>
-            </Card>
-
-            {/* Ace */}
-            <Card className="bg-white ring-[#1B4332]/40 ring-2 pricing-card">
-              <CardHeader className="pt-8 pb-2">
-                <CardTitle className="text-xl font-bold text-[#1A1A1A]">Ace</CardTitle>
-                <CardDescription className="text-[#6B7770]">All-in members</CardDescription>
-              </CardHeader>
-              <CardContent className="pb-6 space-y-6">
-                <div>
-                  <span className="text-4xl font-bold text-[#1A1A1A]">$149</span>
-                  <span className="text-[#6B7770] ml-1">/ yr</span>
-                  <span className="block text-xs text-[#6B7770] mt-0.5">~$12.42/mo</span>
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Eagle</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">Serious golfers</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$79</span>
+                    <span className="text-[#6B7770] text-sm">/ yr</span>
+                  </div>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$6.58/mo</p>
                 </div>
-                <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                  {[
-                    '$25/mo in tee time credits ($300/yr)',
-                    '4 free rounds per year',
-                    'Always-on booking fee waiver',
-                    'Free cancellation unlimited (1hr)',
-                    '3x Fairway Points',
-                    'Priority booking: 72hr early access',
-                    'Unlimited guest passes',
-                    '15% green fee discount',
-                    '$50 birthday credit',
-                  ].map((f) => (
-                    <li key={f} className="flex items-start gap-2">
-                      <span className="text-[#8FA889] font-bold mt-0.5">✓</span>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/golfer"
-                  className="block w-full text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
-                >
-                  Join the Waitlist
-                </Link>
-              </CardContent>
-            </Card>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      '$15/mo in tee time credits ($180/yr)',
+                      '2 free rounds per year',
+                      'Always-on booking fee waiver',
+                      'Free cancellation unlimited (1hr)',
+                      '2× Fairway Points',
+                      'Priority booking: 48hr early access',
+                      '12 guest passes per year',
+                      '10% green fee discount',
+                      '$25 birthday credit',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
+                  >
+                    Join the Waitlist
+                  </Link>
+                  <p className="text-xs text-[#9DAA9F] text-center">Credits applied at partner courses</p>
+                </div>
+              </div>
 
-          </div>
-          <p className="mt-10 text-center text-sm text-[#6B7770] max-w-xl mx-auto">
-            Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
-            earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
-          </p>
-        </div>
-        </FadeIn>
-      </section>
+              {/* Ace */}
+              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#1B4332]">
+                <div className="p-7 border-b border-black/5">
+                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Ace</p>
+                  <p className="text-sm text-[#9DAA9F] mt-0.5">All-in members</p>
+                  <div className="mt-4 flex items-baseline gap-1">
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$149</span>
+                    <span className="text-[#6B7770] text-sm">/ yr</span>
+                  </div>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$12.42/mo</p>
+                </div>
+                <div className="p-7 space-y-5">
+                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
+                    {[
+                      '$25/mo in tee time credits ($300/yr)',
+                      '4 free rounds per year',
+                      'Always-on booking fee waiver',
+                      'Free cancellation unlimited (1hr)',
+                      '3× Fairway Points',
+                      'Priority booking: 72hr early access',
+                      'Unlimited guest passes',
+                      '15% green fee discount',
+                      '$50 birthday credit',
+                    ].map((f) => (
+                      <li key={f} className="flex items-start gap-2">
+                        <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href="/waitlist/golfer"
+                    className="block text-center rounded-lg border-2 border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
+                  >
+                    Join the Waitlist
+                  </Link>
+                </div>
+              </div>
 
-      {/* ── vs. GolfNow Comparison ────────────────────────────── */}
-      <section className="px-6 py-20 bg-white">
-        <FadeIn>
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] text-center mb-12">
-            Why not just use GolfNow?
-          </h2>
+            </div>
 
-          <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-[#1B4332] text-[#FAF7F2]">
-                  <th className="text-left px-6 py-4 font-semibold">Feature</th>
-                  <th className="text-center px-6 py-4 font-semibold text-[#FAF7F2]/70">GolfPass+ ($119/yr)</th>
-                  <th className="text-center px-6 py-4 font-semibold">Eagle ($79/yr)</th>
-                  <th className="text-center px-6 py-4 font-semibold">Ace ($149/yr)</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-black/5">
-                {[
-                  { feature: 'Annual price', them: '$119/yr', eagle: '$79/yr', ace: '$149/yr' },
-                  { feature: 'Monthly tee time credits', them: '$10/mo ($120)', eagle: '$15/mo ($180)', ace: '$25/mo ($300)' },
-                  { feature: 'Free rounds included', them: '0', eagle: '2/year', ace: '4/year' },
-                  { feature: 'Booking fees waived', them: '12×/year only', eagle: 'Always, unlimited', ace: 'Always, unlimited' },
-                  { feature: 'Free cancellation', them: '12×/year', eagle: 'Unlimited (1hr)', ace: 'Unlimited (1hr)' },
-                  { feature: 'Points multiplier', them: '1× base', eagle: '2×', ace: '3×' },
-                  { feature: 'Priority booking', them: 'None', eagle: '48hr early', ace: '72hr early' },
-                  { feature: 'Guest passes', them: 'None', eagle: '12×/year', ace: 'Unlimited' },
-                  { feature: 'Green fee discount', them: 'None', eagle: '10% off', ace: '15% off' },
-                  { feature: 'Birthday credit', them: 'None', eagle: '$25', ace: '$50' },
-                ].map((row, i) => (
-                  <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
-                    <td className="px-6 py-4 font-medium text-[#1A1A1A]">{row.feature}</td>
-                    <td className="px-6 py-4 text-center text-[#6B7770]">{row.them}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.eagle}</td>
-                    <td className="px-6 py-4 text-center font-semibold text-[#1B4332]">{row.ace}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <p className="text-xs text-[#9DAA9F] mt-4 text-center">
-            GolfPass+ features and pricing based on publicly available information at golfnow.com as of April 2026. Features subject to change.
-          </p>
-
-          <blockquote className="text-center mt-10 max-w-2xl mx-auto space-y-2">
-            <p className="text-[#1A1A1A] text-xl font-semibold italic">
-              &ldquo;GolfNow turned your home course into a commodity. We&apos;re turning it back into your home.&rdquo;
+            <p className="mt-12 text-center text-sm text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+              Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
+              earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
             </p>
-            <cite className="text-sm text-[#6B7770] not-italic">— Neil Barris, Co-Founder, TeeAhead</cite>
-          </blockquote>
-        </div>
+          </div>
         </FadeIn>
       </section>
 
