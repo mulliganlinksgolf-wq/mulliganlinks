@@ -14,7 +14,7 @@ export default async function AdminDashboardPage() {
     { data: recentMembers },
     { data: recentBookings },
   ] = await Promise.all([
-    admin.from('waitlist').select('*', { count: 'exact', head: true }),
+    admin.from('golfer_waitlist').select('*', { count: 'exact', head: true }),
     admin.from('profiles').select('*', { count: 'exact', head: true }),
     admin.from('courses').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     admin.from('bookings').select('*', { count: 'exact', head: true }).neq('status', 'canceled'),
@@ -31,7 +31,7 @@ export default async function AdminDashboardPage() {
   const emailMap = Object.fromEntries((authUsers ?? []).map(u => [u.id, u.email ?? '']))
 
   const stats = [
-    { label: 'Waitlist signups', value: waitlistCount ?? 0, href: '/admin/users' },
+    { label: 'Waitlist signups', value: waitlistCount ?? 0, href: '/admin/waitlist' },
     { label: 'Registered members', value: memberCount ?? 0, href: '/admin/users' },
     { label: 'Active courses', value: courseCount ?? 0, href: '/admin/courses' },
     { label: 'Total bookings', value: bookingCount ?? 0, href: null },
