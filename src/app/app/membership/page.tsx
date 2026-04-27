@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { FoundingGolferBanner } from '@/components/FoundingGolferBanner'
 
 export const metadata: Metadata = { title: 'Upgrade Membership' }
 
@@ -66,6 +67,16 @@ export default async function MembershipPage({
     .eq('user_id', user.id)
     .single()
 
+  const { data: counter } = await supabase
+    .from('founding_golfer_counter')
+    .select('claimed, limit')
+    .eq('id', 1)
+    .single()
+
+  const spotsRemaining = counter
+    ? (counter as { claimed: number; limit: number }).limit - counter.claimed
+    : 0
+
   const currentTier = membership?.tier ?? 'fairway'
   const { tier: preselected } = await searchParams
 
@@ -78,6 +89,8 @@ export default async function MembershipPage({
           Upgrade to earn more points, get credits, and unlock priority access.
         </p>
       </div>
+
+      <FoundingGolferBanner spotsRemaining={spotsRemaining} />
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {TIERS.map(tier => {
