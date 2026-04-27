@@ -11,8 +11,24 @@ export default async function AdminUsersPage() {
 
   const { data: { user: me } } = await supabase.auth.getUser()
 
-  const { data: waitlist } = await admin
-    .from('waitlist').select('*').order('created_at', { ascending: false })
+  const [{ data: waitlist }, { data: golferWaitlist }] = await Promise.all([
+    admin.from('waitlist').select('*').order('created_at', { ascending: false }),
+    admin.from('golfer_waitlist').select('id, email, first_name, last_name, created_at').order('created_at', { ascending: false }),
+  ])
+
+  // Merge: prefer golfer_waitlist entries (they have name data); dedupe by email
+  const golferEmails = new Set((golferWaitlist ?? []).map((g: any) => g.email))
+  const combinedWaitlist = [
+    ...(golferWaitlist ?? []).map((g: any) => ({
+      id: `gw-${g.id}`,
+      email: g.email,
+      name: [g.first_name, g.last_name].filter(Boolean).join(' ') || null,
+      created_at: g.created_at,
+    })),
+    ...(waitlist ?? [])
+      .filter((w: any) => !golferEmails.has(w.email))
+      .map((w: any) => ({ id: `w-${w.id}`, email: w.email, name: null, created_at: w.created_at })),
+  ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   // profiles has no email column — email lives in auth.users
   const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
@@ -109,27 +125,29 @@ export default async function AdminUsersPage() {
       {/* Waitlist */}
       <section>
         <h2 className="text-lg font-bold text-[#1A1A1A] mb-4">
-          Waitlist <span className="text-[#6B7770] font-normal text-sm ml-1">({waitlist?.length ?? 0})</span>
+          Waitlist <span className="text-[#6B7770] font-normal text-sm ml-1">({combinedWaitlist.length})</span>
         </h2>
         <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-[#FAF7F2] text-[#6B7770] border-b border-black/5">
                 <tr>
+                  <th className="text-left px-5 py-3 font-medium">Name</th>
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-5 py-3 font-medium">Signed up</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {waitlist && waitlist.length > 0 ? waitlist.map((w: any) => (
+                {combinedWaitlist.length > 0 ? combinedWaitlist.map((w) => (
                   <tr key={w.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
-                    <td className="px-5 py-3 text-[#1A1A1A]">{w.email}</td>
+                    <td className="px-5 py-3 text-[#1A1A1A]">{w.name ?? <span className="text-[#6B7770] italic">—</span>}</td>
+                    <td className="px-5 py-3 text-[#6B7770]">{w.email}</td>
                     <td className="px-5 py-3 text-[#6B7770]">
                       {new Date(w.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                     </td>
                   </tr>
                 )) : (
-                  <tr><td colSpan={2} className="px-5 py-8 text-center text-[#6B7770]">No waitlist signups yet.</td></tr>
+                  <tr><td colSpan={3} className="px-5 py-8 text-center text-[#6B7770]">No waitlist signups yet.</td></tr>
                 )}
               </tbody>
             </table>

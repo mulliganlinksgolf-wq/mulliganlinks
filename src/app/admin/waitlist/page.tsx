@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { ApproveButton, BarterReceiptButton } from './ApproveButton'
 
+export const dynamic = 'force-dynamic'
 export const metadata = { title: 'Waitlist — Admin' }
 
 function StatusBadge({ status }: { status: string }) {
@@ -28,13 +29,21 @@ export default async function AdminWaitlistPage({
 
   const [
     { data: golfers },
+    { data: simpleWaitlist },
     { data: courses },
     { data: counter },
   ] = await Promise.all([
     adminClient.from('golfer_waitlist').select('*').order('id', { ascending: true }),
+    adminClient.from('waitlist').select('*').order('created_at', { ascending: true }),
     adminClient.from('course_waitlist').select('*').order('created_at', { ascending: false }),
     adminClient.from('founding_partner_counter').select('count, cap').single(),
   ])
+
+  // Merge simple email-only signups into golfer list, marking their source
+  const simpleEmails = new Set((golfers ?? []).map((g: any) => g.email))
+  const emailOnlySignups = (simpleWaitlist ?? [])
+    .filter((w: any) => !simpleEmails.has(w.email))
+    .map((w: any) => ({ ...w, _email_only: true }))
 
   const spotsUsed = counter?.count ?? 0
   const spotsCap = counter?.cap ?? 10
@@ -45,7 +54,7 @@ export default async function AdminWaitlistPage({
         <div>
           <h1 className="text-2xl font-bold text-[#1A1A1A]">Waitlist</h1>
           <p className="text-[#6B7770] text-sm mt-1">
-            {golfers?.length ?? 0} golfers · {courses?.length ?? 0} courses · {spotsUsed}/{spotsCap} Founding spots filled
+            {(golfers?.length ?? 0) + emailOnlySignups.length} golfers · {courses?.length ?? 0} courses · {spotsUsed}/{spotsCap} Founding spots filled
           </p>
         </div>
         <a
@@ -59,7 +68,7 @@ export default async function AdminWaitlistPage({
       {/* Tabs */}
       <div className="flex gap-1 bg-white ring-1 ring-black/5 rounded-xl p-1 w-fit">
         {[
-          { value: 'golfers', label: `Golfers (${golfers?.length ?? 0})` },
+          { value: 'golfers', label: `Golfers (${(golfers?.length ?? 0) + emailOnlySignups.length})` },
           { value: 'courses', label: `Courses (${courses?.length ?? 0})` },
         ].map(({ value, label }) => (
           <a
@@ -92,22 +101,37 @@ export default async function AdminWaitlistPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {golfers && golfers.length > 0 ? (
-                  golfers.map((g: any) => (
-                    <tr key={g.id} className="hover:bg-[#FAF7F2] transition-colors">
-                      <td className="px-4 py-3 text-[#6B7770]">{g.id}</td>
-                      <td className="px-4 py-3 font-medium text-[#1A1A1A]">
-                        {g.first_name} {g.last_name}
-                      </td>
-                      <td className="px-4 py-3 text-[#6B7770]">{g.email}</td>
-                      <td className="px-4 py-3 text-[#6B7770]">{g.zip_code}</td>
-                      <td className="px-4 py-3 text-[#6B7770]">{g.rounds_per_year ?? '—'}</td>
-                      <td className="px-4 py-3 text-[#6B7770]">{g.interested_tier ?? '—'}</td>
-                      <td className="px-4 py-3 text-[#6B7770] text-xs">
-                        {new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </td>
-                    </tr>
-                  ))
+                {((golfers?.length ?? 0) + emailOnlySignups.length) > 0 ? (
+                  <>
+                    {(golfers ?? []).map((g: any) => (
+                      <tr key={`gw-${g.id}`} className="hover:bg-[#FAF7F2] transition-colors">
+                        <td className="px-4 py-3 text-[#6B7770]">{g.id}</td>
+                        <td className="px-4 py-3 font-medium text-[#1A1A1A]">
+                          {g.first_name} {g.last_name}
+                        </td>
+                        <td className="px-4 py-3 text-[#6B7770]">{g.email}</td>
+                        <td className="px-4 py-3 text-[#6B7770]">{g.zip_code}</td>
+                        <td className="px-4 py-3 text-[#6B7770]">{g.rounds_per_year ?? '—'}</td>
+                        <td className="px-4 py-3 text-[#6B7770]">{g.interested_tier ?? '—'}</td>
+                        <td className="px-4 py-3 text-[#6B7770] text-xs">
+                          {new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </td>
+                      </tr>
+                    ))}
+                    {emailOnlySignups.map((w: any) => (
+                      <tr key={`w-${w.id}`} className="hover:bg-[#FAF7F2] transition-colors">
+                        <td className="px-4 py-3 text-[#6B7770]">—</td>
+                        <td className="px-4 py-3 text-[#6B7770] italic text-xs">email only</td>
+                        <td className="px-4 py-3 text-[#6B7770]">{w.email}</td>
+                        <td className="px-4 py-3 text-[#6B7770]">—</td>
+                        <td className="px-4 py-3 text-[#6B7770]">—</td>
+                        <td className="px-4 py-3 text-[#6B7770]">—</td>
+                        <td className="px-4 py-3 text-[#6B7770] text-xs">
+                          {new Date(w.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        </td>
+                      </tr>
+                    ))}
+                  </>
                 ) : (
                   <tr>
                     <td colSpan={7} className="px-4 py-8 text-center text-[#6B7770]">
