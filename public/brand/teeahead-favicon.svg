@@ -1,16 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="TeeAhead">
   <!-- Dark green rounded square background -->
   <rect width="100" height="100" rx="20" fill="#0F3D2E"/>
-  <!-- Cream T mark, scaled to fit with 12px padding, centered -->
-  <!-- Original mark: 100×120. Scale=0.633 → 63×76. Center: x=18, y=12 -->
-  <g transform="translate(18, 12) scale(0.633)">
-    <path
-      fill-rule="evenodd"
-      fill="#F4F1EA"
-      d="M 0,0 H 100 V 38 H 75 V 120 H 25 V 38 H 0 Z
-         M 13,13 H 87 V 25 H 13 Z
-         M 38,51 H 62 V 107 H 38 Z"
-    />
-    <path fill="#F4F1EA" d="M 40,71 L 62,79 L 40,87 Z"/>
+  <!-- T mark scaled to fit with padding, centered -->
+  <!-- Original mark viewBox 76x72, scale to ~70px wide: 70/76=0.92, height=0.92*72=66 -->
+  <!-- Center: x=(100-70)/2=15, y=(100-66)/2=17 -->
+  <g transform="translate(50, 50) scale(0.92)" fill="none" stroke="#F4F1EA" stroke-width="6" stroke-linejoin="miter">
+    <path d="M -38 -36 L 38 -36 L 38 -18 L 12 -18 L 12 36 L -12 36 L -12 -18 L -38 -18 Z"/>
+  </g>
+  <g transform="translate(50, 50) scale(0.92)" fill="#F4F1EA">
+    <rect x="-1" y="-13" width="2" height="44"/>
+    <path d="M 1 -13 L 10 -8 L 1 -3 Z"/>
   </g>
 </svg>
