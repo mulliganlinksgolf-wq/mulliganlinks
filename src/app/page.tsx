@@ -101,40 +101,26 @@ export default async function HomePage() {
               For Golfers
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              Eagle beats GolfPass+ on every metric — for $40 less.
+              The smarter GolfPass.
             </h2>
-            <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-[#1B4332] text-[#FAF7F2]">
-                    <th className="text-left px-4 py-3 font-medium">Perk</th>
-                    <th className="text-center px-4 py-3 font-medium text-[#FAF7F2]/70">GolfPass+ $119</th>
-                    <th className="text-center px-4 py-3 font-medium">Eagle $79</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-black/5">
-                  {[
-                    ['Monthly credits', '$10/mo', '$15/mo'],
-                    ['Free rounds/yr', '0', '2'],
-                    ['Booking fee waiver', '12×/yr', 'Always'],
-                    ['Points multiplier', '1×', '2×'],
-                    ['Priority booking', 'None', '48hr early'],
-                    ['Guest passes', 'None', '12/yr'],
-                    ['Green fee discount', 'None', '10% off'],
-                    ['Birthday credit', 'None', '$25'],
-                  ].map(([perk, them, us]) => (
-                    <tr key={perk} className="even:bg-[#FAF7F2]">
-                      <td className="px-4 py-3 font-medium text-[#1A1A1A]">{perk}</td>
-                      <td className="px-4 py-3 text-center text-[#6B7770]">{them}</td>
-                      <td className="px-4 py-3 text-center font-semibold text-[#1B4332]">{us}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <p className="text-[#6B7770] text-base leading-relaxed">
+              $79 instead of $119. $180 in credits instead of $120. Zero booking fees — always. At courses you actually play.
+            </p>
+            <div className="grid grid-cols-1 gap-4">
+              {[
+                { stat: '$40', label: 'saved per year vs GolfPass+' },
+                { stat: '$60', label: 'more in credits per year' },
+                { stat: '0', label: 'booking fees — always' },
+              ].map(({ stat, label }) => (
+                <div key={label} className="flex items-center gap-4 bg-[#FAF7F2] rounded-xl px-5 py-4 ring-1 ring-[#0F3D2E]/10">
+                  <span className="text-3xl font-bold text-[#0F3D2E]">{stat}</span>
+                  <span className="text-sm text-[#6B7770]">{label}</span>
+                </div>
+              ))}
             </div>
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-6 py-3 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
+              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-6 py-3 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
             >
               Join the Golfer Waitlist →
             </Link>
