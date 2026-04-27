@@ -9,7 +9,7 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, phone')
+    .select('full_name, phone, founding_member')
     .eq('id', user.id)
     .single()
 
@@ -28,6 +28,7 @@ export default async function ProfilePage() {
         email={user.email ?? ''}
         initialName={profile?.full_name ?? ''}
         initialPhone={profile?.phone ?? ''}
+        isFoundingMember={profile?.founding_member ?? false}
         membership={membership ?? null}
       />
     </div>
