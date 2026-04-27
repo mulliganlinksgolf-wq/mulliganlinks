@@ -129,7 +129,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                     $0 / month
                   </p>
                   <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
-                    Free for life. The only obligation: promote TeeAhead to your golfers at the point of booking.
+                    Free for your first year. The only obligation: promote TeeAhead to your golfers at the point of booking.
                   </p>
                 </div>
                 <div className="rounded-xl p-5"
