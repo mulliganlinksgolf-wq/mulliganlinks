@@ -31,6 +31,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
   const handleVendorSelect = (key: VendorKey) => {
     setSelectedVendor(key)
     setMonthlySubscription(VENDOR_PRICING[key].medianMonthly)
+    setMarketplaceDistribution(VENDOR_PRICING[key].marketplaceDefault ? 'yes' : 'no')
   }
 
   const annualSubscription = calcAnnualSubscription(monthlySubscription)
@@ -128,7 +129,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                     $0 / month
                   </p>
                   <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
-                    Free for your first year. The only obligation: promote TeeAhead to your golfers at the point of booking.
+                    Free for life. The only obligation: promote TeeAhead to your golfers at the point of booking.
                   </p>
                 </div>
                 <div className="rounded-xl p-5"
@@ -320,7 +321,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                           )}
                         </div>
                         <span className="text-sm font-semibold text-[#1A1A1A]">
-                          {marketplaceDistribution === 'no' ? '$0' : fmt(marketplaceBarter)}
+                          {fmt(marketplaceBarter)}
                         </span>
                       </div>
                       <div className="flex justify-between items-baseline pt-2 border-t border-black/5">
