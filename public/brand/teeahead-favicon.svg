@@ -1,14 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="TeeAhead">
   <!-- Dark green rounded square background -->
   <rect width="100" height="100" rx="20" fill="#0F3D2E"/>
-  <!-- T mark scaled to fit with padding, centered -->
-  <!-- Original mark viewBox 76x72, scale to ~70px wide: 70/76=0.92, height=0.92*72=66 -->
-  <!-- Center: x=(100-70)/2=15, y=(100-66)/2=17 -->
-  <g transform="translate(50, 50) scale(0.92)" fill="none" stroke="#F4F1EA" stroke-width="6" stroke-linejoin="miter">
-    <path d="M -38 -36 L 38 -36 L 38 -18 L 12 -18 L 12 36 L -12 36 L -12 -18 L -38 -18 Z"/>
-  </g>
-  <g transform="translate(50, 50) scale(0.92)" fill="#F4F1EA">
-    <rect x="-1" y="-13" width="2" height="44"/>
-    <path d="M 1 -13 L 10 -8 L 1 -3 Z"/>
-  </g>
+  <!-- Hollow T mark in cream using evenodd: outer T shape minus crossbar void minus stem void -->
+  <path
+    fill-rule="evenodd"
+    fill="#F4F1EA"
+    d="M 20,17 H 80 V 34 H 62 V 84 H 38 V 34 H 20 Z
+       M 24,21 H 76 V 30 H 24 Z
+       M 42,38 H 58 V 80 H 42 Z"
+  />
+  <!-- Flagstick and pennant inside stem void (cream, shows against dark green background) -->
+  <rect x="49" y="38" width="2" height="35" fill="#F4F1EA"/>
+  <path d="M 51,38 L 58,43 L 51,48 Z" fill="#F4F1EA"/>
 </svg>

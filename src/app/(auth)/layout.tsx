@@ -6,7 +6,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-8">
           <a href="/">
-            <TeeAheadLogo className="h-10 w-auto" />
+            <TeeAheadLogo className="h-14 w-auto" />
           </a>
         </div>
         {children}

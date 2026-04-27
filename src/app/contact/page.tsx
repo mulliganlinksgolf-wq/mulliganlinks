@@ -14,7 +14,7 @@ export default function ContactPage() {
       <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-10 w-auto" />
+            <TeeAheadLogo className="h-14 w-auto" />
           </Link>
           <Link
             href="/signup"
@@ -178,7 +178,7 @@ export default function ContactPage() {
 
       <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-8">
         <div className="max-w-6xl mx-auto flex flex-col items-center gap-3">
-          <TeeAheadLogo className="h-10 w-auto" />
+          <TeeAheadLogo className="h-14 w-auto" />
           <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
             <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
             <span>·</span>

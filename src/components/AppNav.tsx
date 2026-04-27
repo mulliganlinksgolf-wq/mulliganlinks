@@ -25,7 +25,7 @@ export function AppNav() {
     <header className="bg-white border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
         <Link href="/app">
-          <TeeAheadLogo className="h-10 w-auto" />
+          <TeeAheadLogo className="h-14 w-auto" />
         </Link>
 
         {/* Desktop nav */}

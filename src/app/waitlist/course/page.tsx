@@ -23,7 +23,7 @@ export default async function CourseWaitlistPage() {
       <header className="bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-9 w-auto" />
+            <TeeAheadLogo className="h-12 w-auto" />
           </Link>
           <Link href="/" className="text-sm text-[#6B7770] hover:text-[#1B4332] transition-colors">
             ← Back
