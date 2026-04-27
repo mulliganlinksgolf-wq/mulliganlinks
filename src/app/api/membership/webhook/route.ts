@@ -26,16 +26,21 @@ export async function POST(req: NextRequest) {
     if (!userId || !tier) return NextResponse.json({ error: 'Missing metadata' }, { status: 400 })
 
     const sub = session.subscription as string
-    const stripeSubscription = await stripe.subscriptions.retrieve(sub) as Stripe.Subscription
+    const stripeSubscription = await stripe.subscriptions.retrieve(sub)
     const periodEnd = new Date(stripeSubscription.current_period_end * 1000).toISOString()
 
-    await admin.from('memberships').upsert({
+    const { error: upsertError } = await admin.from('memberships').upsert({
       user_id: userId,
       tier,
       status: 'active',
       stripe_subscription_id: sub,
       current_period_end: periodEnd,
     }, { onConflict: 'user_id' })
+
+    if (upsertError) {
+      console.error('[webhook] Failed to upsert membership:', upsertError)
+      return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+    }
 
     // Mark founding_member permanently on the profile when payment is confirmed
     if (session.metadata?.founding_golfer === 'true') {
