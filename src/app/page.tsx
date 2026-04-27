@@ -141,145 +141,59 @@ export default async function HomePage() {
         </FadeIn>
       </section>
 
-      {/* ── Two-Column Value Props ──────────────────────────────── */}
-      <section className="px-6 py-20 bg-white">
+      {/* ── Stat Moment ──────────────────────────────────────── */}
+      <section className="bg-white px-6 py-20 text-center border-t-4 border-[#E0A800]">
         <FadeIn>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12">
-
-          {/* Golfer column */}
-          <div className="space-y-6">
-            <div className="inline-block bg-[#1B4332]/10 text-[#1B4332] text-sm font-semibold px-3 py-1 rounded-full">
-              For Golfers
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              The smarter GolfPass.
-            </h2>
-            <p className="text-[#6B7770] text-base leading-relaxed">
-              $79 instead of $119. $180 in credits instead of $120. Zero booking fees — always. At courses you actually play.
+          <div className="max-w-3xl mx-auto space-y-6">
+            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">
+              What GolfNow costs the average course, per year
             </p>
-            <div className="grid grid-cols-1 gap-4">
-              {[
-                { stat: '$40', label: 'saved per year vs GolfPass+' },
-                { stat: '$60', label: 'more in credits per year' },
-                { stat: '0', label: 'booking fees — always' },
-              ].map(({ stat, label }) => (
-                <div key={label} className="flex items-center gap-4 bg-[#FAF7F2] rounded-xl px-5 py-4 ring-1 ring-[#0F3D2E]/10">
-                  <span className="text-3xl font-bold text-[#0F3D2E]">{stat}</span>
-                  <span className="text-sm text-[#6B7770]">{label}</span>
-                </div>
-              ))}
-            </div>
-            <Link
-              href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-6 py-3 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-            >
-              Join the Golfer Waitlist →
-            </Link>
-          </div>
+            <p className="font-display font-black text-[#0F3D2E] leading-none tracking-[-0.03em]"
+               style={{ fontSize: 'clamp(72px, 12vw, 96px)' }}>
+              $94,500
+            </p>
+            <p className="text-xl font-medium text-[#1A1A1A] max-w-md mx-auto leading-snug">
+              in barter tee times — revenue taken directly out of your pocket
+            </p>
+            <p className="text-base text-[#6B7770] max-w-xl mx-auto leading-relaxed">
+              Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
+              slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
+            </p>
+            <p className="text-base text-[#6B7770]">
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong>. For Founding Partners, forever.
+            </p>
 
-          {/* Course column */}
-          <div className="space-y-6">
-            <div className="inline-block bg-[#E0A800]/20 text-[#8B6F00] text-sm font-semibold px-3 py-1 rounded-full">
-              For Courses —{' '}
-              <span className="text-[#E0A800] font-bold">
-                {spotsRemaining <= 5 && spotsRemaining > 0
-                  ? `Only ${spotsRemaining} spots left`
-                  : `${spotsRemaining} of 10 Founding Spots Left`}
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#1A1A1A]">
-              GolfNow costs the average course $94,500/year. We charge $0.
-            </h2>
-            <div className="bg-[#FAF7F2] rounded-xl p-6 space-y-4 ring-1 ring-black/5">
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                The math is brutal once you see it. GolfNow takes 2 prime-time tee times from you per day
-                in barter — at your published rack rate. That&apos;s roughly{' '}
-                <strong className="text-[#1A1A1A]">$94,500/year</strong> in lost revenue per course
-                (NGCOA member survey data and Golf Inc. industry analysis, 2024–2025). High-volume courses lose $150K+.
-              </p>
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
-                slots. Windsor Parke Golf Club saw a{' '}
-                <strong className="text-[#1A1A1A]">382% increase in online revenue</strong> after leaving
-                GolfNow ($81K → $393K).
-              </p>
-              <p className="text-[#1A1A1A] text-sm leading-relaxed">
-                TeeAhead charges <strong className="text-[#0F3D2E]">$0</strong> for the first 10 Founding
-                Partner courses — free for life. Course #11 onward pays $249/month. That&apos;s it. No
-                barter. No commissions. No data extraction.
-              </p>
-              <p className="text-sm text-[#6B7770] italic">
-                The only ask: tell your golfers about the TeeAhead membership at booking.
-              </p>
-              <p className="text-xs text-[#9DAA9F] leading-relaxed">
-                * Based on 2 barter tee times/day at average rack rates across NGCOA member survey
-                data and Golf Inc. industry analysis (2024–2025). High-volume courses document losses
-                of $150K+. Individual results vary by contract terms.
-              </p>
-              <Link href="/barter" className="text-xs font-medium text-[#0F3D2E] hover:underline">
-                Want your real number? Use the barter calculator →
-              </Link>
-            </div>
-            <div className="flex flex-col items-start gap-2">
+            {/* Barter callout — visually distinct, not just a text link */}
+            <div className="inline-flex items-center gap-3 bg-[#0F3D2E] rounded-full px-6 py-3 mt-2">
+              <span className="text-sm font-semibold text-[#F4F1EA]">Want your exact number?</span>
               <Link
-                href="/waitlist/course"
-                className="inline-flex flex-col items-start rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/5 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-[#E0A800]/10 transition-colors"
+                href="/barter"
+                className="text-sm font-bold text-[#E0A800] hover:text-[#E0A800]/80 transition-colors"
               >
-                {spotsRemaining > 0
-                  ? 'Claim a Founding Partner Spot →'
-                  : 'Join the Course Waitlist →'}
-                <span className="text-xs font-normal text-[#6B7770] mt-0.5">
-                  {spotsRemaining > 0
-                    ? `${spotsRemaining} of 10 spots remaining`
-                    : 'Next 10 spots release Q2 2027'}
-                </span>
-              </Link>
-              <Link href="/barter" className="text-xs text-[#0F3D2E] hover:underline">
-                or see what GolfNow has cost you →
+                Use the barter calculator →
               </Link>
             </div>
           </div>
-
-        </div>
         </FadeIn>
       </section>
 
-      {/* ── Social Proof ──────────────────────────────────────── */}
-      <section className="px-6 py-20 bg-[#FAF7F2]">
+      {/* ── Proof Strip ───────────────────────────────────────── */}
+      <section className="bg-[#FAF7F2] px-6 py-10 border-t border-black/5">
         <FadeIn>
-        <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A] mb-4">
-            The exodus is real.
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 text-center">
             {[
-              {
-                stat: '100+',
-                label: 'courses left GolfNow in Q1 2025 alone',
-                source: 'National Golf Course Owners Association (NGCOA), Q1 2025',
-              },
-              {
-                stat: '382%',
-                label: 'online revenue increase at Windsor Parke Golf Club after leaving GolfNow',
-                source: 'Golf Inc. / industry reporting, Windsor Parke case study · $81K → $393K',
-              },
-              {
-                stat: '$94,500',
-                label: 'average annual barter cost per GolfNow course',
-                source: 'NGCOA member survey data & Golf Inc. industry analysis, 2024–2025',
-              },
-            ].map(({ stat, label, source }) => (
-              <div key={stat} className="bg-white rounded-xl p-8 space-y-3 ring-1 ring-black/5 text-center">
-                <div className="text-4xl font-bold text-[#0F3D2E]">{stat}</div>
-                <p className="text-sm text-[#1A1A1A] font-medium leading-snug">{label}</p>
-                <p className="text-xs text-[#9DAA9F]">{source}</p>
+              { num: '100+', label: 'courses left GolfNow in Q1 2025 alone' },
+              { num: '382%', label: 'revenue increase at Windsor Parke after leaving' },
+              { num: '$0', label: 'what TeeAhead charges Founding Partner courses' },
+            ].map(({ num, label }) => (
+              <div key={num} className="space-y-1">
+                <p className="font-display font-extrabold text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
+                  {num}
+                </p>
+                <p className="text-xs text-[#6B7770] max-w-[160px] leading-snug">{label}</p>
               </div>
             ))}
           </div>
-          <p className="mt-10 text-sm text-[#6B7770]">
-            TeeAhead is built to give those courses — and their golfers — a better option.
-          </p>
-        </div>
         </FadeIn>
       </section>
 
