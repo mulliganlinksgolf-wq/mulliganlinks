@@ -1,12 +1,13 @@
 -- Founding golfer counter (enforces single-row via CHECK)
-CREATE TABLE public.founding_golfer_counter (
+CREATE TABLE IF NOT EXISTS public.founding_golfer_counter (
   id      INTEGER PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   claimed INTEGER NOT NULL DEFAULT 0,
   "limit" INTEGER NOT NULL DEFAULT 100
 );
 
 INSERT INTO public.founding_golfer_counter (id, claimed, "limit")
-VALUES (1, 0, 100);
+VALUES (1, 0, 100)
+ON CONFLICT (id) DO NOTHING;
 
 -- RLS: read-only for everyone (public counter display)
 ALTER TABLE public.founding_golfer_counter ENABLE ROW LEVEL SECURITY;
@@ -26,6 +27,7 @@ CREATE OR REPLACE FUNCTION public.claim_founding_spot()
 RETURNS boolean
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public, pg_catalog
 AS $$
 DECLARE
   v_claimed integer;
@@ -47,3 +49,5 @@ BEGIN
   END IF;
 END;
 $$;
+
+GRANT EXECUTE ON FUNCTION public.claim_founding_spot() TO authenticated;
