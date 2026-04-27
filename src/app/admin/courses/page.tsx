@@ -17,7 +17,7 @@ export default async function AdminCoursesPage() {
   const admin = createAdminClient()
   const { data: courses } = await admin
     .from('courses')
-    .select('id, name, slug, city, state, status, created_at')
+    .select('id, name, slug, city, state, status, created_at, onboarding_step, onboarding_complete')
     .order('created_at', { ascending: false })
 
   return (
@@ -63,6 +63,12 @@ export default async function AdminCoursesPage() {
                         className="text-xs text-[#1B4332] hover:underline font-medium"
                       >
                         View as course →
+                      </Link>
+                      <Link
+                        href={`/onboarding/${c.id}/step-${Math.min(c.onboarding_step ?? 1, 5)}`}
+                        className="text-xs text-[#639922] hover:underline font-medium"
+                      >
+                        {c.onboarding_complete ? 'Onboarding ✓' : `Onboarding (step ${c.onboarding_step ?? 1}/5)`}
                       </Link>
                       <form action={toggleCourse}>
                         <input type="hidden" name="id" value={c.id} />
