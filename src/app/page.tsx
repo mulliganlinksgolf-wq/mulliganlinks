@@ -34,7 +34,7 @@ export default async function HomePage() {
   const headline = content['home.headline'] ?? 'Golf, redone for the people who actually play it.'
   const subhead = content['home.subhead'] ?? 'The local-first alternative to GolfPass+. A real membership for the courses you actually play. Built for the regulars.'
   const badge = content['home.badge'] ?? 'Coming soon to Metro Detroit'
-  const tagline = content['home.tagline'] ?? 'No credit card · Founding members get lifetime perks'
+  const tagline = content['home.tagline'] ?? 'No credit card · Founding courses free for your first year'
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
