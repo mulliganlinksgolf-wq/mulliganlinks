@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Caveat } from 'next/font/google'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
+import { NavMenu } from '@/components/NavMenu'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 
@@ -44,19 +45,14 @@ export default async function HomePage() {
           <Link href="/">
             <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
           </Link>
-          <nav className="flex items-center gap-6">
-            <Link
-              href="/barter"
-              className="text-sm font-medium text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors hidden sm:block"
-            >
-              Barter Calculator
-            </Link>
+          <nav className="flex items-center gap-3">
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors hidden sm:inline-flex"
             >
               Join the Waitlist
             </Link>
+            <NavMenu />
           </nav>
         </div>
       </header>
@@ -269,7 +265,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── Solution ──────────────────────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-20">
+      <section id="for-golfers" className="bg-[#0F3D2E] px-6 py-20">
         <FadeIn>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14 space-y-3">
@@ -620,6 +616,7 @@ export default async function HomePage() {
                 <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
                 <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
                 <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
+                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
               </nav>
             </div>
 

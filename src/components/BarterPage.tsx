@@ -304,6 +304,18 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           </FadeIn>
         </section>
 
+        {/* ── Cross-link to /software-cost ─────────────────────── */}
+        <section className="px-6 py-8 bg-white border-t border-black/5">
+          <div className="max-w-xl mx-auto text-center">
+            <p className="text-sm text-[#6B7770]">
+              Not on GolfNow?{' '}
+              <Link href="/software-cost" className="text-[#0F3D2E] hover:underline font-medium">
+                See what your software is actually costing you →
+              </Link>
+            </p>
+          </div>
+        </section>
+
       </main>
 
       {/* ── Footer ────────────────────────────────────────────── */}
