@@ -11,7 +11,7 @@ export function TeeAheadLogo({ className, priority }: Props) {
       src="/brand/teeahead-logo-final.png"
       alt="TeeAhead"
       width={374}
-      height={93}
+      height={95}
       className={className}
       priority={priority}
     />
