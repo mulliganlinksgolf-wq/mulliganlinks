@@ -44,6 +44,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.teeahead.com",
   },
+  verification: {
+    google: "UMxgTah2fiIao60gzONoz4OVsdiAu7LUxat6FO_5-a8",
+  },
   icons: {
     icon: [
       { url: "/brand/teeahead-favicon.svg", type: "image/svg+xml" },
