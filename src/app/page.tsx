@@ -226,18 +226,18 @@ export default async function HomePage() {
             {[
               {
                 icon: '🏌️',
-                title: 'Join free',
-                body: 'Create your TeeAhead account. No card needed to start.',
+                title: 'Join the waitlist.',
+                body: 'Be one of the first golfers in Metro Detroit when we launch. Free, no card required.',
               },
               {
                 icon: '📍',
-                title: 'Find your course',
-                body: 'Book tee times at partner courses with zero booking fees.',
+                title: 'Book at your home course.',
+                body: 'Real tee times at the courses you already play. Zero booking fees, always.',
               },
               {
                 icon: '⭐',
-                title: 'Earn & upgrade',
-                body: 'Every dollar played earns Fairway Points. Upgrade to Eagle or Ace for bigger rewards.',
+                title: 'Earn loyalty that lives at your course.',
+                body: 'Fairway Points stay with you, your home course, and the network. Not a national chain.',
               },
             ].map((step) => (
               <Card key={step.title} className="bg-[#FAF7F2] ring-[#1B4332]/10 text-center">
