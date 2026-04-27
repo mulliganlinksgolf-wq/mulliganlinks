@@ -51,6 +51,11 @@ describe('calcProcessingMarkup', () => {
     const double = calcProcessingMarkup(1_000_000, 3.0)
     expect(double).toBe(base * 2)
   })
+
+  it('rounds fractional dollar result to nearest integer', () => {
+    // $333,333 × (2.9% - 2.5%) = $333,333 × 0.004 = 1,333.332 → rounds to 1,333
+    expect(calcProcessingMarkup(333_333, 2.9)).toBe(1333)
+  })
 })
 
 describe('calcMarketplaceBarter', () => {
@@ -84,6 +89,13 @@ describe('calcTotalExtraction', () => {
   it('returns 0 for a course with zero costs', () => {
     expect(calcTotalExtraction(0, 100_000, 2.5, 'no')).toBe(0)
   })
+
+  it('handles maximum inputs without overflow', () => {
+    // $1,500/mo × 12 + $5M × (4.0% - 2.5%) + 18,200 = $18,000 + $75,000 + $18,200 = $111,200
+    const max = calcTotalExtraction(1500, 5_000_000, 4.0, 'yes')
+    expect(max).toBe(111200)
+    expect(Number.isFinite(max)).toBe(true)
+  })
 })
 
 describe('estimateGolferRecords', () => {
@@ -92,23 +104,20 @@ describe('estimateGolferRecords', () => {
     expect(estimateGolferRecords(1_000_000)).toBe(40000)
   })
 
-  it('floors to integer', () => {
-    // $100K × 0.04 = 4,000
-    expect(estimateGolferRecords(100_000)).toBe(4000)
-  })
-
-  it('handles min card volume ($100K)', () => {
-    expect(estimateGolferRecords(100_000)).toBeGreaterThan(0)
+  it('floors fractional result to integer', () => {
+    // $100,001 × 0.04 = 4,000.04 → Math.floor → 4,000 (not 4,001)
+    expect(estimateGolferRecords(100_001)).toBe(4000)
   })
 })
 
-describe('savings edge case', () => {
-  it('standard savings never go negative — confirmed by Math.max at call site', () => {
-    // A course with $0 everything has totalExtraction=0, which is < standardAnnual ($3,588)
-    // The component does: Math.max(0, totalExtraction - 3588) — test the logic here
+describe('savings edge case — unusually lean course', () => {
+  it('a course with $0 software and no marketplace has totalExtraction below TeeAhead standard pricing', () => {
+    // This documents the threshold for the "unusually lean" UI message.
+    // When totalExtraction < 3588 (TEEAHEAD_PRICING.standardAnnual), the component
+    // shows a different message instead of the savings calculation.
+    // The guard expression Math.max(0, totalExtraction - 3588) is tested in UI tests.
     const totalExtraction = calcTotalExtraction(0, 100_000, 2.5, 'no')
-    const savingsAsStandard = Math.max(0, totalExtraction - 3588)
-    expect(savingsAsStandard).toBe(0)
-    expect(totalExtraction).toBeLessThan(3588) // triggers "unusually lean" message
+    expect(totalExtraction).toBe(0)
+    expect(totalExtraction).toBeLessThan(3588)
   })
 })
