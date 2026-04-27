@@ -40,16 +40,10 @@ export default async function HomePage() {
           </Link>
           <nav className="flex items-center gap-4">
             <Link
-              href="/login"
-              className="text-sm font-medium text-[#1A1A1A] hover:text-[#1B4332] transition-colors"
+              href="/waitlist/golfer"
+              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-5 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
             >
-              Sign in
-            </Link>
-            <Link
-              href="/signup"
-              className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-4 py-2 text-sm font-medium text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
-            >
-              Get Started
+              Join the Waitlist
             </Link>
           </nav>
         </div>
