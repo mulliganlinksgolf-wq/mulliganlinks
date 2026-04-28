@@ -89,29 +89,33 @@ export function WalkInBookingModal({
         return
       }
       startTransition(async () => {
+        const trimmedName = groupName.trim()
+        const trimmedPhone = groupPhone.trim()
+        const trimmedEmail = groupEmail.trim()
+        const parsedAmount = parseFloat(groupAmount) || 0
         const result = await createWalkInBooking({
           teeTimeId,
-          guestName: groupName.trim(),
-          guestPhone: groupPhone.trim(),
-          guestEmail: groupEmail.trim() || undefined,
+          guestName: trimmedName,
+          guestPhone: trimmedPhone,
+          guestEmail: trimmedEmail || undefined,
           players: playerCount,
-          totalPaid: parseFloat(groupAmount) || 0,
+          totalPaid: parsedAmount,
           paymentMethod,
         })
         if (result?.error) {
           setError(result.error)
           return
         }
-        if (groupEmail.trim()) {
+        if (trimmedEmail && trimmedEmail.includes('@')) {
           sendWalkInEmail({
-            guestName: groupName.trim(),
-            guestEmail: groupEmail.trim(),
+            guestName: trimmedName,
+            guestEmail: trimmedEmail,
             courseName,
             teeTimeIso: scheduledAt,
             players: playerCount,
-            totalPaid: parseFloat(groupAmount) || 0,
+            totalPaid: parsedAmount,
             paymentMethod,
-          }).catch(() => {/* fire and forget */})
+          }).catch(err => console.warn('[WalkInBookingModal] email send failed', err))
         }
         onSuccess()
       })
