@@ -164,7 +164,7 @@ export default async function HomePage() {
               slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
             </p>
             <p className="text-base text-[#6B7770]">
-              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for your first year. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$299/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for your first year. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$349/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
             </p>
 
             {/* Barter callout — visually distinct, not just a text link */}
@@ -292,7 +292,7 @@ export default async function HomePage() {
                   {[
                     'Book tee times at your home course with zero fees',
                     'Earn Fairway Points on every round',
-                    'Eagle membership: $79/yr, $120 in credits — beats GolfPass+ by $40',
+                    'Eagle membership: $89/yr — beats GolfPass+ by $30',
                     'Priority booking, guest passes, birthday credit',
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (
@@ -403,23 +403,22 @@ export default async function HomePage() {
                   <p className="font-display font-bold text-xl text-[#1A1A1A]">Eagle</p>
                   <p className="text-sm text-[#9DAA9F] mt-0.5">Serious golfers</p>
                   <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$79</span>
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$89</span>
                     <span className="text-[#6B7770] text-sm">/ yr</span>
                   </div>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$6.58/mo</p>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$7.42/mo</p>
                 </div>
                 <div className="p-7 space-y-5">
                   <ul className="space-y-2 text-sm text-[#1A1A1A]">
                     {[
-                      '$10/mo in tee time credits ($120/yr)',
-                      '1 free round per year',
+                      '250 bonus Fairway Points on signup',
+                      '1 complimentary round/yr (course-provided, subject to availability)',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '1.5× Fairway Points per dollar spent',
+                      '2× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
-                      '12 guest fee waivers per year',
-                      '10% off at participating courses',
-                      '$25 birthday credit',
+                      '1 guest pass per year',
+                      '10% birthday credit',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
@@ -432,7 +431,6 @@ export default async function HomePage() {
                   >
                     Join the Waitlist
                   </Link>
-                  <p className="text-xs text-[#9DAA9F] text-center">Credits applied at partner courses</p>
                 </div>
               </div>
 
@@ -442,23 +440,22 @@ export default async function HomePage() {
                   <p className="font-display font-bold text-xl text-[#1A1A1A]">Ace</p>
                   <p className="text-sm text-[#9DAA9F] mt-0.5">All-in members</p>
                   <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$149</span>
+                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$159</span>
                     <span className="text-[#6B7770] text-sm">/ yr</span>
                   </div>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$12.42/mo</p>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$13.25/mo</p>
                 </div>
                 <div className="p-7 space-y-5">
                   <ul className="space-y-2 text-sm text-[#1A1A1A]">
                     {[
-                      '$20/mo in tee time credits ($240/yr)',
-                      '2 free rounds per year',
+                      '500 bonus Fairway Points on signup',
+                      '2 complimentary rounds/yr (course-provided, subject to availability)',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '2× Fairway Points per dollar spent',
+                      '3× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
-                      '24 guest fee waivers per year',
-                      '15% off at participating courses',
-                      '$50 birthday credit',
+                      '2 guest passes per year',
+                      '15% birthday credit',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
@@ -624,7 +621,6 @@ export default async function HomePage() {
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
                 <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
