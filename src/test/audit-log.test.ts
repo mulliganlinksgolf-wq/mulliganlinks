@@ -63,4 +63,10 @@ describe('writeAuditLog', () => {
     await writeAuditLog({ eventType: 'member_deleted', targetType: 'member', targetId: 'u-1', targetLabel: 'Jane' })
     expect(mockInsert).toHaveBeenCalledWith(expect.objectContaining({ details: {} }))
   })
+
+  it('uses null for admin_email when user has no email', async () => {
+    mockGetUser.mockResolvedValue({ data: { user: { id: 'u-1', email: undefined } } })
+    await writeAuditLog({ eventType: 'tier_changed', targetType: 'member' })
+    expect(mockInsert).toHaveBeenCalledWith(expect.objectContaining({ admin_email: null }))
+  })
 })

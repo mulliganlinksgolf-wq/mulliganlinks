@@ -35,7 +35,7 @@ export async function writeAuditLog(params: WriteAuditLogParams): Promise<void> 
     const admin = createAdminClient()
     await admin.from('admin_audit_log').insert({
       admin_id: user.id,
-      admin_email: user.email ?? '',
+      admin_email: user.email ?? null,
       event_type: params.eventType,
       target_type: params.targetType,
       target_id: params.targetId,
