@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
+import { sendBookingConfirmation, sendCourseBookingAlert, sendCancellationConfirmation } from '@/lib/emails'
 import { platformFeeCents } from '@/lib/stripe/fees'
 
 const MONTHLY_CREDIT_CENTS: Record<string, number> = { eagle: 1000, ace: 2000 }
@@ -212,13 +212,14 @@ export async function confirmBooking({
   const [, { data: memberProfile }, { data: teeTimeFull }] = await Promise.all([
     sendBookingConfirmation({ userId, bookingId: booking.id, teeTimeId, players, total, pointsEarned }).catch(() => {}),
     adminClient.from('profiles').select('full_name, email').eq('id', userId).single(),
-    adminClient.from('tee_times').select('scheduled_at, courses(id, name)').eq('id', teeTimeId).single(),
+    adminClient.from('tee_times').select('scheduled_at, courses(id, name, slug)').eq('id', teeTimeId).single(),
   ])
 
   const course = (teeTimeFull as any)?.courses
   if (course && memberProfile) {
     sendCourseBookingAlert({
       courseId: course.id,
+      courseSlug: course.slug ?? '',
       memberName: memberProfile.full_name ?? 'Member',
       memberEmail: memberProfile.email ?? '',
       players,
@@ -240,7 +241,7 @@ export async function cancelBooking(bookingId: string) {
 
   const { data: booking } = await supabase
     .from('bookings')
-    .select('id, tee_time_id, players, status, points_awarded, tee_times(scheduled_at)')
+    .select('id, tee_time_id, players, status, points_awarded, tee_times(scheduled_at, courses(name))')
     .eq('id', bookingId)
     .eq('user_id', user.id)
     .single()
@@ -288,6 +289,16 @@ export async function cancelBooking(bookingId: string) {
   }
 
   // TODO: Stripe refund goes here when payment is wired
+
+  // Fire-and-forget cancellation confirmation
+  const teeTimeData = booking.tee_times as any
+  sendCancellationConfirmation({
+    userId: user.id,
+    courseName: teeTimeData?.courses?.name ?? 'the course',
+    teeTimeIso: teeTimeData?.scheduled_at ?? '',
+    players: booking.players,
+    redeemedPointsRestored: totalRedeemed < 0 ? -totalRedeemed : 0,
+  }).catch(() => {})
 
   return { ok: true }
 }

@@ -107,7 +107,7 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
 
   const { data: booking } = await admin
     .from('bookings')
-    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, tee_times(scheduled_at, course_id, courses(id, name))')
+    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, tee_times(scheduled_at, course_id, courses(id, name, slug))')
     .eq('id', bookingId)
     .single()
 
@@ -180,6 +180,7 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
   if (course && member) {
     sendCourseBookingAlert({
       courseId: course.id,
+      courseSlug: course.slug ?? '',
       memberName: member.full_name ?? 'Member',
       memberEmail: member.email ?? '',
       players: booking.players,
