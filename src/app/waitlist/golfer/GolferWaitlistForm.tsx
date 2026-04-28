@@ -57,24 +57,8 @@ export function GolferWaitlistForm() {
       </div>
 
       <div className="space-y-1.5">
-        <Label>Home course <span className="text-[#6B7770] font-normal">(optional)</span></Label>
-        <div className="grid grid-cols-2 gap-2">
-          {['Fox Creek', 'Whispering Willows', 'Idyl Wyld', 'Other'].map((course) => (
-            <label
-              key={course}
-              className="flex items-center gap-2 rounded-lg border border-[#D4CFC5] bg-white px-3 py-2.5 text-sm text-[#1A1A1A] cursor-pointer hover:border-[#0F3D2E]/40 has-[:checked]:border-[#0F3D2E] has-[:checked]:bg-[#0F3D2E]/5 transition-colors"
-            >
-              <input
-                type="radio"
-                name="home_course"
-                value={course}
-                disabled={isPending}
-                className="accent-[#0F3D2E]"
-              />
-              {course}
-            </label>
-          ))}
-        </div>
+        <Label htmlFor="home_course">Home course <span className="text-[#6B7770] font-normal">(optional)</span></Label>
+        <Input id="home_course" name="home_course" disabled={isPending} placeholder="Oakland Hills, Detroit Golf Club, etc." />
       </div>
 
       <div className="space-y-1.5">
