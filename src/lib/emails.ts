@@ -149,3 +149,59 @@ export async function sendCourseBookingAlert({
     console.error('[course-booking-alert]', err)
   }
 }
+
+export async function sendPhoneBookingConfirmation({
+  guestName,
+  guestEmail,
+  courseName,
+  teeTimeIso,
+  players,
+  totalPaid,
+  paymentMethod,
+}: {
+  guestName: string
+  guestEmail: string
+  courseName: string
+  teeTimeIso: string
+  players: number
+  totalPaid: number
+  paymentMethod: 'cash' | 'card' | 'unpaid'
+}) {
+  try {
+    const resendKey = process.env.RESEND_API_KEY
+    if (!resendKey || resendKey === 're_placeholder') return
+
+    const { date: dateStr, time: timeStr } = fmtDateTime(teeTimeIso)
+    const firstName = guestName.split(' ')[0]
+    const paymentLabel =
+      paymentMethod === 'cash' ? 'Cash' : paymentMethod === 'card' ? 'Card' : 'Unpaid'
+
+    const { Resend } = await import('resend')
+    const resend = new Resend(resendKey)
+
+    await resend.emails.send({
+      from: 'TeeAhead <notifications@teeahead.com>',
+      to: guestEmail,
+      subject: `Tee time confirmed — ${courseName} ${dateStr}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+          <h2 style="color: #1B4332;">You're on the tee ⛳</h2>
+          <p>Hey ${firstName}, your tee time at <strong>${courseName}</strong> is confirmed.</p>
+          <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Course</td><td style="padding: 8px 0; font-weight: 600; border-bottom: 1px solid #eee;">${courseName}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Date</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${dateStr}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Time</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timeStr}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Players</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${players}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Total paid</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">$${totalPaid.toFixed(2)}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770;">Payment method</td><td style="padding: 8px 0;">${paymentLabel}</td></tr>
+          </table>
+          <p style="color: #6B7770; font-size: 13px;">Booked by calling the course. Questions? Contact us at support@teeahead.com</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+          <p style="color: #6B7770; font-size: 12px;">TeeAhead &middot; Your home course, redone right.</p>
+        </div>
+      `,
+    })
+  } catch (err) {
+    console.error('[phone-booking-email]', err)
+  }
+}
