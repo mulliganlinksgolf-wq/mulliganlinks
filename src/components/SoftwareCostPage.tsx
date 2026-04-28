@@ -351,13 +351,13 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                     <div className="flex-1 border-t-2 border-[#0F3D2E]/25" />
                   </div>
 
-                  {/* Section 2: TeeAhead comparison */}
-                  <div className="p-6 space-y-4" style={{ background: 'rgba(15,61,46,0.025)' }}>
+                  {/* Section 2: TeeAhead comparison — dark green panel */}
+                  <div className="p-6 space-y-4" style={{ background: '#0F3D2E' }}>
                     <div className="space-y-3">
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="text-sm font-semibold text-[#0F3D2E]">Founding Partner</p>
-                          <p className="text-xs text-[#6B7770]">
+                          <p className="text-sm font-semibold text-[#F4F1EA]">Founding Partner</p>
+                          <p className="text-xs" style={{ color: 'rgba(244,241,234,0.55)' }}>
                             {allClaimed ? 'All spots claimed' : `${spotsRemaining} of 10 remaining`}
                           </p>
                         </div>
@@ -365,16 +365,16 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                       </div>
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="text-sm font-semibold text-[#1A1A1A]">Standard pricing</p>
-                          <p className="text-xs text-[#6B7770]">$299/mo, cancel anytime</p>
+                          <p className="text-sm font-semibold" style={{ color: 'rgba(244,241,234,0.75)' }}>Standard pricing</p>
+                          <p className="text-xs" style={{ color: 'rgba(244,241,234,0.45)' }}>$299/mo, cancel anytime</p>
                         </div>
-                        <p className="font-display font-bold text-[#1A1A1A]" style={{ fontSize: '18px' }}>
+                        <p className="font-display font-bold" style={{ fontSize: '18px', color: 'rgba(244,241,234,0.75)' }}>
                           {fmt(TEEAHEAD_PRICING.standardAnnual)}/yr
                         </p>
                       </div>
                     </div>
 
-                    <div className="text-xs text-[#6B7770] space-y-1.5">
+                    <div className="text-xs space-y-1.5" style={{ color: 'rgba(244,241,234,0.6)' }}>
                       {[
                         'No barter',
                         'No commissions',
@@ -382,34 +382,34 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                         'No marketplace routing without your explicit opt-in',
                       ].map((item) => (
                         <p key={item} className="flex items-center gap-1.5">
-                          <span className="text-[#0F3D2E] font-bold text-sm">✓</span> {item}
+                          <span className="font-bold text-sm" style={{ color: '#7EC8A4' }}>✓</span> {item}
                         </p>
                       ))}
                     </div>
 
-                    <div className="border-t border-black/8 pt-4 space-y-2">
-                      <p className="text-xs font-bold tracking-[0.06em] uppercase text-[#6B7770]">Your annual savings</p>
+                    <div className="pt-4 space-y-2" style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+                      <p className="text-xs font-bold tracking-[0.06em] uppercase" style={{ color: 'rgba(244,241,234,0.45)' }}>Your annual savings</p>
                       {isUnusuallyLean ? (
                         <div className="text-sm leading-relaxed">
-                          <p className="font-medium text-[#1A1A1A] mb-1">Your current setup is unusually lean.</p>
-                          <p className="text-[#6B7770]">
+                          <p className="font-medium text-[#F4F1EA] mb-1">Your current setup is unusually lean.</p>
+                          <p style={{ color: 'rgba(244,241,234,0.6)' }}>
                             The case for TeeAhead is data ownership and the loyalty layer — not cost.{' '}
-                            <Link href="/#how-it-works" className="text-[#0F3D2E] hover:underline">Learn more →</Link>
+                            <Link href="/#how-it-works" className="hover:underline" style={{ color: '#7EC8A4' }}>Learn more →</Link>
                           </p>
                         </div>
                       ) : (
                         <div className="space-y-2">
                           <div className="flex justify-between items-baseline">
-                            <span className="text-sm text-[#1A1A1A]">As Founding Partner</span>
-                            <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>
+                            <span className="text-sm" style={{ color: 'rgba(244,241,234,0.8)' }}>As Founding Partner</span>
+                            <span className="font-display font-bold" style={{ fontSize: '22px', color: '#7EC8A4' }}>
                               {fmt(savingsAsFounding)}
                             </span>
                           </div>
                           <div className="flex justify-between items-baseline">
-                            <span className="text-sm text-[#6B7770]">As Standard Partner</span>
-                            <span className="font-semibold text-[#1A1A1A]">{fmt(savingsAsStandard)}</span>
+                            <span className="text-sm" style={{ color: 'rgba(244,241,234,0.5)' }}>As Standard Partner</span>
+                            <span className="font-semibold" style={{ color: 'rgba(244,241,234,0.65)' }}>{fmt(savingsAsStandard)}</span>
                           </div>
-                          <p className="text-xs text-[#9DAA9F]">
+                          <p className="text-xs" style={{ color: 'rgba(244,241,234,0.4)' }}>
                             Even at standard pricing, you save {fmt(savingsAsStandard)}/year.
                           </p>
                         </div>
