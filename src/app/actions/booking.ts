@@ -118,18 +118,10 @@ export async function confirmBooking({
     })
     .eq('id', teeTimeId)
 
-  // Award points
-  if (pointsEarned > 0) {
-    await supabase.from('fairway_points').insert({
-      user_id: userId,
-      course_id: teeTime.course_id,
-      booking_id: booking.id,
-      amount: pointsEarned,
-      reason: `Booking at ${tier} rate (${MULTIPLIER[tier] ?? 1}x)`,
-    })
-  }
+  // Points are awarded at round completion, not at booking time.
+  // points_awarded on the booking row records what will be earned.
 
-  // Deduct redeemed points
+  // Deduct redeemed points immediately — member already paid less
   if (pointsRedeemed > 0) {
     await supabase.from('fairway_points').insert({
       user_id: userId,
@@ -203,13 +195,20 @@ export async function cancelBooking(bookingId: string) {
     }).eq('id', booking.tee_time_id)
   }
 
-  // Reverse points awarded
-  if (booking.points_awarded > 0) {
+  // Restore any points the member redeemed at booking (negative rows for this booking)
+  const { data: redeemedRows } = await supabase
+    .from('fairway_points')
+    .select('amount')
+    .eq('booking_id', bookingId)
+    .lt('amount', 0)
+
+  const totalRedeemed = (redeemedRows ?? []).reduce((sum, r) => sum + r.amount, 0)
+  if (totalRedeemed < 0) {
     await supabase.from('fairway_points').insert({
       user_id: user.id,
       booking_id: bookingId,
-      amount: -booking.points_awarded,
-      reason: 'Booking canceled — points reversed',
+      amount: -totalRedeemed,
+      reason: 'Booking canceled — redeemed points restored',
     })
   }
 
