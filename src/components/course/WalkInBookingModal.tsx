@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { createWalkInBooking } from '@/app/actions/teeTime'
+import { createWalkInBooking, sendWalkInEmail } from '@/app/actions/teeTime'
 
 type PaymentMode = 'group' | 'split'
 type PaymentMethod = 'cash' | 'card' | 'unpaid'
@@ -17,6 +17,7 @@ interface Props {
   availablePlayers: number
   basePrice: number
   scheduledAt: string
+  courseName: string
   onClose: () => void
   onSuccess: () => void
 }
@@ -26,6 +27,7 @@ export function WalkInBookingModal({
   availablePlayers,
   basePrice,
   scheduledAt,
+  courseName,
   onClose,
   onSuccess,
 }: Props) {
@@ -35,6 +37,7 @@ export function WalkInBookingModal({
   // Group mode fields
   const [groupName, setGroupName] = useState('')
   const [groupPhone, setGroupPhone] = useState('')
+  const [groupEmail, setGroupEmail] = useState('')
   const [playerCount, setPlayerCount] = useState(1)
   const [groupAmount, setGroupAmount] = useState(basePrice.toFixed(2))
 
@@ -86,16 +89,35 @@ export function WalkInBookingModal({
         return
       }
       startTransition(async () => {
+        const trimmedName = groupName.trim()
+        const trimmedPhone = groupPhone.trim()
+        const trimmedEmail = groupEmail.trim()
+        const parsedAmount = parseFloat(groupAmount) || 0
         const result = await createWalkInBooking({
           teeTimeId,
-          guestName: groupName.trim(),
-          guestPhone: groupPhone.trim(),
+          guestName: trimmedName,
+          guestPhone: trimmedPhone,
+          guestEmail: trimmedEmail || undefined,
           players: playerCount,
-          totalPaid: parseFloat(groupAmount) || 0,
+          totalPaid: parsedAmount,
           paymentMethod,
         })
-        if (result?.error) setError(result.error)
-        else onSuccess()
+        if (result?.error) {
+          setError(result.error)
+          return
+        }
+        if (trimmedEmail && trimmedEmail.includes('@')) {
+          sendWalkInEmail({
+            guestName: trimmedName,
+            guestEmail: trimmedEmail,
+            courseName,
+            teeTimeIso: scheduledAt,
+            players: playerCount,
+            totalPaid: parsedAmount,
+            paymentMethod,
+          }).catch(err => console.warn('[WalkInBookingModal] email send failed', err))
+        }
+        onSuccess()
       })
     } else {
       const missing = golfers.findIndex(g => !g.name.trim())
@@ -201,6 +223,18 @@ export function WalkInBookingModal({
                     className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4332]"
                   />
                 </div>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-[#6B7770] block mb-1">
+                  Email <span className="text-[#9DAA9F] font-normal">(sends confirmation)</span>
+                </label>
+                <input
+                  type="email"
+                  value={groupEmail}
+                  onChange={e => setGroupEmail(e.target.value)}
+                  placeholder="Optional"
+                  className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4332]"
+                />
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div>

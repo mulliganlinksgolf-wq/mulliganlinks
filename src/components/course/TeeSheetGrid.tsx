@@ -7,6 +7,7 @@ import { WalkInBookingModal } from './WalkInBookingModal'
 import { EditBookingModal } from './EditBookingModal'
 import { WaiveFeeModal } from './WaiveFeeModal'
 import { IssueRainCheckModal } from './IssueRainCheckModal'
+import { SendConfirmationPopover } from './SendConfirmationPopover'
 
 interface Booking {
   id: string
@@ -18,6 +19,7 @@ interface Booking {
   user_id?: string | null
   guest_name: string | null
   guest_phone?: string | null
+  guest_email?: string | null
   payment_method?: string | null
   profiles: { full_name: string } | null
 }
@@ -37,7 +39,7 @@ interface EditTarget {
   teeTime: TeeTime
 }
 
-export function TeeSheetGrid({ teeTimes, slug, courseId }: { teeTimes: TeeTime[]; slug: string; courseId: string }) {
+export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTimes: TeeTime[]; slug: string; courseId: string; courseName: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
@@ -172,6 +174,13 @@ export function TeeSheetGrid({ teeTimes, slug, courseId }: { teeTimes: TeeTime[]
                               Edit
                             </button>
                           )}
+                          {b.status === 'confirmed' && b.user_id === null && (
+                            <SendConfirmationPopover
+                              bookingId={b.id}
+                              guestName={getDisplayName(b)}
+                              initialEmail={b.guest_email ?? undefined}
+                            />
+                          )}
                           {(b.status === 'completed' || b.status === 'no_show') &&
                             b.payment_status !== 'waived' &&
                             b.payment_status !== 'refunded' && (
@@ -254,6 +263,7 @@ export function TeeSheetGrid({ teeTimes, slug, courseId }: { teeTimes: TeeTime[]
           availablePlayers={bookingTeeTime.available_players}
           basePrice={bookingTeeTime.base_price}
           scheduledAt={bookingTeeTime.scheduled_at}
+          courseName={courseName}
           onClose={() => setBookingTeeTime(null)}
           onSuccess={() => {
             setBookingTeeTime(null)
