@@ -33,11 +33,17 @@ describe('AdminSidebar', () => {
     expect(screen.getByRole('link', { name: /Communications/i })).toHaveAttribute('href', '/admin/communications')
     expect(screen.getByRole('link', { name: /Configuration/i })).toHaveAttribute('href', '/admin/config')
     expect(screen.getByRole('link', { name: /Audit Log/i })).toHaveAttribute('href', '/admin/audit')
+    expect(screen.getByRole('link', { name: /Disputes/i })).toHaveAttribute('href', '/admin/disputes')
+    expect(screen.getByRole('link', { name: /Content/i })).toHaveAttribute('href', '/admin/content')
+    expect(screen.getByRole('link', { name: /Courses/i })).toHaveAttribute('href', '/admin/courses')
+    expect(screen.getByRole('link', { name: /Waitlist/i })).toHaveAttribute('href', '/admin/waitlist')
   })
 
   it('shows dispute badge when openDisputeCount > 0', () => {
     render(<AdminSidebar userEmail="neil@example.com" openDisputeCount={3} />)
-    expect(screen.getByText('3')).toBeInTheDocument()
+    const badge = screen.getByTestId('dispute-badge')
+    expect(badge).toBeInTheDocument()
+    expect(badge).toHaveTextContent('3')
   })
 
   it('does not show dispute badge when openDisputeCount is 0', () => {
