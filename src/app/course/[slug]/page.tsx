@@ -41,7 +41,7 @@ export default async function TeeSheetPage({
     .from('tee_times')
     .select(`
       id, scheduled_at, max_players, available_players, base_price, status,
-      bookings(id, players, total_paid, status, payment_status, points_awarded, user_id, guest_name, guest_phone, payment_method,
+      bookings(id, players, total_paid, status, payment_status, points_awarded, user_id, guest_name, guest_phone, guest_email, payment_method,
         profiles(full_name)
       )
     `)
@@ -98,7 +98,7 @@ export default async function TeeSheetPage({
           </Link>
         </div>
       ) : (
-        <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} />
+        <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} courseName={course.name} />
       )}
     </div>
   )
