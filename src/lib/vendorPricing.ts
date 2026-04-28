@@ -11,7 +11,7 @@ export const TEEAHEAD_PRICING = {
     { label: 'Standard', monthly: 349 },
     { label: '2-Year',   monthly: 339 },
     { label: '3-Year',   monthly: 329 },
-    { label: '5-Year',   monthly: 319 },
+    { label: '5-Year',   monthly: 309 },
   ],
 } as const
 
