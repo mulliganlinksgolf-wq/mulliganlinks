@@ -21,15 +21,18 @@ export function BookingForm({
   teeTime,
   tier,
   pointsBalance,
+  creditBalanceCents = 0,
   userId,
 }: {
   teeTime: TeeTime
   tier: string
   pointsBalance: number
+  creditBalanceCents?: number
   userId: string
 }) {
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
+  const [useCredits, setUseCredits] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -39,9 +42,12 @@ export function BookingForm({
   const subtotal = teeTime.base_price * players
   const discount = subtotal * (discountPct / 100)
   const afterDiscount = subtotal - discount
+  // Apply credits first (dollar for dollar), then points (100 pts = $1)
+  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, afterDiscount) : 0
+  const afterCredits = afterDiscount - creditsValue
   // 100 points = $1
-  const pointsValue = usePoints ? Math.min(pointsBalance / 100, afterDiscount) : 0
-  const total = Math.max(0, afterDiscount - pointsValue)
+  const pointsValue = usePoints ? Math.min(pointsBalance / 100, afterCredits) : 0
+  const total = Math.max(0, afterCredits - pointsValue)
   const pointsEarned = Math.floor(total * multiplier)
 
   function handleSubmit() {
@@ -54,6 +60,7 @@ export function BookingForm({
         subtotal,
         discount,
         pointsRedeemed: usePoints ? Math.round(pointsValue * 100) : 0,
+        creditsRedeemedCents: useCredits ? Math.round(creditsValue * 100) : 0,
         total,
         pointsEarned,
         tier,
@@ -104,6 +111,20 @@ export function BookingForm({
             <div className="flex justify-between text-[#1B4332]">
               <span>{discountPct}% member discount</span>
               <span>−${discount.toFixed(2)}</span>
+            </div>
+          )}
+          {creditBalanceCents > 0 && (
+            <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+              <button
+                onClick={() => setUseCredits(!useCredits)}
+                className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
+              >
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useCredits ? 'bg-[#E0A800] border-[#E0A800]' : 'border-gray-300'}`}>
+                  {useCredits && <span className="text-white text-xs">✓</span>}
+                </div>
+                ${(creditBalanceCents / 100).toFixed(2)} member credit
+              </button>
+              {useCredits && <span className="text-[#E0A800] font-medium">−${creditsValue.toFixed(2)}</span>}
             </div>
           )}
           {pointsBalance > 0 && (

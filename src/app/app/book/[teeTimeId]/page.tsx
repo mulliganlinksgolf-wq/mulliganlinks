@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 import { BookingPaymentForm } from '@/components/BookingPaymentForm'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getAndIssueMemberCredits } from '@/app/actions/booking'
 
 export default async function BookPage({
   params,
@@ -36,10 +37,10 @@ export default async function BookPage({
   const course = teeTime.courses as any
   const stripeEnabled = course?.stripe_charges_enabled === true
 
-  const { data: pointsRows } = await supabase
-    .from('fairway_points')
-    .select('amount')
-    .eq('user_id', user.id)
+  const [{ data: pointsRows }, creditBalanceCents] = await Promise.all([
+    supabase.from('fairway_points').select('amount').eq('user_id', user.id),
+    getAndIssueMemberCredits(user.id, tier),
+  ])
 
   const pointsBalance = pointsRows?.reduce((s, r) => s + r.amount, 0) ?? 0
 
@@ -67,6 +68,7 @@ export default async function BookPage({
           teeTime={teeTime as any}
           tier={tier}
           pointsBalance={pointsBalance}
+          creditBalanceCents={creditBalanceCents}
           userId={user.id}
         />
       )}

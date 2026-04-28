@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent } from '@/components/ui/card'
+import { getAndIssueMemberCredits } from '@/app/actions/booking'
 
 export default async function PointsPage() {
   const supabase = await createClient()
@@ -15,11 +16,14 @@ export default async function PointsPage() {
   const tier = membership?.tier ?? 'free'
   const multiplier = tier === 'ace' ? 3 : tier === 'eagle' ? 2 : 1
 
-  const { data: transactions } = await supabase
-    .from('fairway_points')
-    .select('id, amount, reason, created_at, courses(name)')
-    .eq('user_id', user!.id)
-    .order('created_at', { ascending: false })
+  const [{ data: transactions }, creditBalanceCents] = await Promise.all([
+    supabase
+      .from('fairway_points')
+      .select('id, amount, reason, created_at, courses(name)')
+      .eq('user_id', user!.id)
+      .order('created_at', { ascending: false }),
+    getAndIssueMemberCredits(user!.id, tier),
+  ])
 
   const balance = transactions?.reduce((s, t) => s + t.amount, 0) ?? 0
 
@@ -30,27 +34,37 @@ export default async function PointsPage() {
         <p className="text-[#6B7770] mt-1">Earn points on every round. Redeem at checkout.</p>
       </div>
 
-      {/* Balance card */}
+      {/* Balance cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="bg-[#1B4332] border-0 shadow-sm sm:col-span-1">
           <CardContent className="pt-6 pb-6">
-            <p className="text-[#FAF7F2]/70 text-sm">Your balance</p>
+            <p className="text-[#FAF7F2]/70 text-sm">Points balance</p>
             <p className="text-4xl font-bold text-[#FAF7F2] mt-1">{balance.toLocaleString()}</p>
             <p className="text-[#FAF7F2]/70 text-sm mt-1">${(balance / 100).toFixed(2)} value</p>
           </CardContent>
         </Card>
+        {creditBalanceCents > 0 ? (
+          <Card className="bg-[#E0A800]/10 border-0 shadow-sm ring-1 ring-[#E0A800]/40">
+            <CardContent className="pt-6 pb-6">
+              <p className="text-[#6B7770] text-sm">Member credit</p>
+              <p className="text-3xl font-bold text-[#1A1A1A] mt-1">${(creditBalanceCents / 100).toFixed(2)}</p>
+              <p className="text-[#6B7770] text-sm mt-1">Apply at checkout</p>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="bg-white border-0 shadow-sm">
+            <CardContent className="pt-6 pb-6">
+              <p className="text-[#6B7770] text-sm">Earn rate</p>
+              <p className="text-3xl font-bold text-[#1A1A1A] mt-1">{multiplier}x</p>
+              <p className="text-[#6B7770] text-sm mt-1">pts per dollar</p>
+            </CardContent>
+          </Card>
+        )}
         <Card className="bg-white border-0 shadow-sm">
           <CardContent className="pt-6 pb-6">
             <p className="text-[#6B7770] text-sm">Earn rate</p>
             <p className="text-3xl font-bold text-[#1A1A1A] mt-1">{multiplier}x</p>
             <p className="text-[#6B7770] text-sm mt-1">pts per dollar</p>
-          </CardContent>
-        </Card>
-        <Card className="bg-white border-0 shadow-sm">
-          <CardContent className="pt-6 pb-6">
-            <p className="text-[#6B7770] text-sm">Redemption rate</p>
-            <p className="text-3xl font-bold text-[#1A1A1A] mt-1">100</p>
-            <p className="text-[#6B7770] text-sm mt-1">pts = $1.00</p>
           </CardContent>
         </Card>
       </div>

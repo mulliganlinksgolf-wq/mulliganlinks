@@ -5,6 +5,45 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
 import { platformFeeCents } from '@/lib/stripe/fees'
 
+const MONTHLY_CREDIT_CENTS: Record<string, number> = { eagle: 1500, ace: 2500 }
+
+/**
+ * Issues this month's tee-time credit if it hasn't been issued yet,
+ * then returns the total available credit balance in cents.
+ * Safe to call on every page load — the unique index prevents duplicates.
+ */
+export async function getAndIssueMemberCredits(userId: string, tier: string): Promise<number> {
+  const amountCents = MONTHLY_CREDIT_CENTS[tier] ?? 0
+  const admin = createAdminClient()
+
+  if (amountCents > 0) {
+    const period = new Date().toISOString().slice(0, 7) // 'YYYY-MM'
+    const expiresAt = new Date()
+    expiresAt.setMonth(expiresAt.getMonth() + 2)
+    // ignoreDuplicates: true + unique index → no error on re-run
+    await admin.from('member_credits').upsert(
+      {
+        user_id: userId,
+        type: 'monthly',
+        amount_cents: amountCents,
+        period,
+        status: 'available',
+        expires_at: expiresAt.toISOString(),
+      },
+      { onConflict: 'user_id,type,period', ignoreDuplicates: true },
+    )
+  }
+
+  const { data: credits } = await admin
+    .from('member_credits')
+    .select('amount_cents')
+    .eq('user_id', userId)
+    .eq('status', 'available')
+    .gt('expires_at', new Date().toISOString())
+
+  return credits?.reduce((s, c) => s + c.amount_cents, 0) ?? 0
+}
+
 export async function createPendingBooking({
   teeTimeId,
   players,
@@ -63,6 +102,7 @@ export async function confirmBooking({
   subtotal,
   discount,
   pointsRedeemed,
+  creditsRedeemedCents,
   total,
   pointsEarned,
   tier,
@@ -73,6 +113,7 @@ export async function confirmBooking({
   subtotal: number
   discount: number
   pointsRedeemed: number
+  creditsRedeemedCents?: number
   total: number
   pointsEarned: number
   tier: string
@@ -130,6 +171,28 @@ export async function confirmBooking({
       amount: -pointsRedeemed,
       reason: 'Points redeemed at booking',
     })
+  }
+
+  // Mark member credits as used (oldest first, up to creditsRedeemedCents)
+  if (creditsRedeemedCents && creditsRedeemedCents > 0) {
+    const adminClient2 = createAdminClient()
+    const { data: availableCredits } = await adminClient2
+      .from('member_credits')
+      .select('id, amount_cents')
+      .eq('user_id', userId)
+      .eq('status', 'available')
+      .gt('expires_at', new Date().toISOString())
+      .order('created_at')
+
+    let remaining = creditsRedeemedCents
+    for (const credit of availableCredits ?? []) {
+      if (remaining <= 0) break
+      remaining -= credit.amount_cents
+      await adminClient2
+        .from('member_credits')
+        .update({ status: 'used', redeemed_booking_id: booking.id })
+        .eq('id', credit.id)
+    }
   }
 
   // Fire-and-forget emails — never block booking confirmation
