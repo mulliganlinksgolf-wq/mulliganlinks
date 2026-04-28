@@ -103,6 +103,7 @@ export async function confirmBooking({
   discount,
   pointsRedeemed,
   creditsRedeemedCents,
+  rainCheckId,
   total,
   pointsEarned,
   tier,
@@ -114,6 +115,7 @@ export async function confirmBooking({
   discount: number
   pointsRedeemed: number
   creditsRedeemedCents?: number
+  rainCheckId?: string
   total: number
   pointsEarned: number
   tier: string
@@ -193,6 +195,16 @@ export async function confirmBooking({
         .update({ status: 'used', redeemed_booking_id: booking.id })
         .eq('id', credit.id)
     }
+  }
+
+  // Redeem rain check if provided
+  if (rainCheckId) {
+    const adminRc = createAdminClient()
+    await adminRc
+      .from('rain_checks')
+      .update({ status: 'redeemed', redeemed_booking_id: booking.id })
+      .eq('id', rainCheckId)
+      .eq('status', 'available')
   }
 
   // Fire-and-forget emails — never block booking confirmation

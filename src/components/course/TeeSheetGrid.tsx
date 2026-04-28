@@ -6,6 +6,7 @@ import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
 import { WalkInBookingModal } from './WalkInBookingModal'
 import { EditBookingModal } from './EditBookingModal'
 import { WaiveFeeModal } from './WaiveFeeModal'
+import { IssueRainCheckModal } from './IssueRainCheckModal'
 
 interface Booking {
   id: string
@@ -14,6 +15,7 @@ interface Booking {
   status: string
   payment_status?: string | null
   points_awarded?: number
+  user_id?: string | null
   guest_name: string | null
   guest_phone?: string | null
   payment_method?: string | null
@@ -35,11 +37,12 @@ interface EditTarget {
   teeTime: TeeTime
 }
 
-export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: string }) {
+export function TeeSheetGrid({ teeTimes, slug, courseId }: { teeTimes: TeeTime[]; slug: string; courseId: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
   const [waiveTarget, setWaiveTarget] = useState<Booking | null>(null)
+  const [rainCheckTarget, setRainCheckTarget] = useState<Booking | null>(null)
   const [, startTransition] = useTransition()
   const router = useRouter()
 
@@ -179,6 +182,14 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                                 Waive fee
                               </button>
                             )}
+                          {(b.status === 'completed' || b.status === 'no_show') && b.user_id && (
+                            <button
+                              onClick={() => setRainCheckTarget(b)}
+                              className="text-xs px-2 py-0.5 border border-blue-300 rounded hover:bg-blue-50 text-blue-700"
+                            >
+                              Rain check
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))
@@ -277,6 +288,16 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
             setWaiveTarget(null)
             router.refresh()
           }}
+        />
+      )}
+
+      {rainCheckTarget && rainCheckTarget.user_id && (
+        <IssueRainCheckModal
+          memberId={rainCheckTarget.user_id}
+          memberName={getDisplayName(rainCheckTarget)}
+          courseId={courseId}
+          suggestedAmountCents={Math.round(rainCheckTarget.total_paid * 100)}
+          onClose={() => setRainCheckTarget(null)}
         />
       )}
     </>

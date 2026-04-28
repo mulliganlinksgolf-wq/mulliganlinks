@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { confirmBooking } from '@/app/actions/booking'
+import { lookupRainCheck } from '@/app/actions/rainCheck'
 
 interface TeeTime {
   id: string
@@ -33,6 +34,9 @@ export function BookingForm({
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
+  const [rainCheckCode, setRainCheckCode] = useState('')
+  const [rainCheck, setRainCheck] = useState<{ id: string; amountCents: number } | null>(null)
+  const [rainCheckError, setRainCheckError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -42,12 +46,14 @@ export function BookingForm({
   const subtotal = teeTime.base_price * players
   const discount = subtotal * (discountPct / 100)
   const afterDiscount = subtotal - discount
-  // Apply credits first (dollar for dollar), then points (100 pts = $1)
+  // Apply in order: credits → rain check → points
   const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, afterDiscount) : 0
   const afterCredits = afterDiscount - creditsValue
+  const rainCheckValue = rainCheck ? Math.min(rainCheck.amountCents / 100, afterCredits) : 0
+  const afterRainCheck = afterCredits - rainCheckValue
   // 100 points = $1
-  const pointsValue = usePoints ? Math.min(pointsBalance / 100, afterCredits) : 0
-  const total = Math.max(0, afterCredits - pointsValue)
+  const pointsValue = usePoints ? Math.min(pointsBalance / 100, afterRainCheck) : 0
+  const total = Math.max(0, afterRainCheck - pointsValue)
   const pointsEarned = Math.floor(total * multiplier)
 
   function handleSubmit() {
@@ -61,6 +67,7 @@ export function BookingForm({
         discount,
         pointsRedeemed: usePoints ? Math.round(pointsValue * 100) : 0,
         creditsRedeemedCents: useCredits ? Math.round(creditsValue * 100) : 0,
+        rainCheckId: rainCheck?.id,
         total,
         pointsEarned,
         tier,
@@ -127,6 +134,51 @@ export function BookingForm({
               {useCredits && <span className="text-[#E0A800] font-medium">−${creditsValue.toFixed(2)}</span>}
             </div>
           )}
+          {/* Rain check input */}
+          <div className="pt-1 border-t border-gray-100 space-y-1.5">
+            {rainCheck ? (
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-blue-700 font-medium">
+                  Rain check {rainCheckCode.toUpperCase()} applied
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-blue-700">−${rainCheckValue.toFixed(2)}</span>
+                  <button onClick={() => { setRainCheck(null); setRainCheckCode(''); setRainCheckError(null) }} className="text-xs text-[#6B7770] underline">Remove</button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={rainCheckCode}
+                  onChange={e => { setRainCheckCode(e.target.value.toUpperCase()); setRainCheckError(null) }}
+                  placeholder="Rain check code"
+                  maxLength={8}
+                  className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30 uppercase tracking-widest font-mono"
+                />
+                <button
+                  onClick={() => {
+                    if (!rainCheckCode.trim()) return
+                    startTransition(async () => {
+                      const result = await lookupRainCheck(rainCheckCode)
+                      if (result.error) {
+                        setRainCheckError(result.error)
+                      } else {
+                        setRainCheck({ id: result.id!, amountCents: result.amountCents! })
+                        setRainCheckError(null)
+                      }
+                    })
+                  }}
+                  disabled={!rainCheckCode.trim() || isPending}
+                  className="px-3 py-2 text-sm font-medium bg-[#1B4332] text-[#FAF7F2] rounded-lg hover:bg-[#1B4332]/90 disabled:opacity-40"
+                >
+                  Apply
+                </button>
+              </div>
+            )}
+            {rainCheckError && <p className="text-xs text-red-600">{rainCheckError}</p>}
+          </div>
+
           {pointsBalance > 0 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
               <button
