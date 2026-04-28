@@ -304,7 +304,21 @@ details     jsonb -- before/after values, amounts, reasons, etc.
 
 ---
 
-## 11. Key Constraints
+## 11. Testing Requirements
+
+Every feature must be tested as it is built — not after. The project uses Vitest (unit/integration) and Playwright (E2E).
+
+- **Server actions and API routes**: Vitest unit tests covering the happy path, error cases, and any Stripe interactions (mocked via `vi.mock`).
+- **Admin UI pages**: Playwright E2E tests covering the key user flows — e.g., cancel + refund a member, edit a content block, toggle a feature flag, view a dispute.
+- **Database migrations**: Each new migration must be tested against a local Supabase instance before merging.
+- **Audit log**: Every new admin action type must have a test asserting that a log entry is written with the correct `event_type` and `details`.
+- **Feature flags**: Tests must assert that toggling a flag (e.g., disabling bookings) actually blocks the relevant action site-wide.
+
+No feature is considered done until its tests pass.
+
+---
+
+## 12. Key Constraints
 
 - All admin routes are protected by the existing admin auth check in `/src/app/admin/layout.tsx` (email allowlist + `profiles.is_admin` flag). No changes needed to the auth model.
 - Content block changes must call `revalidatePath` to bust Next.js cache and reflect on the live site immediately.
