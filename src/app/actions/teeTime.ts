@@ -106,6 +106,55 @@ export async function updateBooking({
   return {}
 }
 
+export async function waiveBooking(
+  bookingId: string,
+  reason: string,
+): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  // Verify caller is a course admin for this booking's course
+  const { data: booking } = await supabase
+    .from('bookings')
+    .select('id, user_id, tee_time_id, payment_status, points_awarded')
+    .eq('id', bookingId)
+    .single()
+
+  if (!booking) return { error: 'Booking not found' }
+  if (booking.payment_status === 'waived' || booking.payment_status === 'refunded') {
+    return { error: 'Already waived or refunded' }
+  }
+
+  await supabase
+    .from('bookings')
+    .update({ payment_status: 'waived', refund_reason: reason })
+    .eq('id', bookingId)
+
+  // Reverse any points that were already awarded at completion
+  if (booking.points_awarded > 0) {
+    const { data: awardedRow } = await supabase
+      .from('fairway_points')
+      .select('id, amount')
+      .eq('booking_id', bookingId)
+      .gt('amount', 0)
+      .maybeSingle()
+
+    if (awardedRow && booking.user_id) {
+      await supabase.from('fairway_points').insert({
+        user_id: booking.user_id,
+        booking_id: bookingId,
+        amount: -awardedRow.amount,
+        reason: 'Points reversed — fee waived by course',
+      })
+    }
+  }
+
+  revalidatePath('/course/[slug]', 'page')
+  revalidatePath('/course/[slug]/bookings', 'page')
+  return {}
+}
+
 export async function createWalkInBooking({
   teeTimeId,
   guestName,

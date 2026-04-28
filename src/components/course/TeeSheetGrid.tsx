@@ -5,12 +5,15 @@ import { useRouter } from 'next/navigation'
 import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
 import { WalkInBookingModal } from './WalkInBookingModal'
 import { EditBookingModal } from './EditBookingModal'
+import { WaiveFeeModal } from './WaiveFeeModal'
 
 interface Booking {
   id: string
   players: number
   total_paid: number
   status: string
+  payment_status?: string | null
+  points_awarded?: number
   guest_name: string | null
   guest_phone?: string | null
   payment_method?: string | null
@@ -36,6 +39,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
   const [expanded, setExpanded] = useState<string | null>(null)
   const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
+  const [waiveTarget, setWaiveTarget] = useState<Booking | null>(null)
   const [, startTransition] = useTransition()
   const router = useRouter()
 
@@ -165,6 +169,16 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                               Edit
                             </button>
                           )}
+                          {(b.status === 'completed' || b.status === 'no_show') &&
+                            b.payment_status !== 'waived' &&
+                            b.payment_status !== 'refunded' && (
+                              <button
+                                onClick={() => setWaiveTarget(b)}
+                                className="text-xs px-2 py-0.5 border border-orange-300 rounded hover:bg-orange-50 text-orange-700"
+                              >
+                                Waive fee
+                              </button>
+                            )}
                         </div>
                       </div>
                     ))
@@ -248,6 +262,19 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
           onClose={() => setEditTarget(null)}
           onSuccess={() => {
             setEditTarget(null)
+            router.refresh()
+          }}
+        />
+      )}
+
+      {waiveTarget && (
+        <WaiveFeeModal
+          bookingId={waiveTarget.id}
+          guestName={getDisplayName(waiveTarget)}
+          totalPaid={waiveTarget.total_paid}
+          onClose={() => setWaiveTarget(null)}
+          onSuccess={() => {
+            setWaiveTarget(null)
             router.refresh()
           }}
         />

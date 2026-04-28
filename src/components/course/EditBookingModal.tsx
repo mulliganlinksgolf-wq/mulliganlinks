@@ -10,9 +10,9 @@ interface Props {
     id: string
     players: number
     total_paid: number
-    payment_method: string | null
+    payment_method?: string | null
     guest_name: string | null
-    guest_phone: string | null
+    guest_phone?: string | null
   }
   isWalkIn: boolean
   maxSelectablePlayers: number // available_players + current booking.players
