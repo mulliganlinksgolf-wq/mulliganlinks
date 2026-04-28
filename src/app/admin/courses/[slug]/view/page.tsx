@@ -100,7 +100,7 @@ export default async function ViewAsCoursePage({
             <p className="text-[#6B7770]">No tee times for this date.</p>
           </div>
         ) : (
-          <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} />
+          <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} courseName={course.name} />
         )}
       </div>
 
