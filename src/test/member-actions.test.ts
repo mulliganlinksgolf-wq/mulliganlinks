@@ -6,6 +6,36 @@ const mockSelect = vi.fn()
 const mockUpdate = vi.fn()
 const mockEq = vi.fn()
 
+const mockStripeSubscriptionsUpdate = vi.fn().mockResolvedValue({})
+const mockStripeSubscriptionsRetrieve = vi.fn().mockResolvedValue({
+  latest_invoice: {
+    payment_intent: {
+      amount_received: 15900,
+      latest_charge: 'ch_abc123',
+    },
+  },
+  current_period_start: Math.floor(Date.now() / 1000) - 86400 * 15,
+  current_period_end: Math.floor(Date.now() / 1000) + 86400 * 16,
+})
+const mockStripeSubscriptionsCancel = vi.fn().mockResolvedValue({})
+const mockStripeRefundsCreate = vi.fn().mockResolvedValue({})
+
+vi.mock('stripe', () => {
+  function StripeMock() {
+    return {
+      subscriptions: {
+        update: mockStripeSubscriptionsUpdate,
+        retrieve: mockStripeSubscriptionsRetrieve,
+        cancel: mockStripeSubscriptionsCancel,
+      },
+      refunds: {
+        create: mockStripeRefundsCreate,
+      },
+    }
+  }
+  return { default: StripeMock }
+})
+
 // chainable object — every method returns the chain itself so callers can keep chaining.
 // The chain is also thenable so `await chain` resolves to { error: null }.
 const mockChain: any = {
@@ -50,7 +80,7 @@ vi.mock('@/lib/audit', () => ({
 
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
 
-import { saveProfile, addNote, editTier } from '@/app/admin/users/[userId]/actions'
+import { saveProfile, addNote, editTier, cancelMembership } from '@/app/admin/users/[userId]/actions'
 import { writeAuditLog } from '@/lib/audit'
 
 describe('saveProfile', () => {
@@ -132,5 +162,58 @@ describe('editTier', () => {
     expect(writeAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({ eventType: 'tier_changed', targetType: 'member' })
     )
+  })
+
+  it('inserts membership when none exists and writes audit log', async () => {
+    mockSingle.mockResolvedValue({ data: null, error: null })
+    mockInsert.mockResolvedValue({ error: null })
+
+    const result = await editTier('user-2', 'fairway', '')
+    expect(result.success).toBe(true)
+    expect(writeAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({ eventType: 'tier_changed', targetType: 'member' })
+    )
+  })
+})
+
+describe('cancelMembership', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    // Re-establish mock chain after clearAllMocks
+    mockAdminFrom.mockReturnValue(mockChain)
+    mockAdminClient.auth.admin.updateUserById.mockResolvedValue({ error: null })
+    resetChain()
+    mockSingle.mockResolvedValue({ data: { stripe_subscription_id: 'sub_abc', stripe_customer_id: 'cus_abc', current_period_end: '2026-05-01', tier: 'eagle' }, error: null })
+    mockUpdate.mockReturnValue(mockChain)
+    mockEq.mockReturnValue(mockChain)
+    mockSelect.mockReturnValue(mockChain)
+    mockStripeSubscriptionsUpdate.mockResolvedValue({})
+    mockStripeSubscriptionsCancel.mockResolvedValue({})
+    mockStripeRefundsCreate.mockResolvedValue({})
+  })
+
+  it('period_end: calls Stripe update and sets cancel_at_period_end=true', async () => {
+    const result = await cancelMembership('user-1', 'period_end')
+    expect(result.success).toBe(true)
+    expect(mockStripeSubscriptionsUpdate).toHaveBeenCalledWith('sub_abc', { cancel_at_period_end: true })
+    expect(writeAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({ eventType: 'membership_cancelled' })
+    )
+  })
+
+  it('now: cancels subscription and issues refund', async () => {
+    const result = await cancelMembership('user-1', 'now')
+    expect(result.success).toBe(true)
+    expect(mockStripeSubscriptionsCancel).toHaveBeenCalledWith('sub_abc')
+    expect(mockStripeRefundsCreate).toHaveBeenCalled()
+    expect(writeAuditLog).toHaveBeenCalledWith(
+      expect.objectContaining({ eventType: 'membership_cancelled' })
+    )
+  })
+
+  it('returns error when no stripe_subscription_id', async () => {
+    mockSingle.mockResolvedValue({ data: { stripe_subscription_id: null, tier: 'eagle' }, error: null })
+    const result = await cancelMembership('user-1', 'now')
+    expect(result.error).toBeTruthy()
   })
 })

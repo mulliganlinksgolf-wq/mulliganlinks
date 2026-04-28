@@ -217,6 +217,9 @@ export async function cancelMembership(
         targetId: userId,
         details: { mode: 'period_end', tier: membership.tier, by: user.email },
       })
+      revalidatePath(`/admin/users/${userId}`)
+      revalidatePath('/admin/users')
+      return { success: true }
     } else {
       const sub = await stripe.subscriptions.retrieve(membership.stripe_subscription_id, {
         expand: ['latest_invoice.payment_intent'],
@@ -262,10 +265,6 @@ export async function cancelMembership(
       revalidatePath('/admin/users')
       return { success: true, refundAmount: refundCents }
     }
-
-    revalidatePath(`/admin/users/${userId}`)
-    revalidatePath('/admin/users')
-    return { success: true }
   } catch (e: any) {
     return { error: e.message ?? 'Something went wrong.' }
   }
