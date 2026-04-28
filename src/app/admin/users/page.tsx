@@ -1,4 +1,5 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CreateMemberModal } from '@/components/admin/CreateMemberModal'
@@ -85,6 +86,12 @@ export default async function AdminUsersPage({
     fairway: 'bg-[#FAF7F2] text-[#1A1A1A] ring-1 ring-black/10',
   }
 
+  const statusColor: Record<string, string> = {
+    active: 'bg-emerald-50 text-emerald-700',
+    canceled: 'bg-red-50 text-red-700',
+    past_due: 'bg-amber-50 text-amber-700',
+  }
+
   return (
     <div className="space-y-12">
       <div className="flex items-center justify-between">
@@ -111,6 +118,8 @@ export default async function AdminUsersPage({
                   <th className="text-left px-5 py-3 font-medium">Name</th>
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-5 py-3 font-medium">Tier</th>
+                  <th className="text-left px-5 py-3 font-medium">Status</th>
+                  <th className="text-left px-5 py-3 font-medium">Founding</th>
                   <th className="text-left px-5 py-3 font-medium">Joined</th>
                   <th className="text-left px-4 py-3 font-medium">Actions</th>
                 </tr>
@@ -119,12 +128,15 @@ export default async function AdminUsersPage({
                 {members.length > 0 ? members.map((m: any) => {
                   const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
                   const tier = membership?.tier ?? 'fairway'
+                  const memberStatus = membership?.status ?? 'active'
                   const isSelf = m.id === me?.id
                   return (
                     <tr key={m.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
                       <td className="px-5 py-3 font-medium text-[#1A1A1A]">
                         <div className="flex items-center gap-2">
-                          {m.full_name || '—'}
+                          <Link href={'/admin/users/' + m.id} className="hover:underline">
+                            {m.full_name || '—'}
+                          </Link>
                           {m.is_admin && !isSelf && (
                             <span className="text-[10px] font-semibold uppercase tracking-wide text-[#1B4332] bg-[#1B4332]/10 rounded px-1.5 py-0.5">admin</span>
                           )}
@@ -135,6 +147,14 @@ export default async function AdminUsersPage({
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${tierColor[tier] ?? tierColor.fairway}`}>
                           {tier}
                         </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${statusColor[memberStatus] ?? 'bg-gray-50 text-gray-700'}`}>
+                          {memberStatus.replace('_', ' ')}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-[#6B7770] text-xs">
+                        {membership?.is_founding_member ? '★ Founding' : '—'}
                       </td>
                       <td className="px-5 py-3 text-[#6B7770]">
                         {new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -148,7 +168,7 @@ export default async function AdminUsersPage({
                     </tr>
                   )
                 }) : (
-                  <tr><td colSpan={5} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
+                  <tr><td colSpan={6} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
                 )}
               </tbody>
             </table>

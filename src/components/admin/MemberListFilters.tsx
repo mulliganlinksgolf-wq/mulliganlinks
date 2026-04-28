@@ -1,10 +1,14 @@
 'use client'
-
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 
 export default function MemberListFilters() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [q, setQ] = useState(searchParams.get('q') ?? '')
+  const [tier, setTier] = useState(searchParams.get('tier') ?? '')
+  const [status, setStatus] = useState(searchParams.get('status') ?? '')
+  const [founding, setFounding] = useState(searchParams.get('founding') ?? '')
 
   function update(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString())
@@ -18,15 +22,15 @@ export default function MemberListFilters() {
       <input
         type="search"
         placeholder="Search by name or email…"
-        defaultValue={searchParams.get('q') ?? ''}
-        onChange={e => update('q', e.target.value)}
+        value={q}
+        onChange={e => { setQ(e.target.value); update('q', e.target.value) }}
         className="rounded-lg border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-[#1B4332]/30 w-64"
       />
       <label className="sr-only" htmlFor="filter-tier">Tier</label>
       <select
         id="filter-tier"
-        defaultValue={searchParams.get('tier') ?? ''}
-        onChange={e => update('tier', e.target.value)}
+        value={tier}
+        onChange={e => { setTier(e.target.value); update('tier', e.target.value) }}
         className="rounded-lg border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none"
       >
         <option value="">All tiers</option>
@@ -37,8 +41,8 @@ export default function MemberListFilters() {
       <label className="sr-only" htmlFor="filter-status">Status</label>
       <select
         id="filter-status"
-        defaultValue={searchParams.get('status') ?? ''}
-        onChange={e => update('status', e.target.value)}
+        value={status}
+        onChange={e => { setStatus(e.target.value); update('status', e.target.value) }}
         className="rounded-lg border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none"
       >
         <option value="">All statuses</option>
@@ -49,8 +53,8 @@ export default function MemberListFilters() {
       <label className="sr-only" htmlFor="filter-founding">Founding</label>
       <select
         id="filter-founding"
-        defaultValue={searchParams.get('founding') ?? ''}
-        onChange={e => update('founding', e.target.value)}
+        value={founding}
+        onChange={e => { setFounding(e.target.value); update('founding', e.target.value) }}
         className="rounded-lg border border-black/15 bg-white px-3 py-2 text-sm focus:outline-none"
       >
         <option value="">All members</option>

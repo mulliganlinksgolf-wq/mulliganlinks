@@ -35,4 +35,22 @@ describe('MemberListFilters', () => {
     fireEvent.change(input, { target: { value: 'john' } })
     expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('q=john'))
   })
+
+  it('updates URL when tier filter changes', () => {
+    render(<MemberListFilters />)
+    fireEvent.change(screen.getByRole('combobox', { name: /tier/i }), { target: { value: 'eagle' } })
+    expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('tier=eagle'))
+  })
+
+  it('updates URL when status filter changes', () => {
+    render(<MemberListFilters />)
+    fireEvent.change(screen.getByRole('combobox', { name: /status/i }), { target: { value: 'canceled' } })
+    expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('status=canceled'))
+  })
+
+  it('updates URL when founding filter changes', () => {
+    render(<MemberListFilters />)
+    fireEvent.change(screen.getByRole('combobox', { name: /founding/i }), { target: { value: 'true' } })
+    expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('founding=true'))
+  })
 })
