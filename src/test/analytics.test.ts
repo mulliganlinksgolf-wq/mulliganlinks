@@ -23,7 +23,7 @@ function makeChain(data: any) {
   return chain
 }
 
-import { computeAnalytics, getRecentSignups } from '@/lib/analytics'
+import { computeAnalytics, getRecentSignups, buildMrrHistory } from '@/lib/analytics'
 
 describe('computeAnalytics', () => {
   it('calculates MRR from active memberships', async () => {
@@ -78,5 +78,26 @@ describe('getRecentSignups', () => {
     const result = await getRecentSignups(5)
     expect(result).toHaveLength(1)
     expect(result[0].full_name).toBe('Alice')
+  })
+})
+
+describe('buildMrrHistory', () => {
+  it('returns 12 months of data', () => {
+    const result = buildMrrHistory([
+      { tier: 'ace', status: 'active', created_at: '2020-01-01' },
+    ])
+    expect(result).toHaveLength(12)
+    expect(result[0]).toHaveProperty('month')
+    expect(result[0]).toHaveProperty('mrr')
+  })
+
+  it('counts only active memberships for each month', () => {
+    const result = buildMrrHistory([
+      { tier: 'ace', status: 'active', created_at: '2020-01-01' },
+      { tier: 'eagle', status: 'canceled', created_at: '2020-01-01' },
+    ])
+    // Only ace ($159) should be counted, not canceled eagle
+    const lastMonth = result[result.length - 1]
+    expect(lastMonth.mrr).toBe(159)
   })
 })

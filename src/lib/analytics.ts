@@ -25,6 +25,7 @@ export interface RecentSignup {
 }
 
 export async function computeAnalytics(_period: string): Promise<AnalyticsResult> {
+  // reserved for future date-range filtering
   const admin = createAdminClient()
 
   const [membershipsResult, bookingsResult] = await Promise.all([
@@ -76,6 +77,7 @@ export async function getRecentSignups(limit = 10): Promise<RecentSignup[]> {
 }
 
 export function buildMrrHistory(memberships: { tier: string; status: string; created_at: string }[]): { month: string; mrr: number }[] {
+  // Note: uses current membership status, not historical — canceled memberships are excluded from all historical months.
   const months: { month: string; mrr: number }[] = []
   const now = new Date()
   for (let i = 11; i >= 0; i--) {
