@@ -18,6 +18,7 @@ export default function BookingsTab({ bookings }: { bookings: Booking[] }) {
             <th className="text-right px-4 py-2 font-medium">Green Fee</th>
             <th className="text-right px-4 py-2 font-medium">Platform Fee</th>
             <th className="text-left px-4 py-2 font-medium">Status</th>
+            <th className="text-left px-4 py-2 font-medium">Paid at</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-black/5">
@@ -31,6 +32,9 @@ export default function BookingsTab({ bookings }: { bookings: Booking[] }) {
               <td className="px-4 py-3 text-right">{b.green_fee_cents != null ? `$${(b.green_fee_cents / 100).toFixed(2)}` : '—'}</td>
               <td className="px-4 py-3 text-right">{b.platform_fee_cents != null ? `$${(b.platform_fee_cents / 100).toFixed(2)}` : '—'}</td>
               <td className="px-4 py-3 capitalize text-[#6B7770]">{b.status}</td>
+              <td className="px-4 py-3 text-[#6B7770]">
+                {b.paid_at ? new Date(b.paid_at).toLocaleDateString() : '—'}
+              </td>
             </tr>
           ))}
         </tbody>

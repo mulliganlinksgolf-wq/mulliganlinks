@@ -3,7 +3,7 @@ import { useActionState } from 'react'
 import { adjustPoints } from '@/app/admin/users/[userId]/actions'
 
 interface Point {
-  id: string; amount: number; reason: string | null; created_at: string; course_name: string | null
+  id: string; amount: number; reason: string | null; created_at: string; course_name: string | null; booking_id: string | null
 }
 
 export default function PointsTab({ userId, points }: { userId: string; points: Point[] }) {
@@ -21,6 +21,8 @@ export default function PointsTab({ userId, points }: { userId: string; points: 
           <thead className="bg-[#FAF7F2] text-[#6B7770] border-b border-black/5">
             <tr>
               <th className="text-left px-4 py-2 font-medium">Date</th>
+              <th className="text-left px-4 py-2 font-medium">Course</th>
+              <th className="text-left px-4 py-2 font-medium">Booking Ref</th>
               <th className="text-left px-4 py-2 font-medium">Reason</th>
               <th className="text-right px-4 py-2 font-medium">Points</th>
             </tr>
@@ -29,6 +31,10 @@ export default function PointsTab({ userId, points }: { userId: string; points: 
             {points.map(p => (
               <tr key={p.id}>
                 <td className="px-4 py-3 text-[#6B7770]">{new Date(p.created_at).toLocaleDateString()}</td>
+                <td className="px-4 py-3 text-[#6B7770]">{p.course_name ?? '—'}</td>
+                <td className="px-4 py-3 font-mono text-xs text-[#6B7770]">
+                  {p.booking_id ? `…${p.booking_id.slice(-6)}` : '—'}
+                </td>
                 <td className="px-4 py-3">{p.reason ?? '—'}</td>
                 <td className={`px-4 py-3 text-right font-semibold ${p.amount >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
                   {p.amount >= 0 ? '+' : ''}{p.amount}
