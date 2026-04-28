@@ -9,7 +9,7 @@ const TIER_STYLE: Record<string, string> = {
   eagle: 'bg-[#E0A800] text-[#1A1A1A]',
   fairway: 'bg-[#FAF7F2] text-[#1A1A1A] ring-1 ring-black/10',
 }
-const TIER_MULT: Record<string, number> = { ace: 3, eagle: 2, fairway: 1 }
+const TIER_MULT: Record<string, number> = { ace: 2, eagle: 1.5, fairway: 1 }
 
 type Member = {
   id: string

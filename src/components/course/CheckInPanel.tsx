@@ -4,7 +4,7 @@ import { useState, useTransition } from 'react'
 import { logRound } from '@/app/actions/checkIn'
 
 const TIER_LABEL: Record<string, string> = { ace: 'Ace', eagle: 'Eagle', fairway: 'Fairway' }
-const TIER_MULT: Record<string, number> = { ace: 3, eagle: 2, fairway: 1 }
+const TIER_MULT: Record<string, number> = { ace: 2, eagle: 1.5, fairway: 1 }
 const TIER_STYLE: Record<string, string> = {
   ace: 'bg-[#1B4332] text-[#FAF7F2]',
   eagle: 'bg-[#E0A800] text-[#1A1A1A]',

@@ -6,7 +6,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = { title: 'My Member Card' }
 
 const TIER_LABEL: Record<string, string> = { ace: 'Ace', eagle: 'Eagle', fairway: 'Fairway' }
-const TIER_MULT: Record<string, string> = { ace: '3×', eagle: '2×', fairway: '1×' }
+const TIER_MULT: Record<string, string> = { ace: '2×', eagle: '1.5×', fairway: '1×' }
 const TIER_BG: Record<string, string> = {
   ace: 'bg-[#1B4332]',
   eagle: 'bg-[#1A1A1A]',
@@ -120,9 +120,9 @@ export default async function MemberCardPage() {
       {/* Upgrade nudge for free tier */}
       {tier === 'fairway' && (
         <div className="bg-[#E0A800]/10 border border-[#E0A800]/30 rounded-xl p-5 space-y-2">
-          <p className="font-bold text-[#1A1A1A] text-sm">Earn twice as fast with Eagle</p>
+          <p className="font-bold text-[#1A1A1A] text-sm">Earn 1.5× points with Eagle</p>
           <p className="text-sm text-[#6B7770]">
-            Upgrade to Eagle for 2× Fairway Points on every round, plus $180/yr in tee time credits and priority booking.
+            Upgrade to Eagle for 1.5× Fairway Points on every round, plus $120/yr in tee time credits and priority booking.
           </p>
           <a
             href="/app/membership"

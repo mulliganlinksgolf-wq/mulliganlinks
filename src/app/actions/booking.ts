@@ -5,7 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
 import { platformFeeCents } from '@/lib/stripe/fees'
 
-const MONTHLY_CREDIT_CENTS: Record<string, number> = { eagle: 1500, ace: 2500 }
+const MONTHLY_CREDIT_CENTS: Record<string, number> = { eagle: 1000, ace: 2000 }
 
 /**
  * Issues this month's tee-time credit if it hasn't been issued yet,
@@ -231,7 +231,7 @@ export async function confirmBooking({
   return { bookingId: booking.id }
 }
 
-const MULTIPLIER: Record<string, number> = { free: 1, eagle: 2, ace: 3 }
+const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
 
 export async function cancelBooking(bookingId: string) {
   const supabase = await createClient()

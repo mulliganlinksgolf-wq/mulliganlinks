@@ -159,7 +159,7 @@ export default async function DashboardPage() {
           <CardContent className="py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
               <p className="font-bold text-lg">Upgrade to Eagle</p>
-              <p className="text-[#FAF7F2]/80 text-sm">Get $180 in credits and 2x points for $79/yr.</p>
+              <p className="text-[#FAF7F2]/80 text-sm">Get $120 in credits and 1.5× points for $79/yr.</p>
             </div>
             <Link href="/app/membership" className={buttonVariants({ variant: 'default', className: 'bg-[#E0A800] hover:bg-[#E0A800]/90 text-[#1A1A1A] font-semibold shrink-0' })}>
               Upgrade now

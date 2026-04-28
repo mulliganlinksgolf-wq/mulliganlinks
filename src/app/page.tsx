@@ -292,7 +292,7 @@ export default async function HomePage() {
                   {[
                     'Book tee times at your home course with zero fees',
                     'Earn Fairway Points on every round',
-                    'Eagle membership: $79/yr, $180 in credits — beats GolfPass+ by $40',
+                    'Eagle membership: $79/yr, $120 in credits — beats GolfPass+ by $40',
                     'Priority booking, guest passes, birthday credit',
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (

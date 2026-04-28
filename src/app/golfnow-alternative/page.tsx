@@ -231,13 +231,13 @@ export default function GolfNowAlternativePage() {
                   {[
                     { feature: 'Annual price', them: '$119/yr', us: '$79/yr' },
                     { feature: 'Savings vs GolfPass+', them: '—', us: '$40/yr' },
-                    { feature: 'Annual tee time credits', them: '$120 ($10/mo)', us: '$180 ($15/mo)' },
-                    { feature: 'Free rounds per year', them: '0', us: '2' },
+                    { feature: 'Annual tee time credits', them: '$120 ($10/mo)', us: '$120 ($10/mo)' },
+                    { feature: 'Free rounds per year', them: '0', us: '1' },
                     { feature: 'Booking fees waived', them: '12×/year only', us: 'Always, unlimited' },
-                    { feature: 'Guest passes', them: 'None', us: '12×/year' },
+                    { feature: 'Guest fee waivers', them: 'None', us: '12×/year' },
                     { feature: 'Green fee discount', them: 'None', us: '10% at partner courses' },
                     { feature: 'Birthday credit', them: 'None', us: '$25' },
-                    { feature: 'Points multiplier', them: '1× base', us: '2×' },
+                    { feature: 'Points multiplier', them: '1× base', us: '1.5×' },
                     { feature: 'Priority booking access', them: 'None', us: '48hr early access' },
                     { feature: 'Local loyalty', them: 'National chain perks', us: 'Courses you actually play' },
                   ].map((row, i) => (

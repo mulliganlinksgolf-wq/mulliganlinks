@@ -114,7 +114,7 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
   if (!booking || (booking as any).payment_status === 'succeeded') return
 
   const tier = pi.metadata?.member_tier ?? 'free'
-  const MULTIPLIER: Record<string, number> = { free: 1, eagle: 2, ace: 3, fairway: 1 }
+  const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
   const multiplier = MULTIPLIER[tier] ?? 1
   const greenFeeCents = (booking.total_charged_cents ?? 0) - (booking.platform_fee_cents ?? 0)
   const pointsEarned = Math.floor((greenFeeCents / 100) * multiplier)

@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Next.js dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "brainstorm",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", ".superpowers/brainstorm/78864-1777314490/content", "-l", "4321"],
+      "port": 4321
+    }
+  ]
+}

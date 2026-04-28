@@ -4,8 +4,8 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const TIER_MULTIPLIER: Record<string, number> = {
-  ace: 3,
-  eagle: 2,
+  ace: 2,
+  eagle: 1.5,
   fairway: 1,
 }
 

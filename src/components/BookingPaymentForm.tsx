@@ -10,7 +10,7 @@ import { platformFeeCents } from '@/lib/stripe/fees'
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 const DISCOUNT: Record<string, number> = { free: 0, fairway: 0, eagle: 10, ace: 15 }
-const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 2, ace: 3 }
+const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
 
 // Inner form rendered inside <Elements>
 function CheckoutForm({

@@ -14,7 +14,7 @@ export default async function PointsPage() {
     .single()
 
   const tier = membership?.tier ?? 'free'
-  const multiplier = tier === 'ace' ? 3 : tier === 'eagle' ? 2 : 1
+  const multiplier = tier === 'ace' ? 2 : tier === 'eagle' ? 1.5 : 1
 
   const [{ data: transactions }, creditBalanceCents] = await Promise.all([
     supabase

@@ -52,7 +52,7 @@ export function StructuredData() {
               unitCode: 'ANN',
             },
             description:
-              '$180/yr in tee time credits, 2 free rounds, always-on booking fee waiver, 10% green fee discount.',
+              '$120/yr in tee time credits, 1 free round, always-on booking fee waiver, 10% green fee discount.',
           },
           {
             '@type': 'Offer',
@@ -66,7 +66,7 @@ export function StructuredData() {
               unitCode: 'ANN',
             },
             description:
-              '$300/yr in tee time credits, 4 free rounds, unlimited guest passes, concierge booking, 15% green fee discount.',
+              '$240/yr in tee time credits, 2 free rounds, 24 guest fee waivers, concierge booking, 15% green fee discount.',
           },
         ],
       },
@@ -86,7 +86,7 @@ export function StructuredData() {
             name: 'How does TeeAhead compare to GolfPass+?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'TeeAhead Eagle membership ($79/yr) beats GolfPass+ ($119/yr) on every metric: $180/yr in tee time credits vs $120, 2 free rounds vs zero, always-on booking fee waiver vs 12 times per year, 12 guest passes vs none, 10% green fee discount vs none, and a $25 birthday credit vs none.',
+              text: 'TeeAhead Eagle membership ($79/yr) beats GolfPass+ ($119/yr) on every metric: $120/yr in tee time credits, 1 free round, always-on booking fee waiver, 12 guest fee waivers, 10% green fee discount, and a $25 birthday credit.',
             },
           },
           {
