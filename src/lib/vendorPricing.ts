@@ -4,9 +4,15 @@
 export const TEEAHEAD_PRICING = {
   foundingMonthly: 0,
   foundingAnnual: 0,
-  standardMonthly: 299,
-  standardAnnual: 3588,
+  standardMonthly: 349,
+  standardAnnual: 4188,
   foundingTotalSpots: 10,
+  commitmentTiers: [
+    { label: 'Standard', monthly: 349 },
+    { label: '2-Year',   monthly: 329 },
+    { label: '3-Year',   monthly: 309 },
+    { label: '5-Year',   monthly: 289 },
+  ],
 } as const
 
 export const VENDOR_PRICING = {
