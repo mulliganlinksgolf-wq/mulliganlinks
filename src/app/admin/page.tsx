@@ -1,5 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
+import { isLiveMode } from '@/lib/site-config'
+import LaunchModeBanner from '@/components/admin/LaunchModeBanner'
 
 export const metadata = { title: 'Admin Dashboard' }
 
@@ -26,6 +28,8 @@ export default async function AdminDashboardPage() {
       .limit(5),
   ])
 
+  const liveMode = await isLiveMode()
+
   // Get emails for recent members from auth
   const { data: { users: authUsers } } = await admin.auth.admin.listUsers({ perPage: 1000 })
   const emailMap = Object.fromEntries((authUsers ?? []).map(u => [u.id, u.email ?? '']))
@@ -39,6 +43,7 @@ export default async function AdminDashboardPage() {
 
   return (
     <div className="space-y-10">
+      <LaunchModeBanner isLive={liveMode} />
       <div>
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Dashboard</h1>
         <p className="text-[#6B7770] text-sm mt-1">TeeAhead at a glance</p>
