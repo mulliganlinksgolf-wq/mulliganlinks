@@ -13,8 +13,10 @@ interface Props {
 export function LogRocketProvider({ userId, userEmail, userName }: Props) {
   useEffect(() => {
     LogRocket.init('ceymwe/teeahead')
-    setupLogRocketReact()
+    setupLogRocketReact(LogRocket)
+  }, [])
 
+  useEffect(() => {
     if (userId) {
       LogRocket.identify(userId, {
         ...(userEmail && { email: userEmail }),

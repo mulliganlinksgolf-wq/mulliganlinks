@@ -128,7 +128,7 @@ export default async function MemberCardPage() {
             href="/app/membership"
             className="inline-flex items-center text-sm font-semibold text-[#1B4332] hover:underline"
           >
-            Upgrade for $79/yr →
+            Upgrade for $89/yr →
           </a>
         </div>
       )}

@@ -347,7 +347,6 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
                 <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>

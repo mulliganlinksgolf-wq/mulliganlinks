@@ -31,7 +31,7 @@ export function StructuredData() {
         operatingSystem: 'Web',
         url: 'https://www.teeahead.com',
         description:
-          'Golf tee time booking and loyalty platform for Metro Detroit. Free for partner courses. Eagle membership $79/yr beats GolfPass+ on every metric.',
+          'Golf tee time booking and loyalty platform for Metro Detroit. Free for partner courses. Eagle membership $89/yr beats GolfPass+ on every metric.',
         offers: [
           {
             '@type': 'Offer',
@@ -86,7 +86,7 @@ export function StructuredData() {
             name: 'How does TeeAhead compare to GolfPass+?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'TeeAhead Eagle membership ($79/yr) beats GolfPass+ ($119/yr) on every metric: $120/yr in tee time credits, 1 free round, always-on booking fee waiver, 12 guest fee waivers, 10% green fee discount, and a $25 birthday credit.',
+              text: 'TeeAhead Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every metric: 250 bonus Fairway Points on signup, 1 complimentary round/yr (course-provided), always-on booking fee waiver, 2× points multiplier, 48hr priority booking, and a 10% birthday credit.',
             },
           },
           {
@@ -94,7 +94,7 @@ export function StructuredData() {
             name: 'What is the TeeAhead Founding Partner program?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $299/month.',
+              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $349/month.',
             },
           },
           {

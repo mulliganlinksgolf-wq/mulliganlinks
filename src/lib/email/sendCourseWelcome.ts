@@ -18,7 +18,7 @@ export async function sendCourseWelcome(course: {
   }
 
   const resend = new Resend(apiKey)
-  const from = process.env.FROM_EMAIL_HELLO ?? 'hello@teeahead.com'
+  const from = process.env.FROM_EMAIL_HELLO ?? 'support@teeahead.com'
   const firstName = course.gm_name?.split(' ')[0] ?? 'there'
 
   const html = `

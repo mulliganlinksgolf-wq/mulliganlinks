@@ -58,9 +58,9 @@ export async function sendWelcomeEmail({
           <li>Free cancellation up to 1 hour out — always</li>
         </ul>
 
-        <p>Ready to earn more? Upgrade to Eagle ($79/yr) for 1.5× points, priority booking,
-        and $10/mo in tee time credits. Or go Ace ($149/yr) for 2× points, 72hr early
-        access, and $20/mo in credits.</p>
+        <p>Ready to earn more? Upgrade to Eagle ($89/yr) for 2× points, priority booking,
+        and no booking fees. Or go Ace ($159/yr) for 3× points, 72hr early
+        access, and 2 complimentary rounds/yr.</p>
 
         <p style="margin: 24px 0;">
           <a href="https://teeahead.com/app"
@@ -107,7 +107,7 @@ export async function sendGolferWaitlistConfirmation({
         <p>Here's what you're waiting for:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
           <li>Zero booking fees at partner courses — forever</li>
-          <li>Eagle membership ($79/yr) beats GolfPass+ ($119/yr) on every single metric</li>
+          <li>Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every single metric</li>
           <li>Real Fairway Points on every dollar played at local courses</li>
         </ul>
         <p>Know a golf course that should partner with us? Send them to

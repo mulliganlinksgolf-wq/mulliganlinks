@@ -138,11 +138,35 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                     Standard Pricing — Course #11+
                   </p>
                   <p className="font-display font-black text-[#F4F1EA] leading-none mb-2" style={{ fontSize: '28px' }}>
-                    $299 / month
+                    $349 / month
                   </p>
                   <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
                     Flat fee. No barter. No commissions. No data extraction. Cancel anytime.
                   </p>
+                </div>
+              </div>
+
+              {/* Commitment options */}
+              <div className="mt-4">
+                <p className="text-xs font-semibold tracking-[0.08em] uppercase mb-2" style={{ color: 'rgba(244,241,234,0.45)' }}>
+                  Commitment options
+                </p>
+                <div className="grid grid-cols-4 gap-1.5">
+                  {TEEAHEAD_PRICING.commitmentTiers.map(({ label, monthly }) => (
+                    <div
+                      key={label}
+                      className="rounded-lg p-2 text-center"
+                      style={{
+                        background: label === 'Standard'
+                          ? 'rgba(244,241,234,0.12)'
+                          : 'rgba(244,241,234,0.05)',
+                        border: '1px solid rgba(244,241,234,0.1)',
+                      }}
+                    >
+                      <p className="text-[10px] mb-1" style={{ color: 'rgba(244,241,234,0.5)' }}>{label}</p>
+                      <p className="text-sm font-bold text-[#F4F1EA]">${monthly}/mo</p>
+                    </div>
+                  ))}
                 </div>
               </div>
 
@@ -366,7 +390,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="text-sm font-semibold" style={{ color: 'rgba(244,241,234,0.75)' }}>Standard pricing</p>
-                          <p className="text-xs" style={{ color: 'rgba(244,241,234,0.45)' }}>$299/mo, cancel anytime</p>
+                          <p className="text-xs" style={{ color: 'rgba(244,241,234,0.45)' }}>$349/mo, cancel anytime</p>
                         </div>
                         <p className="font-display font-bold" style={{ fontSize: '18px', color: 'rgba(244,241,234,0.75)' }}>
                           {fmt(TEEAHEAD_PRICING.standardAnnual)}/yr
@@ -530,7 +554,7 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                   <div>
                     <p className="text-xs font-bold tracking-[0.08em] uppercase text-[#6B7770] mb-1">Standard Partner</p>
                     <p className="font-display font-bold text-[#0F3D2E] leading-none" style={{ fontSize: '24px' }}>
-                      $299/month
+                      $349/month
                     </p>
                   </div>
                   <p className="text-sm text-[#6B7770] leading-relaxed">
@@ -598,7 +622,6 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About Neil &amp; Billy</Link>
                 <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>

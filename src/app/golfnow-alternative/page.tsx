@@ -102,7 +102,7 @@ export default function GolfNowAlternativePage() {
               </p>
             </div>
             <p className="text-[#6B7770] leading-relaxed">
-              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for their first year — no barter, no commissions, no data extraction. Course #11 onward pays a flat $299/month, which for a course losing $94,500/year to GolfNow represents an immediate 97% cost reduction.
+              TeeAhead charges Founding Partner courses <strong className="text-[#0F3D2E]">$0</strong>. The first 10 courses to join get free platform access for their first year — no barter, no commissions, no data extraction. Course #11 onward pays a flat $349/month, which for a course losing $94,500/year to GolfNow represents an immediate 95% cost reduction.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
@@ -216,7 +216,7 @@ export default function GolfNowAlternativePage() {
               GolfPass+ vs. TeeAhead Eagle: For Golfers
             </h2>
             <p className="text-[#6B7770] text-lg leading-relaxed">
-              GolfPass+ costs $119/year and delivers perks spread thin across a national network. TeeAhead Eagle costs $79/year and delivers more — at the courses you actually play.
+              GolfPass+ costs $119/year and delivers perks spread thin across a national network. TeeAhead Eagle costs $89/year and delivers more — at the courses you actually play.
             </p>
             <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
               <table className="w-full text-sm">
@@ -224,20 +224,19 @@ export default function GolfNowAlternativePage() {
                   <tr className="bg-[#1B4332] text-[#FAF7F2]">
                     <th className="text-left px-6 py-4 font-semibold">For Golfers</th>
                     <th className="text-center px-6 py-4 font-semibold text-[#FAF7F2]/70">GolfPass+ ($119/yr)</th>
-                    <th className="text-center px-6 py-4 font-semibold">Eagle ($79/yr)</th>
+                    <th className="text-center px-6 py-4 font-semibold">Eagle ($89/yr)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5">
                   {[
-                    { feature: 'Annual price', them: '$119/yr', us: '$79/yr' },
-                    { feature: 'Savings vs GolfPass+', them: '—', us: '$40/yr' },
-                    { feature: 'Annual tee time credits', them: '$120 ($10/mo)', us: '$120 ($10/mo)' },
-                    { feature: 'Free rounds per year', them: '0', us: '1' },
+                    { feature: 'Annual price', them: '$119/yr', us: '$89/yr' },
+                    { feature: 'Savings vs GolfPass+', them: '—', us: '$30/yr' },
+                    { feature: 'Signup bonus', them: 'None', us: '250 Fairway Points' },
+                    { feature: 'Free rounds per year', them: '0', us: '1 (course-provided)' },
                     { feature: 'Booking fees waived', them: '12×/year only', us: 'Always, unlimited' },
-                    { feature: 'Guest fee waivers', them: 'None', us: '12×/year' },
-                    { feature: 'Green fee discount', them: 'None', us: '10% at partner courses' },
-                    { feature: 'Birthday credit', them: 'None', us: '$25' },
-                    { feature: 'Points multiplier', them: '1× base', us: '1.5×' },
+                    { feature: 'Guest pass', them: 'None', us: '1 per year' },
+                    { feature: 'Birthday credit', them: 'None', us: '10% off' },
+                    { feature: 'Points multiplier', them: '1× base', us: '2×' },
                     { feature: 'Priority booking access', them: 'None', us: '48hr early access' },
                     { feature: 'Local loyalty', them: 'National chain perks', us: 'Courses you actually play' },
                   ].map((row, i) => (
@@ -276,7 +275,7 @@ export default function GolfNowAlternativePage() {
                 TeeAhead is built specifically for this moment. It&apos;s free tee sheet software for golf courses that want to cancel GolfNow, take back their direct booking channel, and stop subsidizing a platform that treats their prime-time inventory as a commodity. Unlike GolfNow, TeeAhead doesn&apos;t take barter tee times, doesn&apos;t charge commissions, and doesn&apos;t retain your customer data.
               </p>
               <p className="leading-relaxed">
-                For golfers, TeeAhead is the local-first GolfNow alternative. Book tee times at Metro Detroit golf courses with zero booking fees — not &ldquo;waived for members 12 times a year,&rdquo; but zero, always. Earn Fairway Points on every dollar you spend at partner courses. Upgrade to Eagle membership ($79/yr) or Ace membership ($149/yr) for credits, free rounds, and discounts that actually apply to the courses in Oakland County, Macomb County, and Wayne County where you already play.
+                For golfers, TeeAhead is the local-first GolfNow alternative. Book tee times at Metro Detroit golf courses with zero booking fees — not &ldquo;waived for members 12 times a year,&rdquo; but zero, always. Earn Fairway Points on every dollar you spend at partner courses. Upgrade to Eagle membership ($89/yr) or Ace membership ($159/yr) for bonus points, complimentary rounds, and priority booking that actually applies to the courses in Oakland County, Macomb County, and Wayne County where you already play.
               </p>
               <p className="leading-relaxed">
                 TeeAhead is not trying to be a national golf booking aggregator. It&apos;s a local platform for local golfers and local courses. That&apos;s the point. GolfNow turns your home course into a commodity. TeeAhead turns it back into your home.
@@ -315,7 +314,7 @@ export default function GolfNowAlternativePage() {
               </div>
               <h3 className="text-2xl font-bold text-[#F4F1EA]">Done paying booking fees?</h3>
               <p className="text-[#F4F1EA]/70 leading-relaxed">
-                Join the waitlist for free. Eagle membership is $79/yr — $40 less than GolfPass+, with more credits, more perks, and loyalty at the courses you actually play.
+                Join the waitlist for free. Eagle membership is $89/yr — $30 less than GolfPass+, with more perks and loyalty at the courses you actually play.
               </p>
               <Link
                 href="/waitlist/golfer"

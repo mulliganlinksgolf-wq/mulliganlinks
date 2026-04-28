@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     url: "https://www.teeahead.com",
     title: "TeeAhead | Free Golf Tee Time Booking & Loyalty — Metro Detroit",
     description:
-      "Book tee times at Metro Detroit golf courses with zero booking fees. Beat GolfPass+ with Eagle membership at $79/yr.",
+      "Book tee times at Metro Detroit golf courses with zero booking fees. Beat GolfPass+ with Eagle membership at $89/yr.",
     siteName: "TeeAhead",
     images: [
       {
