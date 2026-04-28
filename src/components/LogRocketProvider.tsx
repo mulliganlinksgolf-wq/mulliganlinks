@@ -13,7 +13,7 @@ interface Props {
 export function LogRocketProvider({ userId, userEmail, userName }: Props) {
   useEffect(() => {
     LogRocket.init('ceymwe/teeahead')
-    setupLogRocketReact(LogRocket)
+    ;(setupLogRocketReact as (lr: unknown) => void)(LogRocket)
   }, [])
 
   useEffect(() => {
