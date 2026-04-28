@@ -9,9 +9,9 @@ export const TEEAHEAD_PRICING = {
   foundingTotalSpots: 10,
   commitmentTiers: [
     { label: 'Standard', monthly: 349 },
-    { label: '2-Year',   monthly: 329 },
-    { label: '3-Year',   monthly: 309 },
-    { label: '5-Year',   monthly: 289 },
+    { label: '2-Year',   monthly: 339 },
+    { label: '3-Year',   monthly: 329 },
+    { label: '5-Year',   monthly: 319 },
   ],
 } as const
 
