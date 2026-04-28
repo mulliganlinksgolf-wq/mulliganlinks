@@ -1,6 +1,6 @@
 -- supabase/migrations/027_site_config.sql
 
-CREATE TABLE site_config (
+CREATE TABLE public.site_config (
   key         text PRIMARY KEY,
   value       text NOT NULL,
   type        text NOT NULL CHECK (type IN ('text', 'boolean', 'number')),
@@ -9,7 +9,7 @@ CREATE TABLE site_config (
 );
 
 -- Seed initial values
-INSERT INTO site_config (key, value, type, description) VALUES
+INSERT INTO public.site_config (key, value, type, description) VALUES
   ('launch_mode',                'waitlist', 'text',    'Site mode: waitlist or live'),
   ('metro_area_name',            'Metro Detroit', 'text', 'Metro area shown throughout the site'),
   ('founding_golfer_cap',        '500',  'number',  'Max founding member spots'),
@@ -24,11 +24,14 @@ INSERT INTO site_config (key, value, type, description) VALUES
   ('flag_membership_signups',    'false','boolean', 'Allow new membership signups'),
   ('flag_tee_time_bookings',     'false','boolean', 'Allow tee time bookings');
 
--- RLS: anyone can read (needed for public feature flag checks), only service_role writes
-ALTER TABLE site_config ENABLE ROW LEVEL SECURITY;
+-- RLS: anyone can read (needed for public feature flag checks); writes go through service-role
+-- client (createAdminClient) which bypasses RLS automatically — no write policy needed.
+ALTER TABLE public.site_config ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Public read site_config"
-  ON site_config FOR SELECT USING (true);
+  ON public.site_config FOR SELECT USING (true);
 
-CREATE POLICY "Service role write site_config"
-  ON site_config FOR ALL USING (auth.role() = 'service_role');
+-- Auto-update updated_at on row modification (consistent with sibling tables)
+CREATE TRIGGER site_config_updated_at
+  BEFORE UPDATE ON public.site_config
+  FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
