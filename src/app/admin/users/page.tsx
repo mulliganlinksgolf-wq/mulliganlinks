@@ -1,11 +1,20 @@
+import { Suspense } from 'react'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CreateMemberModal } from '@/components/admin/CreateMemberModal'
 import { UserActions } from '@/components/admin/UserActions'
+import MemberListFilters from '@/components/admin/MemberListFilters'
 
 export const metadata = { title: 'Users' }
 
-export default async function AdminUsersPage() {
+export default async function AdminUsersPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}) {
+  const { q, tier, status, founding } = await searchParams
+
   const supabase = await createClient()
   const admin = createAdminClient()
 
@@ -34,7 +43,7 @@ export default async function AdminUsersPage() {
   const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
     admin
       .from('profiles')
-      .select('id, full_name, phone, is_admin, created_at, memberships(tier, status)')
+      .select('id, full_name, phone, is_admin, created_at, memberships(tier, status, is_founding_member)')
       .order('created_at', { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
   ])
@@ -42,16 +51,45 @@ export default async function AdminUsersPage() {
   // Build email lookup from auth
   const emailMap = Object.fromEntries((authUsers ?? []).map(u => [u.id, u.email ?? '']))
 
-  // Merge email into profiles
-  const members = (profilesResult.data ?? []).map(p => ({
-    ...p,
-    email: emailMap[p.id] ?? '',
-  }))
+  // Merge email into profiles and apply filters
+  const searchQuery = typeof q === 'string' ? q.toLowerCase() : ''
+  const tierFilter = typeof tier === 'string' ? tier : ''
+  const statusFilter = typeof status === 'string' ? status : ''
+  const foundingFilter = founding === 'true'
+
+  const members = (profilesResult.data ?? [])
+    .map(p => ({
+      ...p,
+      email: emailMap[p.id] ?? '',
+    }))
+    .filter(m => {
+      const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
+
+      if (searchQuery) {
+        const nameMatch = (m.full_name ?? '').toLowerCase().includes(searchQuery)
+        const emailMatch = m.email.toLowerCase().includes(searchQuery)
+        if (!nameMatch && !emailMatch) return false
+      }
+
+      if (tierFilter && membership?.tier !== tierFilter) return false
+
+      if (statusFilter && membership?.status !== statusFilter) return false
+
+      if (foundingFilter && !membership?.is_founding_member) return false
+
+      return true
+    })
 
   const tierColor: Record<string, string> = {
     ace: 'bg-[#1B4332] text-[#FAF7F2]',
     eagle: 'bg-[#E0A800] text-[#1A1A1A]',
     fairway: 'bg-[#FAF7F2] text-[#1A1A1A] ring-1 ring-black/10',
+  }
+
+  const statusColor: Record<string, string> = {
+    active: 'bg-emerald-50 text-emerald-700',
+    canceled: 'bg-red-50 text-red-700',
+    past_due: 'bg-amber-50 text-amber-700',
   }
 
   return (
@@ -67,8 +105,11 @@ export default async function AdminUsersPage() {
       {/* Registered members */}
       <section>
         <h2 className="text-lg font-bold text-[#1A1A1A] mb-4">
-          Registered members <span className="text-[#6B7770] font-normal text-sm ml-1">({members?.length ?? 0})</span>
+          Registered members <span className="text-[#6B7770] font-normal text-sm ml-1">({members.length})</span>
         </h2>
+        <Suspense fallback={null}>
+          <MemberListFilters />
+        </Suspense>
         <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
@@ -77,20 +118,25 @@ export default async function AdminUsersPage() {
                   <th className="text-left px-5 py-3 font-medium">Name</th>
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-5 py-3 font-medium">Tier</th>
+                  <th className="text-left px-5 py-3 font-medium">Status</th>
+                  <th className="text-left px-5 py-3 font-medium">Founding</th>
                   <th className="text-left px-5 py-3 font-medium">Joined</th>
                   <th className="text-left px-4 py-3 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {members && members.length > 0 ? members.map((m: any) => {
+                {members.length > 0 ? members.map((m: any) => {
                   const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
                   const tier = membership?.tier ?? 'fairway'
+                  const memberStatus = membership?.status ?? 'active'
                   const isSelf = m.id === me?.id
                   return (
                     <tr key={m.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
                       <td className="px-5 py-3 font-medium text-[#1A1A1A]">
                         <div className="flex items-center gap-2">
-                          {m.full_name || '—'}
+                          <Link href={'/admin/users/' + m.id} className="hover:underline">
+                            {m.full_name || '—'}
+                          </Link>
                           {m.is_admin && !isSelf && (
                             <span className="text-[10px] font-semibold uppercase tracking-wide text-[#1B4332] bg-[#1B4332]/10 rounded px-1.5 py-0.5">admin</span>
                           )}
@@ -101,6 +147,14 @@ export default async function AdminUsersPage() {
                         <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${tierColor[tier] ?? tierColor.fairway}`}>
                           {tier}
                         </span>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold capitalize ${statusColor[memberStatus] ?? 'bg-gray-50 text-gray-700'}`}>
+                          {memberStatus.replace('_', ' ')}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3 text-[#6B7770] text-xs">
+                        {membership?.is_founding_member ? '★ Founding' : '—'}
                       </td>
                       <td className="px-5 py-3 text-[#6B7770]">
                         {new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -114,7 +168,7 @@ export default async function AdminUsersPage() {
                     </tr>
                   )
                 }) : (
-                  <tr><td colSpan={5} className="px-5 py-8 text-center text-[#6B7770]">No members yet.</td></tr>
+                  <tr><td colSpan={6} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
                 )}
               </tbody>
             </table>
