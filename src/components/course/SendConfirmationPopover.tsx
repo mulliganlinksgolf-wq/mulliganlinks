@@ -16,12 +16,21 @@ export function SendConfirmationPopover({ bookingId, guestName, initialEmail }: 
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const inputRef = useRef<HTMLInputElement>(null)
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    if (open) {
-      setTimeout(() => inputRef.current?.focus(), 50)
+    if (open && inputRef.current) {
+      const t = setTimeout(() => inputRef.current?.focus(), 50)
+      return () => clearTimeout(t)
     }
   }, [open])
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [])
 
   function handleSend() {
     if (!email.trim()) {
@@ -35,7 +44,7 @@ export function SendConfirmationPopover({ bookingId, guestName, initialEmail }: 
         setError(result.error)
       } else {
         setSent(true)
-        setTimeout(() => {
+        timerRef.current = setTimeout(() => {
           setOpen(false)
           setSent(false)
         }, 1800)
