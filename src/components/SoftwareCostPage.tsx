@@ -340,10 +340,15 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
                   </div>
 
                   {/* VS Divider */}
-                  <div className="px-6 py-3 flex items-center gap-3">
-                    <div className="flex-1 border-t border-[#0F3D2E]/20" />
-                    <span className="text-xs font-bold tracking-[0.12em] uppercase text-[#0F3D2E]">VS. TEEAHEAD</span>
-                    <div className="flex-1 border-t border-[#0F3D2E]/20" />
+                  <div className="px-6 py-5 flex items-center gap-4">
+                    <div className="flex-1 border-t-2 border-[#0F3D2E]/25" />
+                    <span
+                      className="font-display font-black tracking-[0.06em] uppercase text-white bg-[#0F3D2E] rounded-full px-4 py-1.5"
+                      style={{ fontSize: '13px', letterSpacing: '0.1em' }}
+                    >
+                      VS. TEEAHEAD
+                    </span>
+                    <div className="flex-1 border-t-2 border-[#0F3D2E]/25" />
                   </div>
 
                   {/* Section 2: TeeAhead comparison */}
