@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
 import { WalkInBookingModal } from './WalkInBookingModal'
+import { EditBookingModal } from './EditBookingModal'
 
 interface Booking {
   id: string
@@ -11,6 +12,8 @@ interface Booking {
   total_paid: number
   status: string
   guest_name: string | null
+  guest_phone?: string | null
+  payment_method?: string | null
   profiles: { full_name: string } | null
 }
 
@@ -24,9 +27,15 @@ interface TeeTime {
   bookings: Booking[]
 }
 
+interface EditTarget {
+  booking: Booking
+  teeTime: TeeTime
+}
+
 export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
+  const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
   const [, startTransition] = useTransition()
   const router = useRouter()
 
@@ -135,7 +144,7 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                             {b.players} player{b.players !== 1 ? 's' : ''}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2">
                           <span className="text-[#1A1A1A]">${b.total_paid.toFixed(2)}</span>
                           <span
                             className={`text-xs px-2 py-0.5 rounded-full ${
@@ -148,12 +157,20 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
                           >
                             {b.status}
                           </span>
+                          {b.status === 'confirmed' && (
+                            <button
+                              onClick={() => setEditTarget({ booking: b, teeTime: tt })}
+                              className="text-xs px-2 py-0.5 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
+                            >
+                              Edit
+                            </button>
+                          )}
                         </div>
                       </div>
                     ))
                   )}
 
-                  {/* Actions */}
+                  {/* Slot-level actions */}
                   <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200 flex-wrap">
                     {bookedPlayers < tt.max_players && displayStatus !== 'completed' && (
                       <button
@@ -216,6 +233,21 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
           onSuccess={() => {
             setBookingTeeTime(null)
             setExpanded(null)
+            router.refresh()
+          }}
+        />
+      )}
+
+      {editTarget && (
+        <EditBookingModal
+          booking={editTarget.booking}
+          isWalkIn={editTarget.booking.profiles === null}
+          maxSelectablePlayers={editTarget.teeTime.available_players + editTarget.booking.players}
+          basePrice={editTarget.teeTime.base_price}
+          scheduledAt={editTarget.teeTime.scheduled_at}
+          onClose={() => setEditTarget(null)}
+          onSuccess={() => {
+            setEditTarget(null)
             router.refresh()
           }}
         />
