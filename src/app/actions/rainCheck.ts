@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
+import { sendRainCheckEmail } from '@/lib/emails'
 
 export async function issueRainCheck({
   memberId,
@@ -43,6 +44,15 @@ export async function issueRainCheck({
     .single()
 
   if (error || !data) return { error: 'Failed to issue rain check' }
+
+  // Fire-and-forget — member gets their code by email too
+  sendRainCheckEmail({
+    userId: memberId,
+    courseName: (await createAdminClient().from('courses').select('name').eq('id', courseId).single()).data?.name ?? 'the course',
+    code: data.code,
+    amountCents,
+    note,
+  }).catch(() => {})
 
   revalidatePath('/course/[slug]', 'page')
   return { code: data.code }

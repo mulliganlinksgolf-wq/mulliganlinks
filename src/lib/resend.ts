@@ -58,9 +58,9 @@ export async function sendWelcomeEmail({
           <li>Free cancellation up to 1 hour out — always</li>
         </ul>
 
-        <p>Ready to earn more? Upgrade to Eagle ($79/yr) for 2× points, priority booking,
-        and $15/mo in tee time credits. Or go Ace ($149/yr) for 3× points, 72hr early
-        access, and $25/mo in credits.</p>
+        <p>Ready to earn more? Upgrade to Eagle ($79/yr) for 1.5× points, priority booking,
+        and $10/mo in tee time credits. Or go Ace ($149/yr) for 2× points, 72hr early
+        access, and $20/mo in credits.</p>
 
         <p style="margin: 24px 0;">
           <a href="https://teeahead.com/app"
