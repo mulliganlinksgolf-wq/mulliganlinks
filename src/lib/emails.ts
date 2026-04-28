@@ -172,7 +172,7 @@ export async function sendPhoneBookingConfirmation({
     if (!resendKey || resendKey === 're_placeholder') return
 
     const { date: dateStr, time: timeStr } = fmtDateTime(teeTimeIso)
-    const firstName = guestName.split(' ')[0]
+    const firstName = guestName.split(' ')[0] || 'there'
     const paymentLabel =
       paymentMethod === 'cash' ? 'Cash' : paymentMethod === 'card' ? 'Card' : 'Unpaid'
 
