@@ -18,7 +18,7 @@ export default async function CourseWaitlistPage() {
     .select('count, cap')
     .single()
 
-  const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+  const spotsRemaining = Math.max(0, (counter?.cap ?? 10) - (counter?.count ?? 0))
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">

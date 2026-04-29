@@ -162,7 +162,7 @@ export function GolferWaitlistForm() {
                 value={value}
                 disabled={isPending}
                 checked={selectedTier === value}
-                onChange={() => router.push(`?tier=${value}`, { scroll: false })}
+                onChange={() => router.replace(`?tier=${value}`, { scroll: false })}
                 className="accent-[#E0A800]"
               />
               <span className="text-sm text-[#F4F1EA]">{label}</span>
