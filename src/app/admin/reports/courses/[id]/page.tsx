@@ -39,8 +39,13 @@ export default async function CourseDrilldownPage({
     'Waitlist Fills': m.waitlist_fills,
   }))
 
-  const avgGreenFee = latest?.avg_green_fee ?? 0
-  const golfnowCostMtd = latest ? latest.rounds_booked * Number(avgGreenFee) * 0.20 : 0
+  const storedAvgGreenFee = Number(latest?.avg_green_fee ?? 0)
+  const avgGreenFee = storedAvgGreenFee > 0
+    ? storedAvgGreenFee
+    : latest && latest.rounds_booked > 0
+      ? Number(latest.green_fee_revenue) / latest.rounds_booked
+      : 0
+  const golfnowCostMtd = latest ? latest.rounds_booked * avgGreenFee * 0.20 : 0
 
   return (
     <div className="space-y-8">
@@ -61,17 +66,27 @@ export default async function CourseDrilldownPage({
         <p className="text-sm text-[#6B7770]">No metrics data available for this course yet.</p>
       )}
 
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
-        <h2 className="font-semibold text-[#1A1A1A] mb-2">What GolfNow Would Have Cost This Month</h2>
-        <p className="text-sm text-[#6B7770] mb-4">
-          GolfNow charges ~20% of green fee value as barter. Based on {latest?.rounds_booked ?? 0} rounds × ${Number(avgGreenFee).toFixed(0)}/avg green fee:
-        </p>
-        <div className="text-3xl font-bold text-amber-700 mb-2">
-          ${golfnowCostMtd.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+      {avgGreenFee > 0 ? (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+          <h2 className="font-semibold text-[#1A1A1A] mb-2">What GolfNow Would Have Cost This Month</h2>
+          <p className="text-sm text-[#6B7770] mb-4">
+            GolfNow charges ~20% of green fee value as barter. Based on {latest?.rounds_booked ?? 0} rounds × ${avgGreenFee.toFixed(0)}/avg green fee:
+          </p>
+          <div className="text-3xl font-bold text-amber-700 mb-2">
+            ${golfnowCostMtd.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+          </div>
+          <p className="text-sm text-[#6B7770]">in tee time value surrendered if on GolfNow</p>
+          <p className="text-sm font-semibold text-emerald-700 mt-3">Your TeeAhead cost this month: $0</p>
         </div>
-        <p className="text-sm text-[#6B7770]">in tee time value surrendered if on GolfNow</p>
-        <p className="text-sm font-semibold text-emerald-700 mt-3">Your TeeAhead cost this month: $0</p>
-      </div>
+      ) : (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-6">
+          <h2 className="font-semibold text-[#1A1A1A] mb-2">What GolfNow Would Have Cost This Month</h2>
+          <p className="text-sm text-[#6B7770]">
+            Add green fee data (via the course portal or seed data) to see the GolfNow cost comparison.
+          </p>
+          <p className="text-sm font-semibold text-emerald-700 mt-3">Your TeeAhead cost this month: $0</p>
+        </div>
+      )}
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">

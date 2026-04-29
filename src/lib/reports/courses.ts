@@ -59,18 +59,22 @@ export async function getCourseNetworkData(month: string): Promise<{
   ] = await Promise.all([
     admin.from('courses').select('id, name, slug').eq('active', true).order('name'),
     admin.from('crm_course_metrics').select('*').eq('month', month),
-    admin.from('admin_audit_log').select('course_id, created_at').order('created_at', { ascending: false }),
+    admin.from('admin_audit_log')
+      .select('target_id, created_at')
+      .eq('target_type', 'course')
+      .order('created_at', { ascending: false }),
   ])
   if (coursesError) throw new Error(`[getCourseNetworkData] courses query failed: ${coursesError.message}`)
   if (metricsError) throw new Error(`[getCourseNetworkData] metrics query failed: ${metricsError.message}`)
   // audit log is best-effort — don't throw, just use empty fallback
+  if (auditError) console.error('[getCourseNetworkData] audit log query failed (non-fatal):', auditError.message)
   const auditRows = auditError ? [] : (auditLog ?? [])
 
   const metricsMap = Object.fromEntries((metrics ?? []).map(m => [m.course_id, m]))
   const lastActivityMap: Record<string, number> = {}
   for (const log of auditRows) {
-    if (log.course_id && !lastActivityMap[log.course_id]) {
-      lastActivityMap[log.course_id] = Math.floor(
+    if (log.target_id && !lastActivityMap[log.target_id]) {
+      lastActivityMap[log.target_id] = Math.floor(
         (Date.now() - new Date(log.created_at).getTime()) / (1000 * 60 * 60 * 24)
       )
     }
