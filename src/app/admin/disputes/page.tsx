@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import DisputeList, { type DisputeRow } from '@/components/admin/DisputeList'
+import DisputeList from '@/components/admin/DisputeList'
+import { type DisputeRow } from '@/components/admin/DisputeDetailPanel'
 
 export const metadata = { title: 'Disputes' }
 
