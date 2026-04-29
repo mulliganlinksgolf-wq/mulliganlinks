@@ -35,9 +35,9 @@ export function resolveDateRange(
       if (customFrom && customTo) {
         return { from: customFrom, to: customTo, preset: 'custom' }
       }
-      // fall through to default
-    default:
+      return { from: toISO(yyyy, mm, 1), to: `${yyyy}-${pad(mm + 1)}-${dd}`, preset: 'this_month' }
     case 'this_month':
+    default:
       return { from: toISO(yyyy, mm, 1), to: `${yyyy}-${pad(mm + 1)}-${dd}`, preset: 'this_month' }
   }
 }

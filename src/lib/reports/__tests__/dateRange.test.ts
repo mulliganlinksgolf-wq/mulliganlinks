@@ -34,4 +34,16 @@ describe('resolveDateRange', () => {
     const { from } = resolveDateRange(undefined)
     expect(from).toBe('2026-04-01')
   })
+
+  it('custom without dates falls back to this_month', () => {
+    const { from, preset } = resolveDateRange('custom')
+    expect(from).toBe('2026-04-01')
+    expect(preset).toBe('this_month')
+  })
+
+  it('this_quarter returns Apr 1 – Apr 29 (Q2)', () => {
+    const { from, to } = resolveDateRange('this_quarter')
+    expect(from).toBe('2026-04-01')
+    expect(to).toBe('2026-04-29')
+  })
 })

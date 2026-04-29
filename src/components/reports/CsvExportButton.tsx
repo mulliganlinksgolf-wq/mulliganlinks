@@ -18,13 +18,17 @@ export default function CsvExportButton({ data, filename, label = 'Export CSV' }
         return s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s
       }).join(',')
     )
-    const csv = [headers.join(','), ...rows].join('\n')
+    const quoteIfNeeded = (s: string) =>
+      s.includes(',') || s.includes('"') || s.includes('\n') ? `"${s.replace(/"/g, '""')}"` : s
+    const csv = [headers.map(quoteIfNeeded).join(','), ...rows].join('\n')
     const blob = new Blob([csv], { type: 'text/csv' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
     a.download = filename
+    document.body.appendChild(a)
     a.click()
+    document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 

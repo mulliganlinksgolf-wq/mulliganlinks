@@ -1,5 +1,6 @@
 'use client'
 
+import { Suspense } from 'react'
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import type { DatePreset } from '@/lib/reports/dateRange'
@@ -12,7 +13,7 @@ const PRESETS: { label: string; value: DatePreset }[] = [
   { label: 'Custom', value: 'custom' },
 ]
 
-export default function DateRangePicker() {
+function DateRangePickerInner() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -59,13 +60,25 @@ export default function DateRangePicker() {
           <span className="text-[#6B7770] text-sm">to</span>
           <input type="date" value={customTo} onChange={e => setCustomTo(e.target.value)}
             className="border border-gray-200 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]" />
-          <button onClick={() => navigate('custom', customFrom, customTo)}
-            disabled={!customFrom || !customTo}
+          <button
+            onClick={() => {
+              if (customFrom > customTo) return
+              navigate('custom', customFrom, customTo)
+            }}
+            disabled={!customFrom || !customTo || customFrom > customTo}
             className="px-3 py-1.5 bg-[#1B4332] text-[#FAF7F2] rounded-lg text-sm font-medium disabled:opacity-40">
             Apply
           </button>
         </div>
       )}
     </div>
+  )
+}
+
+export default function DateRangePicker() {
+  return (
+    <Suspense fallback={<div className="h-9 w-64 bg-gray-100 animate-pulse rounded-lg" />}>
+      <DateRangePickerInner />
+    </Suspense>
   )
 }
