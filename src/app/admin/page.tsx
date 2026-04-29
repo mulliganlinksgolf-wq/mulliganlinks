@@ -1,8 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { computeAnalytics, getRecentSignups, buildMrrHistory } from '@/lib/analytics'
 import AnalyticsStatCards from '@/components/admin/AnalyticsStatCards'
-import dynamic from 'next/dynamic'
-const AnalyticsCharts = dynamic(() => import('@/components/admin/AnalyticsCharts'), { ssr: false })
+import AnalyticsCharts from '@/components/admin/AnalyticsCharts'
 import AnalyticsTimeFilter from '@/components/admin/AnalyticsTimeFilter'
 import LaunchModeBanner from '@/components/admin/LaunchModeBanner'
 import { isLiveMode } from '@/lib/site-config'
