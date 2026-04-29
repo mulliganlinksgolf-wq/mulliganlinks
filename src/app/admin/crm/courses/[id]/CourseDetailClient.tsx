@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { InlineEditField } from '@/components/crm/InlineEditField'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
+import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
 import { updateCourse, deleteCourse } from '@/app/actions/crm/courses'
 import { useRouter } from 'next/navigation'
 import type { CrmCourse } from '@/lib/crm/types'
@@ -13,6 +14,7 @@ interface Props {
 
 export function CourseDetailClient({ course }: Props) {
   const [showActivityModal, setShowActivityModal] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const router = useRouter()
 
@@ -37,6 +39,12 @@ export function CourseDetailClient({ course }: Props) {
               className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
             >
               Log Activity
+            </button>
+            <button
+              onClick={() => setShowEmailModal(true)}
+              className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
+            >
+              Send Email
             </button>
             <button
               onClick={() => setShowDeleteConfirm(true)}
@@ -69,6 +77,17 @@ export function CourseDetailClient({ course }: Props) {
           assignee={course.assigned_to ?? 'neil'}
           onClose={() => setShowActivityModal(false)}
           onLogged={() => router.refresh()}
+        />
+      )}
+
+      {showEmailModal && (
+        <EmailComposerModal
+          recordType="course"
+          recordId={course.id}
+          toEmail={course.contact_email}
+          sentBy={course.assigned_to ?? 'neil'}
+          onClose={() => setShowEmailModal(false)}
+          onSent={() => router.refresh()}
         />
       )}
 

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { InlineEditField } from '@/components/crm/InlineEditField'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
+import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
 import { updateCrmMember, deleteCrmMember } from '@/app/actions/crm/members'
 import { useRouter } from 'next/navigation'
 import type { CrmMember } from '@/lib/crm/types'
@@ -11,6 +12,7 @@ interface Props { member: CrmMember }
 
 export function MemberDetailClient({ member }: Props) {
   const [showActivityModal, setShowActivityModal] = useState(false)
+  const [showEmailModal, setShowEmailModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const router = useRouter()
 
@@ -31,6 +33,7 @@ export function MemberDetailClient({ member }: Props) {
           <h3 className="font-semibold text-slate-800 text-sm uppercase tracking-wide">Details</h3>
           <div className="flex gap-2">
             <button onClick={() => setShowActivityModal(true)} className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50">Log Activity</button>
+            <button onClick={() => setShowEmailModal(true)} className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50">Send Email</button>
             <button onClick={() => setShowDeleteConfirm(true)} className="text-xs px-3 py-1.5 border border-red-200 rounded-lg text-red-500 hover:bg-red-50">Delete</button>
           </div>
         </div>
@@ -53,6 +56,17 @@ export function MemberDetailClient({ member }: Props) {
           assignee="neil"
           onClose={() => setShowActivityModal(false)}
           onLogged={() => router.refresh()}
+        />
+      )}
+
+      {showEmailModal && (
+        <EmailComposerModal
+          recordType="member"
+          recordId={member.id}
+          toEmail={member.email}
+          sentBy="neil"
+          onClose={() => setShowEmailModal(false)}
+          onSent={() => router.refresh()}
         />
       )}
 
