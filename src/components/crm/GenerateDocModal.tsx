@@ -29,9 +29,13 @@ interface Props {
 export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onGenerated }: Props) {
   const templates = recordType === 'course' ? COURSE_TEMPLATES : OUTING_TEMPLATES
   const [selected, setSelected] = useState<string | null>(null)
+  const [contractYears, setContractYears] = useState(1)
+  const [monthlyFee, setMonthlyFee] = useState(349)
   const [generating, setGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null)
+
+  const showContractOptions = selected === 'founding-partner-agreement'
 
   async function handleGenerate() {
     if (!selected) return
@@ -39,10 +43,14 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
     setError(null)
 
     try {
+      const body: Record<string, unknown> = { template: selected, recordType, recordId, createdBy }
+      if (showContractOptions) {
+        body.options = { contractYears, monthlyFee }
+      }
       const res = await fetch('/api/crm/generate-pdf', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ template: selected, recordType, recordId, createdBy }),
+        body: JSON.stringify(body),
       })
       const data = await res.json()
       if (!res.ok || data.error) {
@@ -66,7 +74,7 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-slate-800">Generate Document</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
+          <button onClick={onClose} aria-label="Close" className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
         </div>
 
         {downloadUrl ? (
@@ -86,7 +94,7 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
           </div>
         ) : (
           <>
-            <div className="space-y-2 mb-6">
+            <div className="space-y-2 mb-4">
               {templates.map((t) => (
                 <label
                   key={t.id}
@@ -108,6 +116,47 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
                 </label>
               ))}
             </div>
+
+            {showContractOptions && (
+              <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 space-y-4">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Contract Options</p>
+                <div role="group" aria-labelledby="contract-duration-label">
+                  <p id="contract-duration-label" className="block text-sm font-medium text-slate-700 mb-1">Contract Duration</p>
+                  <div className="flex gap-2">
+                    {[1, 2, 3].map((y) => (
+                      <button
+                        key={y}
+                        type="button"
+                        onClick={() => setContractYears(y)}
+                        className={`flex-1 py-1.5 text-sm rounded-lg border font-medium transition-colors
+                          ${contractYears === y
+                            ? 'border-emerald-500 bg-emerald-50 text-emerald-800'
+                            : 'border-slate-200 text-slate-600 hover:border-slate-300'}`}
+                      >
+                        {y} {y === 1 ? 'Year' : 'Years'}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="monthly-fee" className="block text-sm font-medium text-slate-700 mb-1">Monthly Platform Fee</label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
+                    <input
+                      id="monthly-fee"
+                      type="number"
+                      min={0}
+                      step={1}
+                      max={9999}
+                      value={monthlyFee}
+                      onChange={(e) => setMonthlyFee(Math.max(0, Math.round(Number(e.target.value) || 0)))}
+                      className="w-full pl-7 pr-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                    />
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">Annual equivalent: ${(monthlyFee * 12).toLocaleString()}/yr</p>
+                </div>
+              </div>
+            )}
 
             {error && <p className="text-sm text-red-500 mb-3">{error}</p>}
 
