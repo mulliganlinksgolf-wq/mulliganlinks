@@ -302,6 +302,33 @@ export async function sendBarterReceipt({
   })
 }
 
+export async function sendBroadcast({
+  subject,
+  html,
+  recipients,
+}: {
+  subject: string
+  html: string
+  recipients: { email: string; name: string | null }[]
+}): Promise<{ sent: number; error?: string }> {
+  const client = getResend()
+  if (!client) {
+    console.log('[broadcast] Resend not configured — skipping:', subject)
+    return { sent: 0, error: 'Resend not configured.' }
+  }
+  await Promise.all(
+    recipients.map(r =>
+      client.emails.send({
+        from: 'TeeAhead <notifications@teeahead.com>',
+        to: r.email,
+        subject,
+        html,
+      })
+    )
+  )
+  return { sent: recipients.length }
+}
+
 export async function sendFoundingPartnerApproval({
   email,
   contactName,
