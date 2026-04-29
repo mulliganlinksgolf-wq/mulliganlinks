@@ -74,7 +74,7 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
       >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold text-slate-800">Generate Document</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
+          <button onClick={onClose} aria-label="Close" className="text-slate-400 hover:text-slate-600 text-xl leading-none">×</button>
         </div>
 
         {downloadUrl ? (
@@ -120,8 +120,8 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
             {showContractOptions && (
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4 space-y-4">
                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Contract Options</p>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Contract Duration</label>
+                <div role="group" aria-labelledby="contract-duration-label">
+                  <p id="contract-duration-label" className="block text-sm font-medium text-slate-700 mb-1">Contract Duration</p>
                   <div className="flex gap-2">
                     {[1, 2, 3].map((y) => (
                       <button
@@ -139,14 +139,17 @@ export function GenerateDocModal({ recordType, recordId, createdBy, onClose, onG
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Monthly Platform Fee</label>
+                  <label htmlFor="monthly-fee" className="block text-sm font-medium text-slate-700 mb-1">Monthly Platform Fee</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
                     <input
+                      id="monthly-fee"
                       type="number"
                       min={0}
+                      step={1}
+                      max={9999}
                       value={monthlyFee}
-                      onChange={(e) => setMonthlyFee(Number(e.target.value))}
+                      onChange={(e) => setMonthlyFee(Math.max(0, Math.round(Number(e.target.value) || 0)))}
                       className="w-full pl-7 pr-3 py-1.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                     />
                   </div>
