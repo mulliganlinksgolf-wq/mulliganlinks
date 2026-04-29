@@ -13,13 +13,15 @@ export function GolferWaitlistForm() {
   const selectedTier = searchParams.get('tier') ?? ''
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
+  const [submitted, setSubmitted] = useState<string | null>(null)
 
   function handleSubmit(formData: FormData) {
     setError(null)
     startTransition(async () => {
       const result = await joinGolferWaitlist(formData)
       if (result.success) {
-        router.push(`/waitlist/golfer/confirmed?position=${result.position}`)
+        const emailVal = (formData.get('email') as string)?.toLowerCase().trim() ?? ''
+        setSubmitted(emailVal)
       } else {
         setError(result.error ?? 'Something went wrong.')
       }
@@ -27,6 +29,34 @@ export function GolferWaitlistForm() {
   }
 
   const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-[#F4F1EA]/40"
+
+  if (submitted) {
+    return (
+      <div className="space-y-6 text-center py-4">
+        <p className="text-4xl">✅</p>
+        <div className="space-y-2">
+          <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
+          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll reach out to <span className="font-semibold text-[#F4F1EA]">{submitted}</span> when TeeAhead launches in Metro Detroit.</p>
+        </div>
+        <div className="space-y-3 text-left bg-white/8 rounded-xl p-5">
+          <p className="text-sm font-semibold text-[#F4F1EA]">You&apos;re on the list. Here&apos;s what happens next:</p>
+          {[
+            "We'll email you when TeeAhead launches in your zip code area.",
+            "You'll get early access to lock in founding member pricing before public launch.",
+            "No credit card until you're ready to activate.",
+          ].map((step, i) => (
+            <div key={i} className="flex gap-3 items-start">
+              <span className="flex-shrink-0 size-5 rounded-full bg-[#E0A800] text-[#0a0a0a] text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+              <p className="text-sm text-[#F4F1EA]/75">{step}</p>
+            </div>
+          ))}
+        </div>
+        <a href="/#pricing" className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors">
+          Compare memberships →
+        </a>
+      </div>
+    )
+  }
 
   return (
     <form action={handleSubmit} className="space-y-6">
@@ -63,15 +93,8 @@ export function GolferWaitlistForm() {
 
       <div className="space-y-1.5">
         <Label htmlFor="email" className="text-[#F4F1EA]">Email address *</Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          required
-          disabled={isPending}
-          placeholder="jack@example.com"
-          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-        />
+        <Input id="email" name="email" type="email" required disabled={isPending} placeholder="jack@example.com" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
+        <p className="text-xs text-[#F4F1EA]/50">No spam, ever. We&apos;ll only contact you about your waitlist status and the Metro Detroit launch.</p>
       </div>
 
       <div className="space-y-1.5">
@@ -169,10 +192,6 @@ export function GolferWaitlistForm() {
       >
         {isPending ? 'Joining…' : 'Claim My Spot ⛳'}
       </Button>
-
-      <p className="text-xs text-center text-[#F4F1EA]/50">
-        No spam, ever. We&apos;ll only contact you about your waitlist status and the launch.
-      </p>
     </form>
   )
 }

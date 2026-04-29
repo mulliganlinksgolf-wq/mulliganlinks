@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { GolferWaitlistForm } from './GolferWaitlistForm'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Join the Golfer Waitlist — TeeAhead',
@@ -62,6 +63,11 @@ export default async function GolferWaitlistPage({
 }) {
   const { tier } = await searchParams
 
+  const supabase = await createClient()
+  const { count: golferCount } = await supabase
+    .from('golfer_waitlist')
+    .select('*', { count: 'exact', head: true })
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
@@ -103,18 +109,23 @@ export default async function GolferWaitlistPage({
             </div>
 
             {/* Headline */}
-            <h1
-              className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]"
-              style={{ fontSize: 'clamp(40px, 6vw, 58px)' }}
-            >
-              Always one tee{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>ahead.</em>
+            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 58px)' }}>
+              Golf at your home course,{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>done right.</em>
             </h1>
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              Michigan&apos;s first golf loyalty platform. Join free — no credit card, no commitment.
+              TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $30 less than GolfPass+ with more credits and no expiration.
             </p>
+
+            {/* Live count badge */}
+            {(golferCount ?? 0) > 0 && (
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
+                <span className="size-2 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-sm text-[#F4F1EA]/80">{golferCount?.toLocaleString()}+ golfers already on the waitlist</span>
+              </div>
+            )}
 
           </div>
         </FadeIn>
@@ -158,6 +169,32 @@ export default async function GolferWaitlistPage({
           </div>
         </div>
       </div>
+
+      {/* ── Quick comparison ──────────────────────────────── */}
+      <section className="bg-white px-6 py-12 border-t border-black/6">
+        <div className="max-w-xl mx-auto">
+          <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F] text-center mb-6">How Eagle stacks up</p>
+          <div className="rounded-xl overflow-hidden border border-black/8">
+            {/* Header row */}
+            <div className="grid grid-cols-3 bg-[#0F3D2E] text-[#F4F1EA] text-xs font-semibold">
+              <div className="px-4 py-3"></div>
+              <div className="px-4 py-3 text-center text-[#F4F1EA]/60">GolfPass+</div>
+              <div className="px-4 py-3 text-center text-[#E0A800]">Eagle ($89/yr)</div>
+            </div>
+            {[
+              { label: 'Booking fees', golfpass: '$2.49–$3.49/round', eagle: 'Zero, always' },
+              { label: 'Credits', golfpass: 'Expire monthly', eagle: 'Never expire' },
+              { label: 'Works at', golfpass: 'National chains', eagle: 'Your home course' },
+            ].map(({ label, golfpass, eagle }, i) => (
+              <div key={label} className={`grid grid-cols-3 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}`}>
+                <div className="px-4 py-3 font-medium text-[#1A1A1A]">{label}</div>
+                <div className="px-4 py-3 text-center text-[#6B7770]">{golfpass}</div>
+                <div className="px-4 py-3 text-center font-semibold text-[#0F3D2E]">{eagle}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ── Tier cards ───────────────────────────────────────── */}
       <section className="bg-[#FAF7F2] px-6 py-16">
