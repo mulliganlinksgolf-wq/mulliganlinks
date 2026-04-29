@@ -35,6 +35,11 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
           badge={openDisputeCount > 0 ? openDisputeCount : undefined}
         />
 
+        <SidebarSection label="Reports" />
+        <SidebarItem href="/admin/reports/financial" icon="💰" label="Financial" active={pathname.startsWith('/admin/reports/financial')} />
+        <SidebarItem href="/admin/reports/members" icon="📈" label="Members" active={pathname.startsWith('/admin/reports/members')} />
+        <SidebarItem href="/admin/reports/courses" icon="🏌️" label="Courses" active={pathname.startsWith('/admin/reports/courses')} />
+
         <SidebarSection label="Platform" />
         <SidebarItem href="/admin/content" icon="📝" label="Content" active={pathname === '/admin/content'} />
         <SidebarItem href="/admin/courses" icon="🏌️" label="Courses" active={pathname.startsWith('/admin/courses')} />
