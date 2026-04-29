@@ -58,9 +58,17 @@ describe('addBlock', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('inserts a new content block', async () => {
+    const insertChain: any = {
+      then: (resolve: any) => resolve({ data: null, error: null }),
+    }
+    const insertFn = vi.fn().mockReturnValue(insertChain)
     mockFrom.mockImplementation((table: string) => {
       if (table === 'profiles') return makeChain({ is_admin: false })
-      if (table === 'content_blocks') return makeChain(null)
+      if (table === 'content_blocks') {
+        const chain = makeChain(null)
+        chain.insert = insertFn
+        return chain
+      }
       return makeChain(null)
     })
     const formData = new FormData()
@@ -69,6 +77,9 @@ describe('addBlock', () => {
     formData.set('type', 'text')
     formData.set('description', 'Pricing page headline')
     await addBlock(formData)
+    expect(insertFn).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'pricing.headline', type: 'text', description: 'Pricing page headline' })
+    )
     expect(redirect).toHaveBeenCalled()
   })
 

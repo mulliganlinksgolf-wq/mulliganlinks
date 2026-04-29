@@ -6,13 +6,20 @@ import Link from 'next/link'
 export const metadata = { title: 'Content' }
 
 const PAGE_GROUPS = [
-  { key: 'home', label: 'Homepage', path: '/' },
-  { key: 'pricing', label: 'Pricing / Tiers', path: '/pricing' },
-  { key: 'golfnow', label: 'GolfNow Alternative', path: '/golfnow-alternative' },
-  { key: 'waitlist', label: 'Golfer Waitlist', path: '/waitlist' },
-  { key: 'waitlist_course', label: 'Course Signup', path: '/waitlist/course' },
-  { key: 'nav', label: 'Nav & Footer', path: null },
-  { key: 'legal', label: 'Privacy / Terms', path: '/privacy-policy' },
+  // Marketing
+  { key: 'home', label: 'Homepage', path: '/', category: 'Marketing' },
+  { key: 'pricing', label: 'Pricing / Tiers', path: '/pricing', category: 'Marketing' },
+  { key: 'golfnow', label: 'GolfNow Alternative', path: '/golfnow-alternative', category: 'Marketing' },
+  { key: 'barter', label: 'How Barter Works', path: '/how-barter-works', category: 'Marketing' },
+  { key: 'software_cost', label: 'Software Cost', path: '/software-cost', category: 'Marketing' },
+  // Waitlist
+  { key: 'waitlist', label: 'Golfer Signup', path: '/waitlist', category: 'Waitlist' },
+  { key: 'waitlist_course', label: 'Course Signup', path: '/waitlist/course', category: 'Waitlist' },
+  // Site-wide
+  { key: 'nav', label: 'Nav & Footer', path: null, category: 'Site-wide' },
+  { key: 'contact', label: 'Contact Info', path: null, category: 'Site-wide' },
+  // Legal
+  { key: 'legal', label: 'Privacy / Terms', path: '/privacy-policy', category: 'Legal' },
 ]
 
 export default async function ContentPage({
@@ -33,19 +40,24 @@ export default async function ContentPage({
   return (
     <div className="flex gap-6 min-h-[60vh]">
       {/* Sidebar */}
-      <nav className="w-44 shrink-0 space-y-0.5">
-        {PAGE_GROUPS.map(g => (
-          <Link
-            key={g.key}
-            href={`/admin/content?group=${g.key}`}
-            className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-              g.key === activeGroup.key
-                ? 'bg-[#1B4332] text-white'
-                : 'text-[#6B7770] hover:text-[#1A1A1A] hover:bg-[#FAF7F2]'
-            }`}
-          >
-            {g.label}
-          </Link>
+      <nav className="w-48 shrink-0 space-y-4">
+        {(['Marketing', 'Waitlist', 'Site-wide', 'Legal'] as const).map(cat => (
+          <div key={cat}>
+            <p className="text-[10px] font-semibold text-[#6B7770] uppercase tracking-widest px-3 mb-1">{cat}</p>
+            {PAGE_GROUPS.filter(g => g.category === cat).map(g => (
+              <Link
+                key={g.key}
+                href={`/admin/content?group=${g.key}`}
+                className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  g.key === activeGroup.key
+                    ? 'bg-[#1B4332] text-white'
+                    : 'text-[#6B7770] hover:text-[#1A1A1A] hover:bg-[#FAF7F2]'
+                }`}
+              >
+                {g.label}
+              </Link>
+            ))}
+          </div>
         ))}
       </nav>
 
