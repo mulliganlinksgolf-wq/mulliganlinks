@@ -47,7 +47,9 @@ interface Props {
 }
 
 export function BenefitsSchedulePDF({ course, eagleRate, aceRate, priorityHours, eagleCredits, aceCredits, generatedAt }: Props) {
-  const dateStr = new Date(generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const dateStr = generatedAt
+    ? new Date(generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : ''
   const location = [course.city, course.state].filter(Boolean).join(', ')
 
   return (
