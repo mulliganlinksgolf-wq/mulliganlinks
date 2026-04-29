@@ -1,6 +1,6 @@
 import { Resend } from 'resend'
 
-function getResend() {
+export function getResend() {
   const key = process.env.RESEND_API_KEY
   if (!key || key === 're_placeholder') return null
   return new Resend(key)
