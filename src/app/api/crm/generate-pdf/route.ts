@@ -30,6 +30,10 @@ export async function POST(req: NextRequest) {
     recordType: 'course' | 'outing'
     recordId: string
     createdBy: string
+    options?: {
+      contractYears?: number
+      monthlyFee?: number
+    }
   }
 
   const table = body.recordType === 'course' ? 'crm_courses' : 'crm_outings'
@@ -44,7 +48,12 @@ export async function POST(req: NextRequest) {
 
   switch (body.template) {
     case 'founding-partner-agreement':
-      element = createElement(FoundingPartnerAgreementPDF, { course: record, generatedAt: new Date().toISOString() })
+      element = createElement(FoundingPartnerAgreementPDF, {
+        course: record,
+        generatedAt: new Date().toISOString(),
+        contractYears: body.options?.contractYears ?? 1,
+        monthlyFee: body.options?.monthlyFee ?? 349,
+      })
       docName = `Founding Partner Agreement — ${record.name}`
       break
     case 'course-proposal':
