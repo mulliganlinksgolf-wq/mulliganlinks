@@ -28,10 +28,11 @@ export async function saveBlock(formData: FormData) {
     .select('value')
     .eq('key', key)
     .single()
-  await admin
+  const { error: updateError } = await admin
     .from('content_blocks')
     .update({ value, updated_at: new Date().toISOString() })
     .eq('key', key)
+  if (updateError) throw new Error(`Failed to save content block: ${updateError.message}`)
   await writeAuditLog({
     eventType: 'content_edited',
     targetType: 'content',
@@ -56,13 +57,17 @@ export async function addBlock(
 
   const group = key.split('.')[0]
   const { admin } = await assertAdmin()
-  await admin.from('content_blocks').insert({
+  const { error: insertError } = await admin.from('content_blocks').insert({
     key,
     value,
     type,
     description,
     updated_at: new Date().toISOString(),
   })
+  if (insertError) {
+    if (insertError.code === '23505') return { error: 'A block with that key already exists.' }
+    return { error: `Failed to add block: ${insertError.message}` }
+  }
   revalidatePath('/', 'layout')
   redirect(`/admin/content?group=${group}&saved=1`)
 }
