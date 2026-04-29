@@ -203,7 +203,7 @@ export function CourseWaitlistForm() {
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full bg-[#0F3D2E] hover:bg-[#0F3D2E]/90 text-[#FAF7F2] font-bold py-3 rounded-lg"
+        className="w-full bg-[#E0A800] hover:bg-[#E0A800]/90 text-[#0a0a0a] font-bold py-3 rounded-lg"
       >
         {isPending ? 'Submitting…' : 'Reserve My Founding Partner Spot →'}
       </Button>

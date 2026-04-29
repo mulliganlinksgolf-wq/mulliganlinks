@@ -110,7 +110,7 @@ export default async function CourseWaitlistPage() {
             >
               ⛳ I&apos;m a Golfer — Free to Join
             </Link>
-            <span className="px-5 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
+            <span aria-current="page" className="px-5 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
               🏌️ I Manage a Course — Founding Partner
             </span>
           </div>

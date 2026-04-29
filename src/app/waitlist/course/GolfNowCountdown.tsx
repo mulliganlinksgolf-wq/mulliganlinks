@@ -10,6 +10,7 @@ export function GolfNowCountdown() {
 
   useEffect(() => {
     if (!expiryDate) { setTimeLeft(null); return }
+    // Parse as local midnight so the countdown reflects the user's local timezone
     const target = new Date(expiryDate + 'T00:00:00').getTime()
     function tick() {
       const now = Date.now()
