@@ -1,3 +1,9 @@
 {
-  "name": "teeahead"
+  "name": "teeahead",
+  "crons": [
+    {
+      "path": "/api/crm/stale-leads",
+      "schedule": "0 8 * * *"
+    }
+  ]
 }
