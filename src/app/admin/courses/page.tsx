@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
+import InviteCoursePartner from '@/components/admin/InviteCoursePartner'
 
 export const metadata = { title: 'Courses' }
 
@@ -20,13 +21,18 @@ export default async function AdminCoursesPage() {
     .select('id, name, slug, city, state, status, created_at, onboarding_step, onboarding_complete')
     .order('created_at', { ascending: false })
 
+  const { data: coursesForInvite } = await admin.from('courses').select('id, name').order('name')
+
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
-        <p className="text-[#6B7770] text-sm mt-1">
-          Active courses appear in the member booking flow.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
+          <p className="text-[#6B7770] text-sm mt-1">
+            Active courses appear in the member booking flow.
+          </p>
+        </div>
+        <InviteCoursePartner courses={coursesForInvite ?? []} />
       </div>
 
       <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
