@@ -16,7 +16,11 @@ const HOLES = [
     par: "Neil's Side",
     notes: (
       <>
-        Neil spent years building <em>Outing.golf</em> inside the industry —
+        Neil spent years building{' '}
+        <a href="https://outing.golf" className="text-[#0F3D2E] underline decoration-dotted">
+          Outing.golf
+        </a>{' '}
+        inside the industry —
         watching courses get squeezed by a company that&apos;s never set foot on
         their property.
       </>
