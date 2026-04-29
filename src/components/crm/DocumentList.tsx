@@ -2,7 +2,7 @@ import type { CrmDocument } from '@/lib/crm/types'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 interface Props {
-  recordType: 'course' | 'outing'
+  recordType: 'course' | 'outing' | 'member'
   recordId: string
 }
 

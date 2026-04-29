@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { InlineEditField } from '@/components/crm/InlineEditField'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
 import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
+import { GenerateDocModal } from '@/components/crm/GenerateDocModal'
 import { updateCrmMember, deleteCrmMember } from '@/app/actions/crm/members'
 import { useRouter } from 'next/navigation'
 import type { CrmMember } from '@/lib/crm/types'
@@ -13,6 +14,7 @@ interface Props { member: CrmMember }
 export function MemberDetailClient({ member }: Props) {
   const [showActivityModal, setShowActivityModal] = useState(false)
   const [showEmailModal, setShowEmailModal] = useState(false)
+  const [showDocModal, setShowDocModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const router = useRouter()
 
@@ -34,6 +36,7 @@ export function MemberDetailClient({ member }: Props) {
           <div className="flex gap-2">
             <button onClick={() => setShowActivityModal(true)} className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50">Log Activity</button>
             <button onClick={() => setShowEmailModal(true)} className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50">Send Email</button>
+            <button onClick={() => setShowDocModal(true)} className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50">Generate Doc</button>
             <button onClick={() => setShowDeleteConfirm(true)} className="text-xs px-3 py-1.5 border border-red-200 rounded-lg text-red-500 hover:bg-red-50">Delete</button>
           </div>
         </div>
@@ -50,24 +53,15 @@ export function MemberDetailClient({ member }: Props) {
       </div>
 
       {showActivityModal && (
-        <LogActivityModal
-          recordType="member"
-          recordId={member.id}
-          assignee="neil"
-          onClose={() => setShowActivityModal(false)}
-          onLogged={() => router.refresh()}
-        />
+        <LogActivityModal recordType="member" recordId={member.id} assignee="neil" onClose={() => setShowActivityModal(false)} onLogged={() => router.refresh()} />
       )}
 
       {showEmailModal && (
-        <EmailComposerModal
-          recordType="member"
-          recordId={member.id}
-          toEmail={member.email}
-          sentBy="neil"
-          onClose={() => setShowEmailModal(false)}
-          onSent={() => router.refresh()}
-        />
+        <EmailComposerModal recordType="member" recordId={member.id} toEmail={member.email} sentBy="neil" onClose={() => setShowEmailModal(false)} onSent={() => router.refresh()} />
+      )}
+
+      {showDocModal && (
+        <GenerateDocModal recordType="member" recordId={member.id} createdBy="neil" onClose={() => setShowDocModal(false)} onGenerated={() => router.refresh()} />
       )}
 
       {showDeleteConfirm && (
