@@ -57,7 +57,7 @@ export async function getCourseNetworkData(month: string): Promise<{
     { data: metrics, error: metricsError },
     { data: auditLog, error: auditError },
   ] = await Promise.all([
-    admin.from('courses').select('id, name, slug').eq('active', true).order('name'),
+    admin.from('courses').select('id, name, slug').eq('status', 'active').order('name'),
     admin.from('crm_course_metrics').select('*').eq('month', month),
     admin.from('admin_audit_log')
       .select('target_id, created_at')

@@ -29,7 +29,7 @@ export interface MemberKpis {
 export async function getMemberKpis(): Promise<MemberKpis> {
   const admin = createAdminClient()
   const { data: memberships, error: membershipsError } = await admin
-    .from('memberships').select('tier, status, created_at, updated_at')
+    .from('memberships').select('tier, status, created_at')
   if (membershipsError) throw new Error(`[getMemberKpis] memberships query failed: ${membershipsError.message}`)
 
   const active = (memberships ?? []).filter(m => m.status === 'active')
@@ -46,7 +46,7 @@ export async function getMemberKpis(): Promise<MemberKpis> {
   const atRiskCount = (memberships ?? []).filter(m =>
     m.tier === 'eagle' &&
     m.status === 'active' &&
-    (m.updated_at ?? m.created_at) < cutoff45
+    m.created_at < cutoff45
   ).length
 
   return { totalPaying, mrr, churnRatePct, atRiskCount, eagleCount, aceCount, freeCount }
@@ -95,10 +95,10 @@ export async function getAtRiskMembers(): Promise<AtRiskMember[]> {
   const cutoff = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString()
   const { data, error } = await admin
     .from('memberships')
-    .select('id, tier, created_at, updated_at, profiles(full_name, email)')
+    .select('id, tier, created_at, profiles(full_name, email)')
     .eq('tier', 'eagle')
     .eq('status', 'active')
-    .lt('updated_at', cutoff)
+    .lt('created_at', cutoff)
     .limit(100)
   if (error) throw new Error(`[getAtRiskMembers] query failed: ${error.message}`)
 
@@ -106,7 +106,6 @@ export async function getAtRiskMembers(): Promise<AtRiskMember[]> {
     id: string
     tier: string
     created_at: string
-    updated_at: string | null
     profiles: { full_name: string | null; email: string | null } | null
   }
 
@@ -117,7 +116,7 @@ export async function getAtRiskMembers(): Promise<AtRiskMember[]> {
     tier: m.tier,
     joinedAt: m.created_at,
     daysSinceActivity: Math.floor(
-      (Date.now() - new Date(m.updated_at ?? m.created_at).getTime()) / (1000 * 60 * 60 * 24)
+      (Date.now() - new Date(m.created_at).getTime()) / (1000 * 60 * 60 * 24)
     ),
   }))
 }
