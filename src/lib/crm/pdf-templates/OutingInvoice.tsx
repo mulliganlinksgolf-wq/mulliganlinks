@@ -3,7 +3,7 @@ import type { CrmOuting } from '@/lib/crm/types'
 
 const S = StyleSheet.create({
   page: { padding: 60, fontFamily: 'Helvetica', fontSize: 11, color: '#1a1a1a' },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32, borderBottomWidth: 1.5, borderBottomColor: '#1B4332', paddingBottom: 12 },
+  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32, borderBottomWidth: 1.5, borderBottomStyle: 'solid', borderBottomColor: '#1B4332', paddingBottom: 12 },
   brand: { fontSize: 20, fontFamily: 'Helvetica-Bold', color: '#1B4332' },
   brandSub: { fontSize: 9, color: '#6B7280' },
   headerRight: { alignItems: 'flex-end' },
@@ -15,17 +15,17 @@ const S = StyleSheet.create({
   infoName: { fontFamily: 'Helvetica-Bold', fontSize: 11, marginBottom: 2 },
   infoDetail: { fontSize: 10, color: '#4B5563', marginBottom: 1 },
   section: { marginBottom: 20 },
-  sectionTitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1B4332', marginBottom: 8, borderBottomWidth: 1, borderBottomColor: '#E5E7EB', paddingBottom: 4 },
-  lineRow: { flexDirection: 'row', marginBottom: 8, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' },
+  sectionTitle: { fontSize: 11, fontFamily: 'Helvetica-Bold', color: '#1B4332', marginBottom: 8, borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: '#E5E7EB', paddingBottom: 4 },
+  lineRow: { flexDirection: 'row', marginBottom: 8, paddingBottom: 8, borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: '#F3F4F6' },
   lineDesc: { flex: 1, fontSize: 10.5 },
   lineAmt: { width: 120, textAlign: 'right', fontSize: 10.5 },
-  creditRow: { flexDirection: 'row', marginBottom: 8, paddingBottom: 8, borderBottomWidth: 1, borderBottomColor: '#F3F4F6' },
+  creditRow: { flexDirection: 'row', marginBottom: 8, paddingBottom: 8, borderBottomWidth: 1, borderBottomStyle: 'solid', borderBottomColor: '#F3F4F6' },
   creditDesc: { flex: 1, fontSize: 10.5, color: '#059669' },
   creditAmt: { width: 120, textAlign: 'right', fontSize: 10.5, color: '#059669' },
   totalBox: { backgroundColor: '#1B4332', padding: 14, flexDirection: 'row', marginBottom: 24 },
   totalLabel: { flex: 1, fontFamily: 'Helvetica-Bold', fontSize: 14, color: '#FFFFFF' },
   totalAmt: { fontFamily: 'Helvetica-Bold', fontSize: 14, color: '#FFFFFF' },
-  dueBox: { backgroundColor: '#FEF2F2', borderWidth: 1, borderColor: '#FECACA', padding: 12, marginBottom: 24 },
+  dueBox: { backgroundColor: '#FEF2F2', borderWidth: 1, borderStyle: 'solid', borderColor: '#FECACA', padding: 12, marginBottom: 24 },
   dueText: { fontSize: 10.5, color: '#991B1B', fontFamily: 'Helvetica-Bold', textAlign: 'center' },
   payText: { fontSize: 10, lineHeight: 1.6, color: '#374151' },
   footer: { position: 'absolute', bottom: 40, left: 60, right: 60, textAlign: 'center', fontSize: 9, color: '#9CA3AF' },
@@ -41,7 +41,7 @@ interface Props {
 
 export function OutingInvoicePDF({ outing, invoiceNumber, dueDate, depositPaid, generatedAt }: Props) {
   const generatedDateStr = generatedAt
-    ? new Date(generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    ? new Date(generatedAt.includes('T') ? generatedAt : generatedAt + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : ''
   const dueDateStr = dueDate
     ? new Date(dueDate + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
