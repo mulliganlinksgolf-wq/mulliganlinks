@@ -3,14 +3,12 @@
 // Last legal review: April 2026. Review again before major marketing campaigns.
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { Caveat } from 'next/font/google'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { NavMenu } from '@/components/NavMenu'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
-
-const caveat = Caveat({ subsets: ['latin'], weight: ['400', '600', '700'] })
+import { FoundersScorecard } from '@/components/FoundersScorecard'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
@@ -513,81 +511,10 @@ export default async function HomePage() {
         </FadeIn>
       </section>
 
-      {/* ── Founder Note ──────────────────────────────────────── */}
+      {/* ── Founders' Scorecard ──────────────────────────────── */}
       <section className="bg-[#0F3D2E] px-6 py-24">
         <FadeIn>
-        <div className="max-w-2xl mx-auto">
-          <p className="text-center text-xs font-bold tracking-[0.14em] uppercase text-[#F4F1EA]/35 mb-10">
-            A note from the founders
-          </p>
-          {/* Paper card */}
-          <div className="relative bg-[#FDFAF4] rounded-sm shadow-2xl px-10 py-12 sm:px-14 sm:py-14"
-               style={{ boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 2px 8px rgba(0,0,0,0.2)', transform: 'rotate(-0.4deg)' }}>
-            {/* Ruled lines */}
-            <div className="absolute inset-0 rounded-sm overflow-hidden pointer-events-none" aria-hidden>
-              {Array.from({ length: 22 }).map((_, i) => (
-                <div key={i} className="absolute w-full border-b border-[#D4E4DC]/60"
-                     style={{ top: `${68 + i * 32}px` }} />
-              ))}
-              {/* Left margin red line */}
-              <div className="absolute top-0 bottom-0 border-l-2 border-[#F4A0A0]/50" style={{ left: '52px' }} />
-            </div>
-
-            <div className={`${caveat.className} relative`}>
-              {/* Date line */}
-              <p className="text-[#6B7770] text-lg mb-8 text-right" style={{ fontWeight: 400 }}>
-                Detroit, April 2026
-              </p>
-
-              {/* Salutation */}
-              <p className="text-[#1A1A1A] text-2xl mb-6" style={{ fontWeight: 600 }}>
-                Hey —
-              </p>
-
-              {/* Body */}
-              <div className="space-y-5 text-[#1A1A1A] text-[1.35rem] leading-[1.8]" style={{ fontWeight: 400 }}>
-                <p>
-                  Between the two of us, we&apos;ve seen this problem from every angle. Neil spent years
-                  building{' '}
-                  <a href="https://outing.golf" className="text-[#0F3D2E] underline decoration-dotted">Outing.golf</a>{' '}
-                  inside the golf industry, watching courses get squeezed by a company that&apos;s never
-                  set foot on their property.
-                </p>
-                <p>
-                  Billy&apos;s been the golfer on the other side — paying booking fees, watching credits
-                  expire, feeling like a transaction instead of a regular.
-                </p>
-                <p>
-                  We&apos;re not building TeeAhead because the market is hot. We&apos;re building it
-                  because we&apos;re both tired of watching it happen.
-                </p>
-                <p>
-                  If you run a course in Metro Detroit, reach out to Neil directly —{' '}
-                  <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline decoration-dotted">neil@teeahead.com</a>.
-                  Not a contact form. His actual inbox.
-                </p>
-                <p>
-                  If you&apos;re a golfer who just wants a fair deal at your home course, Billy&apos;s
-                  your guy —{' '}
-                  <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] underline decoration-dotted">billy@teeahead.com</a>.
-                  We both built this for you.
-                </p>
-              </div>
-
-              {/* Signatures */}
-              <div className="mt-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-8">
-                <div>
-                  <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Neil Barris</p>
-                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Neil Barris, Co-Founder, TeeAhead · neil@teeahead.com</p>
-                </div>
-                <div className="sm:text-right">
-                  <p className="text-[#1A1A1A] text-4xl" style={{ fontWeight: 700 }}>Billy Beslock</p>
-                  <p className="text-[#6B7770] text-xl mt-1" style={{ fontWeight: 400 }}>Co-Founder · billy@teeahead.com</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+          <FoundersScorecard />
         </FadeIn>
       </section>
 

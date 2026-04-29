@@ -13,6 +13,7 @@ import path from 'path'
 
 const ROOT = path.resolve(__dirname, '../..')
 const PAGE = fs.readFileSync(path.join(ROOT, 'src/app/page.tsx'), 'utf-8')
+const SCORECARD = fs.readFileSync(path.join(ROOT, 'src/components/FoundersScorecard.tsx'), 'utf-8')
 const BARTER = fs.readFileSync(path.join(ROOT, 'src/components/BarterPage.tsx'), 'utf-8')
 
 describe('Homepage (page.tsx) — legal compliance', () => {
@@ -29,7 +30,8 @@ describe('Homepage (page.tsx) — legal compliance', () => {
   })
 
   it('attributes pull-quote to Neil Barris by name', () => {
-    expect(PAGE).toContain('Neil Barris, Co-Founder, TeeAhead')
+    // Founder attribution moved to FoundersScorecard component (April 2026 redesign)
+    expect(SCORECARD).toContain('Neil Barris')
   })
 
   it('comparison table removed — source notes moved to stat section', () => {
