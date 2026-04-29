@@ -47,10 +47,12 @@ export interface FinancialKpis {
 export async function getFinancialKpis(from: string, to: string): Promise<FinancialKpis> {
   const admin = createAdminClient()
 
-  const [{ data: memberships }, { data: expenses }] = await Promise.all([
+  const [{ data: memberships, error: membershipsError }, { data: expenses, error: expensesError }] = await Promise.all([
     admin.from('memberships').select('tier, status').eq('status', 'active'),
     admin.from('crm_expenses').select('amount, month').gte('month', from.slice(0, 7)).lte('month', to.slice(0, 7)),
   ])
+  if (membershipsError) throw new Error(`[getFinancialKpis] memberships query failed: ${membershipsError.message}`)
+  if (expensesError) throw new Error(`[getFinancialKpis] expenses query failed: ${expensesError.message}`)
 
   const active = memberships ?? []
   const eagleCount = active.filter(m => m.tier === 'eagle').length
@@ -58,14 +60,14 @@ export async function getFinancialKpis(from: string, to: string): Promise<Financ
   const mrr = calcMrr({ eagleCount, aceCount })
   const arr = mrr * 12
   const totalExpenses = (expenses ?? []).reduce((s, e) => s + Number(e.amount), 0)
-  const grossMarginPct = calcGrossMargin({ revenue: mrr, cogs: 0 })
+  const grossMarginPct = calcGrossMargin({ revenue: mrr, cogs: totalExpenses })
 
   return {
     mrrCurrent: mrr,
     arrCurrent: arr,
     totalRevenueMtd: mrr,
     grossMarginPct,
-    netBurn: totalExpenses > mrr ? totalExpenses - mrr : null,
+    netBurn: totalExpenses > 0 ? totalExpenses - mrr : null,
     eagleCount,
     aceCount,
   }
@@ -80,12 +82,13 @@ export interface RevenueByMonth {
 
 export async function getRevenueByMonth(from: string, to: string): Promise<RevenueByMonth[]> {
   const admin = createAdminClient()
-  const { data: metrics } = await admin
+  const { data: metrics, error: metricsError } = await admin
     .from('crm_member_metrics')
     .select('month, mrr_eagle, mrr_ace')
     .gte('month', from.slice(0, 7))
     .lte('month', to.slice(0, 7))
     .order('month')
+  if (metricsError) throw new Error(`[getRevenueByMonth] query failed: ${metricsError.message}`)
 
   return (metrics ?? []).map(m => ({
     month: m.month,
@@ -104,11 +107,12 @@ export interface MrrHistory {
 
 export async function getMrrHistory(months = 12): Promise<MrrHistory[]> {
   const admin = createAdminClient()
-  const { data } = await admin
+  const { data, error } = await admin
     .from('crm_member_metrics')
     .select('month, mrr_eagle, mrr_ace')
     .order('month', { ascending: false })
     .limit(months)
+  if (error) throw new Error(`[getMrrHistory] query failed: ${error.message}`)
 
   return (data ?? []).reverse().map(m => ({
     month: m.month,
@@ -128,17 +132,22 @@ export interface PnlRow {
 
 export async function getPnlByMonth(from: string, to: string): Promise<PnlRow[]> {
   const admin = createAdminClient()
-  const [{ data: metrics }, { data: expenses }] = await Promise.all([
+  const [{ data: metrics, error: metricsError }, { data: expenses, error: expensesError }] = await Promise.all([
     admin.from('crm_member_metrics').select('month, mrr_eagle, mrr_ace')
       .gte('month', from.slice(0, 7)).lte('month', to.slice(0, 7)).order('month'),
     admin.from('crm_expenses').select('month, category, amount')
       .gte('month', from.slice(0, 7)).lte('month', to.slice(0, 7)),
   ])
+  if (metricsError) throw new Error(`[getPnlByMonth] metrics query failed: ${metricsError.message}`)
+  if (expensesError) throw new Error(`[getPnlByMonth] expenses query failed: ${expensesError.message}`)
 
   const expMap: Record<string, Partial<Record<ExpenseCategory, number>>> = {}
   for (const e of expenses ?? []) {
     if (!expMap[e.month]) expMap[e.month] = {}
-    expMap[e.month][e.category as ExpenseCategory] = Number(e.amount)
+    if ((EXPENSE_CATEGORIES as readonly string[]).includes(e.category)) {
+      expMap[e.month][e.category as ExpenseCategory] =
+        (expMap[e.month][e.category as ExpenseCategory] ?? 0) + Number(e.amount)
+    }
   }
 
   return (metrics ?? []).map(m => {
