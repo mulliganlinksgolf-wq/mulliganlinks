@@ -124,9 +124,10 @@ export default async function GolferWaitlistPage({
       <section className="bg-white px-6 py-12 border-t-4 border-[#E0A800]">
         <div className="max-w-4xl mx-auto flex flex-wrap justify-center gap-8 sm:gap-16 text-center">
           {[
-            { value: '200+', label: 'Golfers waiting' },
-            { value: '20', label: 'Target courses' },
-            { value: '$0', label: 'To join' },
+            { value: '$0', label: 'Free to join' },
+            { value: '$89/yr', label: 'Eagle membership' },
+            { value: '$40', label: 'Saved vs GolfPass+' },
+            { value: '0', label: 'Booking fees on Eagle+' },
             { value: '10', label: 'Founding Partner spots' },
           ].map(({ value, label }) => (
             <div key={label}>
