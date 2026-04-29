@@ -7,6 +7,7 @@ import KpiTile from '@/components/reports/KpiTile'
 import DateRangePicker from '@/components/reports/DateRangePicker'
 import CsvExportButton from '@/components/reports/CsvExportButton'
 import { RevenueStackedChart, MrrAreaChart } from './FinancialCharts'
+import ExpenseForm from './ExpenseForm'
 
 export const metadata = { title: 'Financial Reports' }
 
@@ -136,7 +137,7 @@ export default async function FinancialReportPage({
         </div>
       </div>
 
-      {/* ExpenseForm goes here — Task 5 */}
+      <ExpenseForm />
     </div>
   )
 }
