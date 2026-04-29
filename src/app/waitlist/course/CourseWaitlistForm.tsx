@@ -1,14 +1,13 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinCourseWaitlist } from './actions'
 
 export function CourseWaitlistForm() {
-  const router = useRouter()
   const searchParams = useSearchParams()
   const tier = searchParams.get('tier') ?? 'founding'
 
@@ -16,6 +15,7 @@ export function CourseWaitlistForm() {
   const [isPending, startTransition] = useTransition()
   const [onGolfnow, setOnGolfnow] = useState<boolean | null>(null)
   const [avgGreenFee, setAvgGreenFee] = useState<string>('')
+  const [submitted, setSubmitted] = useState<string | null>(null)
 
   const estimatedBarter =
     onGolfnow && avgGreenFee && !isNaN(parseInt(avgGreenFee, 10))
@@ -27,7 +27,8 @@ export function CourseWaitlistForm() {
     startTransition(async () => {
       const result = await joinCourseWaitlist(formData)
       if (result.success) {
-        router.push('/waitlist/course/confirmed')
+        const emailVal = (formData.get('email') as string)?.toLowerCase().trim() ?? ''
+        setSubmitted(emailVal)
       } else {
         setError(result.error ?? 'Something went wrong.')
       }
@@ -35,6 +36,25 @@ export function CourseWaitlistForm() {
   }
 
   const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
+
+  if (submitted) {
+    return (
+      <div className="space-y-6 text-center py-4">
+        <p className="text-4xl">✅</p>
+        <div className="space-y-2">
+          <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
+          <p className="text-sm text-[#F4F1EA]/70">Neil or Billy will email you at <span className="font-semibold text-[#F4F1EA]">{submitted}</span> within 48 hours.</p>
+        </div>
+        <p className="text-sm text-[#F4F1EA]/60">In the meantime — use the barter calculator to see exactly what GolfNow cost you last year.</p>
+        <a
+          href="/barter"
+          className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+        >
+          Run the Barter Calculator →
+        </a>
+      </div>
+    )
+  }
 
   return (
     <form action={handleSubmit} className="space-y-6">
@@ -208,8 +228,8 @@ export function CourseWaitlistForm() {
         {isPending ? 'Submitting…' : 'Reserve My Founding Partner Spot →'}
       </Button>
 
-      <p className="text-xs text-center text-[#F4F1EA]/50">
-        Founding Partner status is subject to review. We&apos;ll be in touch within 48 hours.
+      <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
+        After you apply: Neil or Billy will email you personally within 48 hours. Founding Partner status is reviewed manually — we&apos;re selective so every course in the network is one golfers actually want to play.
       </p>
     </form>
   )

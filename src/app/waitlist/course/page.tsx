@@ -18,7 +18,7 @@ export default async function CourseWaitlistPage() {
     .select('count, cap')
     .single()
 
-  const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+  const spotsRemaining = Math.max(0, (counter?.cap ?? 10) - (counter?.count ?? 0))
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -61,17 +61,14 @@ export default async function CourseWaitlistPage() {
             </div>
 
             {/* Headline */}
-            <h1
-              className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]"
-              style={{ fontSize: 'clamp(40px, 6vw, 58px)' }}
-            >
-              Always one tee{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>ahead.</em>
+            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(36px, 5.5vw, 54px)' }}>
+              Stop giving GolfNow{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>your tee times.</em>
             </h1>
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              Michigan&apos;s first golf loyalty platform. Bring your course on board — no credit card, no commitment.
+              TeeAhead gives courses a complete booking and loyalty platform — free for your first year. No barter. No commissions. No data extraction.
             </p>
 
           </div>
@@ -85,7 +82,7 @@ export default async function CourseWaitlistPage() {
             { value: '200+', label: 'Golfers waiting' },
             { value: '10', label: 'Founding Partner spots' },
             { value: '$0/mo', label: 'Year 1' },
-            { value: '$349/mo', label: 'Month 13+' },
+            { value: '$349/mo', label: 'Year 2 onward' },
           ].map(({ value, label }) => (
             <div key={label}>
               <p
@@ -126,19 +123,19 @@ export default async function CourseWaitlistPage() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                icon: '📊',
-                title: 'Own Your Data',
-                description: 'Every golfer record belongs to your course. Full CSV export anytime. Zero lock-in.',
+                icon: '💸',
+                title: 'Kill the Barter',
+                description: 'Stop handing GolfNow free tee times worth $80K–$150K a year. Keep every dollar your golfers spend.',
               },
               {
-                icon: '🃏',
-                title: 'QR Card Network',
-                description: 'Business cards drive golfers to your course. Free marketing at every handshake.',
+                icon: '📋',
+                title: 'Own Your Golfer Data',
+                description: 'Every booking, every profile, every email address belongs to your course. Full CSV export anytime. We never market to your golfers.',
               },
               {
-                icon: '🚫',
-                title: 'Replace Barter',
-                description: 'Stop giving GolfNow free tee times. Keep your revenue. Build a loyal repeat base.',
+                icon: '⚡',
+                title: 'Live in 48 Hours',
+                description: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right.",
               },
             ].map(({ icon, title, description }) => (
               <div
@@ -169,7 +166,7 @@ export default async function CourseWaitlistPage() {
                 description: '10 founding spots. Free for your first year.',
               },
               {
-                title: 'Standard (Month 13+)',
+                title: 'Standard (Year 2 Onward)',
                 price: '$349/mo',
                 description: 'Flat monthly, no commissions, no barter.',
               },
@@ -190,20 +187,44 @@ export default async function CourseWaitlistPage() {
               </div>
             ))}
           </div>
-          <div className="flex justify-center">
-            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-5 py-2.5">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#8B6F00]">
-                First 10 courses only — Founding Partner spots · {spotsRemaining} of 10 spots remaining
-              </span>
+          {spotsRemaining < 10 && (
+            <div className="flex justify-center">
+              <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-5 py-2.5">
+                <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
+                <span className="text-sm font-semibold text-[#8B6F00]">
+                  {spotsRemaining} of 10 Founding Partner spots remaining
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </section>
 
       {/* ── GolfNow Countdown ────────────────────────────────── */}
       <section className="bg-white px-6 py-12 border-t border-black/5">
         <GolfNowCountdown />
+      </section>
+
+      {/* ── Social proof bar ────────────────────────────────── */}
+      <section className="bg-[#F0F4F1] px-6 py-8 border-t border-[#0F3D2E]/10">
+        <div className="max-w-xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div className="space-y-0.5">
+              <p className="text-xl font-black text-[#0F3D2E]">100+</p>
+              <p className="text-xs text-[#6B7770] leading-snug">courses left GolfNow<br/>in Q1 2025 alone</p>
+            </div>
+            <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
+            <div className="space-y-0.5">
+              <p className="text-xl font-black text-[#0F3D2E]">$94,500</p>
+              <p className="text-xs text-[#6B7770] leading-snug">avg annual barter cost<br/>per course</p>
+            </div>
+            <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
+            <div className="space-y-0.5">
+              <p className="text-xl font-black text-[#0F3D2E]">382%</p>
+              <p className="text-xs text-[#6B7770] leading-snug">revenue increase at Windsor Parke<br/>after leaving GolfNow</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ── Form section ─────────────────────────────────────── */}
@@ -213,6 +234,9 @@ export default async function CourseWaitlistPage() {
             <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">
               COURSE WAITLIST — FOUNDING PARTNER PROGRAM
             </p>
+            {spotsRemaining > 0 && spotsRemaining < 10 && (
+              <p className="text-sm text-[#E0A800]/80 mb-2">{spotsRemaining} of 10 founding spots remaining.</p>
+            )}
             <p className="text-lg font-semibold text-[#F4F1EA] mb-8">Bring TeeAhead to your course.</p>
             <Suspense fallback={null}>
               <CourseWaitlistForm />
