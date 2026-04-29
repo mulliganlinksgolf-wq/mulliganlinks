@@ -5,7 +5,7 @@ vi.mock('@/lib/supabase/admin', () => ({
   createAdminClient: vi.fn(),
 }))
 
-import { getCrmDashboardStats, getStaleLeads } from './queries'
+import { getCrmDashboardStats, getRecentActivity, getStaleLeads } from './queries'
 
 describe('getCrmDashboardStats', () => {
   it('counts pipeline courses excluding partner and churned', async () => {
@@ -30,6 +30,30 @@ describe('getCrmDashboardStats', () => {
     expect(stats.pipelineValue).toBe(500)
     expect(stats.activeOutings).toBe(1)
     expect(stats.payingMembers).toBe(1)
+  })
+})
+
+describe('getRecentActivity', () => {
+  it('returns recent activity log entries', async () => {
+    const { createAdminClient } = await import('@/lib/supabase/admin')
+    vi.mocked(createAdminClient).mockReturnValue({
+      from: vi.fn((table: string) => {
+        const chain: Record<string, unknown> = {}
+        chain.select = vi.fn().mockReturnValue(chain)
+        chain.order = vi.fn().mockReturnValue(chain)
+        chain.limit = vi.fn().mockResolvedValue({
+          data: table === 'crm_activity_log'
+            ? [{ id: '1', record_type: 'course', record_id: 'c1', type: 'call', body: 'talked', created_by: 'neil', created_at: '2026-01-01T00:00:00Z' }]
+            : [],
+          error: null,
+        })
+        return chain
+      }),
+    } as ReturnType<typeof createAdminClient>)
+
+    const result = await getRecentActivity()
+    expect(result).toHaveLength(1)
+    expect(result[0].id).toBe('1')
   })
 })
 

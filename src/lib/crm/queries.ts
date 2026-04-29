@@ -1,22 +1,30 @@
 // src/lib/crm/queries.ts
 import { createAdminClient } from '@/lib/supabase/admin'
-import type { CrmDashboardStats, StaleLeadSummary } from './types'
+import type { CrmActivityLog, CrmDashboardStats, StaleLeadSummary } from './types'
 
 export async function getCrmDashboardStats(): Promise<CrmDashboardStats> {
   const supabase = createAdminClient()
-  const [courses, outings, members] = await Promise.all([
+  const [
+    { data: coursesData, error: coursesError },
+    { data: outingsData, error: outingsError },
+    { data: membersData, error: membersError },
+  ] = await Promise.all([
     supabase.from('crm_courses').select('stage, estimated_value'),
     supabase.from('crm_outings').select('status'),
     supabase.from('crm_members').select('status, membership_tier'),
   ])
 
-  const nonTerminalCourses = (courses.data ?? []).filter(
+  if (coursesError) throw new Error(coursesError.message)
+  if (outingsError) throw new Error(outingsError.message)
+  if (membersError) throw new Error(membersError.message)
+
+  const nonTerminalCourses = (coursesData ?? []).filter(
     (c) => c.stage !== 'partner' && c.stage !== 'churned'
   )
-  const activeOutings = (outings.data ?? []).filter(
+  const activeOutings = (outingsData ?? []).filter(
     (o) => o.status !== 'completed' && o.status !== 'cancelled'
   )
-  const payingMembers = (members.data ?? []).filter(
+  const payingMembers = (membersData ?? []).filter(
     (m) => m.status === 'active' && m.membership_tier !== 'free'
   )
 
@@ -31,13 +39,14 @@ export async function getCrmDashboardStats(): Promise<CrmDashboardStats> {
   }
 }
 
-export async function getRecentActivity(limit = 20) {
+export async function getRecentActivity(limit = 20): Promise<CrmActivityLog[]> {
   const supabase = createAdminClient()
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('crm_activity_log')
-    .select('*')
+    .select('id, record_type, record_id, type, body, created_by, created_at')
     .order('created_at', { ascending: false })
     .limit(limit)
+  if (error) throw new Error(error.message)
   return data ?? []
 }
 
@@ -47,7 +56,10 @@ export async function getStaleLeads(days: number): Promise<StaleLeadSummary> {
   cutoff.setDate(cutoff.getDate() - days)
   const cutoffIso = cutoff.toISOString()
 
-  const [courses, outings] = await Promise.all([
+  const [
+    { data: coursesData, error: coursesError },
+    { data: outingsData, error: outingsError },
+  ] = await Promise.all([
     supabase
       .from('crm_courses')
       .select('id, name, stage, last_activity_at, assigned_to')
@@ -60,8 +72,11 @@ export async function getStaleLeads(days: number): Promise<StaleLeadSummary> {
       .not('status', 'in', '("completed","cancelled")'),
   ])
 
+  if (coursesError) throw new Error(coursesError.message)
+  if (outingsError) throw new Error(outingsError.message)
+
   return {
-    staleCourses: courses.data ?? [],
-    staleOutings: outings.data ?? [],
+    staleCourses: coursesData ?? [],
+    staleOutings: outingsData ?? [],
   }
 }
