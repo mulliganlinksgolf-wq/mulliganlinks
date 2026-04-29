@@ -23,7 +23,7 @@ describe('getCrmDashboardStats', () => {
         }
         return { select: vi.fn().mockResolvedValue({ data: [], error: null }) }
       }),
-    } as ReturnType<typeof createAdminClient>)
+    } as unknown as ReturnType<typeof createAdminClient>)
 
     const stats = await getCrmDashboardStats()
     expect(stats.pipelineCourses).toBe(1)
@@ -49,7 +49,7 @@ describe('getRecentActivity', () => {
         })
         return chain
       }),
-    } as ReturnType<typeof createAdminClient>)
+    } as unknown as ReturnType<typeof createAdminClient>)
 
     const result = await getRecentActivity()
     expect(result).toHaveLength(1)
@@ -74,7 +74,7 @@ describe('getStaleLeads', () => {
         })
         return chain
       }),
-    } as ReturnType<typeof createAdminClient>)
+    } as unknown as ReturnType<typeof createAdminClient>)
 
     const result = await getStaleLeads(7)
     expect(result.staleCourses).toHaveLength(1)
