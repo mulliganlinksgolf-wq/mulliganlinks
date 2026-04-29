@@ -1,13 +1,12 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CourseKanban } from '@/components/crm/CourseKanban'
-import { CourseTable } from '@/components/crm/CourseTable'
+import { CoursesTableWrapper } from './CoursesTableWrapper'
 import CoursesViewToggle from './CoursesViewToggle'
 import Link from 'next/link'
-import type { CrmCourse } from '@/lib/crm/types'
 
 export const dynamic = 'force-dynamic'
 
-async function getCourses(): Promise<CrmCourse[]> {
+async function getCourses() {
   const supabase = createAdminClient()
   const { data } = await supabase
     .from('crm_courses')
@@ -43,7 +42,7 @@ export default async function CoursesPage({
       {view === 'kanban' ? (
         <CourseKanban initialCourses={courses} />
       ) : (
-        <CourseTable initialCourses={courses} onExportCsv={() => {}} />
+        <CoursesTableWrapper courses={courses} />
       )}
     </div>
   )

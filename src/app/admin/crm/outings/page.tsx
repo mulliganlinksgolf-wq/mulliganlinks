@@ -1,11 +1,10 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { OutingTable } from '@/components/crm/OutingTable'
+import { OutingsTableWrapper } from './OutingsTableWrapper'
 import Link from 'next/link'
-import type { CrmOuting } from '@/lib/crm/types'
 
 export const dynamic = 'force-dynamic'
 
-async function getOutings(): Promise<CrmOuting[]> {
+async function getOutings() {
   const supabase = createAdminClient()
   const { data } = await supabase.from('crm_outings').select('*').order('event_date', { ascending: true, nullsFirst: false })
   return data ?? []
@@ -22,7 +21,7 @@ export default async function OutingsPage() {
         </Link>
       </div>
       <div className="bg-white rounded-xl border border-slate-200 p-4">
-        <OutingTable initialOutings={outings} onExportCsv={() => {}} />
+        <OutingsTableWrapper outings={outings} />
       </div>
     </div>
   )

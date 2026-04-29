@@ -1,5 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin'
-import { MemberTable } from '@/components/crm/MemberTable'
+import { MembersTableWrapper } from './MembersTableWrapper'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -20,7 +20,7 @@ export default async function CrmMembersPage() {
         </Link>
       </div>
       <div className="bg-white rounded-xl border border-slate-200 p-4">
-        <MemberTable initialMembers={members ?? []} onExportCsv={() => {}} />
+        <MembersTableWrapper members={members ?? []} />
       </div>
     </div>
   )
