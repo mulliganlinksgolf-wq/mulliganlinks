@@ -41,7 +41,9 @@ interface Props {
 }
 
 export function OnboardingPacketPDF({ course, generatedAt }: Props) {
-  const dateStr = new Date(generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  const dateStr = generatedAt
+    ? new Date(generatedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : ''
 
   return (
     <Document>
@@ -66,7 +68,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
             ['Brief your pro shop team', 'Let your staff know that TeeAhead members will start coming through. Process: verify active membership (app or email), apply the rate from the Benefits Schedule, record the round normally.'],
             ['Your first monthly report arrives on the 1st', "On the 1st of next month, you'll receive a TeeAhead activity report showing member visits, rounds played, and redemptions. This is your proof of performance."],
           ] as [string, string][]).map(([title, desc], i) => (
-            <View key={i} style={S.stepRow}>
+            <View key={i} style={S.stepRow} wrap={false}>
               <View style={S.stepBadge}><Text style={S.stepBadgeText}>{i + 1}</Text></View>
               <View style={S.stepContent}>
                 <Text style={S.stepTitle}>{title}</Text>
@@ -78,7 +80,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
 
         <View style={S.section}>
           <Text style={S.sectionTitle}>Member Tiers — Quick Reference for Staff</Text>
-          <View style={S.tiersRow}>
+          <View style={S.tiersRow} wrap={false}>
             <View style={S.tierBox}>
               <Text style={S.tierName}>Eagle Member</Text>
               <Text style={S.tierPrice}>$89/mo subscription</Text>
