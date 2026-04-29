@@ -128,7 +128,6 @@ export default async function GolferWaitlistPage({
             { value: '$89/yr', label: 'Eagle membership' },
             { value: '$40', label: 'Saved vs GolfPass+' },
             { value: '0', label: 'Booking fees on Eagle+' },
-            { value: '10', label: 'Founding Partner spots' },
           ].map(({ value, label }) => (
             <div key={label}>
               <p
