@@ -188,7 +188,7 @@ export default async function GolferWaitlistPage({
                         {tierItem.badge}
                       </div>
                     )}
-                    {isSelected && !isEagle && (
+                    {isSelected && (
                       <div className="absolute -top-3 right-4 bg-[#0F3D2E] text-white text-xs font-bold px-3 py-1 rounded-full whitespace-nowrap">
                         ✓ Selected
                       </div>
