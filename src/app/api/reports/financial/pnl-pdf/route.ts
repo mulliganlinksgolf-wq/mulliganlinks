@@ -24,6 +24,10 @@ export async function GET(req: NextRequest) {
     sp.get('to') ?? undefined,
   )
 
+  // Sanitize to prevent Content-Disposition header injection (only allow YYYY-MM-DD chars)
+  const safeFrom = range.from.replace(/[^0-9\-]/g, '')
+  const safeTo = range.to.replace(/[^0-9\-]/g, '')
+
   try {
     const rows = await getPnlByMonth(range.from, range.to)
     const generatedAt = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
@@ -33,7 +37,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse(new Uint8Array(buffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="teeahead-pnl-${range.from}-${range.to}.pdf"`,
+        'Content-Disposition': `attachment; filename="teeahead-pnl-${safeFrom}-${safeTo}.pdf"`,
       },
     })
   } catch (err) {
