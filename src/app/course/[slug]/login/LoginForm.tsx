@@ -22,12 +22,12 @@ export default function LoginForm({ slug }: { slug: string }) {
       )}
       <div>
         <label className="block text-sm font-medium text-[#1A1A1A] mb-1">Email</label>
-        <input name="email" type="email" required autoComplete="email"
+        <input name="email" type="email" required autoComplete="email" disabled={loading}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]" />
       </div>
       <div>
         <label className="block text-sm font-medium text-[#1A1A1A] mb-1">Password</label>
-        <input name="password" type="password" required autoComplete="current-password"
+        <input name="password" type="password" required autoComplete="current-password" disabled={loading}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]" />
       </div>
       <button type="submit" disabled={loading}
