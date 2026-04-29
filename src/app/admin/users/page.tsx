@@ -43,7 +43,7 @@ export default async function AdminUsersPage({
   const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
     admin
       .from('profiles')
-      .select('id, full_name, phone, is_admin, created_at, memberships(tier, status, is_founding_member)')
+      .select('id, full_name, phone, is_admin, founding_member, created_at, memberships(tier, status)')
       .order('created_at', { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
   ])
@@ -154,7 +154,7 @@ export default async function AdminUsersPage({
                         </span>
                       </td>
                       <td className="px-5 py-3 text-[#6B7770] text-xs">
-                        {membership?.is_founding_member ? '★ Founding' : '—'}
+                        {m.founding_member ? '★ Founding' : '—'}
                       </td>
                       <td className="px-5 py-3 text-[#6B7770]">
                         {new Date(m.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
