@@ -106,7 +106,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
           We're thrilled to have {course.name} as a Founding Partner. If anything is unclear, if you want to adjust your benefit rates, or if you just have a question — reply to any TeeAhead email or reach out directly.
         </Text>
 
-        <Text style={S.signature}>Neil Barris &amp; Billy Eslock{'\n'}TeeAhead Co-Founders</Text>
+        <Text style={S.signature}>Neil Barris & Billy Eslock{'\n'}TeeAhead Co-Founders</Text>
 
         <View style={S.footerDivider}>
           <Text style={S.footerText}>TeeAhead, LLC · teeahead.com</Text>
