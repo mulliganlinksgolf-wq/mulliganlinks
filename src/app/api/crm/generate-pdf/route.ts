@@ -36,6 +36,10 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  if (body.recordType !== 'course' && body.recordType !== 'outing') {
+    return NextResponse.json({ error: 'Invalid record type' }, { status: 400 })
+  }
+
   const table = body.recordType === 'course' ? 'crm_courses' : 'crm_outings'
   const { data: record, error: recordError } = await admin.from(table).select('*').eq('id', body.recordId).single()
   if (recordError || !record) {
