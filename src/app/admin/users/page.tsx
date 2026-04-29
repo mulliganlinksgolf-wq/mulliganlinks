@@ -71,7 +71,9 @@ export default async function AdminUsersPage({
         if (!nameMatch && !emailMatch) return false
       }
 
-      if (tierFilter && membership?.tier !== tierFilter) return false
+      // 'fairway' is the display label for members with no paid membership
+      const effectiveTier = membership?.tier ?? 'fairway'
+      if (tierFilter && effectiveTier !== tierFilter) return false
 
       if (statusFilter && membership?.status !== statusFilter) return false
 
