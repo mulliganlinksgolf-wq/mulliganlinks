@@ -10,8 +10,7 @@ import { joinGolferWaitlist } from './actions'
 export function GolferWaitlistForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const tierParam = searchParams.get('tier')
-  const [selectedTier, setSelectedTier] = useState<string>(tierParam ?? '')
+  const selectedTier = searchParams.get('tier') ?? ''
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -140,7 +139,7 @@ export function GolferWaitlistForm() {
                 value={value}
                 disabled={isPending}
                 checked={selectedTier === value}
-                onChange={() => setSelectedTier(value)}
+                onChange={() => router.push(`?tier=${value}`, { scroll: false })}
                 className="accent-[#E0A800]"
               />
               <span className="text-sm text-[#F4F1EA]">{label}</span>
