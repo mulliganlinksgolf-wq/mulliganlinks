@@ -1,7 +1,9 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import { RecordHeader } from '@/components/crm/RecordHeader'
 import { ActivityLog } from '@/components/crm/ActivityLog'
+import { DocumentList } from '@/components/crm/DocumentList'
 import { OutingDetailClient } from './OutingDetailClient'
 import { getActivityLog } from '@/app/actions/crm/activity'
 
@@ -34,9 +36,17 @@ export default async function OutingDetailPage({ params }: { params: Promise<{ i
         <div className="lg:col-span-2">
           <OutingDetailClient outing={outing} />
         </div>
-        <div className="bg-white rounded-xl border border-slate-200 p-5">
-          <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Activity Log</h3>
-          <ActivityLog activities={activities} />
+        <div className="space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Activity Log</h3>
+            <ActivityLog activities={activities} />
+          </div>
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Documents</h3>
+            <Suspense fallback={<p className="text-xs text-slate-400">Loading…</p>}>
+              <DocumentList recordType="outing" recordId={id} />
+            </Suspense>
+          </div>
         </div>
       </div>
     </div>

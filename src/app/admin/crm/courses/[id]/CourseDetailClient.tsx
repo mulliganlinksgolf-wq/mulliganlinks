@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { InlineEditField } from '@/components/crm/InlineEditField'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
 import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
+import { GenerateDocModal } from '@/components/crm/GenerateDocModal'
 import { updateCourse, deleteCourse } from '@/app/actions/crm/courses'
 import { useRouter } from 'next/navigation'
 import type { CrmCourse } from '@/lib/crm/types'
@@ -15,6 +16,7 @@ interface Props {
 export function CourseDetailClient({ course }: Props) {
   const [showActivityModal, setShowActivityModal] = useState(false)
   const [showEmailModal, setShowEmailModal] = useState(false)
+  const [showDocModal, setShowDocModal] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const router = useRouter()
 
@@ -47,6 +49,12 @@ export function CourseDetailClient({ course }: Props) {
               Send Email
             </button>
             <button
+              onClick={() => setShowDocModal(true)}
+              className="text-xs px-3 py-1.5 border border-slate-200 rounded-lg text-slate-600 hover:bg-slate-50"
+            >
+              Generate Doc
+            </button>
+            <button
               onClick={() => setShowDeleteConfirm(true)}
               className="text-xs px-3 py-1.5 border border-red-200 rounded-lg text-red-500 hover:bg-red-50"
             >
@@ -77,6 +85,16 @@ export function CourseDetailClient({ course }: Props) {
           assignee={course.assigned_to ?? 'neil'}
           onClose={() => setShowActivityModal(false)}
           onLogged={() => router.refresh()}
+        />
+      )}
+
+      {showDocModal && (
+        <GenerateDocModal
+          recordType="course"
+          recordId={course.id}
+          createdBy={course.assigned_to ?? 'neil'}
+          onClose={() => setShowDocModal(false)}
+          onGenerated={() => router.refresh()}
         />
       )}
 

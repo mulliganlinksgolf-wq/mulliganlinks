@@ -1,7 +1,9 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import { RecordHeader } from '@/components/crm/RecordHeader'
 import { ActivityLog } from '@/components/crm/ActivityLog'
+import { DocumentList } from '@/components/crm/DocumentList'
 import { CourseDetailClient } from './CourseDetailClient'
 import { getActivityLog } from '@/app/actions/crm/activity'
 import type { CrmCourse } from '@/lib/crm/types'
@@ -50,6 +52,12 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
           <div className="bg-white rounded-xl border border-slate-200 p-5">
             <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Activity Log</h3>
             <ActivityLog activities={activities} />
+          </div>
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Documents</h3>
+            <Suspense fallback={<p className="text-xs text-slate-400">Loading…</p>}>
+              <DocumentList recordType="course" recordId={id} />
+            </Suspense>
           </div>
         </div>
       </div>
