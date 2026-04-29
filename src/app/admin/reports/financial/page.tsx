@@ -102,6 +102,14 @@ export default async function FinancialReportPage({
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-semibold text-[#1A1A1A]">P&amp;L View</h2>
+          <a
+            href={`/api/reports/financial/pnl-pdf?preset=${range.preset}${range.preset === 'custom' ? `&from=${range.from}&to=${range.to}` : ''}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-[#6B7770] hover:border-[#1B4332] hover:text-[#1A1A1A] transition-colors"
+          >
+            Export as PDF
+          </a>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
