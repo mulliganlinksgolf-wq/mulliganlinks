@@ -72,17 +72,17 @@ export default async function MemberReportPage({
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-semibold text-[#1A1A1A]">At-Risk Eagle Members</h2>
+          <h2 id="at-risk-heading" className="font-semibold text-[#1A1A1A]">At-Risk Eagle Members</h2>
           <CsvExportButton data={atRiskCsvData} filename="at-risk-members.csv" label="Export for Win-Back" />
         </div>
         {atRisk.length === 0 ? (
           <p className="text-sm text-[#6B7770]">No at-risk members. Great retention!</p>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm" aria-labelledby="at-risk-heading">
             <thead>
               <tr className="border-b border-gray-100">
                 {['Name', 'Email', 'Joined', 'Days Inactive'].map(h => (
-                  <th key={h} className="text-left py-2 px-3 text-xs text-[#6B7770] font-medium">{h}</th>
+                  <th key={h} scope="col" className="text-left py-2 px-3 text-xs text-[#6B7770] font-medium">{h}</th>
                 ))}
               </tr>
             </thead>
