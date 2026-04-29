@@ -75,7 +75,7 @@ export default async function AdminUsersPage({
 
       if (statusFilter && membership?.status !== statusFilter) return false
 
-      if (foundingFilter && !membership?.is_founding_member) return false
+      if (foundingFilter && !m.founding_member) return false
 
       return true
     })
