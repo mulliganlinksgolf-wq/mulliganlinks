@@ -21,17 +21,18 @@ export async function getCourseReportKpis(courseId: string): Promise<CourseRepor
   const admin = createAdminClient()
   const currentMonth = new Date().toISOString().slice(0, 7)
 
-  const [{ data: metrics, error: metricsError }, { data: members, error: membersError }] = await Promise.all([
-    admin.from('crm_course_metrics').select('*').eq('course_id', courseId).eq('month', currentMonth).maybeSingle(),
-    admin.from('memberships').select('id').eq('status', 'active'),
-  ])
+  const { data: metrics, error: metricsError } = await admin
+    .from('crm_course_metrics')
+    .select('*')
+    .eq('course_id', courseId)
+    .eq('month', currentMonth)
+    .maybeSingle()
   if (metricsError) throw new Error(`[getCourseReportKpis] metrics query failed: ${metricsError.message}`)
-  if (membersError) throw new Error(`[getCourseReportKpis] members query failed: ${membersError.message}`)
 
   return {
     roundsThisMonth: metrics?.rounds_booked ?? 0,
     revenueThisMonth: Number(metrics?.green_fee_revenue ?? 0),
-    membersTotal: members?.length ?? 0,
+    membersTotal: metrics?.members_attributed ?? 0,
     waitlistFillsThisMonth: metrics?.waitlist_fills ?? 0,
     avgGreenFee: Number(metrics?.avg_green_fee ?? 0),
   }

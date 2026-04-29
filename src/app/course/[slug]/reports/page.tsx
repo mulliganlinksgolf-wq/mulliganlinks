@@ -16,7 +16,8 @@ export default async function CourseReportsDashboard({
   if (!user) redirect(`/course/${slug}/login`)
 
   const admin = createAdminClient()
-  const { data: course } = await admin.from('courses').select('id, name, slug').eq('slug', slug).single()
+  const { data: course, error: courseError } = await admin.from('courses').select('id, name, slug').eq('slug', slug).single()
+  if (courseError && courseError.code !== 'PGRST116') throw new Error(`[CourseReportsDashboard] course query failed: ${courseError.message}`)
   if (!course) notFound()
 
   const kpis = await getCourseReportKpis(course.id)
