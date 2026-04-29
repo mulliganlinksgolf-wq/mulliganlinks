@@ -75,7 +75,9 @@ export default async function FinancialReportPage({
               </tr>
             </thead>
             <tbody>
-              {revenueByMonth.map(r => (
+              {revenueByMonth.length === 0 ? (
+                <tr><td colSpan={5} className="py-8 text-center text-sm text-[#6B7770]">No data for this period.</td></tr>
+              ) : revenueByMonth.map(r => (
                 <tr key={r.month} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3 text-[#1A1A1A]">{r.month}</td>
                   <td className="py-2 px-3">${r.membership.toLocaleString()}</td>
@@ -114,7 +116,9 @@ export default async function FinancialReportPage({
               </tr>
             </thead>
             <tbody>
-              {pnl.map(row => (
+              {pnl.length === 0 ? (
+                <tr><td colSpan={EXPENSE_CATEGORIES.length + 3} className="py-8 text-center text-sm text-[#6B7770]">No data for this period.</td></tr>
+              ) : pnl.map(row => (
                 <tr key={row.month} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3">{row.month}</td>
                   <td className="py-2 px-3 text-right text-emerald-700">${row.revenue.toLocaleString()}</td>

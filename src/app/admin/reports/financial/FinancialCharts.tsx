@@ -13,7 +13,7 @@ export function RevenueStackedChart({ data }: { data: RevenueByMonth[] }) {
         <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
         <XAxis dataKey="month" tick={{ fontSize: 12 }} />
         <YAxis tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 12 }} />
-        <Tooltip formatter={(v) => [`$${Number(v).toLocaleString()}`, '']} />
+        <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
         <Legend />
         <Bar dataKey="membership" fill="#1B4332" name="Membership" stackId="a" />
         <Bar dataKey="outing" fill="#E0A800" name="Outing" stackId="a" />
@@ -30,7 +30,7 @@ export function MrrAreaChart({ data }: { data: MrrHistory[] }) {
         <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
         <XAxis dataKey="month" tick={{ fontSize: 12 }} />
         <YAxis tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 12 }} />
-        <Tooltip formatter={(v) => [`$${Number(v).toLocaleString()}`, '']} />
+        <Tooltip formatter={(v) => `$${Number(v).toLocaleString()}`} />
         <Legend />
         <Area dataKey="eagle" fill="#E0A800" stroke="#E0A800" fillOpacity={0.3} name="Eagle MRR" stackId="a" />
         <Area dataKey="ace" fill="#1B4332" stroke="#1B4332" fillOpacity={0.3} name="Ace MRR" stackId="a" />
