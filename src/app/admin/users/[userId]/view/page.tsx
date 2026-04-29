@@ -12,9 +12,9 @@ const tierLabels: Record<string, { label: string; color: string }> = {
 export default async function ViewAsMemberPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ userId: string }>
 }) {
-  const { id } = await params
+  const { userId } = await params
   const admin = createAdminClient()
 
   const [
@@ -25,18 +25,18 @@ export default async function ViewAsMemberPage({
     { data: bookings },
     { data: pointsLog },
   ] = await Promise.all([
-    admin.from('profiles').select('full_name, email, created_at').eq('id', id).single(),
-    admin.auth.admin.getUserById(id),
-    admin.from('memberships').select('tier, status, current_period_end').eq('user_id', id).eq('status', 'active').maybeSingle(),
-    admin.from('fairway_points').select('amount').eq('user_id', id),
+    admin.from('profiles').select('full_name, email, created_at').eq('id', userId).single(),
+    admin.auth.admin.getUserById(userId),
+    admin.from('memberships').select('tier, status, current_period_end').eq('user_id', userId).eq('status', 'active').maybeSingle(),
+    admin.from('fairway_points').select('amount').eq('user_id', userId),
     admin.from('bookings')
       .select('id, total_paid, status, players, created_at, tee_times(scheduled_at, courses(name))')
-      .eq('user_id', id)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(10),
     admin.from('fairway_points')
       .select('amount, reason, created_at, courses(name)')
-      .eq('user_id', id)
+      .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(10),
   ])
@@ -198,7 +198,7 @@ export default async function ViewAsMemberPage({
       {/* Admin-only info panel */}
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-2 text-sm">
         <p className="font-bold text-amber-800">Admin info (not visible to member)</p>
-        <p className="text-amber-700">User ID: <code className="font-mono text-xs bg-amber-100 px-1 py-0.5 rounded">{id}</code></p>
+        <p className="text-amber-700">User ID: <code className="font-mono text-xs bg-amber-100 px-1 py-0.5 rounded">{userId}</code></p>
         <p className="text-amber-700">Email: {email}</p>
         <p className="text-amber-700">Joined: {profile?.created_at ? new Date(profile.created_at).toLocaleDateString() : '—'}</p>
         <p className="text-amber-700">Auth provider: {user.user.app_metadata?.provider ?? 'email'}</p>
