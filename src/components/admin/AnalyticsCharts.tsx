@@ -34,7 +34,7 @@ export default function AnalyticsCharts({ mrrHistory, tierBreakdown, newMembersD
           <BarChart data={mrrHistory} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
             <XAxis dataKey="month" tick={CHART_STYLE} tickLine={false} axisLine={false} />
             <YAxis tick={CHART_STYLE} tickLine={false} axisLine={false} tickFormatter={(v: number) => `$${v}`} />
-            <Tooltip formatter={(v: number) => [`$${v}`, 'MRR']} />
+            <Tooltip formatter={(v) => [`$${v}`, 'MRR']} />
             <Bar dataKey="mrr" fill="#1B4332" radius={[3, 3, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
@@ -54,7 +54,7 @@ export default function AnalyticsCharts({ mrrHistory, tierBreakdown, newMembersD
                 ))}
               </Pie>
               <Legend formatter={(v: string) => <span className="capitalize text-xs">{v}</span>} />
-              <Tooltip formatter={(v: number, name: string) => [v, name]} />
+              <Tooltip formatter={(v, name) => [v, name]} />
             </PieChart>
           </ResponsiveContainer>
         )}
