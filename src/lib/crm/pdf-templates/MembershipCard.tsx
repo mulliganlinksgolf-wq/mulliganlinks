@@ -19,7 +19,7 @@ const S = StyleSheet.create({
   benefitCheck: { fontSize: 9, color: '#059669', fontFamily: 'Helvetica-Bold', marginBottom: 2 },
   benefitTitle: { fontSize: 9.5, fontFamily: 'Helvetica-Bold', color: '#1a1a1a', marginBottom: 1 },
   benefitSub: { fontSize: 8.5, color: '#6B7280' },
-  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 14, paddingTop: 12, borderTopWidth: 1, borderTopColor: '#E5E7EB' },
+  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', marginTop: 14, paddingTop: 12, borderTopWidth: 1, borderTopStyle: 'solid', borderTopColor: '#E5E7EB' },
   footerLeft: { fontSize: 9, color: '#6B7280' },
   footerRight: { fontSize: 9, color: '#6B7280' },
   instruction: { textAlign: 'center', fontSize: 9, color: '#9CA3AF', marginTop: 16 },
