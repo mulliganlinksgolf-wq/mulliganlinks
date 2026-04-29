@@ -1,4 +1,4 @@
--- supabase/migrations/031_reports_schema.sql
+-- supabase/migrations/033_reports_schema.sql
 
 -- Course partner user accounts (passwords managed by Supabase Auth)
 CREATE TABLE IF NOT EXISTS crm_course_users (
@@ -64,9 +64,6 @@ CREATE TABLE IF NOT EXISTS crm_expenses (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   UNIQUE(category, month)
 );
-
--- Ensure courses.slug column exists (may already be present)
-ALTER TABLE courses ADD COLUMN IF NOT EXISTS slug VARCHAR(100) UNIQUE;
 
 -- RLS: all queries from app use admin client (service role), which bypasses RLS
 ALTER TABLE crm_course_users ENABLE ROW LEVEL SECURITY;
