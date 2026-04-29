@@ -5,6 +5,11 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { FoundingPartnerAgreementPDF } from '@/lib/crm/pdf-templates/FoundingPartnerAgreement'
 import { CourseProposalPDF } from '@/lib/crm/pdf-templates/CourseProposal'
+import { BenefitsSchedulePDF } from '@/lib/crm/pdf-templates/BenefitsSchedule'
+import { OnboardingPacketPDF } from '@/lib/crm/pdf-templates/OnboardingPacket'
+import { TerminationLetterPDF } from '@/lib/crm/pdf-templates/TerminationLetter'
+import { MembershipCardPDF } from '@/lib/crm/pdf-templates/MembershipCard'
+import { OutingInvoicePDF } from '@/lib/crm/pdf-templates/OutingInvoice'
 import { OutingQuotePDF } from '@/lib/crm/pdf-templates/OutingQuote'
 import { OutingConfirmationPDF } from '@/lib/crm/pdf-templates/OutingConfirmation'
 
@@ -27,25 +32,36 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json() as {
     template: string
-    recordType: 'course' | 'outing'
+    recordType: 'course' | 'outing' | 'member'
     recordId: string
     createdBy: string
     options?: {
       contractYears?: number
       monthlyFee?: number
+      eagleRate?: string
+      aceRate?: string
+      priorityHours?: string
+      eagleCredits?: string
+      aceCredits?: string
+      noticeDate?: string
+      lastDay?: string
+      refundAmount?: number
+      dueDate?: string
+      depositPaid?: number
     }
   }
 
-  if (body.recordType !== 'course' && body.recordType !== 'outing') {
+  if (!['course', 'outing', 'member'].includes(body.recordType)) {
     return NextResponse.json({ error: 'Invalid record type' }, { status: 400 })
   }
 
-  const table = body.recordType === 'course' ? 'crm_courses' : 'crm_outings'
+  const table = body.recordType === 'course' ? 'crm_courses' : body.recordType === 'outing' ? 'crm_outings' : 'crm_members'
   const { data: record, error: recordError } = await admin.from(table).select('*').eq('id', body.recordId).single()
   if (recordError || !record) {
     return NextResponse.json({ error: 'Record not found' }, { status: 404 })
   }
 
+  const now = new Date().toISOString()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let element: any
   let docName: string
@@ -53,8 +69,7 @@ export async function POST(req: NextRequest) {
   switch (body.template) {
     case 'founding-partner-agreement':
       element = createElement(FoundingPartnerAgreementPDF, {
-        course: record,
-        generatedAt: new Date().toISOString(),
+        course: record, generatedAt: now,
         contractYears: body.options?.contractYears ?? 1,
         monthlyFee: body.options?.monthlyFee ?? 349,
       })
@@ -64,6 +79,49 @@ export async function POST(req: NextRequest) {
       element = createElement(CourseProposalPDF, { course: record })
       docName = `Course Proposal — ${record.name}`
       break
+    case 'benefits-schedule':
+      element = createElement(BenefitsSchedulePDF, {
+        course: record, generatedAt: now,
+        eagleRate: body.options?.eagleRate ?? '',
+        aceRate: body.options?.aceRate ?? '',
+        priorityHours: body.options?.priorityHours ?? 'Off-peak only',
+        eagleCredits: body.options?.eagleCredits ?? '',
+        aceCredits: body.options?.aceCredits ?? '',
+      })
+      docName = `Benefits Schedule — ${record.name}`
+      break
+    case 'onboarding-packet':
+      element = createElement(OnboardingPacketPDF, { course: record, generatedAt: now })
+      docName = `Onboarding Packet — ${record.name}`
+      break
+    case 'termination-letter':
+      element = createElement(TerminationLetterPDF, {
+        course: record, generatedAt: now,
+        noticeDateStr: body.options?.noticeDate
+          ? new Date(body.options.noticeDate + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+          : new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        lastDayStr: body.options?.lastDay
+          ? new Date(body.options.lastDay + 'T12:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+          : new Date(Date.now() + 30 * 864e5).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        refundAmount: body.options?.refundAmount ?? 0,
+      })
+      docName = `Termination Letter — ${record.name}`
+      break
+    case 'membership-card':
+      element = createElement(MembershipCardPDF, { member: record, generatedAt: now })
+      docName = `Membership Card — ${record.name}`
+      break
+    case 'outing-invoice': {
+      const invoiceNumber = `INV-${new Date().getFullYear()}-${record.id.slice(0, 6).toUpperCase()}`
+      element = createElement(OutingInvoicePDF, {
+        outing: record, generatedAt: now,
+        invoiceNumber,
+        dueDate: body.options?.dueDate ?? new Date(Date.now() + 14 * 864e5).toISOString().split('T')[0],
+        depositPaid: body.options?.depositPaid ?? 0,
+      })
+      docName = `Invoice — ${record.contact_name}`
+      break
+    }
     case 'outing-quote':
       element = createElement(OutingQuotePDF, { outing: record })
       docName = `Outing Quote — ${record.contact_name}`
@@ -90,11 +148,15 @@ export async function POST(req: NextRequest) {
   const { data: urlData } = admin.storage.from('crm-documents').getPublicUrl(filename)
   const fileUrl = urlData.publicUrl
 
+  const docType = ['founding-partner-agreement', 'termination-letter'].includes(body.template) ? 'contract'
+    : ['course-proposal', 'onboarding-packet', 'benefits-schedule'].includes(body.template) ? 'proposal'
+    : 'other'
+
   const { data: doc, error: docError } = await admin.from('crm_documents').insert({
     record_type: body.recordType,
     record_id: body.recordId,
     name: docName,
-    type: body.template.includes('agreement') || body.template.includes('confirmation') ? 'contract' : 'proposal',
+    type: docType,
     file_url: fileUrl,
     created_by: body.createdBy,
   }).select('id, file_url').single()
