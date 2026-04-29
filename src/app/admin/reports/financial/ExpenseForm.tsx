@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { saveExpenses } from './expenseActions'
 import { EXPENSE_CATEGORIES } from '@/lib/reports/financial'
 
@@ -8,8 +8,13 @@ export default function ExpenseForm() {
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState<{ error?: string; success?: boolean } | null>(null)
   const [loading, setLoading] = useState(false)
+  const autoCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const defaultMonth = new Date().toISOString().slice(0, 7)
+
+  useEffect(() => {
+    return () => { if (autoCloseTimerRef.current) clearTimeout(autoCloseTimerRef.current) }
+  }, [])
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -18,14 +23,16 @@ export default function ExpenseForm() {
     const result = await saveExpenses(new FormData(e.currentTarget))
     setStatus(result)
     setLoading(false)
-    if (result.success) setTimeout(() => { setOpen(false); setStatus(null) }, 1500)
+    if (result.success) {
+      autoCloseTimerRef.current = setTimeout(() => { setOpen(false); setStatus(null) }, 1500)
+    }
   }
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6">
       <div className="flex items-center justify-between mb-2">
         <h2 className="font-semibold text-[#1A1A1A]">Log Expenses</h2>
-        <button onClick={() => setOpen(v => !v)}
+        <button onClick={() => { setOpen(v => !v); setStatus(null) }}
           className="text-sm text-[#1B4332] font-medium hover:underline">
           {open ? 'Hide' : 'Enter expenses'}
         </button>
@@ -41,8 +48,8 @@ export default function ExpenseForm() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-[#1A1A1A] mb-1">Month</label>
-            <input name="month" type="month" defaultValue={defaultMonth} required
+            <label htmlFor="expense-month" className="block text-sm font-medium text-[#1A1A1A] mb-1">Month</label>
+            <input id="expense-month" name="month" type="month" defaultValue={defaultMonth} required
               disabled={loading}
               className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332] disabled:opacity-50" />
           </div>
@@ -50,8 +57,8 @@ export default function ExpenseForm() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {EXPENSE_CATEGORIES.map(category => (
               <div key={category}>
-                <label className="block text-sm font-medium text-[#1A1A1A] mb-1">{category}</label>
-                <input name={`expense_${category}`} type="number" min="0" step="0.01" defaultValue="0"
+                <label htmlFor={`expense-${category}`} className="block text-sm font-medium text-[#1A1A1A] mb-1">{category}</label>
+                <input id={`expense-${category}`} name={`expense_${category}`} type="number" min="0" step="0.01" defaultValue="0"
                   disabled={loading}
                   className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332] disabled:opacity-50" />
               </div>

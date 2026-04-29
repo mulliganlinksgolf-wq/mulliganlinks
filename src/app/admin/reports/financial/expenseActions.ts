@@ -19,7 +19,14 @@ export async function saveExpenses(
   formData: FormData,
 ): Promise<{ error?: string; success?: boolean }> {
   let createdBy: string
-  try { createdBy = await assertAdmin() } catch { return { error: 'Unauthorized' } }
+  try {
+    createdBy = await assertAdmin()
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : ''
+    if (msg === 'Unauthorized' || msg === 'Forbidden') return { error: 'Unauthorized' }
+    console.error('[saveExpenses] unexpected error in assertAdmin', err)
+    return { error: 'Server error. Please try again.' }
+  }
 
   const month = formData.get('month') as string
   if (!month || !/^\d{4}-\d{2}$/.test(month)) return { error: 'Invalid month format (YYYY-MM required)' }
@@ -28,8 +35,7 @@ export async function saveExpenses(
   const upserts = EXPENSE_CATEGORIES.map(category => ({
     category,
     month,
-    amount: Number(formData.get(`expense_${category}`) ?? 0),
-    notes: (formData.get(`notes_${category}`) as string) ?? '',
+    amount: Math.max(0, Number(formData.get(`expense_${category}`) ?? 0)),
     created_by: createdBy,
     updated_at: new Date().toISOString(),
   }))
