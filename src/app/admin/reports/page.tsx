@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
+export const metadata = { title: 'Reports' }
+
 export default async function AdminReportsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
