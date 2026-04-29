@@ -116,7 +116,7 @@ export default async function GolferWaitlistPage({
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $30 less than GolfPass+ with more credits and no expiration.
+              TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $40 less than GolfPass+ with more credits and no expiration.
             </p>
 
             {/* Live count badge */}
