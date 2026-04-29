@@ -62,13 +62,16 @@ describe('sendBroadcastEmail', () => {
     )
   })
 
-  it('returns error when subject is empty', async () => {
-    mockFrom.mockImplementation(() => makeChain({ is_admin: false }))
+  it('redirects with error when subject is empty', async () => {
+    mockFrom.mockImplementation((table: string) => {
+      if (table === 'profiles') return makeChain({ is_admin: false })
+      return makeChain([])
+    })
     const formData = new FormData()
     formData.set('subject', '  ')
     formData.set('body', 'body')
     formData.set('filter', 'all')
-    const result = await sendBroadcastEmail(formData)
-    expect(result?.error).toBeTruthy()
+    await sendBroadcastEmail(formData)
+    expect(redirect).toHaveBeenCalledWith(expect.stringContaining('/admin/communications?error='))
   })
 })

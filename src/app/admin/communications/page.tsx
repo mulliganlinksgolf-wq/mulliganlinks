@@ -14,9 +14,9 @@ const FILTER_LABELS: Record<string, string> = {
 export default async function CommunicationsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string }>
+  searchParams: Promise<{ sent?: string; error?: string }>
 }) {
-  const { sent } = await searchParams
+  const { sent, error } = await searchParams
   const admin = createAdminClient()
 
   const [membershipResult, historyResult] = await Promise.all([
@@ -50,6 +50,11 @@ export default async function CommunicationsPage({
       {sent && (
         <div className="rounded-lg bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-800 font-medium">
           Broadcast sent successfully
+        </div>
+      )}
+      {error && (
+        <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-800 font-medium">
+          {error}
         </div>
       )}
 

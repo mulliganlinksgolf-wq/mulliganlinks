@@ -226,10 +226,11 @@ export async function cancelMembership(
       })
 
       let refundCents = 0
-      const invoice = (sub as any).latest_invoice
-      if (invoice?.payment_intent?.amount_received && sub.current_period_start && sub.current_period_end) {
-        const totalDays = (sub.current_period_end - sub.current_period_start) / 86400
-        const daysUsed = (Math.floor(Date.now() / 1000) - sub.current_period_start) / 86400
+      const subAny = sub as any
+      const invoice = subAny.latest_invoice
+      if (invoice?.payment_intent?.amount_received && subAny.current_period_start && subAny.current_period_end) {
+        const totalDays = (subAny.current_period_end - subAny.current_period_start) / 86400
+        const daysUsed = (Math.floor(Date.now() / 1000) - subAny.current_period_start) / 86400
         const daysRemaining = Math.max(0, totalDays - daysUsed)
         refundCents = Math.round((daysRemaining / totalDays) * invoice.payment_intent.amount_received)
       }

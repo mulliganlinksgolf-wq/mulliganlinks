@@ -27,15 +27,13 @@ const FILTER_TIERS: Record<string, string[]> = {
   fairway: ['fairway'],
 }
 
-export async function sendBroadcastEmail(
-  formData: FormData
-): Promise<{ error?: string; success?: boolean; count?: number } | undefined> {
+export async function sendBroadcastEmail(formData: FormData): Promise<void> {
   const subject = (formData.get('subject') as string).trim()
   const body = (formData.get('body') as string).trim()
   const filter = (formData.get('filter') as string) || 'all'
 
-  if (!subject) return { error: 'Subject is required.' }
-  if (!body) return { error: 'Body is required.' }
+  if (!subject) redirect('/admin/communications?error=Subject+is+required.')
+  if (!body) redirect('/admin/communications?error=Body+is+required.')
 
   const { admin, user } = await assertAdmin()
 
@@ -59,7 +57,7 @@ export async function sendBroadcastEmail(
     .join('')
 
   const { sent, error: sendError } = await sendBroadcast({ subject, html, recipients })
-  if (sendError && sent === 0) return { error: sendError }
+  if (sendError && sent === 0) redirect(`/admin/communications?error=${encodeURIComponent(sendError)}`)
 
   await writeAuditLog({
     eventType: 'email_sent',
