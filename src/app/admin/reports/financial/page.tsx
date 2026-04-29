@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/requireAdmin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { resolveDateRange } from '@/lib/reports/dateRange'
 import { getFinancialKpis, getRevenueByMonth, getMrrHistory, getPnlByMonth, EXPENSE_CATEGORIES } from '@/lib/reports/financial'
@@ -16,12 +15,8 @@ export default async function FinancialReportPage({
 }: {
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  await requireAdmin()
   const admin = createAdminClient()
-  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) redirect('/app')
 
   const sp = await searchParams
   const range = resolveDateRange(sp.preset, sp.from, sp.to)

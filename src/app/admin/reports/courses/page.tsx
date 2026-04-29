@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/requireAdmin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseNetworkData } from '@/lib/reports/courses'
 import KpiTile from '@/components/reports/KpiTile'
@@ -20,12 +19,8 @@ const HEALTH_LABEL: Record<string, string> = {
 }
 
 export default async function CourseNetworkReportPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  await requireAdmin()
   const admin = createAdminClient()
-  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) redirect('/app')
 
   const currentMonth = new Date().toISOString().slice(0, 7)
   const { kpis, rows } = await getCourseNetworkData(currentMonth)

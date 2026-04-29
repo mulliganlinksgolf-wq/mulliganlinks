@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/requireAdmin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getMemberKpis, getMemberGrowth, getAtRiskMembers } from '@/lib/reports/members'
 import KpiTile from '@/components/reports/KpiTile'
@@ -14,12 +13,8 @@ export default async function MemberReportPage({
 }: {
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  await requireAdmin()
   const admin = createAdminClient()
-  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) redirect('/app')
 
   const [kpis, growth, atRisk] = await Promise.all([
     getMemberKpis(),

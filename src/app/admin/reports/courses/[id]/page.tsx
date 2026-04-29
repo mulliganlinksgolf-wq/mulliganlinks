@@ -1,6 +1,6 @@
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { requireAdmin } from '@/lib/auth/requireAdmin'
 import { createAdminClient } from '@/lib/supabase/admin'
 import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
@@ -11,12 +11,8 @@ export default async function CourseDrilldownPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) redirect('/login')
+  await requireAdmin()
   const admin = createAdminClient()
-  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) redirect('/app')
 
   const { data: course, error: courseError } = await admin
     .from('courses').select('id, name, slug').eq('id', id).single()
