@@ -161,7 +161,7 @@ export default async function GolferWaitlistPage({
             </span>
             <Link
               href="/waitlist/course"
-              className="px-7 py-3 rounded-xl text-base font-semibold text-[#6B7770] hover:text-[#1A1A1A] transition-colors"
+              className="px-7 py-3 rounded-xl text-base font-semibold text-[#6B7770] border border-[#0F3D2E]/20 hover:border-[#0F3D2E]/50 hover:text-[#1A1A1A] hover:bg-[#0F3D2E]/5 transition-colors"
             >
               🏌️ I Manage a Course — Founding Partner
             </Link>

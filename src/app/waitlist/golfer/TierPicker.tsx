@@ -32,12 +32,13 @@ export function TierPicker({ tiers, initialTier }: { tiers: Tier[]; initialTier:
                   type="button"
                   onClick={() => setSelectedTier(tierItem.key)}
                   className={[
-                    'relative rounded-2xl bg-white p-6 flex flex-col gap-4 transition-transform duration-150 hover:-translate-y-1 text-left w-full',
+                    'relative rounded-2xl bg-white p-6 flex flex-col gap-4 cursor-pointer text-left w-full',
+                    'transition-all duration-150 hover:-translate-y-1 hover:shadow-lg',
                     isEagle
                       ? '-translate-y-2 border-2 border-[#E0A800] shadow-[0_8px_32px_rgba(224,168,0,0.18)]'
                       : isSelected
                         ? 'border-2 border-[#1B4332] ring-2 ring-[#E0A800] shadow-sm'
-                        : 'border border-black/8 shadow-sm',
+                        : 'border border-black/8 shadow-sm hover:border-[#0F3D2E]/30',
                   ].join(' ')}
                 >
                   {tierItem.badge && (
