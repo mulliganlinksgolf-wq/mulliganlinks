@@ -115,7 +115,7 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
       </Button>
 
       {/* ── Optional fields ─────────────────────────── */}
-      <div className="space-y-5 pt-2">
+      <div className="space-y-5 pt-4 border-t border-white/10">
         <p className="text-sm font-medium text-[#F4F1EA]/70">
           Optional — help us personalize your experience
         </p>
@@ -153,8 +153,8 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
           </select>
         </div>
 
-        <div className="space-y-2">
-          <Label className="text-[#F4F1EA]">Which tier interests you most?</Label>
+        <fieldset className="space-y-2">
+          <legend className="text-sm font-medium text-[#F4F1EA]">Which tier interests you most?</legend>
           <div className="space-y-2">
             {[
               { value: 'fairway', label: 'Fairway — Free forever' },
@@ -176,7 +176,7 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
               </label>
             ))}
           </div>
-        </div>
+        </fieldset>
 
         <div className="space-y-1.5">
           <Label htmlFor="referral_source" className="text-[#F4F1EA]">Where did you hear about us?</Label>
