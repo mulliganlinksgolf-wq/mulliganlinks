@@ -267,6 +267,7 @@ export default async function CourseWaitlistPage() {
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
                 <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
+                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>
