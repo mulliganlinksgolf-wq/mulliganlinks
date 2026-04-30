@@ -56,6 +56,15 @@ describe('BarterPage — rendering', () => {
     render(<BarterPage spotsRemaining={10} />)
     expect(screen.getByText(/TeeAhead would have charged you/i)).toBeInTheDocument()
   })
+
+  it('all range sliders have touchAction none to prevent mobile scroll conflict', () => {
+    const { container } = render(<BarterPage spotsRemaining={10} />)
+    const sliders = container.querySelectorAll('input[type="range"]')
+    expect(sliders.length).toBe(3)
+    sliders.forEach((slider) => {
+      expect((slider as HTMLElement).style.touchAction).toBe('none')
+    })
+  })
 })
 
 describe('BarterPage — proof section legal citations', () => {

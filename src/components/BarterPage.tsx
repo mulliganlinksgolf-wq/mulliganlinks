@@ -161,7 +161,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   type="range" min={20} max={200} step={5} value={greenFee}
                   onChange={(e) => { setGreenFee(Number(e.target.value)); setPresetKey('custom') }}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E' }}
+                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
                 />
                 <p className="text-xs text-[#9DAA9F]">$20–$200 · Use your published weekend or peak-time rate</p>
               </div>
@@ -176,7 +176,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   type="range" min={100} max={360} step={10} value={operatingDays}
                   onChange={(e) => { setOperatingDays(Number(e.target.value)); setPresetKey('custom') }}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E' }}
+                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
                 />
                 <p className="text-xs text-[#9DAA9F]">100–360 days</p>
               </div>
@@ -191,7 +191,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   type="range" min={1} max={4} step={1} value={barterTeeTimes}
                   onChange={(e) => setBarterTeeTimes(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E' }}
+                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
                 />
                 <p className="text-xs text-[#9DAA9F]">GolfNow typically takes 2 prime-time tee times per day · 1–4</p>
               </div>
