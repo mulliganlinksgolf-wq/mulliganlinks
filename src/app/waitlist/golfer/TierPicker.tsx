@@ -80,6 +80,9 @@ export function TierPicker({ tiers, initialTier }: { tiers: Tier[]; initialTier:
               )
             })}
           </div>
+          <p className="text-xs text-[#9DAA9F] text-center mt-4 italic">
+            Each course varies on how they would like to promote their deals.
+          </p>
         </div>
       </section>
 

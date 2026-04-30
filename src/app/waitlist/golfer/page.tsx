@@ -6,8 +6,14 @@ import { TierPicker } from './TierPicker'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Join the Golfer Waitlist — TeeAhead',
-  description: 'Get early access to TeeAhead, the local-first golf loyalty network coming to Metro Detroit.',
+  title: 'Join the Golfer Waitlist',
+  description: 'Get early access to TeeAhead — zero booking fees, Eagle membership at $89/yr, loyalty points at every Metro Detroit partner course.',
+  alternates: { canonical: '/waitlist/golfer' },
+  openGraph: {
+    url: '/waitlist/golfer',
+    title: 'Join the TeeAhead Golfer Waitlist',
+    description: 'Zero booking fees, Eagle membership at $89/yr — the local-first alternative to GolfPass+.',
+  },
 }
 
 const tiers = [
@@ -31,7 +37,7 @@ const tiers = [
     badge: 'Most Popular',
     features: [
       '250 bonus Fairway Points',
-      '2× Fairway Points per dollar',
+      '1.5× Fairway Points per dollar',
       'Priority booking: 48hr early access',
       'Always-on booking fee waiver',
       '1 guest pass per year',
@@ -46,7 +52,7 @@ const tiers = [
     badge: null,
     features: [
       '500 bonus Fairway Points',
-      '3× Fairway Points per dollar',
+      '2× Fairway Points per dollar',
       'Priority booking: 72hr early access',
       'Always-on booking fee waiver',
       '2 guest passes per year',
