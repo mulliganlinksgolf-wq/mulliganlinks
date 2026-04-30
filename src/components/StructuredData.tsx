@@ -43,30 +43,30 @@ export function StructuredData() {
           {
             '@type': 'Offer',
             name: 'Eagle Membership',
-            price: '79',
+            price: '89',
             priceCurrency: 'USD',
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
-              price: '79',
+              price: '89',
               priceCurrency: 'USD',
               unitCode: 'ANN',
             },
             description:
-              '$120/yr in tee time credits, 1 free round, always-on booking fee waiver, 10% green fee discount.',
+              '250 bonus Fairway Points, 2x points multiplier, 1 annual guest pass, always-on booking fee waiver, 48-hour priority booking.',
           },
           {
             '@type': 'Offer',
             name: 'Ace Membership',
-            price: '149',
+            price: '159',
             priceCurrency: 'USD',
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
-              price: '149',
+              price: '159',
               priceCurrency: 'USD',
               unitCode: 'ANN',
             },
             description:
-              '$240/yr in tee time credits, 2 free rounds, 24 guest fee waivers, concierge booking, 15% green fee discount.',
+              '500 bonus Fairway Points, 3x points multiplier, 2 annual guest passes, always-on booking fee waiver, 72-hour priority booking.',
           },
         ],
       },
