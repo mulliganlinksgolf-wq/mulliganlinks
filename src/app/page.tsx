@@ -544,13 +544,13 @@ export default async function HomePage() {
             {/* Column 2 — Product */}
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
-                <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
+              <nav className="flex flex-col gap-1.5 text-sm text-[#F4F1EA]/70">
+                <Link href="/waitlist/golfer" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
+                <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors pl-3">Pricing</Link>
+                <Link href="/waitlist/course" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors mt-1">For Courses</Link>
+                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors pl-3">Barter Calculator</Link>
+                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors pl-3">GolfNow Damage Report</Link>
+                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors pl-3">Software Cost Calculator</Link>
               </nav>
             </div>
 
@@ -558,7 +558,7 @@ export default async function HomePage() {
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>
