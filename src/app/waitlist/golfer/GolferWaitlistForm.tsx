@@ -1,16 +1,13 @@
 'use client'
 
 import { useState, useTransition } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinGolferWaitlist } from './actions'
 
-export function GolferWaitlistForm() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const selectedTier = searchParams.get('tier') ?? ''
+export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
+  const [selectedTier, setSelectedTier] = useState(tier)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [submitted, setSubmitted] = useState<string | null>(null)
@@ -162,7 +159,7 @@ export function GolferWaitlistForm() {
                 value={value}
                 disabled={isPending}
                 checked={selectedTier === value}
-                onChange={() => router.replace(`?tier=${value}`, { scroll: false })}
+                onChange={() => setSelectedTier(value)}
                 className="accent-[#E0A800]"
               />
               <span className="text-sm text-[#F4F1EA]">{label}</span>

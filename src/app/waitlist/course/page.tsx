@@ -100,14 +100,14 @@ export default async function CourseWaitlistPage() {
       {/* ── Tab strip ────────────────────────────────────────── */}
       <div className="bg-white border-b border-black/8 sticky top-[73px] z-40">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="flex gap-1 py-2">
+          <div className="flex justify-center gap-2 py-3">
             <Link
               href="/waitlist/golfer"
-              className="px-5 py-2.5 rounded-lg text-sm font-semibold text-[#6B7770] hover:text-[#1A1A1A] transition-colors"
+              className="px-7 py-3 rounded-xl text-base font-semibold text-[#6B7770] hover:text-[#1A1A1A] transition-colors"
             >
               ⛳ I&apos;m a Golfer — Free to Join
             </Link>
-            <span aria-current="page" className="px-5 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
+            <span aria-current="page" className="px-7 py-3 rounded-xl bg-[#0F3D2E] text-base font-semibold text-[#F4F1EA]">
               🏌️ I Manage a Course — Founding Partner
             </span>
           </div>
@@ -283,7 +283,7 @@ export default async function CourseWaitlistPage() {
 
           </div>
           <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan · <a href="mailto:billy.teeahead@gmail.com" className="hover:text-[#F4F1EA]/70 transition-colors">billy.teeahead@gmail.com</a></p>
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
           </div>
         </div>

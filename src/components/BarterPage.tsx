@@ -355,7 +355,7 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
 
           </div>
           <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan · <a href="mailto:billy.teeahead@gmail.com" className="hover:text-[#F4F1EA]/70 transition-colors">billy.teeahead@gmail.com</a></p>
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
             <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
             <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
               Competitor references are for comparative purposes only and based on publicly available

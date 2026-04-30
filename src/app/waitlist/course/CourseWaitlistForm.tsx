@@ -13,9 +13,11 @@ export function CourseWaitlistForm() {
 
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const [onGolfnow, setOnGolfnow] = useState<boolean | null>(null)
+  const [currentSoftware, setCurrentSoftware] = useState<string>('')
   const [avgGreenFee, setAvgGreenFee] = useState<string>('')
   const [submitted, setSubmitted] = useState<string | null>(null)
+
+  const onGolfnow = currentSoftware === 'golfnow'
 
   const estimatedBarter =
     onGolfnow && avgGreenFee && !isNaN(parseInt(avgGreenFee, 10))
@@ -131,7 +133,14 @@ export function CourseWaitlistForm() {
 
       <div className="space-y-1.5">
         <Label htmlFor="current_software" className="text-[#F4F1EA]">Current tee sheet software</Label>
-        <select id="current_software" name="current_software" disabled={isPending} className={selectClassName}>
+        <select
+          id="current_software"
+          name="current_software"
+          disabled={isPending}
+          value={currentSoftware}
+          onChange={(e) => setCurrentSoftware(e.target.value)}
+          className={selectClassName}
+        >
           <option value="">Select…</option>
           <option value="golfnow">GolfNow</option>
           <option value="foreup">foreUP</option>
@@ -142,43 +151,23 @@ export function CourseWaitlistForm() {
         </select>
       </div>
 
-      <div className="space-y-1.5">
-        <Label htmlFor="contract_expiry_date" className="text-[#F4F1EA]">
-          GolfNow contract expiry date{' '}
-          <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
-        </Label>
-        <Input
-          id="contract_expiry_date"
-          name="contract_expiry_date"
-          type="date"
-          disabled={isPending}
-          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-        />
-      </div>
+      {onGolfnow && (
+        <div className="space-y-4 bg-white/8 rounded-xl p-4 ring-1 ring-white/15">
+          <div className="space-y-1.5">
+            <Label htmlFor="contract_expiry_date" className="text-[#F4F1EA]">
+              Contract expiry date{' '}
+              <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
+            </Label>
+            <Input
+              id="contract_expiry_date"
+              name="contract_expiry_date"
+              type="date"
+              disabled={isPending}
+              className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+            />
+          </div>
 
-      <div className="space-y-3 bg-white/8 rounded-xl p-4 ring-1 ring-white/15">
-        <Label className="text-[#F4F1EA]">Are you currently on GolfNow?</Label>
-        <div className="flex gap-6">
-          {[
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' },
-          ].map(({ value, label }) => (
-            <label key={value} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="radio"
-                name="on_golfnow"
-                value={value}
-                disabled={isPending}
-                onChange={() => setOnGolfnow(value === 'yes')}
-                className="accent-[#E0A800]"
-              />
-              <span className="text-sm text-[#F4F1EA]">{label}</span>
-            </label>
-          ))}
-        </div>
-
-        {onGolfnow && (
-          <div className="space-y-2 pt-2">
+          <div className="space-y-2">
             <Label htmlFor="avg_green_fee" className="text-[#F4F1EA]">Average green fee (rack rate, $)</Label>
             <Input
               id="avg_green_fee"
@@ -202,8 +191,8 @@ export function CourseWaitlistForm() {
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="space-y-1.5">
         <Label htmlFor="biggest_frustration" className="text-[#F4F1EA]">
