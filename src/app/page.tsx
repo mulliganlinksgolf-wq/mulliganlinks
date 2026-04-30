@@ -9,6 +9,8 @@ import { NavMenu } from '@/components/NavMenu'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 import { FoundersScorecard } from '@/components/FoundersScorecard'
+import { FoundingPartnerProgress } from '@/components/FoundingPartnerProgress'
+import { HomepageFaq } from '@/components/HomepageFaq'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
@@ -25,7 +27,9 @@ export default async function HomePage() {
     ]),
     supabase.from('golfer_waitlist').select('*', { count: 'exact', head: true }),
   ])
-  const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+  const totalSpots = counter?.cap ?? 10
+  const spotsClaimed = parseInt(process.env.FOUNDING_SPOTS_CLAIMED ?? String(counter?.count ?? '0'), 10)
+  const spotsRemaining = totalSpots - spotsClaimed
   const content: Record<string, string> = Object.fromEntries(
     (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
   )
@@ -105,11 +109,7 @@ export default async function HomePage() {
                 >
                   {spotsRemaining > 0 ? 'Claim a Founding Spot' : 'Join the Course Waitlist'}
                 </Link>
-                <p className="text-xs text-[#F4F1EA]/40 text-center">
-                  {spotsRemaining > 0
-                    ? `${spotsRemaining} of 10 spots remaining`
-                    : 'All founding spots claimed'}
-                </p>
+                <FoundingPartnerProgress claimed={spotsClaimed} total={totalSpots} />
               </div>
 
               {/* Golfer card */}
@@ -482,6 +482,9 @@ export default async function HomePage() {
           </div>
         </FadeIn>
       </section>
+
+      {/* ── FAQ ───────────────────────────────────────────────── */}
+      <HomepageFaq />
 
       {/* ── Manifesto ─────────────────────────────────────────── */}
       <section className="bg-[#0F3D2E] px-6 py-32 text-center border-t border-[#F4F1EA]/8">
