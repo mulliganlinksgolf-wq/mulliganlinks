@@ -112,7 +112,7 @@ export default function GolfNowAlternativePage() {
                 Claim a Founding Partner Spot →
               </Link>
               <Link
-                href="/barter"
+                href="/damage"
                 className="inline-flex items-center justify-center rounded-lg border border-black/10 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-black/5 transition-colors"
               >
                 Calculate your real GolfNow cost →
@@ -336,7 +336,7 @@ export default function GolfNowAlternativePage() {
             <Link href="/" className="hover:text-[#F4F1EA] transition-colors">Home</Link>
             <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">Golfer Waitlist</Link>
             <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Course Waitlist</Link>
-            <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
+            <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
           </nav>
           <p className="text-xs text-[#F4F1EA]/30">© 2026 TeeAhead, LLC.</p>
         </div>

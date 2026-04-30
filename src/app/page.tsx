@@ -173,10 +173,10 @@ export default async function HomePage() {
             <div className="inline-flex items-center gap-3 bg-[#0F3D2E] rounded-full px-6 py-3 mt-2">
               <span className="text-sm font-semibold text-[#F4F1EA]">Want your exact number?</span>
               <Link
-                href="/barter"
+                href="/damage"
                 className="text-sm font-bold text-[#E0A800] hover:text-[#E0A800]/80 transition-colors"
               >
-                Use the barter calculator →
+                Get your damage report →
               </Link>
             </div>
 
@@ -546,6 +546,7 @@ export default async function HomePage() {
                 <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
                 <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
                 <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
+                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
                 <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
                 <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
               </nav>
