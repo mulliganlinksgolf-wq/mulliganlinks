@@ -44,6 +44,8 @@ interface Props {
   onLeadSubmit?: (lead: LeadData) => Promise<void>
   // Optional: override the threshold above which the modal auto-fires
   autoFireThreshold?: number
+  // Optional: increment this value to imperatively open the modal (e.g. from a parent button)
+  openTrigger?: number
 }
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -83,6 +85,7 @@ export default function SoftwareCostLeadCapture({
   costs,
   onLeadSubmit,
   autoFireThreshold = 5000,
+  openTrigger,
 }: Props) {
   const [modalOpen, setModalOpen] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -95,6 +98,11 @@ export default function SoftwareCostLeadCapture({
     courseName: '',
   })
   const [errors, setErrors] = useState<Partial<typeof form>>({})
+
+  // Open modal when parent increments openTrigger
+  useEffect(() => {
+    if (openTrigger && openTrigger > 0) setModalOpen(true)
+  }, [openTrigger])
 
   // Auto-fire modal once per session when total exceeds threshold
   useEffect(() => {

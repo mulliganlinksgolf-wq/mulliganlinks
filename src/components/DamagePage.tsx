@@ -40,6 +40,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
 
   const [displayedAnnual, setDisplayedAnnual] = useState(annualBarterCost)
   const [displayedTotal, setDisplayedTotal] = useState(totalDamage)
+  const [openLeadModal, setOpenLeadModal] = useState(0)
 
   // Animate annualBarterCost
   useEffect(() => {
@@ -303,6 +304,14 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
                 </div>
               )}
 
+              <button
+                onClick={() => setOpenLeadModal(n => n + 1)}
+                className="inline-flex items-center justify-center rounded-lg px-6 py-3 text-sm font-semibold transition-colors"
+                style={{ background: '#E0A800', color: '#0a0a0a' }}
+              >
+                Get my free damage report →
+              </button>
+
               <p className="text-xs text-[#F4F1EA]/25 leading-relaxed max-w-lg mx-auto pt-2">
                 Calculation based on GolfNow&apos;s standard barter model of 2 prime-time tee times per day
                 at published rack rates. Actual barter arrangements vary by course agreement.
@@ -326,6 +335,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
               }}
               onLeadSubmit={handleLeadSubmit}
               autoFireThreshold={10000}
+              openTrigger={openLeadModal}
             />
           </div>
         </section>
