@@ -5,7 +5,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
-import { NavMenu } from '@/components/NavMenu'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 import { FoundersScorecard } from '@/components/FoundersScorecard'
@@ -47,15 +46,20 @@ export default async function HomePage() {
           <Link href="/">
             <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
           </Link>
-          <nav className="flex items-center gap-3">
+          <div className="flex flex-col-reverse gap-2 min-[480px]:flex-row min-[480px]:gap-3">
+            <Link
+              href="/waitlist/course"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#E0A800] transition-colors hover:bg-[#E0A800]/10"
+            >
+              I Run a Course
+            </Link>
             <Link
               href="/waitlist/golfer"
-              className="whitespace-nowrap inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors hidden md:inline-flex"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] transition-colors hover:bg-[#E0A800]/90"
             >
-              Join the Waitlist
+              I&apos;m a Golfer →
             </Link>
-            <NavMenu />
-          </nav>
+          </div>
         </div>
       </header>
 
