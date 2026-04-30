@@ -7,8 +7,14 @@ import { CourseWaitlistForm } from './CourseWaitlistForm'
 import { GolfNowCountdown } from './GolfNowCountdown'
 
 export const metadata = {
-  title: 'Founding Partner Application — TeeAhead',
-  description: 'Claim one of 10 Founding Partner spots. Free platform for your first year.',
+  title: 'Founding Partner Application',
+  description: 'Claim one of 10 Founding Partner spots. Free tee sheet software for your first year — zero barter, zero commissions, go live in 48 hours.',
+  alternates: { canonical: '/waitlist/course' },
+  openGraph: {
+    url: '/waitlist/course',
+    title: 'TeeAhead Founding Partner Application',
+    description: 'Claim one of 10 Founding Partner spots. Free platform for your first year — zero barter, zero commissions.',
+  },
 }
 
 export default async function CourseWaitlistPage() {

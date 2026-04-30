@@ -43,11 +43,11 @@ export function StructuredData() {
           {
             '@type': 'Offer',
             name: 'Eagle Membership',
-            price: '79',
+            price: '89',
             priceCurrency: 'USD',
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
-              price: '79',
+              price: '89',
               priceCurrency: 'USD',
               unitCode: 'ANN',
             },
@@ -57,11 +57,11 @@ export function StructuredData() {
           {
             '@type': 'Offer',
             name: 'Ace Membership',
-            price: '149',
+            price: '159',
             priceCurrency: 'USD',
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
-              price: '149',
+              price: '159',
               priceCurrency: 'USD',
               unitCode: 'ANN',
             },

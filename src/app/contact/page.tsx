@@ -4,8 +4,14 @@ import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { submitCourseInquiry } from '@/app/actions/contact'
 
 export const metadata: Metadata = {
-  title: 'For Courses',
-  description: 'Bring TeeAhead to your course. Free software, zero barter, zero commissions — your tee sheet stays yours.',
+  title: 'Bring TeeAhead to Your Course',
+  description: 'Free tee sheet software for Metro Detroit golf courses. Zero barter tee times, zero commissions — go live in 48 hours.',
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    url: '/contact',
+    title: 'Bring TeeAhead to Your Course',
+    description: 'Free tee sheet software for Metro Detroit golf courses. Zero barter tee times, zero commissions — go live in 48 hours.',
+  },
 }
 
 export default function ContactPage() {

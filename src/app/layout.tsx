@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   alternates: {
-    canonical: "https://www.teeahead.com",
+    canonical: "/",
   },
   verification: {
     google: "UMxgTah2fiIao60gzONoz4OVsdiAu7LUxat6FO_5-a8",
