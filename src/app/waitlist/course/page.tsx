@@ -140,7 +140,7 @@ export default async function CourseWaitlistPage() {
               },
               {
                 icon: '⚡',
-                title: 'Live within 48 Hours',
+                title: 'Live within 48 hours',
                 description: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right.",
               },
             ].map(({ icon, title, description }) => (
