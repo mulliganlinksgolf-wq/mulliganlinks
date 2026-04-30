@@ -6,16 +6,58 @@ export function StructuredData() {
         '@type': 'Organization',
         '@id': 'https://www.teeahead.com/#organization',
         name: 'TeeAhead',
+        legalName: 'TeeAhead, LLC',
         url: 'https://www.teeahead.com',
-        logo: 'https://www.teeahead.com/logo.png',
+        logo: {
+          '@type': 'ImageObject',
+          url: 'https://www.teeahead.com/logo.png',
+          width: 200,
+          height: 60,
+        },
         description:
           "TeeAhead is Metro Detroit's local-first golf loyalty network. Free tee sheet software for courses, zero booking fees for golfers.",
         foundingDate: '2026',
+        email: 'support@teeahead.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Detroit',
+          addressRegion: 'MI',
+          addressCountry: 'US',
+        },
         areaServed: {
           '@type': 'Place',
           name: 'Metro Detroit, Michigan',
         },
-        sameAs: [],
+        founder: [
+          { '@id': 'https://www.teeahead.com/#neil-barris' },
+          { '@id': 'https://www.teeahead.com/#billy-beslock' },
+        ],
+        contactPoint: {
+          '@type': 'ContactPoint',
+          email: 'support@teeahead.com',
+          contactType: 'customer support',
+          availableLanguage: 'English',
+        },
+      },
+      {
+        '@type': 'Person',
+        '@id': 'https://www.teeahead.com/#neil-barris',
+        name: 'Neil Barris',
+        email: 'neil@teeahead.com',
+        jobTitle: 'Co-Founder',
+        worksFor: { '@id': 'https://www.teeahead.com/#organization' },
+        description: 'Co-founder of TeeAhead. Previously built Outing.golf, a golf group booking platform. Based in Metro Detroit.',
+        knowsAbout: ['Golf course management software', 'Tee time booking systems', 'Golf loyalty programs', 'Golf industry SaaS'],
+      },
+      {
+        '@type': 'Person',
+        '@id': 'https://www.teeahead.com/#billy-beslock',
+        name: 'Billy Beslock',
+        email: 'billy@teeahead.com',
+        jobTitle: 'Co-Founder',
+        worksFor: { '@id': 'https://www.teeahead.com/#organization' },
+        description: 'Co-founder of TeeAhead. Ford Motor Company background. Metro Detroit golfer and product thinker behind the TeeAhead membership model.',
+        knowsAbout: ['Golf membership programs', 'Golf loyalty programs', 'Consumer product design'],
       },
       {
         '@type': 'WebSite',
@@ -67,51 +109,6 @@ export function StructuredData() {
             },
             description:
               '$240/yr in tee time credits, 2 free rounds, 24 guest fee waivers, concierge booking, 15% green fee discount.',
-          },
-        ],
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: [
-          {
-            '@type': 'Question',
-            name: 'Is TeeAhead free for golf courses?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'Yes. TeeAhead is completely free for the first 10 Founding Partner courses — free for your first year. There are no barter tee times, no commissions, and no data extraction. TeeAhead makes money from golfer memberships, not from courses.',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'How does TeeAhead compare to GolfPass+?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'TeeAhead Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every metric: 250 bonus Fairway Points on signup, 1 complimentary round/yr (course-provided), always-on booking fee waiver, 2× points multiplier, 48hr priority booking, and a 10% birthday credit.',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'What is the TeeAhead Founding Partner program?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $349/month.',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'What does GolfNow actually cost a golf course?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: 'GolfNow takes approximately 2 barter tee times per day at rack rate. At 300 operating days per year, that equals roughly $94,500 per year in lost revenue for an average course. High-volume courses can lose $150,000 or more annually.',
-            },
-          },
-          {
-            '@type': 'Question',
-            name: 'What are Fairway Points?',
-            acceptedAnswer: {
-              '@type': 'Answer',
-              text: "Fairway Points are TeeAhead's loyalty currency. Every dollar you spend on green fees at partner courses earns Fairway Points. Eagle members earn 2x points, Ace members earn 3x. Points can be redeemed for tee time credits at any partner course in the network.",
-            },
           },
         ],
       },

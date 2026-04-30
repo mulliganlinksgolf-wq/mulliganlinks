@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { GolfnowAlternativeSchema } from '@/components/GolfnowAlternativeSchema'
 
 export const metadata: Metadata = {
   title: 'Best GolfNow Alternative for Courses & Golfers',
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 export default function GolfNowAlternativePage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <GolfnowAlternativeSchema />
 
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
