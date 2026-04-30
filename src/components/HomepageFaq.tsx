@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const FAQS = [
   {
-    q: 'Is TeeAhead really free for courses?',
+    q: 'Is TeeAhead really free for courses for founding partners?',
     a: (
       <>
         Yes — completely free for the first 10 Founding Partner courses for your full first year. No barter tee times, no commissions, no hidden fees. After year one, it&apos;s a flat $349/month. No long-term contract. Cancel anytime.
@@ -24,11 +24,15 @@ const FAQS = [
     q: 'What if my course already uses EZLinks, foreUP, or another system?',
     a: (
       <>
-        TeeAhead is designed to work alongside or replace your current booking system. We handle the setup and can walk you through the transition. Email Neil directly at{' '}
+        TeeAhead is designed to work alongside or replace your current booking system. We handle the setup and can walk you through the transition. Email Neil or Billy directly at{' '}
         <a href="mailto:neil@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
           neil@teeahead.com
         </a>{' '}
-        — he&apos;ll give you a straight answer about your specific setup.
+        or{' '}
+        <a href="mailto:billy@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
+          billy@teeahead.com
+        </a>{' '}
+        — they&apos;ll give you a straight answer about your specific setup.
       </>
     ),
   },
