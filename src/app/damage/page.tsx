@@ -6,6 +6,12 @@ export const metadata: Metadata = {
   title: 'GolfNow Damage Report — What Has GolfNow Cost Your Course? | TeeAhead',
   description:
     'Calculate how much GolfNow barter has cost your Metro Detroit golf course. Enter your green fee and see the total damage — then see what TeeAhead would have cost instead.',
+  openGraph: {
+    title: 'GolfNow Damage Report — See What Barter Has Cost You',
+    description:
+      'GolfNow barter tee times add up. Calculate your course\'s total damage in 30 seconds. No login required.',
+    type: 'website',
+  },
 }
 
 export default async function GolfNowDamageReportPage() {

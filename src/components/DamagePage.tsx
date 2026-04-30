@@ -321,7 +321,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
                 marketplaceBarter: totalDamage,
                 totalExtraction: totalDamage,
                 savingsAsFounder: totalDamage,
-                savingsAsStandard: Math.max(0, totalDamage - 4188),
+                savingsAsStandard: Math.max(0, totalDamage - 4188), // 12 × $349 standard annual
                 selectedVendor: 'GolfNow',
               }}
               onLeadSubmit={handleLeadSubmit}
