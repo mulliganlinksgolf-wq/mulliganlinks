@@ -6,8 +6,14 @@ import { TierPicker } from './TierPicker'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Join the Golfer Waitlist — TeeAhead',
-  description: 'Get early access to TeeAhead, the local-first golf loyalty network coming to Metro Detroit.',
+  title: 'Join the Golfer Waitlist',
+  description: 'Join TeeAhead\'s waitlist for Metro Detroit golfers. Zero booking fees, Fairway Points on every round, Eagle membership at $89/yr — $40 less than GolfPass+.',
+  alternates: { canonical: '/waitlist/golfer' },
+  openGraph: {
+    url: '/waitlist/golfer',
+    title: 'Join the TeeAhead Golfer Waitlist — Metro Detroit',
+    description: 'Zero booking fees, Fairway Points on every round. Eagle membership $89/yr.',
+  },
 }
 
 const tiers = [

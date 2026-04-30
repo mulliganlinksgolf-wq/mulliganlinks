@@ -5,5 +5,13 @@
       "path": "/api/crm/stale-leads",
       "schedule": "0 8 * * *"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "teeahead.com" }],
+      "destination": "https://www.teeahead.com/:path*",
+      "permanent": true
+    }
   ]
 }

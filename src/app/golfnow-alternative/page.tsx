@@ -5,7 +5,7 @@ import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 export const metadata: Metadata = {
   title: 'Best GolfNow Alternative for Courses & Golfers',
   description:
-    'TeeAhead is the top GolfNow alternative — free tee sheet software with no barter tee times, no commissions, and a golfer loyalty program that beats GolfPass+. Metro Detroit launch.',
+    'Free tee sheet software with no barter tee times, no commissions, and a golfer loyalty program that beats GolfPass+. The best GolfNow alternative for Metro Detroit courses.',
   alternates: {
     canonical: 'https://www.teeahead.com/golfnow-alternative',
   },

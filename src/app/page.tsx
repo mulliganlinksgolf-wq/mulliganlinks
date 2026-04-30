@@ -10,6 +10,7 @@ import { createClient } from '@/lib/supabase/server'
 import { FoundersScorecard } from '@/components/FoundersScorecard'
 import { FoundingPartnerProgress } from '@/components/FoundingPartnerProgress'
 import { HomepageFaq } from '@/components/HomepageFaq'
+import { HomepageSchema } from '@/components/HomepageSchema'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
@@ -39,6 +40,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <HomepageSchema />
 
       {/* ── Header / Nav ──────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
