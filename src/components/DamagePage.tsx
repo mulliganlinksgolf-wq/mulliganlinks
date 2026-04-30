@@ -7,51 +7,90 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
+import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
+import { METRO_DETROIT_COURSES } from '@/lib/metro-detroit-courses'
 
-interface BarterPageProps {
+interface DamagePageProps {
   spotsRemaining: number
 }
 
-export function BarterPage({ spotsRemaining }: BarterPageProps) {
+async function handleLeadSubmit(lead: {
+  name: string
+  email: string
+  role: string
+  courseName: string
+  calculatedSavings: number
+  vendor: string
+}) {
+  await fetch('/api/lead', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(lead),
+  })
+}
+
+export function DamagePage({ spotsRemaining }: DamagePageProps) {
   const [greenFee, setGreenFee] = useState(85)
   const [operatingDays, setOperatingDays] = useState(280)
   const [barterTeeTimes, setBarterTeeTimes] = useState(2)
-  const [presetKey, setPresetKey] = useState<'municipal' | 'dailyfee' | 'semiprivate' | 'custom'>('dailyfee')
-
-  const presets = {
-    municipal:   { label: 'Municipal ($45)',      greenFee: 45,  days: 280 },
-    dailyfee:    { label: 'Daily Fee ($85)',       greenFee: 85,  days: 280 },
-    semiprivate: { label: 'Semi-Private ($120)',   greenFee: 120, days: 260 },
-    custom:      { label: 'My own numbers',        greenFee: greenFee, days: operatingDays },
-  } as const
-
-  const handlePreset = (key: typeof presetKey) => {
-    setPresetKey(key)
-    if (key !== 'custom') {
-      setGreenFee(presets[key].greenFee)
-      setOperatingDays(presets[key].days)
-    }
-  }
+  const [yearsOnGolfNow, setYearsOnGolfNow] = useState(3)
 
   const annualBarterCost = greenFee * operatingDays * barterTeeTimes
+  const totalDamage = annualBarterCost * yearsOnGolfNow
 
-  const [displayedCost, setDisplayedCost] = useState(annualBarterCost)
+  const [displayedAnnual, setDisplayedAnnual] = useState(annualBarterCost)
+  const [displayedTotal, setDisplayedTotal] = useState(totalDamage)
 
+  // Animate annualBarterCost
   useEffect(() => {
-    const start = displayedCost
+    const start = displayedAnnual
     const end = annualBarterCost
     const duration = 600
     const startTime = performance.now()
     const tick = (now: number) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3) // ease-out-cubic
-      setDisplayedCost(Math.round(start + (end - start) * eased))
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplayedAnnual(Math.round(start + (end - start) * eased))
       if (progress < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [annualBarterCost])
+
+  // Animate totalDamage
+  useEffect(() => {
+    const start = displayedTotal
+    const end = totalDamage
+    const duration = 600
+    const startTime = performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setDisplayedTotal(Math.round(start + (end - start) * eased))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [totalDamage])
+
+  // Tangibles breakdown (inline, mirroring SoftwareCostLeadCapture logic)
+  const tangibles = [
+    { icon: '🛺', label: 'new golf cart', cost: 8000 },
+    { icon: '🌿', label: 'fairway renovation', cost: 25000 },
+    { icon: '📣', label: 'local marketing campaign', cost: 3500 },
+    { icon: '🏌️', label: 'pro shop remodel', cost: 15000 },
+    { icon: '📱', label: 'tee sheet software (10 yrs)', cost: 4200 },
+    { icon: '👔', label: 'full-time staff salary', cost: 45000 },
+  ]
+    .map(item => ({ ...item, qty: Math.floor(totalDamage / item.cost) }))
+    .filter(item => item.qty >= 1)
+    .map(item => ({
+      icon: item.icon,
+      label: item.qty === 1 ? `1 ${item.label}` : `${item.qty}× ${item.label}`,
+    }))
+    .slice(0, 4)
 
   const allClaimed = spotsRemaining <= 0
 
@@ -88,41 +127,19 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           <FadeIn>
             <div className="max-w-2xl mx-auto space-y-7 relative z-10">
               <div className="inline-flex items-center gap-2 bg-[#E0A800]/12 border border-[#E0A800]/30 rounded-full px-4 py-1.5">
-                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">For Golf Course Operators</span>
+                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">GolfNow Damage Report</span>
               </div>
 
               <h1 className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.02em]"
                   style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
-                See exactly what GolfNow has cost you.{' '}
-                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>In dollars.</em>
+                GolfNow has been charging you barter for years.{' '}
+                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>See the total damage.</em>
               </h1>
 
               <p className="text-base leading-relaxed max-w-md mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
-                Drop in your numbers. We&apos;ll calculate the exact revenue GolfNow&apos;s barter model has
-                extracted from your course — this year alone. No login. No email required.
+                Enter your numbers and see how much GolfNow&apos;s barter model has extracted from your course
+                — not just this year, but since you signed. No login. No email required.
               </p>
-
-              {/* Preset chips */}
-              <div className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase" style={{ color: 'rgba(244,241,234,0.35)' }}>
-                  Quick-start with a course type
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {(Object.keys(presets) as Array<keyof typeof presets>).map((key) => (
-                    <button
-                      key={key}
-                      onClick={() => handlePreset(key)}
-                      className="rounded-full px-4 py-2 text-sm font-semibold transition-colors"
-                      style={presetKey === key
-                        ? { background: 'rgba(224,168,0,0.15)', border: '1px solid rgba(224,168,0,0.40)', color: '#E0A800' }
-                        : { background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.15)', color: 'rgba(244,241,234,0.65)' }
-                      }
-                    >
-                      {presets[key].label}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
               <p className="text-xs" style={{ color: 'rgba(244,241,234,0.30)' }}>
                 Calculator based on NGCOA member survey data and Golf Inc. industry analysis (2024–2025). Actual costs vary by contract terms.
@@ -134,20 +151,20 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
         {/* ── Calculator ────────────────────────────────────────── */}
         <section className="px-6 pb-6 bg-[#FAF7F2]">
           <FadeIn>
-            <div className="max-w-2xl mx-auto bg-white rounded-[20px] p-8 border border-black/7"
+            <div className="max-w-2xl mx-auto bg-white rounded-[20px] p-8 border border-black/7 mt-0"
                  style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}>
 
               {/* Card header with running total */}
               <div className="flex items-start justify-between mb-8 pb-6 border-b border-black/6">
                 <div>
-                  <p className="text-sm font-bold text-[#1A1A1A]">GolfNow Barter Calculator</p>
+                  <p className="text-sm font-bold text-[#1A1A1A]">GolfNow Damage Calculator</p>
                   <p className="text-xs text-[#9DAA9F] mt-0.5">Adjust sliders to match your course</p>
                 </div>
                 <div className="text-right">
                   <p className="font-display font-black text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
-                    ${displayedCost.toLocaleString()}
+                    ${displayedTotal.toLocaleString()}
                   </p>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">running total</p>
+                  <p className="text-xs text-[#9DAA9F] mt-0.5">total damage</p>
                 </div>
               </div>
 
@@ -158,12 +175,12 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>${greenFee}</span>
                 </div>
                 <input
-                  type="range" min={20} max={200} step={5} value={greenFee}
-                  onChange={(e) => { setGreenFee(Number(e.target.value)); setPresetKey('custom') }}
+                  type="range" min={45} max={200} step={5} value={greenFee}
+                  onChange={(e) => setGreenFee(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full cursor-pointer"
                   style={{ accentColor: '#0F3D2E' }}
                 />
-                <p className="text-xs text-[#9DAA9F]">$20–$200 · Use your published weekend or peak-time rate</p>
+                <p className="text-xs text-[#9DAA9F]">$45–$200 · Use your published weekend or peak-time rate</p>
               </div>
 
               {/* Slider 2: Operating Days */}
@@ -173,16 +190,16 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                   <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{operatingDays}</span>
                 </div>
                 <input
-                  type="range" min={100} max={360} step={10} value={operatingDays}
-                  onChange={(e) => { setOperatingDays(Number(e.target.value)); setPresetKey('custom') }}
+                  type="range" min={200} max={365} step={5} value={operatingDays}
+                  onChange={(e) => setOperatingDays(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full cursor-pointer"
                   style={{ accentColor: '#0F3D2E' }}
                 />
-                <p className="text-xs text-[#9DAA9F]">100–360 days</p>
+                <p className="text-xs text-[#9DAA9F]">200–365 days</p>
               </div>
 
               {/* Slider 3: Barter Tee Times */}
-              <div className="space-y-3">
+              <div className="space-y-3 mb-7">
                 <div className="flex items-center justify-between">
                   <label className="text-sm font-medium text-[#1A1A1A]">Barter tee times given to GolfNow per day</label>
                   <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{barterTeeTimes}</span>
@@ -196,6 +213,39 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 <p className="text-xs text-[#9DAA9F]">GolfNow typically takes 2 prime-time tee times per day · 1–4</p>
               </div>
 
+              {/* Slider 4: Years on GolfNow */}
+              <div className="space-y-3 mb-7">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-medium text-[#1A1A1A]">Years on GolfNow</label>
+                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{yearsOnGolfNow}</span>
+                </div>
+                <input
+                  type="range" min={1} max={15} step={1} value={yearsOnGolfNow}
+                  onChange={(e) => setYearsOnGolfNow(Number(e.target.value))}
+                  className="w-full h-1.5 rounded-full cursor-pointer"
+                  style={{ accentColor: '#0F3D2E' }}
+                />
+                <p className="text-xs text-[#9DAA9F]">1–15 years · How long has your course been on GolfNow?</p>
+              </div>
+
+              {/* Course autocomplete */}
+              <div className="space-y-2 pt-4 border-t border-black/6">
+                <label htmlFor="course-name" className="text-sm font-medium text-[#1A1A1A]">Your course (optional)</label>
+                <input
+                  id="course-name"
+                  type="text"
+                  list="metro-detroit-courses"
+                  placeholder="Start typing your course name…"
+                  className="w-full h-10 px-3 rounded-lg border border-black/10 text-sm text-[#1A1A1A] bg-[#FAF7F2] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]/20"
+                />
+                <datalist id="metro-detroit-courses">
+                  {METRO_DETROIT_COURSES.map((course) => (
+                    <option key={course} value={course} />
+                  ))}
+                </datalist>
+                <p className="text-xs text-[#9DAA9F]">Metro Detroit courses shown. Used only for your lead report — not stored.</p>
+              </div>
+
             </div>
           </FadeIn>
         </section>
@@ -204,24 +254,27 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
         <section className="px-6 py-16 bg-[#0F3D2E] text-center">
           <FadeIn>
             <div className="max-w-2xl mx-auto space-y-6">
-              <p className="text-sm font-medium text-[#F4F1EA]/60">GolfNow&apos;s barter model cost you</p>
+              <p className="text-sm font-medium text-[#F4F1EA]/60">GolfNow&apos;s barter model has cost you</p>
               <p className="font-display font-black text-[#F4F1EA] leading-none tracking-[-0.03em]"
                  style={{ fontSize: 'clamp(72px, 12vw, 96px)' }}>
-                ${displayedCost.toLocaleString()}
+                ${displayedTotal.toLocaleString()}
               </p>
-              <p className="text-base text-[#F4F1EA]/50">this year alone</p>
+              <p className="text-base text-[#F4F1EA]/50">over {yearsOnGolfNow} {yearsOnGolfNow === 1 ? 'year' : 'years'}</p>
 
-              <div className="border-t border-[#F4F1EA]/15 pt-8 space-y-2">
-                <p className="text-sm font-medium text-[#F4F1EA]/65">TeeAhead would have charged you</p>
-                <p className="font-display font-black text-[#E0A800] leading-none" style={{ fontSize: '64px' }}>$0</p>
+              <div className="border-t border-[#F4F1EA]/15 pt-6 space-y-2">
+                <p className="text-sm font-medium text-[#F4F1EA]/65">Annual barter cost</p>
+                <p className="font-display font-black text-[#E0A800] leading-none" style={{ fontSize: '48px' }}>
+                  ${displayedAnnual.toLocaleString()}
+                </p>
+                <p className="text-xs text-[#F4F1EA]/40">per year</p>
               </div>
 
-              {/* Context cards — inside the dark section */}
+              {/* Context cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
                 {[
-                  { label: 'Over 5 years, that\'s', value: `$${(annualBarterCost * 5).toLocaleString()}`, sub: 'in lost revenue' },
-                  { label: 'That equals about', value: `${Math.round(annualBarterCost / greenFee).toLocaleString()} rounds`, sub: 'of revenue per year' },
-                  { label: 'You could hire', value: `${Math.max(1, Math.round(annualBarterCost / 50000))} staff`, sub: 'with that money' },
+                  { label: 'Years on GolfNow', value: `${yearsOnGolfNow}`, sub: yearsOnGolfNow === 1 ? 'year of extraction' : 'years of extraction' },
+                  { label: 'That equals about', value: `${Math.round(totalDamage / greenFee).toLocaleString()} rounds`, sub: 'of revenue handed over' },
+                  { label: 'TeeAhead would have cost you', value: '$0', sub: 'in barter or commissions' },
                 ].map(({ label, value, sub }) => (
                   <div key={label} className="rounded-xl p-5 text-center"
                        style={{ background: 'rgba(244,241,234,0.06)', border: '1px solid rgba(244,241,234,0.10)' }}>
@@ -232,12 +285,49 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 ))}
               </div>
 
+              {/* Tangibles breakdown */}
+              {tangibles.length > 0 && (
+                <div className="border-t border-[#F4F1EA]/10 pt-6">
+                  <p className="text-xs font-medium text-[#F4F1EA]/40 uppercase tracking-wider mb-4">
+                    What ${totalDamage.toLocaleString()} could have bought your course
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    {tangibles.map((t, i) => (
+                      <div key={i} className="rounded-xl p-4 text-center"
+                           style={{ background: 'rgba(244,241,234,0.06)', border: '1px solid rgba(244,241,234,0.10)' }}>
+                        <span className="text-2xl block mb-1">{t.icon}</span>
+                        <span className="text-xs text-[#F4F1EA]/60 leading-snug">{t.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               <p className="text-xs text-[#F4F1EA]/25 leading-relaxed max-w-lg mx-auto pt-2">
                 Calculation based on GolfNow&apos;s standard barter model of 2 prime-time tee times per day
                 at published rack rates. Actual barter arrangements vary by course agreement.
               </p>
             </div>
           </FadeIn>
+        </section>
+
+        {/* ── Lead Capture ───────────────────────────────────────── */}
+        <section className="px-6 py-10 bg-[#FAF7F2]">
+          <div className="max-w-2xl mx-auto">
+            <SoftwareCostLeadCapture
+              costs={{
+                annualSubscription: 0,
+                processingMarkup: 0,
+                marketplaceBarter: totalDamage,
+                totalExtraction: totalDamage,
+                savingsAsFounder: totalDamage,
+                savingsAsStandard: Math.max(0, totalDamage - 4188),
+                selectedVendor: 'GolfNow',
+              }}
+              onLeadSubmit={handleLeadSubmit}
+              autoFireThreshold={10000}
+            />
+          </div>
         </section>
 
         {/* ── Proof ──────────────────────────────────────────────── */}
@@ -304,19 +394,13 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           </FadeIn>
         </section>
 
-        {/* ── Cross-links ──────────────────────────────────────── */}
+        {/* ── Cross-link to /software-cost ─────────────────────── */}
         <section className="px-6 py-8 bg-white border-t border-black/5">
-          <div className="max-w-xl mx-auto text-center space-y-2">
+          <div className="max-w-xl mx-auto text-center">
             <p className="text-sm text-[#6B7770]">
-              Not on GolfNow?{' '}
+              On our non-GolfNow calculators?{' '}
               <Link href="/software-cost" className="text-[#0F3D2E] hover:underline font-medium">
-                See what your software is actually costing you →
-              </Link>
-            </p>
-            <p className="text-sm text-[#6B7770]">
-              Want the full historical damage?{' '}
-              <Link href="/damage" className="text-[#0F3D2E] hover:underline font-medium">
-                See the GolfNow Damage Report →
+                Calculate your full software cost →
               </Link>
             </p>
           </div>
