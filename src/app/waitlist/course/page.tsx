@@ -8,7 +8,7 @@ import { GolfNowCountdown } from './GolfNowCountdown'
 
 export const metadata = {
   title: 'Founding Partner Application',
-  description: 'Claim one of 10 Founding Partner spots. Free tee sheet software for your first year — zero barter, zero commissions, go live in 48 hours.',
+  description: 'Claim one of 10 Founding Partner spots. Free tee sheet software for your first year — zero barter, zero commissions, live within 48 hours.',
   alternates: { canonical: '/waitlist/course' },
   openGraph: {
     url: '/waitlist/course',
@@ -140,7 +140,7 @@ export default async function CourseWaitlistPage() {
               },
               {
                 icon: '⚡',
-                title: 'Live in 48 Hours',
+                title: 'Live within 48 Hours',
                 description: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right.",
               },
             ].map(({ icon, title, description }) => (
@@ -175,6 +175,7 @@ export default async function CourseWaitlistPage() {
                 title: 'Standard (Year 2 Onward)',
                 price: '$349/mo',
                 description: 'Flat monthly, no commissions, no barter.',
+                multiYearNote: true,
               },
               {
                 title: '3+ Courses',
@@ -182,7 +183,7 @@ export default async function CourseWaitlistPage() {
                 description: 'Volume pricing for multi-course operators.',
                 note: 'per course',
               },
-            ].map(({ title, price, description, note }) => (
+            ].map(({ title, price, description, note, multiYearNote }) => (
               <div key={title} className="bg-white rounded-xl p-6 border border-black/8 shadow-sm space-y-2">
                 <p className="text-xs font-bold tracking-[0.1em] uppercase text-[#6B7770]">{title}</p>
                 <p className="text-3xl font-black text-[#0F3D2E] leading-none">
@@ -190,6 +191,11 @@ export default async function CourseWaitlistPage() {
                   {note && <span className="text-sm font-semibold text-[#9DAA9F] ml-1">{note}</span>}
                 </p>
                 <p className="text-sm text-[#6B7770] leading-relaxed">{description}</p>
+                {multiYearNote && (
+                  <p className="text-xs text-[#9DAA9F] mt-1">
+                    Multi-year contracts available at a discount — ask Neil.
+                  </p>
+                )}
               </div>
             ))}
           </div>
