@@ -21,7 +21,7 @@ interface Props {
 }
 
 export function TemplatesClient({ initialTemplates }: Props) {
-  const [templates] = useState(initialTemplates)
+  const templates = initialTemplates
   const [creating, setCreating] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null)

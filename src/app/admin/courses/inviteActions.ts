@@ -52,7 +52,7 @@ export async function inviteCoursePartner(
   const { subject, html, text } = buildCoursePartnerInviteEmail({ recipientName: name, courseName: course.name, setupUrl, adminName })
 
   const { error: emailError } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
+    from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead CRM <crm@teeahead.com>',
     to: email,
     subject,
     html,
