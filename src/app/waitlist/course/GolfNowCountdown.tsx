@@ -1,16 +1,21 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-export function GolfNowCountdown() {
-  const [expiryDate, setExpiryDate] = useState('')
-  const [timeLeft, setTimeLeft] = useState<{ days: number; hours: number; minutes: number; seconds: number } | null>(null)
+interface GolfNowCountdownProps {
+  expiryDate: string
+  onExpiryChange: (value: string) => void
+}
+
+export function GolfNowCountdown({ expiryDate, onExpiryChange }: GolfNowCountdownProps) {
+  const [timeLeft, setTimeLeft] = useState<{
+    days: number; hours: number; minutes: number; seconds: number
+  } | null>(null)
 
   useEffect(() => {
     if (!expiryDate) { setTimeLeft(null); return }
-    // Parse as local midnight so the countdown reflects the user's local timezone
     const target = new Date(expiryDate + 'T00:00:00').getTime()
     function tick() {
       const now = Date.now()
@@ -38,10 +43,10 @@ export function GolfNowCountdown() {
           id="golfnow_expiry_preview"
           type="date"
           value={expiryDate}
-          onChange={e => setExpiryDate(e.target.value)}
+          onChange={e => onExpiryChange(e.target.value)}
         />
       </div>
-      {timeLeft && (
+      {timeLeft ? (
         <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
           {[
             { value: timeLeft.days, label: 'Days' },
@@ -55,8 +60,7 @@ export function GolfNowCountdown() {
             </div>
           ))}
         </div>
-      )}
-      {!timeLeft && (
+      ) : (
         <div className="grid grid-cols-4 gap-4 max-w-md mx-auto opacity-30">
           {['Days', 'Hours', 'Minutes', 'Seconds'].map(label => (
             <div key={label} className="bg-[#0F3D2E] rounded-xl p-4 text-center">

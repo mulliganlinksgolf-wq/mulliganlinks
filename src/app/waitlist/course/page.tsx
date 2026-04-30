@@ -1,10 +1,8 @@
-import { Suspense } from 'react'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { createClient } from '@/lib/supabase/server'
-import { CourseWaitlistForm } from './CourseWaitlistForm'
-import { GolfNowCountdown } from './GolfNowCountdown'
+import { CourseWaitlistSection } from './CourseWaitlistSection'
 
 export const metadata = {
   title: 'Founding Partner Application',
@@ -212,11 +210,6 @@ export default async function CourseWaitlistPage() {
         </div>
       </section>
 
-      {/* ── GolfNow Countdown ────────────────────────────────── */}
-      <section className="bg-white px-6 py-12 border-t border-black/5">
-        <GolfNowCountdown />
-      </section>
-
       {/* ── Social proof bar ────────────────────────────────── */}
       <section className="bg-[#F0F4F1] px-6 py-8 border-t border-[#0F3D2E]/10">
         <div className="max-w-xl mx-auto">
@@ -239,23 +232,8 @@ export default async function CourseWaitlistPage() {
         </div>
       </section>
 
-      {/* ── Form section ─────────────────────────────────────── */}
-      <section className="px-6 py-16 bg-[#FAF7F2]">
-        <div className="max-w-xl mx-auto">
-          <div className="bg-[#0F3D2E] rounded-2xl p-8 sm:p-10">
-            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">
-              COURSE WAITLIST — FOUNDING PARTNER PROGRAM
-            </p>
-            {spotsRemaining > 0 && spotsRemaining < 10 && (
-              <p className="text-sm text-[#E0A800]/80 mb-2">{spotsRemaining} of 10 founding spots remaining.</p>
-            )}
-            <p className="text-lg font-semibold text-[#F4F1EA] mb-8">Bring TeeAhead to your course.</p>
-            <Suspense fallback={null}>
-              <CourseWaitlistForm />
-            </Suspense>
-          </div>
-        </div>
-      </section>
+      {/* ── GolfNow Countdown + Form section ─────────────────── */}
+      <CourseWaitlistSection spotsRemaining={spotsRemaining} />
 
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">

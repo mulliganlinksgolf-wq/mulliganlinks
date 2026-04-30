@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinCourseWaitlist } from './actions'
 
-export function CourseWaitlistForm() {
+export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: string }) {
   const searchParams = useSearchParams()
   const tier = searchParams.get('tier') ?? 'founding'
 
@@ -163,6 +163,7 @@ export function CourseWaitlistForm() {
               name="contract_expiry_date"
               type="date"
               disabled={isPending}
+              defaultValue={prefillExpiryDate ?? ''}
               className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
             />
           </div>
