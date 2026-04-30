@@ -39,3 +39,21 @@ test('renders the waitlist CTA linking to /waitlist/golfer', () => {
   const cta = screen.getByRole('link', { name: /Join the Waitlist/i })
   expect(cta).toHaveAttribute('href', '/waitlist/golfer')
 })
+
+test('Hole 4 reflects the updated "Why" copy', () => {
+  render(<FoundersScorecard />)
+  expect(
+    screen.getByText(/just like every other golfer that wants something more reasonable and innovative/i)
+  ).toBeInTheDocument()
+})
+
+test('Hole 5 does not contain "feels the same way"', () => {
+  render(<FoundersScorecard />)
+  expect(screen.queryByText(/feels the same way/i)).not.toBeInTheDocument()
+})
+
+test('Hole 5 includes billy email in the course outreach text', () => {
+  render(<FoundersScorecard />)
+  const billyLinks = screen.getAllByRole('link', { name: 'billy@teeahead.com' })
+  expect(billyLinks.length).toBeGreaterThanOrEqual(1)
+})

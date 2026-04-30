@@ -41,8 +41,7 @@ const HOLES = [
     par: 'The Why',
     notes: (
       <>
-        We&apos;re not building TeeAhead because the market is hot. We&apos;re
-        building it because <em>we&apos;re both tired of watching it happen</em>.
+        We&apos;re just like every other golfer that wants something more reasonable and innovative.
       </>
     ),
     redNumber: true,
@@ -52,14 +51,14 @@ const HOLES = [
     par: 'The Ask',
     notes: (
       <>
-        If you run a course in Metro Detroit, reach out to Neil directly —{' '}
+        If you run a course in Metro Detroit, reach out to Neil or Billy directly —{' '}
         <a
           href="mailto:neil@teeahead.com"
           className="text-[#0F3D2E] underline decoration-dotted"
         >
           neil@teeahead.com
         </a>
-        . If you&apos;re a golfer who feels the same way —{' '}
+        {' '}or{' '}
         <a
           href="mailto:billy@teeahead.com"
           className="text-[#0F3D2E] underline decoration-dotted"
