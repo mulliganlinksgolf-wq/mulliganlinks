@@ -140,6 +140,7 @@ export default function GolfNowAlternativePage() {
                   Online revenue increased from $81,000 to $393,000 after leaving GolfNow. That&apos;s a $312,000 swing — by reclaiming their own booking channel, eliminating barter, and owning their customer relationships directly.
                 </p>
                 <p className="text-xs text-[#9DAA9F]">Source: Golf Inc. / industry reporting, Windsor Parke case study</p>
+                <Link href="/case-studies/windsor-parke" className="text-sm font-medium text-[#0F3D2E] hover:underline">Read the full case study →</Link>
               </div>
               <div className="bg-white rounded-xl p-8 ring-1 ring-black/5 space-y-4">
                 <div className="text-5xl font-bold text-[#0F3D2E]">36.3%</div>
