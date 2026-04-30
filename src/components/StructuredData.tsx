@@ -46,8 +46,8 @@ export function StructuredData() {
         email: 'neil@teeahead.com',
         jobTitle: 'Co-Founder',
         worksFor: { '@id': 'https://www.teeahead.com/#organization' },
-        description: 'Co-founder of TeeAhead. Previously built Outing.golf, a golf group booking platform. Based in Metro Detroit.',
-        knowsAbout: ['Golf course management software', 'Tee time booking systems', 'Golf loyalty programs', 'Golf industry SaaS'],
+        description: 'Co-founder of TeeAhead. 10 years in software as a Customer Success Manager at companies including Samsung, FinTech, and Observability. Previously built Outing.golf, a golf group booking platform. Based in Metro Detroit.',
+        knowsAbout: ['Golf course management software', 'Tee time booking systems', 'Golf loyalty programs', 'Customer success', 'Golf industry SaaS'],
       },
       {
         '@type': 'Person',
@@ -56,8 +56,8 @@ export function StructuredData() {
         email: 'billy@teeahead.com',
         jobTitle: 'Co-Founder',
         worksFor: { '@id': 'https://www.teeahead.com/#organization' },
-        description: 'Co-founder of TeeAhead. Ford Motor Company background. Metro Detroit golfer and product thinker behind the TeeAhead membership model.',
-        knowsAbout: ['Golf membership programs', 'Golf loyalty programs', 'Consumer product design'],
+        description: 'Co-founder of TeeAhead. Career engineer at Ford Motor Company with decades of experience in complex operational systems. The systems thinker behind the TeeAhead loyalty mechanic and membership tier model. Metro Detroit native.',
+        knowsAbout: ['Golf membership programs', 'Golf loyalty programs', 'Systems engineering', 'Consumer product design'],
       },
       {
         '@type': 'WebSite',

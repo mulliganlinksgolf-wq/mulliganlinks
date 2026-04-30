@@ -102,7 +102,7 @@ export default function AboutPage() {
                 <p className="text-sm text-[#6B7770]">Co-Founder</p>
               </div>
               <p className="text-sm text-[#4A5550] leading-relaxed">
-                Previously built <strong>Outing.golf</strong>, a golf group booking platform. Spent years learning what courses need from software — and what they don&apos;t. Based in Metro Detroit.
+                10 years in software helping enterprise customers get real value — as a CSM at companies spanning <strong>Samsung</strong>, FinTech, and Observability. Knows firsthand what good software feels like and what bad onboarding costs. Previously built <strong>Outing.golf</strong>, a golf group booking platform. Based in Metro Detroit.
               </p>
               <a href="mailto:neil@teeahead.com" className="text-sm text-[#0F3D2E] font-medium hover:underline">neil@teeahead.com</a>
             </article>
@@ -117,7 +117,7 @@ export default function AboutPage() {
                 <p className="text-sm text-[#6B7770]">Co-Founder</p>
               </div>
               <p className="text-sm text-[#4A5550] leading-relaxed">
-                Product thinker with a <strong>Ford Motor Company</strong> background. The mind behind the TeeAhead membership model and loyalty mechanic. Metro Detroit golfer who&apos;s been thinking about this problem for years.
+                Career engineer at <strong>Ford Motor Company</strong> — decades deep in one of the most operationally complex organizations in the world. Brings that same systems-thinking to TeeAhead: the loyalty mechanic, the membership tiers, the course economics. Metro Detroit through and through.
               </p>
               <a href="mailto:billy@teeahead.com" className="text-sm text-[#0F3D2E] font-medium hover:underline">billy@teeahead.com</a>
             </article>
