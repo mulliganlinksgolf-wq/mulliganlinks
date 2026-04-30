@@ -11,8 +11,6 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [submitted, setSubmitted] = useState<string | null>(null)
-  const [showOptional, setShowOptional] = useState(false)
-
   function handleSubmit(formData: FormData) {
     setError(null)
     startTransition(async () => {
@@ -78,6 +76,17 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
       </div>
 
       <div className="space-y-1.5">
+        <Label htmlFor="last_name" className="text-[#F4F1EA]">Last name</Label>
+        <Input
+          id="last_name"
+          name="last_name"
+          disabled={isPending}
+          placeholder="Nicklaus"
+          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+        />
+      </div>
+
+      <div className="space-y-1.5">
         <Label htmlFor="email" className="text-[#F4F1EA]">Email address *</Label>
         <Input id="email" name="email" type="email" required disabled={isPending} placeholder="jack@example.com" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
         <p className="text-xs text-[#F4F1EA]/50">No spam, ever. We&apos;ll only contact you about your waitlist status and the Metro Detroit launch.</p>
@@ -105,117 +114,79 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
         {isPending ? 'Joining…' : 'Claim My Spot ⛳'}
       </Button>
 
-      {/* Optional accordion */}
-      <div className="border border-white/12 rounded-xl overflow-hidden">
-        <button
-          type="button"
-          onClick={() => setShowOptional(!showOptional)}
-          className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left"
-          aria-expanded={showOptional}
-        >
-          <span className="text-sm text-[#F4F1EA]/70 font-medium">
-            Optional: help us personalize your experience
-          </span>
-          <span
-            className="flex-shrink-0 text-[#F4F1EA]/50 transition-transform duration-200"
-            style={{ transform: showOptional ? 'rotate(180deg)' : 'rotate(0deg)' }}
-            aria-hidden="true"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </button>
+      {/* ── Optional fields ─────────────────────────── */}
+      <div className="space-y-5 pt-2">
+        <p className="text-sm font-medium text-[#F4F1EA]/70">
+          Optional — help us personalize your experience
+        </p>
 
-        <div
-          className="overflow-hidden transition-all duration-300"
-          style={{ maxHeight: showOptional ? '800px' : '0px' }}
-        >
-          <div className="px-4 pb-5 space-y-5 border-t border-white/10 pt-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="home_course" className="text-[#F4F1EA]">Home course</Label>
+          <Input
+            id="home_course"
+            name="home_course"
+            disabled={isPending}
+            placeholder="Oakland Hills, Detroit Golf Club, etc."
+            className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+          />
+        </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2 space-y-1.5">
-                <Label htmlFor="last_name" className="text-[#F4F1EA]">Last name</Label>
-                <Input
-                  id="last_name"
-                  name="last_name"
+        <div className="space-y-1.5">
+          <Label htmlFor="rounds_per_year" className="text-[#F4F1EA]">Rounds per year</Label>
+          <select id="rounds_per_year" name="rounds_per_year" disabled={isPending} className={selectClassName}>
+            <option value="">Select…</option>
+            <option value="under_10">Under 10</option>
+            <option value="10_20">10–20</option>
+            <option value="20_40">20–40</option>
+            <option value="40_plus">40+</option>
+          </select>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="current_membership" className="text-[#F4F1EA]">Current membership</Label>
+          <select id="current_membership" name="current_membership" disabled={isPending} className={selectClassName}>
+            <option value="">Select…</option>
+            <option value="none">None</option>
+            <option value="golfpass_plus">GolfPass+</option>
+            <option value="troon_access">Troon Access</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-[#F4F1EA]">Which tier interests you most?</Label>
+          <div className="space-y-2">
+            {[
+              { value: 'fairway', label: 'Fairway — Free forever' },
+              { value: 'eagle', label: 'Eagle — $89/yr (most popular)' },
+              { value: 'ace', label: 'Ace — $159/yr (all-in)' },
+              { value: 'not_sure', label: 'Not sure yet' },
+            ].map(({ value, label }) => (
+              <label key={value} className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="radio"
+                  name="interested_tier"
+                  value={value}
                   disabled={isPending}
-                  placeholder="Nicklaus"
-                  className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+                  checked={selectedTier === value}
+                  onChange={() => setSelectedTier(value)}
+                  className="accent-[#E0A800]"
                 />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="home_course" className="text-[#F4F1EA]">Home course</Label>
-              <Input
-                id="home_course"
-                name="home_course"
-                disabled={isPending}
-                placeholder="Oakland Hills, Detroit Golf Club, etc."
-                className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="rounds_per_year" className="text-[#F4F1EA]">Rounds per year</Label>
-              <select id="rounds_per_year" name="rounds_per_year" disabled={isPending} className={selectClassName}>
-                <option value="">Select…</option>
-                <option value="under_10">Under 10</option>
-                <option value="10_20">10–20</option>
-                <option value="20_40">20–40</option>
-                <option value="40_plus">40+</option>
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="current_membership" className="text-[#F4F1EA]">Current membership</Label>
-              <select id="current_membership" name="current_membership" disabled={isPending} className={selectClassName}>
-                <option value="">Select…</option>
-                <option value="none">None</option>
-                <option value="golfpass_plus">GolfPass+</option>
-                <option value="troon_access">Troon Access</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-[#F4F1EA]">Which tier interests you most?</Label>
-              <div className="space-y-2">
-                {[
-                  { value: 'fairway', label: 'Fairway — Free forever' },
-                  { value: 'eagle', label: 'Eagle — $89/yr (most popular)' },
-                  { value: 'ace', label: 'Ace — $159/yr (all-in)' },
-                  { value: 'not_sure', label: 'Not sure yet' },
-                ].map(({ value, label }) => (
-                  <label key={value} className="flex items-center gap-3 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="interested_tier"
-                      value={value}
-                      disabled={isPending}
-                      checked={selectedTier === value}
-                      onChange={() => setSelectedTier(value)}
-                      className="accent-[#E0A800]"
-                    />
-                    <span className="text-sm text-[#F4F1EA]">{label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <Label htmlFor="referral_source" className="text-[#F4F1EA]">Where did you hear about us?</Label>
-              <Input
-                id="referral_source"
-                name="referral_source"
-                disabled={isPending}
-                placeholder="Instagram, friend, golf course, etc."
-                className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-              />
-            </div>
-
+                <span className="text-sm text-[#F4F1EA]">{label}</span>
+              </label>
+            ))}
           </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="referral_source" className="text-[#F4F1EA]">Where did you hear about us?</Label>
+          <Input
+            id="referral_source"
+            name="referral_source"
+            disabled={isPending}
+            placeholder="Instagram, friend, golf course, etc."
+            className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+          />
         </div>
       </div>
     </form>
