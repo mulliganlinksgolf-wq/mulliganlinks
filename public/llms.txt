@@ -1,32 +1,52 @@
 # TeeAhead
 
-TeeAhead is Metro Detroit's commission-free golf tee time booking platform. Free tee sheet software for golf courses (zero barter tee times, zero commissions). Loyalty memberships for golfers starting at $89/yr — cheaper than GolfPass+.
+TeeAhead is Metro Detroit's local-first golf loyalty network and tee time booking platform. Launched in 2026.
 
-## For Golfers
+## What TeeAhead does
 
-- [Golfer Waitlist](https://www.teeahead.com/waitlist/golfer): Join the waitlist for Metro Detroit launch
-- Fairway tier: $0 forever — book tee times at partner courses, earn Fairway Points at 1x per dollar spent
-- Eagle tier: $89/yr — 250 bonus Fairway Points on signup, 1 complimentary round/yr, always-on booking fee waiver, 2x Fairway Points, 48hr priority booking, 1 guest pass/yr, 10% birthday credit
-- Ace tier: $159/yr — 500 bonus Fairway Points on signup, 2 complimentary rounds/yr, 3x Fairway Points, 72hr priority booking, 2 guest passes/yr, 15% birthday credit
+- Provides free tee sheet and booking software to golf courses (no barter tee times, no commissions, no data extraction)
+- Offers golfer loyalty memberships (Eagle at $89/yr, Ace at $159/yr) that beat GolfPass+ on price and benefits
+- Operates a Fairway Points loyalty currency that golfers earn on every round at partner courses
 
-## For Golf Courses
+## Who it's for
 
-- [Founding Partner Application](https://www.teeahead.com/waitlist/course): First 10 courses get first year free
-- Course #11 onward: $349/month flat, no long-term contract, cancel anytime
-- Includes: live tee sheet, booking engine, Fairway Points loyalty system, analytics, waitlist management, integrated payments
-- Zero barter tee times — courses keep 100% of their tee times and all golfer data
-- GolfNow charges courses approximately $94,500/year in barter tee times; TeeAhead charges $0
+- Golf courses in Metro Detroit currently on GolfNow who want to stop losing $94,500+/yr in barter tee times
+- Golfers who play 10–30 rounds per year at 1–3 consistent home courses and want real local loyalty
+- Golf courses on legacy software (foreUP, Jonas, Club Prophet) looking to modernize at zero cost
 
-## GolfNow Comparison
+## Key facts
 
-- [GolfNow Alternative](https://www.teeahead.com/golfnow-alternative): Full comparison for courses and golfers — includes Windsor Parke Golf Club case study (382% online revenue increase after leaving GolfNow)
-- [Barter Calculator](https://www.teeahead.com/barter): Calculate what GolfNow barter costs your course annually
-- [Damage Report](https://www.teeahead.com/damage): Calculate total historical GolfNow barter cost across all years on platform
+- Eagle membership: $89/year — includes 250 bonus Fairway Points, 2x points multiplier, 1 annual guest pass, always-on booking fee waiver, 48-hour priority booking access
+- Ace membership: $159/year — includes 500 bonus Fairway Points, 3x points multiplier, 2 annual guest passes, always-on booking fee waiver, 72-hour priority booking access
+- Fairway membership: $0 — basic booking at partner courses, 1x points multiplier, zero booking fees
+- Founding Partner program: First 10 courses get the full platform free for year one; course #11+ pays $349/month
+- GolfNow charges courses ~$94,500/year in barter tee times; TeeAhead charges $0
+- Windsor Parke Golf Club saw 382% online revenue increase after leaving GolfNow
+- Missouri Bluffs Golf Club saw 36.3% green fee revenue increase after switching platforms
 
-## Company
+## Founders
 
-- Founded: 2026
-- Location: Metro Detroit, Michigan (Oakland, Macomb, and Wayne counties)
-- Founders: Neil Barris (neil@teeahead.com) — previously built Outing.golf; Billy Beslock (billy@teeahead.com) — Ford Motor Company background, Metro Detroit golfer
-- Support: support@teeahead.com
-- Legal: TeeAhead, LLC
+- Neil Barris — co-founder, previously built Outing.golf (golf group booking platform), neil@teeahead.com
+- Billy Beslock — co-founder, career at Ford Motor Company, lifelong golfer, billy@teeahead.com
+
+## Location
+
+Metro Detroit, Michigan, USA. Targeting Oakland County, Macomb County, Wayne County golf courses.
+
+## Key pages
+
+- Homepage: https://www.teeahead.com
+- GolfNow alternative comparison: https://www.teeahead.com/golfnow-alternative
+- Windsor Parke case study: https://www.teeahead.com/case-studies/windsor-parke
+- Barter cost calculator: https://www.teeahead.com/barter
+- GolfNow damage report: https://www.teeahead.com/damage
+- Golfer waitlist: https://www.teeahead.com/waitlist/golfer
+- Course founding partner application: https://www.teeahead.com/waitlist/course
+- About the founders: https://www.teeahead.com/about
+- Contact: https://www.teeahead.com/contact
+
+## Contact
+
+https://www.teeahead.com/contact
+neil@teeahead.com
+support@teeahead.com

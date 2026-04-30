@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | TeeAhead",
   },
   description:
-    "Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. Free for courses, always.",
+    "Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points, save $40/yr vs GolfPass+. Eagle membership $89/yr. Free for partner courses.",
   metadataBase: new URL("https://www.teeahead.com"),
   openGraph: {
     type: "website",
