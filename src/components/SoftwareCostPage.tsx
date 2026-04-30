@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { VENDOR_PRICING, TEEAHEAD_PRICING, VENDOR_KEYS, type VendorKey } from '@/lib/vendorPricing'
+import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
 import {
   calcAnnualSubscription,
   calcProcessingMarkup,
@@ -70,6 +71,10 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
     n >= 1_000_000
       ? `$${(n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1)}M`
       : `$${(n / 1_000).toFixed(0)}K`
+
+  async function handleLeadSubmit(lead: { name: string; email: string; role: string; courseName: string; calculatedSavings: number; vendor: string }) {
+    await fetch('/api/lead', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(lead) })
+  }
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -448,6 +453,19 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
           </div>
         </section>
 
+        <SoftwareCostLeadCapture
+          costs={{
+            annualSubscription,
+            processingMarkup,
+            marketplaceBarter,
+            totalExtraction,
+            savingsAsFounder: savingsAsFounding,
+            savingsAsStandard,
+            selectedVendor: selectedVendor ?? undefined,
+          }}
+          onLeadSubmit={handleLeadSubmit}
+        />
+
         {/* ── Proof ──────────────────────────────────────────────── */}
         <section className="px-6 py-16 bg-white">
           <FadeIn>
@@ -587,12 +605,12 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
           </FadeIn>
         </section>
 
-        {/* ── Cross-link to /barter ──────────────────────────────── */}
+        {/* ── Cross-link to /damage ── */}
         <section className="px-6 py-8 bg-white border-t border-black/5">
           <div className="max-w-xl mx-auto text-center">
             <p className="text-sm text-[#6B7770]">
               On GolfNow?{' '}
-              <Link href="/barter" className="text-[#0F3D2E] hover:underline font-medium">
+              <Link href="/damage" className="text-[#0F3D2E] hover:underline font-medium">
                 Calculate your barter cost →
               </Link>
             </p>
