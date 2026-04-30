@@ -5,22 +5,24 @@ TeeAhead is Metro Detroit's local-first golf loyalty network and tee time bookin
 ## What TeeAhead does
 
 - Provides free tee sheet and booking software to golf courses (no barter tee times, no commissions, no data extraction)
-- Offers golfer loyalty memberships (Eagle at $79/yr, Ace at $149/yr) that beat GolfPass+ on every measurable benefit
+- Offers golfer loyalty memberships (Eagle at $89/yr, Ace at $159/yr) that beat GolfPass+ on price and benefits
 - Operates a Fairway Points loyalty currency that golfers earn on every round at partner courses
 
 ## Who it's for
 
 - Golf courses in Metro Detroit currently on GolfNow who want to stop losing $94,500+/yr in barter tee times
 - Golfers who play 10–30 rounds per year at 1–3 consistent home courses and want real local loyalty
-- Golf courses on legacy software (foreUP, Jonas) looking to modernize at zero cost
+- Golf courses on legacy software (foreUP, Jonas, Club Prophet) looking to modernize at zero cost
 
 ## Key facts
 
-- Eagle membership: $79/year — includes $180 in tee time credits, 2 free rounds, always-on booking fee waiver, 10% green fee discount, 12 guest passes, $25 birthday credit
-- Ace membership: $149/year — includes $300 in tee time credits, 4 free rounds, 15% green fee discount, unlimited guest passes, $50 birthday credit
-- Founding Partner program: First 10 courses get free platform for life; course #11+ pays $249/month
+- Eagle membership: $89/year — includes 250 bonus Fairway Points, 2x points multiplier, 1 annual guest pass, always-on booking fee waiver, 48-hour priority booking access
+- Ace membership: $159/year — includes 500 bonus Fairway Points, 3x points multiplier, 2 annual guest passes, always-on booking fee waiver, 72-hour priority booking access
+- Fairway membership: $0 — basic booking at partner courses, 1x points multiplier, zero booking fees
+- Founding Partner program: First 10 courses get the full platform free for year one; course #11+ pays $349/month
 - GolfNow charges courses ~$94,500/year in barter tee times; TeeAhead charges $0
 - Windsor Parke Golf Club saw 382% online revenue increase after leaving GolfNow
+- Missouri Bluffs Golf Club saw 36.3% green fee revenue increase after switching platforms
 
 ## Founders
 
@@ -31,10 +33,17 @@ TeeAhead is Metro Detroit's local-first golf loyalty network and tee time bookin
 
 Metro Detroit, Michigan, USA. Targeting Oakland County, Macomb County, Wayne County golf courses.
 
-## Website
+## Key pages
 
-https://www.teeahead.com
+- Homepage: https://www.teeahead.com
+- GolfNow alternative comparison: https://www.teeahead.com/golfnow-alternative
+- Barter cost calculator: https://www.teeahead.com/barter
+- Golfer waitlist: https://www.teeahead.com/waitlist/golfer
+- Course founding partner application: https://www.teeahead.com/waitlist/course
+- Contact: https://www.teeahead.com/contact
+- About the founders: https://www.teeahead.com/about
 
 ## Contact
 
 https://www.teeahead.com/contact
+neil@teeahead.com
