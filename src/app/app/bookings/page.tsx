@@ -31,7 +31,7 @@ export default async function BookingsPage() {
           <p className="font-semibold text-white text-sm">
             {b.tee_times?.courses?.name ?? 'Course'}
           </p>
-          <p className="text-xs mt-0.5" style={{ color: isUpcoming ? '#8FA889' : '#555' }}>
+          <p className="text-xs mt-0.5" style={{ color: isUpcoming ? '#8FA889' : '#aaa' }}>
             {new Date(b.tee_times?.scheduled_at).toLocaleDateString('en-US', {
               weekday: 'short',
               month: 'short',
@@ -53,7 +53,7 @@ export default async function BookingsPage() {
                 b.status === 'confirmed'
                   ? '#8FA889'
                   : b.status === 'completed'
-                  ? '#888'
+                  ? '#aaa'
                   : '#ef4444',
             }}
           >
@@ -78,7 +78,7 @@ export default async function BookingsPage() {
       <div className="rounded-xl overflow-hidden" style={{ background: '#1B4332' }}>
         {!bookings || bookings.length === 0 ? (
           <div className="p-8 text-center" style={{ background: '#163d2a' }}>
-            <p style={{ color: '#888' }}>No bookings yet.</p>
+            <p className="text-[#aaa]">No bookings yet.</p>
             <Link
               href="/app/courses"
               className="inline-block mt-4 px-4 py-2 rounded-lg text-sm font-semibold text-[#FAF7F2]"
@@ -92,7 +92,7 @@ export default async function BookingsPage() {
             {upcoming.length > 0 && (
               <>
                 <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
-                  <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
+                  <span className="text-[8px] uppercase tracking-widest font-sans text-[#aaa]">
                     Upcoming
                   </span>
                 </div>
@@ -104,7 +104,7 @@ export default async function BookingsPage() {
             {past.length > 0 && (
               <>
                 <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
-                  <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
+                  <span className="text-[8px] uppercase tracking-widest font-sans text-[#aaa]">
                     Past
                   </span>
                 </div>
