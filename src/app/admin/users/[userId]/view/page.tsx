@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import ImpersonateButton from './ImpersonateButton'
 
 const tierLabels: Record<string, { label: string; color: string }> = {
   free:   { label: 'Fairway', color: 'bg-[#8FA889]/20 text-[#1B4332]' },
@@ -59,9 +60,12 @@ export default async function ViewAsMemberPage({
           <span className="text-amber-600 font-bold text-sm">Admin View</span>
           <span className="text-amber-700 text-sm">You are viewing the account of <strong>{fullName}</strong> ({email})</span>
         </div>
-        <Link href="/admin/users" className="text-xs text-amber-600 hover:text-amber-800 font-medium underline">
-          ← Back to users
-        </Link>
+        <div className="flex items-center gap-3">
+          <ImpersonateButton userId={userId} />
+          <Link href="/admin/users" className="text-xs text-amber-600 hover:text-amber-800 font-medium underline">
+            ← Back to users
+          </Link>
+        </div>
       </div>
 
       {/* Member header — exactly as they see it */}
