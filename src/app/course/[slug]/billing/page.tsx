@@ -2,6 +2,7 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import CsvExportButton from '@/components/reports/CsvExportButton'
+import { requireManager } from '@/lib/courseRole'
 
 export default async function CourseBillingPage({
   params,
@@ -9,6 +10,7 @@ export default async function CourseBillingPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+  await requireManager(slug)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/course/${slug}/login`)

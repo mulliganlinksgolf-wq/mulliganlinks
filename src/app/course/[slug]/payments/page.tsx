@@ -3,6 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { stripe } from '@/lib/stripe'
+import { requireManager } from '@/lib/courseRole'
 
 export default async function CoursePaymentsPage({
   params,
@@ -12,6 +13,7 @@ export default async function CoursePaymentsPage({
   searchParams: Promise<{ stripe?: string }>
 }) {
   const { slug } = await params
+  await requireManager(slug)
   const { stripe: stripeParam } = await searchParams
   const supabase = await createClient()
   const admin = createAdminClient()

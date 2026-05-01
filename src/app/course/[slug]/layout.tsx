@@ -2,6 +2,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { MANAGER_ROLES } from '@/lib/courseRole'
 
 export default async function CourseAdminLayout({
   children,
@@ -37,19 +38,22 @@ export default async function CourseAdminLayout({
   const isGlobalAdmin = profile?.is_admin === true
   if (!isGlobalAdmin && !courseAdmin && !courseUser) redirect(`/course/${slug}/login`)
 
-  const role = isGlobalAdmin ? 'admin' : (courseAdmin?.role ?? courseUser?.role ?? 'owner')
+  const role = isGlobalAdmin ? 'owner' : (courseAdmin?.role ?? courseUser?.role ?? 'staff')
+  const isManager = isGlobalAdmin || MANAGER_ROLES.includes(role)
 
-  const navItems = [
-    { href: `/course/${slug}`, label: 'Tee Sheet' },
-    { href: `/course/${slug}/check-in`, label: 'Check-in' },
-    { href: `/course/${slug}/bookings`, label: 'Bookings' },
-    { href: `/course/${slug}/members`, label: 'Members' },
-    { href: `/course/${slug}/payments`, label: 'Payments' },
-    { href: `/course/${slug}/dashboard`, label: 'Dashboard' },
-    { href: `/course/${slug}/reports`, label: 'Reports' },
-    { href: `/course/${slug}/billing`, label: 'Billing' },
-    { href: `/course/${slug}/settings`, label: 'Settings' },
+  const allNavItems = [
+    { href: `/course/${slug}`,            label: 'Tee Sheet',  managerOnly: false },
+    { href: `/course/${slug}/check-in`,   label: 'Check-in',   managerOnly: false },
+    { href: `/course/${slug}/bookings`,   label: 'Bookings',   managerOnly: false },
+    { href: `/course/${slug}/members`,    label: 'Members',    managerOnly: false },
+    { href: `/course/${slug}/payments`,   label: 'Payments',   managerOnly: true },
+    { href: `/course/${slug}/dashboard`,  label: 'Dashboard',  managerOnly: true },
+    { href: `/course/${slug}/reports`,    label: 'Reports',    managerOnly: true },
+    { href: `/course/${slug}/billing`,    label: 'Billing',    managerOnly: true },
+    { href: `/course/${slug}/settings`,   label: 'Settings',   managerOnly: true },
   ]
+
+  const navItems = allNavItems.filter(item => !item.managerOnly || isManager)
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { requireManager } from '@/lib/courseRole'
 
 export default async function CourseDashboardPage({
   params,
@@ -8,6 +9,7 @@ export default async function CourseDashboardPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
+  await requireManager(slug)
   const supabase = await createClient()
 
   const { data: course } = await supabase

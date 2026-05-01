@@ -6,6 +6,7 @@ import { getCourseReportKpis } from '@/lib/reports/courseMetrics'
 import { resolveDateRange } from '@/lib/reports/dateRange'
 import KpiTile from '@/components/reports/KpiTile'
 import DateRangePicker from '@/components/reports/DateRangePicker'
+import { requireManager } from '@/lib/courseRole'
 
 export default async function CourseReportsDashboard({
   params,
@@ -15,6 +16,7 @@ export default async function CourseReportsDashboard({
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
+  await requireManager(slug)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/course/${slug}/login`)

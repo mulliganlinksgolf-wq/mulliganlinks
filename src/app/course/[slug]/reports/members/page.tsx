@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseMetricHistory } from '@/lib/reports/courseMetrics'
 import { resolveDateRange } from '@/lib/reports/dateRange'
+import { requireManager } from '@/lib/courseRole'
 import KpiTile from '@/components/reports/KpiTile'
 import DateRangePicker from '@/components/reports/DateRangePicker'
 import { PointsBarChart } from './MemberActivityChart'
@@ -15,6 +16,7 @@ export default async function MemberActivityPage({
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
+  await requireManager(slug)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/course/${slug}/login`)
