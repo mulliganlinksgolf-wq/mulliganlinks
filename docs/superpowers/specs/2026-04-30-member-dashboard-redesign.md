@@ -1,49 +1,55 @@
-# Member Dashboard Redesign — Design Spec
+# Member App — Round Card Theme Redesign
 
 **Date:** 2026-04-30
-**Page:** `/app` (`src/app/app/page.tsx`)
+**Scope:** All member-facing pages under `/app/*`
 
 ---
 
 ## Overview
 
-Replace the current stat-cards dashboard with a dark, golf-native "Round Card" — a scorecard-metaphor UI that shows the member's live stats and contextual rows based on their activity state. The shell stays consistent; the content inside adapts.
+Apply a consistent "Round Card" design language across every tab in the member app. The pattern: a dark `#1C1C1C` header block with a small uppercase label and a serif headline, followed by either dark `#2a2a2a` content rows (for data-heavy pages) or the existing light `#FAF7F2` background (for input-heavy pages). The nav stays white — it's chrome, not content.
+
+The dashboard (`/app`) gets the deepest treatment — a full scorecard metaphor with two adaptive states. The other pages apply the same header/surface language without the scorecard rows.
 
 ---
 
-## Visual Design
+## Design Tokens (shared across all pages)
 
-- **Background:** `#1C1C1C` (near-black)
-- **Surface cards:** `#2a2a2a`
-- **Header row inside card:** `#222`
-- **Accent — points/rounds:** `#FFFFFF`
-- **Accent — credits:** `#E0A800` (gold)
-- **Accent — positive/green:** `#8FA889`
-- **CTA button:** `#1B4332` bg / `#FAF7F2` text
-- **Tier badge:** Eagle = `#E0A800`, Ace = `#1B4332`/`#FAF7F2`, Fairway = `#8FA889`/`#1A1A1A`
-- **Font:** serif for greeting/headline; sans-serif for scorecard rows and stats
-
-The overall page background remains `#FAF7F2` (the layout shell). The Round Card itself is the dark block, max-width matching the existing `max-w-5xl` container.
+| Token | Value | Usage |
+|---|---|---|
+| Dark shell | `#1C1C1C` | Header block background |
+| Dark surface | `#2a2a2a` | Cards, rows, content panels |
+| Dark header row | `#222` | Section labels inside dark panels |
+| Light bg | `#FAF7F2` | Form pages (Profile) |
+| White | `#fff` | Nav, form inputs |
+| Text primary | `#FFFFFF` | Headlines on dark |
+| Text muted | `#888888` | Labels, sub-lines on dark |
+| Text dimmed | `#555555` | Inactive/zero stats |
+| Accent green | `#8FA889` | Positive states, sub-lines |
+| Accent gold | `#E0A800` | Credits, Eagle badge, highlights |
+| CTA bg | `#1B4332` | Buttons, member card background |
+| Divider | `#333333` | Row separators on dark |
+| Tier — Fairway badge | `#8FA889` bg / `#1A1A1A` text |
+| Tier — Eagle badge | `#E0A800` bg / `#1A1A1A` text |
+| Tier — Ace badge | `#1B4332` bg / `#FAF7F2` text |
+| Font — headlines | Tailwind `font-serif` (Georgia fallback) |
+| Font — body/labels | Tailwind `font-sans` (default) |
 
 ---
 
-## Component Structure
+## Page 1 — Dashboard (`/app`)
+
+### Component Structure
 
 Extract two new components from `page.tsx`:
 
-### `RoundCard`
-Server component. Receives all data as props. Renders the full dark card: header, stats strip, scorecard rows, CTA.
+**`RoundCard`** — server component. Receives all data as props. Renders the full dark card: header, stats strip, scorecard rows, CTA.
 
-### `ScorecardRows`
-Pure presentational component. Receives `state: 'new' | 'active'` and `tier: 'free' | 'eagle' | 'ace'` and the relevant data, renders the correct three rows.
+**`ScorecardRows`** — pure presentational. Receives `state: 'new' | 'active'` and `tier: 'free' | 'eagle' | 'ace'` plus relevant data. Renders the correct three rows.
 
-`page.tsx` keeps its data-fetching logic and composes these components.
+`page.tsx` keeps all data-fetching and composes these components.
 
----
-
-## Data Requirements
-
-All fetched server-side in `page.tsx`. Additions vs. current:
+### Data Requirements
 
 | Field | Source | Currently fetched? |
 |---|---|---|
@@ -55,11 +61,9 @@ All fetched server-side in `page.tsx`. Additions vs. current:
 | **Upcoming booking** | `bookings` where `scheduled_at > now`, limit 1 | ❌ add |
 | **Last completed booking** | `bookings` where `status = 'completed'`, limit 1 | ❌ add |
 
-The "active vs new" state trigger is: `completedBookings.length > 0`.
+Active vs new state trigger: `completedBookings.length > 0`.
 
----
-
-## Card Header
+### Card Header
 
 ```
 [Round Card]                          [Eagle] ← tier badge
@@ -73,27 +77,17 @@ Sub-headline copy:
 - **Active (5–9 rounds):** "N rounds played. You're on the back nine. 🏌️"
 - **Active (10+ rounds):** "N rounds played. A regular. See you out there. 🏌️"
 
----
+### Stats Strip
 
-## Stats Strip
-
-3-column grid, always visible, inside the top of the card:
+3-column grid inside the top of the card:
 
 | Column | New member | Active member |
 |---|---|---|
-| **Points** | `0` (dimmed) | Live balance |
+| **Points** | `0` (dimmed `#555`) | Live balance, white |
 | **Credits** | `—` (dimmed) | `$X.XX` in gold |
-| **Rounds** | `0` (dimmed) | Total completed |
+| **Rounds** | `0` (dimmed) | Total completed, white |
 
-"Dimmed" = `color: #555` instead of `#fff`/`#E0A800`. No placeholder text — just the zero/dash.
-
----
-
-## Scorecard Rows
-
-Three rows always shown. Each row has: icon/number, a short label (uppercase, muted), and a description with optional sub-line.
-
-### New Member State (0 completed bookings)
+### Scorecard Rows — New Member (0 completed bookings)
 
 | # | Label | Primary | Sub-line |
 |---|---|---|---|
@@ -103,74 +97,187 @@ Three rows always shown. Each row has: icon/number, a short label (uppercase, mu
 
 Row 03 links to `/app/membership`.
 
-### Active Member State (1+ completed bookings)
+### Scorecard Rows — Active Member (1+ completed bookings)
 
-Row content varies by what data is available and by tier.
+**Row 1 — ▸ NEXT**
+- Upcoming booking exists: "Course Name · Day Time" / "N days away · fee waived" (Eagle/Ace) or "N days away" (Fairway)
+- No upcoming: "No round booked yet" / "Find a tee time →" → `/app/courses`
 
-**Row 1 — Next tee time (▸ NEXT)**
-- If upcoming booking exists: "Course Name · Day Time" / "N days away · fee waived" (Eagle/Ace) or "N days away" (Fairway)
-- If no upcoming: "No round booked yet" / "Find a tee time →" (links to `/app/courses`)
-
-**Row 2 — Last round (✓ LAST)**
+**Row 2 — ✓ LAST**
 - "Course Name · Mon DD" / "+N pts earned · $X paid"
-- Always available once active (at least 1 completed booking)
 
-**Row 3 — Tier-dependent**
+**Row 3 — tier-dependent**
 
-| Tier | Icon | Label | Primary | Sub-line |
-|---|---|---|---|---|
-| Fairway | ↑ | UPGRADE | Go Eagle — 2× points + fee waived | $89/yr — $50 less than Golf Pass |
-| Eagle | ◎ | GOAL | N pts to your next $1 credit | Book 1 more round to hit it |
-| Ace | ◎ | GOAL | N pts to your next $1 credit | Book 1 more round to hit it |
+| Tier | Icon | Label | Primary | Sub-line | Link |
+|---|---|---|---|---|---|
+| Fairway | ↑ | UPGRADE | Go Eagle — 2× points + fee waived | $89/yr — $50 less than Golf Pass | `/app/membership` |
+| Eagle | ◎ | GOAL | N pts to your next $1 credit | Book 1 more round to hit it | `/app/points` |
+| Ace | ◎ | GOAL | N pts to your next $1 credit | Book 1 more round to hit it | `/app/points` |
 
-Fairway row 3 links to `/app/membership`. Eagle/Ace row 3 links to `/app/points`.
+Points-to-next-credit: `100 - (pointsBalance % 100)` (100 pts = $1).
 
-Points-to-next-credit calculation: `100 - (pointsBalance % 100)` pts to the next $1 credit (100 pts = $1, matching the rate shown on `/app/points`).
+### CTA Button
 
----
+Full-width `#1B4332`, below the scorecard rows:
+- New: "⛳ Find a tee time near you" → `/app/courses`
+- Active: "⛳ Book another tee time" → `/app/courses`
 
-## CTA Button
+### What's Removed
 
-Full-width, `#1B4332`, sits below the scorecard rows inside the card.
-
-- **New:** "⛳ Find a tee time near you" → `/app/courses`
-- **Active:** "⛳ Book another tee time" → `/app/courses`
-
----
-
-## What's Removed
-
-- The existing stat-card grid (Fairway Points / Membership / Rounds Booked cards)
-- The standalone "Recent bookings" list section
-- The separate upgrade nudge card at the bottom (absorbed into scorecard row 3)
-
-Recent bookings detail is still accessible via `/app/bookings` (nav link already exists).
+- Existing stat-card grid (Fairway Points / Membership / Rounds Booked)
+- Standalone "Recent bookings" list section
+- Separate upgrade nudge card at the bottom
 
 ---
 
-## What's Unchanged
+## Page 2 — Courses (`/app/courses`)
 
-- `AppNav` — no changes
-- `AppLayout` — no changes
-- All other `/app/*` pages — no changes
-- Auth/redirect logic in `page.tsx`
+### Header Block (dark)
+
+```
+[Partner Courses]
+Find your round.
+Zero booking fees, always.
+```
+
+### Course Cards
+
+Replace current white `Card` components with dark `#2a2a2a` cards:
+- Image area: `#1B4332` placeholder with ⛳ (or actual hero image)
+- Course name: white, `font-semibold`
+- City/state: `#888`
+- Price: `#8FA889` ("From $X.XX")
+- Hover: `#333` background (subtle lift)
+
+Grid layout unchanged: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`.
+
+Empty state: dark `#2a2a2a` panel with white/muted text.
 
 ---
 
-## States Summary
+## Page 3 — Bookings (`/app/bookings`)
 
-| Condition | State |
-|---|---|
-| 0 completed bookings | New member |
-| 1+ completed bookings | Active member |
-| Active + `tier = 'free'` | Row 3 = upgrade nudge |
-| Active + `tier = 'eagle'` or `'ace'` | Row 3 = points goal |
+### Header Block (dark)
+
+```
+[My Bookings]
+Your rounds.
+```
+
+### Booking Rows
+
+Replace current white cards with dark `#2a2a2a` scorecard-style rows, grouped by section:
+
+Section labels (`#222` bg, `#555` text, `8px` uppercase):
+- **UPCOMING** — confirmed bookings with `scheduled_at > now`
+- **PAST** — everything else
+
+Each row (full-width, separated by `#333` divider):
+- Left: course name (white, `font-semibold`) + date/time + players (`#888`)
+- Right: price (white) + status chip
+- Upcoming rows: sub-line in `#8FA889` ("N days away · confirmed")
+- Past rows: sub-line in `#555` ("+N pts earned · completed")
+- Rows are links to `/app/bookings/[id]`
+
+Status chips adapt colors: confirmed = `#8FA889` text, completed = `#888`, cancelled = muted red.
+
+Empty state: dark panel with "No bookings yet" + CTA button.
 
 ---
 
-## Out of Scope
+## Page 4 — Points (`/app/points`)
 
-- Animations or transitions between states
-- Push notifications or real-time updates
-- Any changes to the bookings, points, membership, or courses pages
+### Header Block (dark)
+
+Three inline stats in the header (no separate cards):
+- Points balance — white, large serif number
+- Credit ready — gold `#E0A800`
+- Earn rate — white (e.g. "1.5×")
+
+Sub-line: "100 pts = $1 toward future rounds."
+
+### Transaction History
+
+Replace current white table with dark `#2a2a2a` panel:
+- Section label: "HISTORY" in `#222` bg
+- Each row: reason + course + date on left, `+N` / `-N` on right (`#8FA889` for positive, muted red for negative)
+- Separated by `#333` dividers
+
+Empty state: dark panel with "No transactions yet."
+
+---
+
+## Page 5 — My Card (`/app/card`)
+
+Already close to the theme. Changes are minor:
+
+- Wrap the existing card + "How it works" section in a dark `#1C1C1C` shell
+- Header label: `[Member Card]` in the standard uppercase style
+- "How it works" section: move from white `ring-1` card to dark `#2a2a2a` panel, text `#ddd`
+- Upgrade nudge for Fairway tier: dark `#2a2a2a` panel with gold `#E0A800` text accent (currently `#E0A800/10` bg — harmonise with the new surface)
+- The physical member card itself (`#1B4332` background) is unchanged
+
+---
+
+## Page 6 — Profile (`/app/profile`)
+
+### Header Block (dark)
+
+```
+[Profile]
+William Barris
+Eagle Member · Member since April 2025
+```
+
+Membership tier shown in gold/green text (not a badge — inline, muted).
+
+### Form Area
+
+Stays light (`#FAF7F2` background, white inputs) — better UX for text input against a light background. No dark inputs.
+
+`ProfileForm` component itself is unchanged. Only the page wrapper gets the dark header above it.
+
+---
+
+## Page 7 — Membership (`/app/membership`)
+
+### Header Block (dark)
+
+```
+[Membership]
+Upgrade your game.
+Currently on Fairway (free).   ← or "You're on Eagle." for paid members
+```
+
+### Tier Cards
+
+Replace white `ring-2` cards with dark `#2a2a2a` cards:
+- Recommended tier (Eagle for Fairway members): `border: 1px solid #E0A800`
+- Current tier: `border: 1px solid #555`, "Current plan" label instead of button
+- Tier name: colored by tier (`#E0A800` Eagle, `#8FA889` Ace)
+- Price: white, large serif
+- Feature list: `#888` text, `#8FA889` checkmarks
+- CTA button: `#E0A800` bg / `#1A1A1A` text for recommended; `#333` bg / `#888` text for secondary
+
+`FoundingGolferBanner` component: currently uses `bg-[#E0A800]/15 border-[#E0A800]/40` on a light page. On the dark membership page, keep the gold border but change bg to `bg-[#E0A800]/10` and text colors to `text-[#FAF7F2]` / `text-[#aaa]` so it reads on `#2a2a2a`.
+
+---
+
+## Shared Rules
+
+1. **Nav stays white.** `AppNav` is unchanged — it's chrome, not content.
+2. **`AppLayout` background stays `#FAF7F2`.** The dark card sits on the cream — it contrasts intentionally.
+3. **No dark inputs.** Form fields always use white/light backgrounds for readability.
+4. **All pages are server components.** No client-side state added.
+5. **No new routes or DB schema changes** beyond what Page 1 requires.
+
+---
+
+## What's Out of Scope
+
+- Animations or transitions
+- Individual booking detail page (`/app/bookings/[id]`)
+- Individual course detail page (`/app/courses/[slug]`)
+- Booking flow (`/app/book/[teeTimeId]`)
+- Any admin, course portal, or public marketing pages
 - Stripe/payment flows
