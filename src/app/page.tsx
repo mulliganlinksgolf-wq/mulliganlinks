@@ -13,9 +13,9 @@ import { HomepageFaq } from '@/components/HomepageFaq'
 import { HomepageFaqSchema } from '@/components/HomepageFaqSchema'
 
 export const metadata: Metadata = {
-  title: 'TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit',
+  title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
   description:
-    'Book tee times at Metro Detroit golf courses. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. The local-first alternative to GolfPass+, built for the regulars.',
+    'TeeAhead is free tee sheet software for golf courses with no barter and no commissions, paired with a golfer loyalty membership that beats GolfPass+ for $89/yr. Metro Detroit launch.',
 }
 
 export default async function HomePage() {
