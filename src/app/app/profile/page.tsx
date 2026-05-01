@@ -26,29 +26,27 @@ export default async function ProfilePage() {
 
   return (
     <div className="max-w-lg">
-      {/* Dark header */}
-      <div className="rounded-xl overflow-hidden mb-6" style={{ background: '#1B4332' }}>
-        <div className="px-5 py-5">
-          <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">Profile</p>
-          <h1 className="text-2xl font-bold font-serif text-white italic">
-            {profile?.full_name ?? 'Your profile'}
-          </h1>
-          <p className="text-[11px] font-sans mt-1">
-            <span style={{ color: tierColor }}>{tierLabel} Member</span>
-            <span style={{ color: '#555' }}> · Member since {memberSince}</span>
-          </p>
-        </div>
+      <div className="mb-6">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-[#aaa] font-sans mb-1">Profile</p>
+        <h1 className="text-2xl font-bold font-serif text-white italic">
+          {profile?.full_name ?? 'Your profile'}.
+        </h1>
+        <p className="text-[11px] font-sans mt-1">
+          <span style={{ color: tierColor }}>{tierLabel} Member</span>
+          <span style={{ color: '#555' }}> · Member since {memberSince}</span>
+        </p>
       </div>
 
-      {/* Form stays light */}
-      <ProfileForm
-        userId={user.id}
-        email={user.email ?? ''}
-        initialName={profile?.full_name ?? ''}
-        initialPhone={profile?.phone ?? ''}
-        isFoundingMember={profile?.founding_member ?? false}
-        membership={membership ?? null}
-      />
+      <div className="rounded-xl p-6 bg-[#1B4332]">
+        <ProfileForm
+          userId={user.id}
+          email={user.email ?? ''}
+          initialName={profile?.full_name ?? ''}
+          initialPhone={profile?.phone ?? ''}
+          isFoundingMember={profile?.founding_member ?? false}
+          membership={membership ?? null}
+        />
+      </div>
     </div>
   )
 }
