@@ -65,6 +65,12 @@ export default function MemberDetailHeader({
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <Link href="/admin/users" className="text-sm text-[#6B7770] hover:text-[#1A1A1A] mr-2">← All members</Link>
+          <Link
+            href={`/admin/users/${userId}/view`}
+            className="text-xs font-medium text-[#1B4332] border border-[#1B4332]/30 rounded-lg px-3 py-1.5 hover:bg-[#1B4332]/5 transition-colors"
+          >
+            View as member →
+          </Link>
           <EditTierModal userId={userId} currentTier={tier} />
           <CancelMembershipModal userId={userId} periodEndDate={periodEndDate} hasMembership={hasMembership} />
         </div>
