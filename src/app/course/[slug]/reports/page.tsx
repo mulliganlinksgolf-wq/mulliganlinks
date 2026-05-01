@@ -3,12 +3,16 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseReportKpis } from '@/lib/reports/courseMetrics'
+import { resolveDateRange } from '@/lib/reports/dateRange'
 import KpiTile from '@/components/reports/KpiTile'
+import DateRangePicker from '@/components/reports/DateRangePicker'
 
 export default async function CourseReportsDashboard({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
   const supabase = await createClient()
@@ -20,7 +24,17 @@ export default async function CourseReportsDashboard({
   if (courseError && courseError.code !== 'PGRST116') throw new Error(`[CourseReportsDashboard] course query failed: ${courseError.message}`)
   if (!course) notFound()
 
-  const kpis = await getCourseReportKpis(course.id)
+  const sp = await searchParams
+  const dateRange = resolveDateRange(sp.preset, sp.from, sp.to)
+  const kpis = await getCourseReportKpis(course.id, dateRange.from, dateRange.to)
+
+  const presetLabel: Record<string, string> = {
+    this_month: new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' }),
+    last_month: 'Last Month',
+    this_quarter: 'This Quarter',
+    ytd: 'Year to Date',
+    custom: `${dateRange.from} – ${dateRange.to}`,
+  }
 
   const subPages = [
     { href: `/course/${slug}/reports/rounds`, label: 'Rounds & Utilization', icon: '⛳' },
@@ -34,11 +48,13 @@ export default async function CourseReportsDashboard({
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Your TeeAhead Performance</h1>
-        <p className="text-[#6B7770] text-sm mt-1">{new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}</p>
+        <p className="text-[#6B7770] text-sm mt-1">{presetLabel[dateRange.preset] ?? dateRange.preset}</p>
       </div>
 
+      <DateRangePicker />
+
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <KpiTile label="Rounds This Month" value={kpis.roundsThisMonth.toLocaleString()} accent />
+        <KpiTile label="Rounds" value={kpis.roundsThisMonth.toLocaleString()} accent />
         <KpiTile label="Revenue Processed" value={`$${kpis.revenueThisMonth.toLocaleString()}`} />
         <KpiTile label="TeeAhead Members" value={kpis.membersTotal.toLocaleString()} />
         <KpiTile label="Waitlist Cancellations Recovered" value={kpis.waitlistFillsThisMonth.toString()} />

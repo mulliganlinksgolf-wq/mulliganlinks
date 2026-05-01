@@ -17,24 +17,34 @@ export interface CourseReportKpis {
   avgGreenFee: number
 }
 
-export async function getCourseReportKpis(courseId: string): Promise<CourseReportKpis> {
+export async function getCourseReportKpis(
+  courseId: string,
+  from?: string,
+  to?: string,
+): Promise<CourseReportKpis> {
   const admin = createAdminClient()
-  const currentMonth = new Date().toISOString().slice(0, 7)
 
-  const { data: metrics, error: metricsError } = await admin
-    .from('crm_course_metrics')
-    .select('*')
-    .eq('course_id', courseId)
-    .eq('month', currentMonth)
-    .maybeSingle()
-  if (metricsError) throw new Error(`[getCourseReportKpis] metrics query failed: ${metricsError.message}`)
+  let query = admin.from('crm_course_metrics').select('*').eq('course_id', courseId)
+  if (from && to) {
+    query = query.gte('month', from.slice(0, 7)).lte('month', to.slice(0, 7))
+  } else {
+    query = query.eq('month', new Date().toISOString().slice(0, 7))
+  }
+
+  const { data, error } = await query
+  if (error) throw new Error(`[getCourseReportKpis] metrics query failed: ${error.message}`)
+
+  const rows = data ?? []
+  const totalRevenue = rows.reduce((s, r) => s + Number(r.green_fee_revenue ?? 0), 0)
+  const totalRounds = rows.reduce((s, r) => s + (r.rounds_booked ?? 0), 0)
+  const avgGreenFee = totalRounds > 0 ? totalRevenue / totalRounds : 0
 
   return {
-    roundsThisMonth: metrics?.rounds_booked ?? 0,
-    revenueThisMonth: Number(metrics?.green_fee_revenue ?? 0),
-    membersTotal: metrics?.members_attributed ?? 0,
-    waitlistFillsThisMonth: metrics?.waitlist_fills ?? 0,
-    avgGreenFee: Number(metrics?.avg_green_fee ?? 0),
+    roundsThisMonth: totalRounds,
+    revenueThisMonth: totalRevenue,
+    membersTotal: rows.reduce((s, r) => s + (r.members_attributed ?? 0), 0),
+    waitlistFillsThisMonth: rows.reduce((s, r) => s + (r.waitlist_fills ?? 0), 0),
+    avgGreenFee,
   }
 }
 
