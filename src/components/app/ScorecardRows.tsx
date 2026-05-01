@@ -1,5 +1,3 @@
-'use server'
-
 import Link from 'next/link'
 import { MemberTier, DashboardState, getPointsToNextCredit, formatDaysAway } from '@/lib/member-dashboard'
 
