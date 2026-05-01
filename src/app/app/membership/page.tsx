@@ -10,8 +10,8 @@ const TIERS = [
   {
     id: 'eagle',
     name: 'Eagle',
-    price: 79,
-    priceMonthly: 7.99,
+    price: 89,
+    priceMonthly: 7.42,
     features: [
       '$10/mo in tee time credits ($120/yr)',
       '1 free round per year',
@@ -27,8 +27,8 @@ const TIERS = [
   {
     id: 'ace',
     name: 'Ace',
-    price: 149,
-    priceMonthly: 12.42,
+    price: 159,
+    priceMonthly: 13.25,
     features: [
       '$20/mo in tee time credits ($240/yr)',
       '2 free rounds per year',
