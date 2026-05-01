@@ -2,14 +2,18 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseMetricHistory } from '@/lib/reports/courseMetrics'
+import { resolveDateRange } from '@/lib/reports/dateRange'
 import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
+import DateRangePicker from '@/components/reports/DateRangePicker'
 import { RoundsBarChart } from './RoundsCharts'
 
 export default async function RoundsReportPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
   const supabase = await createClient()
@@ -21,7 +25,9 @@ export default async function RoundsReportPage({
   if (courseError && courseError.code !== 'PGRST116') throw new Error(`[RoundsReportPage] course query failed: ${courseError.message}`)
   if (!course) notFound()
 
-  const history = await getCourseMetricHistory(course.id, 12)
+  const sp = await searchParams
+  const dateRange = resolveDateRange(sp.preset, sp.from, sp.to)
+  const history = await getCourseMetricHistory(course.id, 12, dateRange.from, dateRange.to)
   const latest = history[history.length - 1]
   const prev = history[history.length - 2]
   const momChange = latest && prev && prev.rounds_booked > 0
@@ -40,22 +46,28 @@ export default async function RoundsReportPage({
     }
   })
 
+  const latestMonthLabel = latest?.month
+    ? new Date(latest.month + '-01').toLocaleString('en-US', { month: 'long', year: 'numeric' })
+    : 'Latest Month'
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Rounds &amp; Utilization</h1>
         <CsvExportButton data={csvData} filename={`${slug}-rounds.csv`} />
       </div>
 
+      <DateRangePicker />
+
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label="Rounds This Month" value={(latest?.rounds_booked ?? 0).toLocaleString()} accent />
+        <KpiTile label={`Rounds — ${latestMonthLabel}`} value={(latest?.rounds_booked ?? 0).toLocaleString()} accent />
         {momChange !== null && (
           <KpiTile label="Month-over-Month" value={`${momChange > 0 ? '+' : ''}${momChange}%`} />
         )}
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 id="rounds-chart-heading" className="font-semibold text-[#1A1A1A] mb-4">Rounds Booked (12 months)</h2>
+        <h2 id="rounds-chart-heading" className="font-semibold text-[#1A1A1A] mb-4">Rounds Booked</h2>
         <RoundsBarChart data={history} />
       </div>
 

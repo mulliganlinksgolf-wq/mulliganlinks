@@ -51,8 +51,26 @@ export interface CourseMetricRow {
   cancellations_recovered_revenue: number
 }
 
-export async function getCourseMetricHistory(courseId: string, months = 12): Promise<CourseMetricRow[]> {
+export async function getCourseMetricHistory(
+  courseId: string,
+  months = 12,
+  from?: string,
+  to?: string,
+): Promise<CourseMetricRow[]> {
   const admin = createAdminClient()
+
+  if (from && to) {
+    const { data, error } = await admin
+      .from('crm_course_metrics')
+      .select('*')
+      .eq('course_id', courseId)
+      .gte('month', from.slice(0, 7))
+      .lte('month', to.slice(0, 7))
+      .order('month', { ascending: true })
+    if (error) throw new Error(`[getCourseMetricHistory] query failed: ${error.message}`)
+    return (data ?? []) as CourseMetricRow[]
+  }
+
   const { data, error } = await admin
     .from('crm_course_metrics')
     .select('*')

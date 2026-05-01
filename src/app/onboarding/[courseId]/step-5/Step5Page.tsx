@@ -60,7 +60,7 @@ export default function Step5Page({ courseId, courseSlug }: Props) {
         </button>
       </div>
 
-      <OnboardingNav courseId={courseId} prevStep={4} />
+      <OnboardingNav courseId={courseId} prevStep={4} onContinue={handleGoLive} isLoading={isLoading} />
     </div>
   )
 }

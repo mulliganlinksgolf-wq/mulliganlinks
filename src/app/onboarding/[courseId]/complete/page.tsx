@@ -8,6 +8,7 @@ export default async function CompletePage({
   const { courseId } = await params
   const course = await getCourseById(courseId)
   const courseName = course?.name ?? 'Your course'
+  const dashboardUrl = course?.slug ? `/course/${course.slug}/dashboard` : '/dashboard'
 
   const checklist = [
     'Tee sheet live and accepting bookings',
@@ -63,7 +64,7 @@ export default async function CompletePage({
       </div>
 
       <a
-        href="/dashboard"
+        href={dashboardUrl}
         className="bg-[#3B6D11] text-white rounded-lg px-6 py-3 text-sm hover:bg-[#27500A] transition-colors inline-block"
       >
         Go to your dashboard →

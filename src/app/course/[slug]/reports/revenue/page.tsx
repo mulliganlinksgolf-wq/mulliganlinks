@@ -2,11 +2,19 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseMetricHistory } from '@/lib/reports/courseMetrics'
+import { resolveDateRange } from '@/lib/reports/dateRange'
 import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
+import DateRangePicker from '@/components/reports/DateRangePicker'
 import { RevenueLineChart } from './RevenueChart'
 
-export default async function RevenueReportPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function RevenueReportPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ preset?: string; from?: string; to?: string }>
+}) {
   const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -17,7 +25,9 @@ export default async function RevenueReportPage({ params }: { params: Promise<{ 
   if (courseError && courseError.code !== 'PGRST116') throw new Error(`[RevenueReportPage] course query failed: ${courseError.message}`)
   if (!course) notFound()
 
-  const history = await getCourseMetricHistory(course.id, 12)
+  const sp = await searchParams
+  const dateRange = resolveDateRange(sp.preset, sp.from, sp.to)
+  const history = await getCourseMetricHistory(course.id, 12, dateRange.from, dateRange.to)
   const latest = history[history.length - 1]
   const prev = history[history.length - 2]
   const revenueMtd = Number(latest?.green_fee_revenue ?? 0)
@@ -31,15 +41,21 @@ export default async function RevenueReportPage({ params }: { params: Promise<{ 
     'Rounds': h.rounds_booked,
   }))
 
+  const latestMonthLabel = latest?.month
+    ? new Date(latest.month + '-01').toLocaleString('en-US', { month: 'long', year: 'numeric' })
+    : 'Latest Month'
+
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Revenue</h1>
         <CsvExportButton data={csvData} filename={`${slug}-revenue.csv`} />
       </div>
 
+      <DateRangePicker />
+
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label="Revenue This Month" value={`$${revenueMtd.toLocaleString()}`} accent />
+        <KpiTile label={`Revenue — ${latestMonthLabel}`} value={`$${revenueMtd.toLocaleString()}`} accent />
         <KpiTile label="Avg Green Fee" value={`$${Number(latest?.avg_green_fee ?? 0).toFixed(0)}`} />
         {momChange !== null && (
           <KpiTile label="Month-over-Month" value={`${momChange > 0 ? '+' : ''}${momChange}%`} />
@@ -47,7 +63,7 @@ export default async function RevenueReportPage({ params }: { params: Promise<{ 
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="font-semibold text-[#1A1A1A] mb-4">Green Fee Revenue (12 months)</h2>
+        <h2 className="font-semibold text-[#1A1A1A] mb-4">Green Fee Revenue</h2>
         <RevenueLineChart data={history} />
       </div>
 
