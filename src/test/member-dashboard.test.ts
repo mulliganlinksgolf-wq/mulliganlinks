@@ -73,9 +73,17 @@ describe('formatDaysAway', () => {
     const past = new Date(Date.now() - 1000).toISOString()
     expect(formatDaysAway(past)).toBe('today')
   })
-  it('returns tomorrow for ~1 day out', () => {
-    const tomorrow = new Date(Date.now() + 1000 * 60 * 60 * 25).toISOString()
+  it('returns tomorrow for a booking 1 second out', () => {
+    const tomorrow = new Date(Date.now() + 1000).toISOString()
     expect(formatDaysAway(tomorrow)).toBe('tomorrow')
+  })
+  it('returns tomorrow for a booking 23 hours out (not today)', () => {
+    const almostTomorrow = new Date(Date.now() + 1000 * 60 * 60 * 23).toISOString()
+    expect(formatDaysAway(almostTomorrow)).toBe('tomorrow')
+  })
+  it('returns 2 days away for a booking 47 hours out (not tomorrow)', () => {
+    const almostTwoDays = new Date(Date.now() + 1000 * 60 * 60 * 47).toISOString()
+    expect(formatDaysAway(almostTwoDays)).toBe('2 days away')
   })
   it('returns N days away for further dates', () => {
     const fiveDays = new Date(Date.now() + 1000 * 60 * 60 * 24 * 5).toISOString()

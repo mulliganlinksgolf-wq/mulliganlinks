@@ -19,7 +19,7 @@ export function getPointsToNextCredit(balance: number): number {
 
 export function formatDaysAway(scheduledAt: string): string {
   const diff = new Date(scheduledAt).getTime() - Date.now()
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
   if (days <= 0) return 'today'
   if (days === 1) return 'tomorrow'
   return `${days} days away`
