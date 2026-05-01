@@ -27,11 +27,11 @@ type RowContent = {
 function RowTemplate({ icon, label, primary, subLine, link }: RowContent) {
   return (
     <div className="border-t border-[#1d4c36] px-4 py-3 flex items-center gap-3">
-      <span className="text-[#555] text-xs font-mono w-5 shrink-0">{icon}</span>
+      <span className="text-[#8FA889] text-xs font-mono w-5 shrink-0">{icon}</span>
       <div className="flex-1 min-w-0">
-        <div className="text-[10px] text-[#555] uppercase tracking-widest font-sans mb-0.5">{label}</div>
+        <div className="text-[10px] text-[#aaa] uppercase tracking-widest font-sans mb-0.5">{label}</div>
         <div className="text-sm text-white font-semibold font-sans truncate">{primary}</div>
-        {subLine && <div className="text-xs text-[#888] font-sans mt-0.5">{subLine}</div>}
+        {subLine && <div className="text-xs text-[#aaa] font-sans mt-0.5">{subLine}</div>}
       </div>
       {link && (
         <Link href={link} className="text-[#8FA889] text-xs shrink-0 hover:underline">
