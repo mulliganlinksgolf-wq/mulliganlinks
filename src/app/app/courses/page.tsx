@@ -1,6 +1,6 @@
+// src/app/app/courses/page.tsx
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
-import { Card, CardContent } from '@/components/ui/card'
 
 export default async function CoursesPage() {
   const supabase = await createClient()
@@ -12,43 +12,67 @@ export default async function CoursesPage() {
     .order('name')
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
-        <p className="text-[#6B7770] mt-1">Book tee times with zero booking fees.</p>
+    <div className="rounded-xl overflow-hidden">
+      {/* Dark header */}
+      <div className="px-5 py-5" style={{ background: '#1C1C1C' }}>
+        <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">
+          Partner Courses
+        </p>
+        <h1 className="text-2xl font-bold font-serif text-white italic">Find your round.</h1>
+        <p className="text-[11px] font-sans mt-1" style={{ color: '#8FA889' }}>
+          Zero booking fees, always.
+        </p>
       </div>
 
-      {!courses || courses.length === 0 ? (
-        <Card className="bg-white border-0 shadow-sm">
-          <CardContent className="py-16 text-center">
-            <p className="text-[#6B7770]">No courses in your area yet — we&apos;re growing.</p>
-            <p className="text-sm text-[#6B7770] mt-2">Check back soon or tell your home course about TeeAhead.</p>
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courses.map(course => (
-            <Link key={course.id} href={`/app/courses/${course.slug}`}>
-              <Card className="bg-white border-0 shadow-sm hover:shadow-md transition-shadow cursor-pointer h-full">
-                <div className="h-36 bg-[#1B4332]/10 rounded-t-lg flex items-center justify-center">
-                  {course.hero_image_url ? (
-                    <img src={course.hero_image_url} alt={course.name} className="w-full h-full object-cover rounded-t-lg" />
-                  ) : (
-                    <span className="text-4xl">⛳</span>
-                  )}
+      {/* Content */}
+      <div className="p-4" style={{ background: '#1C1C1C' }}>
+        {!courses || courses.length === 0 ? (
+          <div className="rounded-lg p-12 text-center" style={{ background: '#2a2a2a' }}>
+            <p style={{ color: '#888' }}>No courses in your area yet — we&apos;re growing.</p>
+            <p className="text-sm mt-2" style={{ color: '#555' }}>
+              Check back soon or tell your home course about TeeAhead.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {courses.map(course => (
+              <Link key={course.id} href={`/app/courses/${course.slug}`}>
+                <div
+                  className="rounded-lg overflow-hidden transition-colors cursor-pointer hover:bg-[#333]"
+                  style={{ background: '#2a2a2a' }}
+                >
+                  <div
+                    className="h-36 flex items-center justify-center overflow-hidden"
+                    style={{ background: '#1B4332' }}
+                  >
+                    {course.hero_image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={course.hero_image_url as string}
+                        alt={course.name as string}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <span className="text-4xl">⛳</span>
+                    )}
+                  </div>
+                  <div className="px-4 py-3">
+                    <h2 className="font-semibold text-white text-sm">{course.name as string}</h2>
+                    <p className="text-xs mt-0.5" style={{ color: '#888' }}>
+                      {course.city as string}, {course.state as string}
+                    </p>
+                    {course.base_green_fee && (
+                      <p className="text-xs font-medium mt-2" style={{ color: '#8FA889' }}>
+                        From ${(course.base_green_fee as number).toFixed(2)}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <CardContent className="pt-4 pb-4">
-                  <h2 className="font-semibold text-[#1A1A1A]">{course.name}</h2>
-                  <p className="text-sm text-[#6B7770] mt-0.5">{course.city}, {course.state}</p>
-                  {course.base_green_fee && (
-                    <p className="text-sm font-medium text-[#1B4332] mt-2">From ${course.base_green_fee.toFixed(2)}</p>
-                  )}
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
-      )}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
