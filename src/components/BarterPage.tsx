@@ -295,9 +295,12 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
                 )}
               </div>
               <p className="text-sm text-[#6B7770]">
-                Questions? Email Neil directly —{' '}
+                Questions? Email Neil or Bill directly —{' '}
                 <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
                   neil@teeahead.com
+                </a>{' '}or{' '}
+                <a href="mailto:bill@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
+                  bill@teeahead.com
                 </a>. Not a contact form.
               </p>
             </div>
