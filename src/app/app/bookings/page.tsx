@@ -65,55 +65,57 @@ export default async function BookingsPage() {
   )
 
   return (
-    <div className="rounded-xl overflow-hidden">
-      {/* Dark header */}
-      <div className="px-5 py-5" style={{ background: '#1B4332' }}>
-        <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">
+    <div>
+      {/* Inline header */}
+      <div className="mb-6">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-[#aaa] font-sans mb-1">
           My Bookings
         </p>
         <h1 className="text-2xl font-bold font-serif text-white italic">Your rounds.</h1>
       </div>
 
       {/* Content */}
-      {!bookings || bookings.length === 0 ? (
-        <div className="p-8 text-center" style={{ background: '#163d2a' }}>
-          <p style={{ color: '#888' }}>No bookings yet.</p>
-          <Link
-            href="/app/courses"
-            className="inline-block mt-4 px-4 py-2 rounded-lg text-sm font-semibold text-[#FAF7F2]"
-            style={{ background: '#1B4332' }}
-          >
-            Find a course
-          </Link>
-        </div>
-      ) : (
-        <div style={{ background: '#163d2a' }}>
-          {upcoming.length > 0 && (
-            <>
-              <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
-                <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
-                  Upcoming
-                </span>
-              </div>
-              {upcoming.map(b => (
-                <BookingRow key={b.id} b={b} isUpcoming />
-              ))}
-            </>
-          )}
-          {past.length > 0 && (
-            <>
-              <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
-                <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
-                  Past
-                </span>
-              </div>
-              {past.map(b => (
-                <BookingRow key={b.id} b={b} />
-              ))}
-            </>
-          )}
-        </div>
-      )}
+      <div className="rounded-xl overflow-hidden" style={{ background: '#1B4332' }}>
+        {!bookings || bookings.length === 0 ? (
+          <div className="p-8 text-center" style={{ background: '#163d2a' }}>
+            <p style={{ color: '#888' }}>No bookings yet.</p>
+            <Link
+              href="/app/courses"
+              className="inline-block mt-4 px-4 py-2 rounded-lg text-sm font-semibold text-[#FAF7F2]"
+              style={{ background: '#1B4332' }}
+            >
+              Find a course
+            </Link>
+          </div>
+        ) : (
+          <div style={{ background: '#163d2a' }}>
+            {upcoming.length > 0 && (
+              <>
+                <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
+                  <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
+                    Upcoming
+                  </span>
+                </div>
+                {upcoming.map(b => (
+                  <BookingRow key={b.id} b={b} isUpcoming />
+                ))}
+              </>
+            )}
+            {past.length > 0 && (
+              <>
+                <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
+                  <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
+                    Past
+                  </span>
+                </div>
+                {past.map(b => (
+                  <BookingRow key={b.id} b={b} />
+                ))}
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
