@@ -5,7 +5,6 @@ type Booking = {
   id: string
   course_name: string
   scheduled_at: string
-  status: string
   total_price: number
 }
 
@@ -60,7 +59,6 @@ export default function ScorecardRows({
     )
   }
 
-  // state === 'active'
   const nextRow: RowContent = upcomingBooking
     ? {
         icon: '▸',
@@ -73,7 +71,7 @@ export default function ScorecardRows({
         icon: '▸',
         label: 'NEXT',
         primary: 'No round booked yet',
-        subLine: 'Find a tee time →',
+        subLine: 'Find a tee time',
         link: '/app/courses',
       }
 
