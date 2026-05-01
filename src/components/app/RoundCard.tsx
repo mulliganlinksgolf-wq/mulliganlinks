@@ -30,7 +30,7 @@ export function RoundCard({
   upcomingBooking,
   lastCompletedBooking,
 }: RoundCardProps) {
-  const state = getMemberState(completedRoundsCount)
+  const state = getMemberState(completedRoundsCount, tier)
   const tierInfo = getTierInfo(tier)
   const subHeadline = getSubHeadline(state, completedRoundsCount)
   const isActive = state === 'active'

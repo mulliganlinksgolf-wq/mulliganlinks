@@ -1,8 +1,8 @@
 export type MemberTier = 'free' | 'eagle' | 'ace'
 export type DashboardState = 'new' | 'active'
 
-export function getMemberState(completedRoundsCount: number): DashboardState {
-  return completedRoundsCount > 0 ? 'active' : 'new'
+export function getMemberState(completedRoundsCount: number, tier: MemberTier = 'free'): DashboardState {
+  return completedRoundsCount > 0 || tier !== 'free' ? 'active' : 'new'
 }
 
 export function getSubHeadline(state: DashboardState, roundsCount: number): string {

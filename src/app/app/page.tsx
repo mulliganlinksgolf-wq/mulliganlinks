@@ -39,7 +39,10 @@ export default async function DashboardPage() {
   const now = new Date().toISOString()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const typedBookings = (bookings ?? []) as any[]
-  const completedBookings = typedBookings.filter(b => b.status === 'completed')
+  // Count rounds played = completed status OR confirmed with a past tee time
+  const completedBookings = typedBookings.filter(
+    b => b.status === 'completed' || (b.status === 'confirmed' && b.tee_times?.scheduled_at < now)
+  )
   const upcomingRaw = typedBookings.find(
     b => b.status === 'confirmed' && b.tee_times?.scheduled_at > now
   )
