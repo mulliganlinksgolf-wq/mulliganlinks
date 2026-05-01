@@ -46,34 +46,34 @@ function TeeTimeCard({
         relative flex flex-col items-center text-center rounded-xl border-2 transition-all
         ${compact ? 'p-3 pt-5' : 'p-5 pt-6'}
         ${isMovingFast && lastSpot
-          ? 'border-[#1B4332] bg-[#1B4332]/5 hover:bg-[#1B4332]/10 shadow-sm'
+          ? 'border-[#8FA889] bg-[#163d2a] hover:bg-[#1B4332]'
           : isMovingFast
-          ? 'border-[#E0A800] bg-[#E0A800]/5 hover:bg-[#E0A800]/10'
-          : 'border-gray-200 bg-white hover:border-[#1B4332] hover:shadow-sm'
+          ? 'border-[#E0A800] bg-[#163d2a] hover:bg-[#1B4332]'
+          : 'border-[#0f2d1d] bg-[#163d2a] hover:border-[#8FA889] hover:bg-[#1B4332]'
         }
       `}
     >
       {isMovingFast && (
         <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap
           ${lastSpot
-            ? 'bg-[#1B4332] text-[#FAF7F2]'
+            ? 'bg-[#8FA889] text-[#0f2d1d]'
             : 'bg-[#E0A800] text-[#1A1A1A]'
           }`}
         >
           {lastSpot ? '1 spot left' : `${spotsLeft} left`}
         </div>
       )}
-      <p className={`font-bold text-[#1A1A1A] ${compact ? 'text-base' : 'text-xl'}`}>
+      <p className={`font-bold text-white ${compact ? 'text-base' : 'text-xl'}`}>
         {formatTime(tt.scheduled_at)}
       </p>
-      <p className={`text-[#1B4332] font-semibold ${compact ? 'text-sm mt-0.5' : 'text-lg mt-1'}`}>
+      <p className={`text-[#E0A800] font-semibold ${compact ? 'text-sm mt-0.5' : 'text-lg mt-1'}`}>
         ${price.toFixed(2)}
       </p>
       {discountPct > 0 && (
-        <p className="text-xs text-[#6B7770] line-through">${tt.base_price.toFixed(2)}</p>
+        <p className="text-xs text-[#8FA889] line-through">${tt.base_price.toFixed(2)}</p>
       )}
       {!isMovingFast && (
-        <p className={`text-[#6B7770] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
+        <p className={`text-[#8FA889] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
           {spotsLeft} spot{spotsLeft !== 1 ? 's' : ''} left
         </p>
       )}
@@ -124,16 +124,16 @@ export function TeeTimeSearch({
   return (
     <div className="space-y-6">
       {/* Date navigator */}
-      <div className="flex items-center justify-between bg-white rounded-xl border border-gray-200 px-4 py-3">
-        <Link href={`?date=${prevDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors text-lg">
+      <div className="flex items-center justify-between bg-[#1B4332] rounded-xl border border-[#0f2d1d] px-4 py-3">
+        <Link href={`?date=${prevDate}`} className="p-2 rounded-lg hover:bg-white/5 text-[#8FA889] hover:text-white transition-colors text-lg">
           ←
         </Link>
         <div className="text-center">
-          <p className="text-sm text-[#6B7770]">Tee times at</p>
-          <p className="font-bold text-[#1A1A1A]">{courseName}</p>
-          <p className="text-sm font-medium text-[#1B4332]">{formatDate(selectedDate)}</p>
+          <p className="text-sm text-[#8FA889]">Tee times at</p>
+          <p className="font-bold text-white">{courseName}</p>
+          <p className="text-sm font-medium text-[#E0A800]">{formatDate(selectedDate)}</p>
         </div>
-        <Link href={`?date=${nextDate}`} className="p-2 rounded-lg hover:bg-gray-100 text-[#6B7770] transition-colors text-lg">
+        <Link href={`?date=${nextDate}`} className="p-2 rounded-lg hover:bg-white/5 text-[#8FA889] hover:text-white transition-colors text-lg">
           →
         </Link>
       </div>
@@ -145,14 +145,14 @@ export function TeeTimeSearch({
           onClick={() => setFastOnly(v => !v)}
           className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
             fastOnly
-              ? 'border-[#1B4332] bg-[#1B4332]/5 text-[#1B4332]'
-              : 'border-gray-200 bg-white text-[#6B7770] hover:border-gray-300'
+              ? 'border-[#E0A800] bg-[#E0A800]/10 text-[#E0A800]'
+              : 'border-[#0f2d1d] bg-[#163d2a] text-[#8FA889] hover:text-white hover:border-[#8FA889]'
           }`}
         >
           <span>Moving Fast</span>
           {movingFast.length > 0 && (
             <span className={`text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold ${
-              fastOnly ? 'bg-[#1B4332] text-[#FAF7F2]' : 'bg-[#6B7770] text-white'
+              fastOnly ? 'bg-[#E0A800] text-[#1A1A1A]' : 'bg-[#0f2d1d] text-[#8FA889]'
             }`}>
               {movingFast.length}
             </span>
@@ -160,13 +160,13 @@ export function TeeTimeSearch({
         </button>
 
         {/* Time */}
-        <div className="flex gap-1 bg-white border border-gray-200 rounded-full p-1">
+        <div className="flex gap-1 bg-[#163d2a] border border-[#0f2d1d] rounded-full p-1">
           {(['any', 'early', 'morning', 'afternoon'] as const).map(t => (
             <button
               key={t}
               onClick={() => setTimeOfDay(t)}
               className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                timeOfDay === t ? 'bg-[#1B4332] text-[#FAF7F2]' : 'text-[#6B7770] hover:text-[#1A1A1A]'
+                timeOfDay === t ? 'bg-white/10 text-white' : 'text-[#8FA889] hover:text-white'
               }`}
             >
               {t === 'any' ? 'Any Time' : t === 'early' ? 'Before 9AM' : t === 'morning' ? '9AM–12PM' : 'Afternoon'}
@@ -175,10 +175,10 @@ export function TeeTimeSearch({
         </div>
 
         {/* Golfers */}
-        <div className="flex gap-1 bg-white border border-gray-200 rounded-full p-1">
+        <div className="flex gap-1 bg-[#163d2a] border border-[#0f2d1d] rounded-full p-1">
           <button
             onClick={() => setGolfers(null)}
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${golfers === null ? 'bg-[#1B4332] text-[#FAF7F2]' : 'text-[#6B7770] hover:text-[#1A1A1A]'}`}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${golfers === null ? 'bg-white/10 text-white' : 'text-[#8FA889] hover:text-white'}`}
           >
             Any
           </button>
@@ -186,7 +186,7 @@ export function TeeTimeSearch({
             <button
               key={n}
               onClick={() => setGolfers(golfers === n ? null : n)}
-              className={`w-8 h-7 rounded-full text-xs font-medium transition-all ${golfers === n ? 'bg-[#1B4332] text-[#FAF7F2]' : 'text-[#6B7770] hover:text-[#1A1A1A]'}`}
+              className={`w-8 h-7 rounded-full text-xs font-medium transition-all ${golfers === n ? 'bg-white/10 text-white' : 'text-[#8FA889] hover:text-white'}`}
             >
               {n}
             </button>
@@ -194,7 +194,7 @@ export function TeeTimeSearch({
         </div>
 
         {tier !== 'free' && (
-          <span className="ml-auto text-xs px-3 py-1.5 rounded-full bg-[#E0A800]/20 text-[#8B6F00] font-semibold">
+          <span className="ml-auto text-xs px-3 py-1.5 rounded-full bg-[#E0A800]/20 text-[#E0A800] font-semibold">
             {discountPct}% {tier} discount applied
           </span>
         )}
@@ -203,7 +203,7 @@ export function TeeTimeSearch({
       {/* Moving Fast carousel */}
       {movingFast.length > 0 && !fastOnly && (
         <div>
-          <h2 className="text-sm font-bold text-[#1A1A1A] uppercase tracking-wide mb-4">
+          <h2 className="text-[9px] font-bold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-4">
             Moving Fast at {courseName}
           </h2>
           <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide">
@@ -218,11 +218,11 @@ export function TeeTimeSearch({
 
       {/* Tee time groups */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <p className="text-[#6B7770]">No tee times match your filters.</p>
+        <div className="bg-[#163d2a] rounded-xl border border-[#0f2d1d] p-12 text-center">
+          <p className="text-[#8FA889]">No tee times match your filters.</p>
           <button
             onClick={() => { setGolfers(null); setTimeOfDay('any'); setFastOnly(false) }}
-            className="mt-3 text-sm text-[#1B4332] underline"
+            className="mt-3 text-sm text-[#E0A800] underline"
           >
             Clear filters
           </button>
@@ -231,7 +231,7 @@ export function TeeTimeSearch({
         <>
           {morning.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold text-[#6B7770] uppercase tracking-wide mb-3">Morning</h2>
+              <h2 className="text-[9px] font-semibold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-3">Morning</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
               </div>
@@ -239,7 +239,7 @@ export function TeeTimeSearch({
           )}
           {afternoon.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold text-[#6B7770] uppercase tracking-wide mb-3">Afternoon</h2>
+              <h2 className="text-[9px] font-semibold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-3">Afternoon</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                 {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
               </div>

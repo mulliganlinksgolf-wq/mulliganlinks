@@ -54,9 +54,9 @@ export default async function CourseDetailPage({
   return (
     <div className="space-y-4">
       <div>
-        <Link href="/app/courses" className="text-sm text-[#6B7770] hover:text-[#1A1A1A]">← All courses</Link>
-        <h1 className="text-2xl font-bold text-[#1A1A1A] mt-2">{course.name}</h1>
-        {course.city && <p className="text-[#6B7770]">{course.city}, {course.state}</p>}
+        <Link href="/app/courses" className="text-sm text-[#8FA889] hover:text-white">← All courses</Link>
+        <h1 className="text-2xl font-bold text-white mt-2">{course.name}</h1>
+        {course.city && <p className="text-[#8FA889]">{course.city}, {course.state}</p>}
       </div>
 
       <TeeTimeSearch
