@@ -206,7 +206,7 @@ export function TeeTimeSearch({
           <h2 className="text-[9px] font-bold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-4">
             Moving Fast at {courseName}
           </h2>
-          <div className="flex gap-3 overflow-x-auto pb-3 scrollbar-hide">
+          <div className="flex gap-3 overflow-x-auto pt-3 pb-3 pr-4 scrollbar-hide">
             {movingFast.slice(0, 8).map(tt => (
               <div key={tt.id} className="flex-shrink-0 w-32">
                 <TeeTimeCard tt={tt} discountPct={discountPct} isMovingFast compact />
