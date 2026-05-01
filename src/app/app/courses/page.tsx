@@ -14,7 +14,7 @@ export default async function CoursesPage() {
   return (
     <div className="rounded-xl overflow-hidden">
       {/* Dark header */}
-      <div className="px-5 py-5" style={{ background: '#1C1C1C' }}>
+      <div className="px-5 py-5" style={{ background: '#1B4332' }}>
         <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">
           Partner Courses
         </p>
@@ -25,9 +25,9 @@ export default async function CoursesPage() {
       </div>
 
       {/* Content */}
-      <div className="p-4" style={{ background: '#1C1C1C' }}>
+      <div className="p-4" style={{ background: '#1B4332' }}>
         {!courses || courses.length === 0 ? (
-          <div className="rounded-lg p-12 text-center" style={{ background: '#2a2a2a' }}>
+          <div className="rounded-lg p-12 text-center" style={{ background: '#163d2a' }}>
             <p style={{ color: '#888' }}>No courses in your area yet — we&apos;re growing.</p>
             <p className="text-sm mt-2" style={{ color: '#555' }}>
               Check back soon or tell your home course about TeeAhead.
@@ -39,7 +39,7 @@ export default async function CoursesPage() {
               <Link key={course.id} href={`/app/courses/${course.slug}`}>
                 <div
                   className="rounded-lg overflow-hidden transition-colors cursor-pointer hover:bg-[#333]"
-                  style={{ background: '#2a2a2a' }}
+                  style={{ background: '#163d2a' }}
                 >
                   <div
                     className="h-36 flex items-center justify-center overflow-hidden"

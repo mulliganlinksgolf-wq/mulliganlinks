@@ -30,7 +30,7 @@ export default async function PointsPage() {
   return (
     <div className="rounded-xl overflow-hidden">
       {/* Dark header with inline stats */}
-      <div className="px-5 py-5" style={{ background: '#1C1C1C' }}>
+      <div className="px-5 py-5" style={{ background: '#1B4332' }}>
         <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-3">
           Fairway Points
         </p>
@@ -66,8 +66,8 @@ export default async function PointsPage() {
       </div>
 
       {/* Transaction history */}
-      <div style={{ background: '#2a2a2a' }}>
-        <div className="px-4 py-1.5" style={{ background: '#222' }}>
+      <div style={{ background: '#163d2a' }}>
+        <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
           <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
             History
           </span>
@@ -80,7 +80,7 @@ export default async function PointsPage() {
           transactions.map(t => (
             <div
               key={t.id}
-              className="flex items-center justify-between px-4 py-3 border-b border-[#333] last:border-0"
+              className="flex items-center justify-between px-4 py-3 border-b border-[#1d4c36] last:border-0"
             >
               <div>
                 <p className="text-[11px] font-sans" style={{ color: '#ddd' }}>

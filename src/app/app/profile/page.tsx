@@ -27,7 +27,7 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-lg">
       {/* Dark header */}
-      <div className="rounded-xl overflow-hidden mb-6" style={{ background: '#1C1C1C' }}>
+      <div className="rounded-xl overflow-hidden mb-6" style={{ background: '#1B4332' }}>
         <div className="px-5 py-5">
           <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">Profile</p>
           <h1 className="text-2xl font-bold font-serif text-white italic">

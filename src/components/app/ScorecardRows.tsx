@@ -26,7 +26,7 @@ type RowContent = {
 
 function RowTemplate({ icon, label, primary, subLine, link }: RowContent) {
   return (
-    <div className="border-t border-[#333] px-4 py-3 flex items-center gap-3">
+    <div className="border-t border-[#1d4c36] px-4 py-3 flex items-center gap-3">
       <span className="text-[#555] text-xs font-mono w-5 shrink-0">{icon}</span>
       <div className="flex-1 min-w-0">
         <div className="text-[10px] text-[#555] uppercase tracking-widest font-sans mb-0.5">{label}</div>

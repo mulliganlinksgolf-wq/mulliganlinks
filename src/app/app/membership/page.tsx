@@ -69,7 +69,7 @@ export default async function MembershipPage() {
   return (
     <div className="max-w-3xl mx-auto">
       {/* Dark header */}
-      <div className="rounded-xl overflow-hidden mb-6" style={{ background: '#1C1C1C' }}>
+      <div className="rounded-xl overflow-hidden mb-6" style={{ background: '#1B4332' }}>
         <div className="px-5 py-5">
           <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">
             Membership
@@ -94,13 +94,13 @@ export default async function MembershipPage() {
             ? 'border-[#E0A800]'
             : isCurrent
             ? 'border-[#555]'
-            : 'border-[#333]'
+            : 'border-[#1d4c36]'
 
           return (
             <div
               key={tier.id}
               className={`rounded-xl border p-6 space-y-5 relative ${borderColor}`}
-              style={{ background: '#2a2a2a' }}
+              style={{ background: '#163d2a' }}
             >
               {isRecommended && (
                 <div className="absolute -top-3 left-6">
@@ -135,7 +135,7 @@ export default async function MembershipPage() {
               {isCurrent ? (
                 <div
                   className="w-full text-center py-2.5 rounded-lg text-sm font-semibold font-sans"
-                  style={{ background: '#333', color: '#666' }}
+                  style={{ background: '#1d4c36', color: '#666' }}
                 >
                   Current plan
                 </div>
@@ -148,7 +148,7 @@ export default async function MembershipPage() {
                     style={
                       isRecommended
                         ? { background: '#E0A800', color: '#1A1A1A' }
-                        : { background: '#333', color: '#aaa' }
+                        : { background: '#1d4c36', color: '#aaa' }
                     }
                   >
                     Upgrade to {tier.name} — ${tier.price}/yr

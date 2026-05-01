@@ -24,7 +24,7 @@ export default async function BookingsPage() {
   const BookingRow = ({ b, isUpcoming = false }: { b: any; isUpcoming?: boolean }) => (
     <Link
       href={`/app/bookings/${b.id}`}
-      className="block border-b border-[#333] last:border-0 hover:bg-[#333]/30 transition-colors"
+      className="block border-b border-[#1d4c36] last:border-0 hover:bg-[#333]/30 transition-colors"
     >
       <div className="px-4 py-3 flex items-center justify-between">
         <div>
@@ -67,7 +67,7 @@ export default async function BookingsPage() {
   return (
     <div className="rounded-xl overflow-hidden">
       {/* Dark header */}
-      <div className="px-5 py-5" style={{ background: '#1C1C1C' }}>
+      <div className="px-5 py-5" style={{ background: '#1B4332' }}>
         <p className="text-[9px] uppercase tracking-[0.2em] text-[#888] font-sans mb-1">
           My Bookings
         </p>
@@ -76,7 +76,7 @@ export default async function BookingsPage() {
 
       {/* Content */}
       {!bookings || bookings.length === 0 ? (
-        <div className="p-8 text-center" style={{ background: '#2a2a2a' }}>
+        <div className="p-8 text-center" style={{ background: '#163d2a' }}>
           <p style={{ color: '#888' }}>No bookings yet.</p>
           <Link
             href="/app/courses"
@@ -87,10 +87,10 @@ export default async function BookingsPage() {
           </Link>
         </div>
       ) : (
-        <div style={{ background: '#2a2a2a' }}>
+        <div style={{ background: '#163d2a' }}>
           {upcoming.length > 0 && (
             <>
-              <div className="px-4 py-1.5" style={{ background: '#222' }}>
+              <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
                 <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
                   Upcoming
                 </span>
@@ -102,7 +102,7 @@ export default async function BookingsPage() {
           )}
           {past.length > 0 && (
             <>
-              <div className="px-4 py-1.5" style={{ background: '#222' }}>
+              <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
                 <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
                   Past
                 </span>

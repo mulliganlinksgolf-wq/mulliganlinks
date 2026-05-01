@@ -36,7 +36,7 @@ export function RoundCard({
   const isActive = state === 'active'
 
   return (
-    <div className="rounded-xl overflow-hidden" style={{ background: '#1C1C1C' }}>
+    <div className="rounded-xl overflow-hidden" style={{ background: '#1B4332' }}>
       {/* Header */}
       <div className="px-5 pt-5 pb-4">
         <div className="flex items-center justify-between mb-1">
@@ -52,8 +52,8 @@ export function RoundCard({
       </div>
 
       {/* Stats strip */}
-      <div className="grid grid-cols-3 border-y border-[#333]" style={{ background: '#2a2a2a' }}>
-        <div className="px-4 py-3 text-center border-r border-[#333]">
+      <div className="grid grid-cols-3 border-y border-[#1d4c36]" style={{ background: '#163d2a' }}>
+        <div className="px-4 py-3 text-center border-r border-[#1d4c36]">
           <p className="text-[8px] uppercase tracking-widest text-[#888] font-sans mb-1">Points</p>
           <p className={`text-xl font-bold font-serif ${isActive ? 'text-white' : 'text-[#555]'}`}>
             {isActive ? pointsBalance.toLocaleString() : '0'}
@@ -62,7 +62,7 @@ export function RoundCard({
             {isActive ? `$${(pointsBalance / 100).toFixed(2)} val` : 'not yet'}
           </p>
         </div>
-        <div className="px-4 py-3 text-center border-r border-[#333]">
+        <div className="px-4 py-3 text-center border-r border-[#1d4c36]">
           <p className="text-[8px] uppercase tracking-widest text-[#888] font-sans mb-1">Credit</p>
           <p className={`text-xl font-bold font-serif ${isActive && creditCents > 0 ? 'text-[#E0A800]' : 'text-[#555]'}`}>
             {isActive && creditCents > 0 ? `$${(creditCents / 100).toFixed(0)}` : '—'}
@@ -83,14 +83,14 @@ export function RoundCard({
       </div>
 
       {/* Section label */}
-      <div className="px-3 py-1.5" style={{ background: '#222' }}>
+      <div className="px-3 py-1.5" style={{ background: '#0f2d1d' }}>
         <span className="text-[8px] uppercase tracking-widest text-[#555] font-sans">
           {state === 'new' ? 'Scorecard — 3 holes left' : 'This week'}
         </span>
       </div>
 
       {/* Scorecard rows */}
-      <div style={{ background: '#2a2a2a' }}>
+      <div style={{ background: '#163d2a' }}>
         <ScorecardRows
           state={state}
           tier={tier}
@@ -101,7 +101,7 @@ export function RoundCard({
       </div>
 
       {/* CTA */}
-      <div className="p-4" style={{ background: '#1C1C1C' }}>
+      <div className="p-4" style={{ background: '#1B4332' }}>
         <Link
           href="/app/courses"
           className="block w-full text-center py-3 rounded-lg text-sm font-semibold font-sans text-[#FAF7F2] transition-colors hover:opacity-90"
