@@ -10,14 +10,14 @@ const PAGE_GROUPS = [
   { key: 'home', label: 'Homepage', path: '/', category: 'Marketing' },
   { key: 'pricing', label: 'Pricing / Tiers', path: '/pricing', category: 'Marketing' },
   { key: 'golfnow', label: 'GolfNow Alternative', path: '/golfnow-alternative', category: 'Marketing' },
-  { key: 'barter', label: 'How Barter Works', path: '/how-barter-works', category: 'Marketing' },
+  { key: 'barter', label: 'Barter Calculator', path: '/barter', category: 'Marketing' },
   { key: 'software_cost', label: 'Software Cost', path: '/software-cost', category: 'Marketing' },
   // Waitlist
-  { key: 'waitlist', label: 'Golfer Signup', path: '/waitlist', category: 'Waitlist' },
+  { key: 'waitlist', label: 'Golfer Signup', path: '/waitlist/golfer', category: 'Waitlist' },
   { key: 'waitlist_course', label: 'Course Signup', path: '/waitlist/course', category: 'Waitlist' },
   // Site-wide
   { key: 'nav', label: 'Nav & Footer', path: null, category: 'Site-wide' },
-  { key: 'contact', label: 'Contact Info', path: null, category: 'Site-wide' },
+  { key: 'contact', label: 'Contact Info', path: '/contact', category: 'Site-wide' },
   // Legal
   { key: 'legal', label: 'Privacy / Terms', path: '/privacy-policy', category: 'Legal' },
 ]

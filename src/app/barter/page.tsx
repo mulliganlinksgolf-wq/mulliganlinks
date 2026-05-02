@@ -16,12 +16,15 @@ export const metadata: Metadata = {
 
 export default async function BarterCalculatorPage() {
   const supabase = await createClient()
-  const { data: counter } = await supabase
-    .from('founding_partner_counter')
-    .select('count, cap')
-    .single()
+  const [{ data: counter }, { data: contentRows }] = await Promise.all([
+    supabase.from('founding_partner_counter').select('count, cap').single(),
+    supabase.from('content_blocks').select('key, value').ilike('key', 'barter.%'),
+  ])
 
   const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+  const content: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
 
-  return <BarterPage spotsRemaining={spotsRemaining} />
+  return <BarterPage spotsRemaining={spotsRemaining} content={content} />
 }

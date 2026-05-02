@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { submitCourseInquiry } from '@/app/actions/contact'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Bring TeeAhead to Your Course',
@@ -14,7 +15,17 @@ export const metadata: Metadata = {
   },
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const supabase = await createClient()
+  const { data: contentRows } = await supabase
+    .from('content_blocks')
+    .select('key, value')
+    .ilike('key', 'contact.%')
+
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
@@ -36,15 +47,13 @@ export default function ContactPage() {
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5">
             <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-            <span className="text-sm font-medium">Free for courses — always</span>
+            <span className="text-sm font-medium">{c['contact.hero_badge'] ?? 'Free for courses — always'}</span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
-            Your tee sheet.<br />Your customers.<br />Your revenue.
+            {c['contact.hero_headline'] ?? 'Your tee sheet. Your customers. Your revenue.'}
           </h1>
           <p className="text-lg text-[#FAF7F2]/80 max-w-2xl mx-auto leading-relaxed">
-            TeeAhead gives your course a complete management platform at zero cost.
-            No barter tee times. No commissions. No data extraction. The software works
-            for you — not against you.
+            {c['contact.hero_subhead'] ?? 'TeeAhead gives your course a complete management platform at zero cost. No barter tee times. No commissions. No data extraction. The software works for you — not against you.'}
           </p>
         </div>
       </section>

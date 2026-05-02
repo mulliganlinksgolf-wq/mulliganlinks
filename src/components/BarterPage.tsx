@@ -10,9 +10,10 @@ import { FadeIn } from '@/components/FadeIn'
 
 interface BarterPageProps {
   spotsRemaining: number
+  content?: Record<string, string>
 }
 
-export function BarterPage({ spotsRemaining }: BarterPageProps) {
+export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
   const [greenFee, setGreenFee] = useState(85)
   const [operatingDays, setOperatingDays] = useState(280)
   const [barterTeeTimes, setBarterTeeTimes] = useState(2)
@@ -88,18 +89,16 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           <FadeIn>
             <div className="max-w-2xl mx-auto space-y-7 relative z-10">
               <div className="inline-flex items-center gap-2 bg-[#E0A800]/12 border border-[#E0A800]/30 rounded-full px-4 py-1.5">
-                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">For Golf Course Operators</span>
+                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">{content['barter.hero_badge'] ?? 'For Golf Course Operators'}</span>
               </div>
 
               <h1 className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.02em]"
                   style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
-                See exactly what GolfNow has cost you.{' '}
-                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>In dollars.</em>
+                {content['barter.hero_headline'] ?? 'See exactly what GolfNow has cost you. In dollars.'}
               </h1>
 
               <p className="text-base leading-relaxed max-w-md mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
-                Drop in your numbers. We&apos;ll calculate the exact revenue GolfNow&apos;s barter model has
-                extracted from your course — this year alone. No login. No email required.
+                {content['barter.hero_subhead'] ?? "Drop in your numbers. We'll calculate the exact revenue GolfNow's barter model has extracted from your course — this year alone. No login. No email required."}
               </p>
 
               {/* Preset chips */}
@@ -246,10 +245,10 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
             <div className="max-w-3xl mx-auto space-y-10">
               <div className="max-w-xl mx-auto text-center space-y-3">
                 <h2 className="font-display font-bold text-[#1A1A1A] tracking-[-0.02em]" style={{ fontSize: '32px' }}>
-                  This is not a hypothetical.
+                  {content['barter.stats_headline'] ?? 'This is not a hypothetical.'}
                 </h2>
                 <p className="text-[#6B7770] text-base leading-relaxed">
-                  The math above isn&apos;t projection — it&apos;s documented industry data.
+                  {content['barter.stats_intro'] ?? "The math above isn't projection — it's documented industry data."}
                 </p>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -275,11 +274,10 @@ export function BarterPage({ spotsRemaining }: BarterPageProps) {
           <FadeIn>
             <div className="max-w-xl mx-auto space-y-6">
               <h2 className="font-display font-bold text-[#1A1A1A] tracking-[-0.02em] leading-tight" style={{ fontSize: '34px' }}>
-                Ready to stop paying GolfNow to take your tee times?
+                {content['barter.cta_headline'] ?? 'Ready to stop paying GolfNow to take your tee times?'}
               </h2>
               <p className="text-[#6B7770] text-base leading-relaxed">
-                TeeAhead is free for Founding Partner courses — your first year on us. No barter. No commissions.
-                The only ask: tell your golfers about TeeAhead at booking.
+                {content['barter.cta_body'] ?? 'TeeAhead is free for Founding Partner courses — your first year on us. No barter. No commissions. The only ask: tell your golfers about TeeAhead at booking.'}
               </p>
               <div className="space-y-3">
                 <Link

@@ -63,9 +63,13 @@ export default async function GolferWaitlistPage({
   const { tier } = await searchParams
 
   const supabase = await createClient()
-  const { count: golferCount } = await supabase
-    .from('golfer_waitlist')
-    .select('*', { count: 'exact', head: true })
+  const [{ count: golferCount }, { data: contentRows }] = await Promise.all([
+    supabase.from('golfer_waitlist').select('*', { count: 'exact', head: true }),
+    supabase.from('content_blocks').select('key, value').ilike('key', 'waitlist.%'),
+  ])
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -104,18 +108,17 @@ export default async function GolferWaitlistPage({
             {/* Eyebrow badge */}
             <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
               <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">Metro Detroit Launch</span>
+              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{c['waitlist.hero_badge'] ?? 'Metro Detroit Launch'}</span>
             </div>
 
             {/* Headline */}
             <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 58px)' }}>
-              Golf at your home course,{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>done right.</em>
+              {c['waitlist.hero_headline'] ?? 'Golf at your home course, done right.'}
             </h1>
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $40 less than GolfPass+ with more credits and no expiration.
+              {c['waitlist.hero_subhead'] ?? 'TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $40 less than GolfPass+ with more credits and no expiration.'}
             </p>
 
             {/* Live count badge */}

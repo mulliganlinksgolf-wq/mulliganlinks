@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { GolfnowAlternativeSchema } from '@/components/GolfnowAlternativeSchema'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
   title: 'Best GolfNow Alternative for Courses & Golfers',
@@ -12,7 +13,17 @@ export const metadata: Metadata = {
   },
 }
 
-export default function GolfNowAlternativePage() {
+export default async function GolfNowAlternativePage() {
+  const supabase = await createClient()
+  const { data: contentRows } = await supabase
+    .from('content_blocks')
+    .select('key, value')
+    .ilike('key', 'golfnow.%')
+
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <GolfnowAlternativeSchema />
@@ -41,13 +52,13 @@ export default function GolfNowAlternativePage() {
           <div className="max-w-4xl mx-auto space-y-6">
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
               <span className="size-2 rounded-full bg-[#F4F1EA] animate-pulse" />
-              <span className="text-sm font-medium text-[#F4F1EA]">Coming soon to Metro Detroit</span>
+              <span className="text-sm font-medium text-[#F4F1EA]">{c['golfnow.hero_badge'] ?? 'Coming soon to Metro Detroit'}</span>
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
-              The Best GolfNow Alternative for Golf Courses and Golfers
+              {c['golfnow.hero_headline'] ?? 'The Best GolfNow Alternative for Golf Courses and Golfers'}
             </h1>
             <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-3xl mx-auto">
-              TeeAhead is Metro Detroit&apos;s local-first golf platform — free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every single metric.
+              {c['golfnow.hero_subhead'] ?? "TeeAhead is Metro Detroit's local-first golf platform — free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every single metric."}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
@@ -70,10 +81,10 @@ export default function GolfNowAlternativePage() {
         <section className="px-6 py-20 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              What GolfNow Actually Costs a Golf Course
+              {c['golfnow.cost_headline'] ?? 'What GolfNow Actually Costs a Golf Course'}
             </h2>
             <p className="text-[#6B7770] text-lg leading-relaxed">
-              Most golf course operators know GolfNow is expensive. Few have run the actual math. Here it is.
+              {c['golfnow.cost_intro'] ?? 'Most golf course operators know GolfNow is expensive. Few have run the actual math. Here it is.'}
             </p>
             <div className="bg-[#FAF7F2] rounded-xl p-8 ring-1 ring-black/5 space-y-6">
               <h3 className="text-xl font-bold text-[#1A1A1A]">The barter model, explained</h3>
@@ -127,10 +138,10 @@ export default function GolfNowAlternativePage() {
         <section className="px-6 py-20 bg-[#FAF7F2]">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              Real Results from Courses That Left GolfNow
+              {c['golfnow.results_headline'] ?? 'Real Results from Courses That Left GolfNow'}
             </h2>
             <p className="text-[#6B7770] text-lg leading-relaxed">
-              These aren&apos;t projections. These are documented outcomes from golf courses that made the switch away from GolfNow.
+              {c['golfnow.results_intro'] ?? "These aren't projections. These are documented outcomes from golf courses that made the switch away from GolfNow."}
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <div className="bg-white rounded-xl p-8 ring-1 ring-black/5 space-y-4">
@@ -165,10 +176,10 @@ export default function GolfNowAlternativePage() {
         <section className="px-6 py-20 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              GolfNow vs. TeeAhead: For Golf Courses
+              {c['golfnow.compare_courses_headline'] ?? 'GolfNow vs. TeeAhead: For Golf Courses'}
             </h2>
             <p className="text-[#6B7770] text-lg leading-relaxed">
-              A direct comparison of what each platform costs and delivers for course operators.
+              {c['golfnow.compare_courses_intro'] ?? 'A direct comparison of what each platform costs and delivers for course operators.'}
             </p>
             <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
               <table className="w-full text-sm">
@@ -216,10 +227,10 @@ export default function GolfNowAlternativePage() {
         <section className="px-6 py-20 bg-[#FAF7F2]">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              GolfPass+ vs. TeeAhead Eagle: For Golfers
+              {c['golfnow.compare_golfers_headline'] ?? 'GolfPass+ vs. TeeAhead Eagle: For Golfers'}
             </h2>
             <p className="text-[#6B7770] text-lg leading-relaxed">
-              GolfPass+ costs $119/year and delivers perks spread thin across a national network. TeeAhead Eagle costs $89/year and delivers more — at the courses you actually play.
+              {c['golfnow.compare_golfers_intro'] ?? 'GolfPass+ costs $119/year and delivers perks spread thin across a national network. TeeAhead Eagle costs $89/year and delivers more — at the courses you actually play.'}
             </p>
             <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
               <table className="w-full text-sm">
@@ -268,21 +279,20 @@ export default function GolfNowAlternativePage() {
         <section className="px-6 py-20 bg-white">
           <div className="max-w-4xl mx-auto space-y-8">
             <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              Why Courses and Golfers in Metro Detroit Are Looking for a GolfNow Alternative
+              {c['golfnow.body_headline'] ?? 'Why Courses and Golfers in Metro Detroit Are Looking for a GolfNow Alternative'}
             </h2>
             <div className="prose prose-lg max-w-none text-[#6B7770] space-y-6">
               <p className="leading-relaxed">
-                The search for a GolfNow alternative is accelerating in 2025 and 2026. Courses in Oakland County, Macomb County, and Wayne County are re-evaluating their dependency on GolfNow&apos;s tee sheet software — and for good reason. The barter model that seemed like free distribution in 2010 now looks very different when you run the numbers against today&apos;s green fee rates.
+                {c['golfnow.body_p1'] ?? 'The search for a GolfNow alternative is accelerating in 2025 and 2026. Courses in Oakland County, Macomb County, and Wayne County are re-evaluating their dependency on GolfNow\'s tee sheet software — and for good reason. The barter model that seemed like free distribution in 2010 now looks very different when you run the numbers against today\'s green fee rates.'}
               </p>
               <p className="leading-relaxed">
-                TeeAhead is built specifically for this moment. It&apos;s free tee sheet software for golf courses that want to cancel GolfNow, take back their direct booking channel, and stop subsidizing a platform that treats their prime-time inventory as a commodity. Unlike GolfNow, TeeAhead doesn&apos;t take barter tee times, doesn&apos;t charge commissions, and doesn&apos;t retain your customer data.
+                {c['golfnow.body_p2'] ?? "TeeAhead is built specifically for this moment. It's free tee sheet software for golf courses that want to cancel GolfNow, take back their direct booking channel, and stop subsidizing a platform that treats their prime-time inventory as a commodity. Unlike GolfNow, TeeAhead doesn't take barter tee times, doesn't charge commissions, and doesn't retain your customer data."}
               </p>
               <p className="leading-relaxed">
-                For golfers, TeeAhead is the local-first GolfNow alternative. Book tee times at Metro Detroit golf courses with zero booking fees — not &ldquo;waived for members 12 times a year,&rdquo; but zero, always. Earn Fairway Points on every dollar you spend at partner courses. Upgrade to Eagle membership ($89/yr) or Ace membership ($159/yr) for bonus points, complimentary rounds, and priority booking that actually applies to the courses in Oakland County, Macomb County, and Wayne County where you already play.
+                {c['golfnow.body_p3'] ?? 'For golfers, TeeAhead is the local-first GolfNow alternative. Book tee times at Metro Detroit golf courses with zero booking fees — not "waived for members 12 times a year," but zero, always. Earn Fairway Points on every dollar you spend at partner courses. Upgrade to Eagle membership ($89/yr) or Ace membership ($159/yr) for bonus points, complimentary rounds, and priority booking that actually applies to the courses in Oakland County, Macomb County, and Wayne County where you already play.'}
               </p>
               <p className="leading-relaxed">
-                TeeAhead is not trying to be a national golf booking aggregator. It&apos;s a local platform for local golfers and local courses. That&apos;s the point. GolfNow turns your home course into a commodity. TeeAhead turns it back into your home.
-              </p>
+                {c['golfnow.body_p4'] ?? "TeeAhead is not trying to be a national golf booking aggregator. It's a local platform for local golfers and local courses. That's the point. GolfNow turns your home course into a commodity. TeeAhead turns it back into your home."}</p>
               <p className="leading-relaxed">
                 If you run a golf course in Metro Detroit and you want to learn more about leaving GolfNow, reach out to Neil directly at{' '}
                 <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline decoration-dotted">neil@teeahead.com</a>.
@@ -300,9 +310,9 @@ export default function GolfNowAlternativePage() {
               <div className="inline-block bg-[#E0A800]/20 text-[#8B6F00] text-sm font-semibold px-3 py-1 rounded-full">
                 For Courses
               </div>
-              <h3 className="text-2xl font-bold text-[#1A1A1A]">Ready to cancel GolfNow?</h3>
+              <h3 className="text-2xl font-bold text-[#1A1A1A]">{c['golfnow.cta_courses_headline'] ?? 'Ready to cancel GolfNow?'}</h3>
               <p className="text-[#6B7770] leading-relaxed">
-                The first 10 Founding Partner courses in Metro Detroit get TeeAhead free for their first year. No barter. No commissions. No data extraction.
+                {c['golfnow.cta_courses_body'] ?? 'The first 10 Founding Partner courses in Metro Detroit get TeeAhead free for their first year. No barter. No commissions. No data extraction.'}
               </p>
               <Link
                 href="/waitlist/course"
@@ -315,9 +325,9 @@ export default function GolfNowAlternativePage() {
               <div className="inline-block bg-white/10 text-[#F4F1EA] text-sm font-semibold px-3 py-1 rounded-full">
                 For Golfers
               </div>
-              <h3 className="text-2xl font-bold text-[#F4F1EA]">Done paying booking fees?</h3>
+              <h3 className="text-2xl font-bold text-[#F4F1EA]">{c['golfnow.cta_golfers_headline'] ?? 'Done paying booking fees?'}</h3>
               <p className="text-[#F4F1EA]/70 leading-relaxed">
-                Join the waitlist for free. Eagle membership is $89/yr — $30 less than GolfPass+, with more perks and loyalty at the courses you actually play.
+                {c['golfnow.cta_golfers_body'] ?? "Join the waitlist for free. Eagle membership is $89/yr — $30 less than GolfPass+, with more perks and loyalty at the courses you actually play."}
               </p>
               <Link
                 href="/waitlist/golfer"

@@ -20,9 +20,10 @@ import {
 
 interface SoftwareCostPageProps {
   spotsRemaining: number
+  content?: Record<string, string>
 }
 
-export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
+export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostPageProps) {
   const [selectedVendor, setSelectedVendor] = useState<VendorKey | null>(null)
   const [monthlySubscription, setMonthlySubscription] = useState(300)
   const [annualCardVolume, setAnnualCardVolume] = useState(1_000_000)
@@ -108,19 +109,16 @@ export function SoftwareCostPage({ spotsRemaining }: SoftwareCostPageProps) {
           <FadeIn>
             <div className="max-w-3xl mx-auto space-y-7 relative z-10">
               <div className="inline-flex items-center gap-2 bg-[#E0A800]/12 border border-[#E0A800]/30 rounded-full px-4 py-1.5">
-                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">For Golf Course Operators</span>
+                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">{content['software_cost.hero_badge'] ?? 'For Golf Course Operators'}</span>
               </div>
 
               <h1 className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.02em]"
                   style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
-                Your software vendor isn&apos;t free.{' '}
-                <em style={{ fontStyle: 'italic', color: '#E0A800' }}>See exactly what they&apos;re costing you.</em>
+                {content['software_cost.hero_headline'] ?? "Your software vendor isn't free. See exactly what they're costing you."}
               </h1>
 
               <p className="text-base leading-relaxed max-w-2xl mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
-                GolfNow isn&apos;t the only one extracting from your course. foreUP, Lightspeed, Club Caddie, and Club Prophet
-                all charge real money — and quietly route your golfer data through marketplaces like Barstool Golf Time and Golf Digest.
-                Pick your current setup. We&apos;ll calculate the real cost.
+                {content['software_cost.hero_subhead'] ?? "GolfNow isn't the only one extracting from your course. foreUP, Lightspeed, Club Caddie, and Club Prophet all charge real money — and quietly route your golfer data through marketplaces like Barstool Golf Time and Golf Digest. Pick your current setup. We'll calculate the real cost."}
               </p>
 
               {/* Pricing clarifier */}

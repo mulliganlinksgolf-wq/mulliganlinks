@@ -17,12 +17,15 @@ export const metadata = {
 
 export default async function CourseWaitlistPage() {
   const supabase = await createClient()
-  const { data: counter } = await supabase
-    .from('founding_partner_counter')
-    .select('count, cap')
-    .single()
+  const [{ data: counter }, { data: contentRows }] = await Promise.all([
+    supabase.from('founding_partner_counter').select('count, cap').single(),
+    supabase.from('content_blocks').select('key, value').ilike('key', 'waitlist_course.%'),
+  ])
 
   const spotsRemaining = Math.max(0, (counter?.cap ?? 10) - (counter?.count ?? 0))
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -61,18 +64,17 @@ export default async function CourseWaitlistPage() {
             {/* Eyebrow badge */}
             <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
               <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">Metro Detroit Launch</span>
+              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{c['waitlist_course.hero_badge'] ?? 'Metro Detroit Launch'}</span>
             </div>
 
             {/* Headline */}
             <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(36px, 5.5vw, 54px)' }}>
-              Stop giving GolfNow{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>your tee times.</em>
+              {c['waitlist_course.hero_headline'] ?? 'Stop giving GolfNow your tee times.'}
             </h1>
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              TeeAhead gives courses a complete booking and loyalty platform — free for your first year. No barter. No commissions. No data extraction.
+              {c['waitlist_course.hero_subhead'] ?? 'TeeAhead gives courses a complete booking and loyalty platform — free for your first year. No barter. No commissions. No data extraction.'}
             </p>
 
           </div>
