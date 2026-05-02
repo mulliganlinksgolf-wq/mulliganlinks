@@ -47,7 +47,13 @@ export default async function CourseBookingsPage({
 
   const { data: bookings } = await query
 
-  const statuses = ['all', 'confirmed', 'completed', 'canceled', 'no_show']
+  const statuses = [
+    { value: 'all', label: 'All' },
+    { value: 'confirmed', label: 'Confirmed' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'canceled', label: 'Canceled' },
+    { value: 'no_show', label: 'No show' },
+  ]
   const ranges = [
     { value: '', label: 'All time' },
     { value: 'today', label: 'Today' },
@@ -71,15 +77,15 @@ export default async function CourseBookingsPage({
       <div className="flex gap-2 flex-wrap">
         {statuses.map(s => (
           <a
-            key={s}
-            href={`?status=${s}&range=${range ?? ''}`}
+            key={s.value}
+            href={`?status=${s.value}&range=${range ?? ''}`}
             className={`px-3 py-1 text-xs rounded-full border font-medium capitalize transition-colors ${
-              (statusFilter ?? 'all') === s
+              (statusFilter ?? 'all') === s.value
                 ? 'bg-[#1B4332] text-[#FAF7F2] border-[#1B4332]'
                 : 'bg-white text-[#6B7770] border-gray-200 hover:border-[#1B4332]'
             }`}
           >
-            {s}
+            {s.label}
           </a>
         ))}
         <span className="w-px bg-gray-200 mx-1" />
