@@ -57,7 +57,7 @@ export default async function CourseReportsDashboard({
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <KpiTile label="Rounds" value={kpis.roundsThisMonth.toLocaleString()} accent />
-        <KpiTile label="Revenue Processed" value={`$${kpis.revenueThisMonth.toLocaleString()}`} />
+        <KpiTile label="Revenue Processed" value={`$${kpis.revenueThisMonth.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} />
         <KpiTile label="TeeAhead Members" value={kpis.membersTotal.toLocaleString()} />
         <KpiTile label="Waitlist Cancellations Recovered" value={kpis.waitlistFillsThisMonth.toString()} />
       </div>

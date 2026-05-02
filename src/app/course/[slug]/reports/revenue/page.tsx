@@ -57,7 +57,7 @@ export default async function RevenueReportPage({
       <DateRangePicker />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label={`Revenue — ${latestMonthLabel}`} value={`$${revenueMtd.toLocaleString()}`} accent />
+        <KpiTile label={`Revenue — ${latestMonthLabel}`} value={`$${revenueMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} accent />
         <KpiTile label="Avg Green Fee" value={`$${Number(latest?.avg_green_fee ?? 0).toFixed(0)}`} />
         {momChange !== null && (
           <KpiTile label="Month-over-Month" value={`${momChange > 0 ? '+' : ''}${momChange}%`} />
@@ -88,7 +88,7 @@ export default async function RevenueReportPage({
               return (
                 <tr key={row.month} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3">{row.month}</td>
-                  <td className="py-2 px-3 font-medium">${rev.toLocaleString()}</td>
+                  <td className="py-2 px-3 font-medium">${rev.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="py-2 px-3">${Number(row.avg_green_fee).toFixed(0)}</td>
                   <td className="py-2 px-3">{row.rounds_booked.toLocaleString()}</td>
                   <td className={`py-2 px-3 ${change === null ? '' : change >= 0 ? 'text-emerald-700' : 'text-red-600'}`}>

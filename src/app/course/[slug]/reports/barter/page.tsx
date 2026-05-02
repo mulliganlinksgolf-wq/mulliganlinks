@@ -50,7 +50,7 @@ export default async function BarterReceiptPage({ params }: { params: Promise<{ 
         <h2 className="font-semibold text-[#1A1A1A] mb-4">This Month at a Glance</h2>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <div className="text-center p-4 bg-gray-50 rounded-xl">
-            <div className="text-2xl font-bold text-[#1B4332]">${Number(latest?.green_fee_revenue ?? 0).toLocaleString()}</div>
+            <div className="text-2xl font-bold text-[#1B4332]">${Number(latest?.green_fee_revenue ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
             <p className="text-xs text-[#6B7770] mt-1">Revenue Processed</p>
           </div>
           <div className="text-center p-4 bg-gray-50 rounded-xl">

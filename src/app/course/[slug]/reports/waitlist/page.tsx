@@ -44,7 +44,7 @@ export default async function WaitlistReportPage({
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <KpiTile label="Cancellations Auto-Filled" value={totalFills.toLocaleString()} accent sub="selected period" />
-        <KpiTile label="Revenue Recovered" value={`$${totalRevenue.toLocaleString()}`} sub="selected period" />
+        <KpiTile label="Revenue Recovered" value={`$${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} sub="selected period" />
         <KpiTile label="Fill Rate" value={`${fillRate}%`} sub="latest month" />
         <KpiTile label="Total Cancellations" value={(latest?.total_cancellations ?? 0).toString()} sub="latest month" />
       </div>
@@ -58,7 +58,7 @@ export default async function WaitlistReportPage({
         <h2 className="font-semibold text-emerald-900 mb-2">What This Means</h2>
         <p className="text-sm text-emerald-800">
           TeeAhead automatically filled <strong>{totalFills.toLocaleString()} cancelled tee times</strong> in the selected period
-          via the waitlist system, recovering an estimated <strong>${totalRevenue.toLocaleString()}</strong> in green fee
+          via the waitlist system, recovering an estimated <strong>${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> in green fee
           revenue that would have been lost — with zero staff effort.
         </p>
       </div>

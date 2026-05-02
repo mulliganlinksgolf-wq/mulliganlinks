@@ -61,7 +61,7 @@ export default function BarterPdf({
           <Text style={s.sectionTitle}>This Month at a Glance</Text>
           <View style={s.kpiGrid}>
             <View style={s.kpiBox}>
-              <Text style={s.kpiValue}>${revenueMtd.toLocaleString()}</Text>
+              <Text style={s.kpiValue}>${revenueMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
               <Text style={s.kpiLabel}>Revenue Processed</Text>
             </View>
             <View style={s.kpiBox}>
@@ -85,11 +85,11 @@ export default function BarterPdf({
             <Text style={{ fontSize: 10, color: '#92400E', marginBottom: 8 }}>
               If you were still on GolfNow (20% barter on {roundsMtd} rounds × ${avgGreenFee} avg green fee):
             </Text>
-            <Text style={s.barterAmount}>${savings.golfnowCostMtd.toLocaleString()}</Text>
+            <Text style={s.barterAmount}>${savings.golfnowCostMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
             <Text style={s.barterLabel}>surrendered in tee time value this month</Text>
             {monthsElapsed > 1 && (
               <Text style={{ fontSize: 9, color: '#B45309', marginTop: 6 }}>
-                YTD barter cost avoided: ${savings.golfnowCostYtd.toLocaleString()}
+                YTD barter cost avoided: ${savings.golfnowCostYtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </Text>
             )}
           </View>

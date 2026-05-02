@@ -11,7 +11,7 @@ export function RevenueLineChart({ data }: { data: CourseMetricRow[] }) {
         <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
         <XAxis dataKey="month" tick={{ fontSize: 11 }} />
         <YAxis tickFormatter={v => `$${(v / 1000).toFixed(0)}k`} tick={{ fontSize: 11 }} />
-        <Tooltip formatter={(v) => [`$${Number(v).toLocaleString()}`, 'Revenue']} />
+        <Tooltip formatter={(v) => [`$${Number(v).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`, 'Revenue']} />
         <Line dataKey="revenue" stroke="#1B4332" strokeWidth={2} dot={false} name="Revenue" />
       </LineChart>
     </ResponsiveContainer>

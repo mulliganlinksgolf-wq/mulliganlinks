@@ -52,12 +52,12 @@ export default function BarterCalculator({
           If you were still on GolfNow ({Math.round(GOLFNOW_BARTER_RATE * 100)}% barter), you would have surrendered approximately
         </p>
         <div className="text-4xl font-bold text-amber-700 my-3">
-          ${savings.golfnowCostMtd.toLocaleString()}
+          ${savings.golfnowCostMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </div>
         <p className="text-sm text-amber-700">in tee time value this month</p>
         {monthsElapsed > 1 && (
           <p className="text-xs text-amber-600 mt-2">
-            YTD barter cost avoided: <strong>${savings.golfnowCostYtd.toLocaleString()}</strong>
+            YTD barter cost avoided: <strong>${savings.golfnowCostYtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong>
           </p>
         )}
       </div>
