@@ -70,3 +70,39 @@ export async function removeStaff(
   if (error) throw new Error(error.message)
   revalidatePath(`/course/${slug}/settings/team`)
 }
+
+export async function updateMemberRole(
+  targetUserId: string,
+  courseId: string,
+  slug: string,
+  newRole: 'owner' | 'manager' | 'staff',
+): Promise<void> {
+  await assertManager(courseId)
+
+  const admin = createAdminClient()
+  const { error } = await admin
+    .from('course_admins')
+    .update({ role: newRole })
+    .eq('user_id', targetUserId)
+    .eq('course_id', courseId)
+
+  if (error) throw new Error(error.message)
+  revalidatePath(`/course/${slug}/settings/team`)
+}
+
+export async function resendInvite(
+  email: string,
+  courseId: string,
+  slug: string,
+): Promise<void> {
+  await assertManager(courseId)
+
+  const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://teeahead.com'
+  const admin = createAdminClient()
+  const { error } = await admin.auth.admin.inviteUserByEmail(email, {
+    redirectTo: `${siteUrl}/course/${slug}`,
+  })
+  if (error) throw new Error(error.message)
+
+  revalidatePath(`/course/${slug}/settings/team`)
+}

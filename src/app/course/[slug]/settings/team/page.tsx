@@ -2,6 +2,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { requireManager } from '@/lib/courseRole'
 import InviteStaffModal from './InviteStaffModal'
 import RemoveStaffButton from './RemoveStaffButton'
+import RoleSelector from './RoleSelector'
+import ResendInviteButton from './ResendInviteButton'
 
 export default async function CourseTeamPage({
   params,
@@ -9,11 +11,10 @@ export default async function CourseTeamPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const { courseId } = await requireManager(slug)
+  const { courseId, userId: currentUserId } = await requireManager(slug)
 
   const admin = createAdminClient()
 
-  // Fetch course_admins then look up profiles separately (view join not guaranteed via FK hint)
   const { data: members } = await admin
     .from('course_admins')
     .select('user_id, role, created_at')
@@ -22,7 +23,10 @@ export default async function CourseTeamPage({
 
   const userIds = (members ?? []).map(m => m.user_id)
   const { data: profileRows } = userIds.length > 0
-    ? await admin.from('profiles_with_email').select('id, full_name, email').in('id', userIds)
+    ? await admin
+        .from('profiles_with_email')
+        .select('id, full_name, email, last_sign_in_at, invited_at, email_confirmed_at')
+        .in('id', userIds)
     : { data: [] }
 
   const profileMap = Object.fromEntries((profileRows ?? []).map(p => [p.id, p]))
@@ -44,7 +48,7 @@ export default async function CourseTeamPage({
               <th className="text-left px-4 py-3 font-medium text-[#6B7770]">Name</th>
               <th className="text-left px-4 py-3 font-medium text-[#6B7770]">Email</th>
               <th className="text-left px-4 py-3 font-medium text-[#6B7770]">Role</th>
-              <th className="text-left px-4 py-3 font-medium text-[#6B7770]">Added</th>
+              <th className="text-left px-4 py-3 font-medium text-[#6B7770]">Last login</th>
               <th className="px-4 py-3" />
             </tr>
           </thead>
@@ -53,33 +57,52 @@ export default async function CourseTeamPage({
               const p = profileMap[m.user_id] as any
               const name = p?.full_name ?? '—'
               const email = p?.email ?? '—'
+              const isPending = !p?.last_sign_in_at
+              const isSelf = m.user_id === currentUserId
+
               return (
                 <tr key={m.user_id} className="hover:bg-[#FAF7F2]/50">
-                  <td className="px-4 py-3 font-medium text-[#1A1A1A]">{name}</td>
+                  <td className="px-4 py-3">
+                    <div className="font-medium text-[#1A1A1A]">{name}</div>
+                    {isPending && (
+                      <span className="inline-flex items-center gap-1 text-xs text-amber-600 mt-0.5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 inline-block" />
+                        Invite pending
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-[#6B7770]">{email}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium capitalize ${
-                      m.role === 'owner'   ? 'bg-[#1B4332]/10 text-[#1B4332]' :
-                      m.role === 'manager' ? 'bg-amber-50 text-amber-700' :
-                                            'bg-gray-100 text-gray-600'
-                    }`}>
-                      {m.role}
-                    </span>
+                    <RoleSelector
+                      targetUserId={m.user_id}
+                      courseId={courseId}
+                      slug={slug}
+                      currentRole={m.role}
+                      disabled={isSelf}
+                    />
                   </td>
-                  <td className="px-4 py-3 text-[#6B7770]">
-                    {new Date(m.created_at).toLocaleDateString('en-US', {
-                      month: 'short', day: 'numeric', year: 'numeric',
-                    })}
+                  <td className="px-4 py-3 text-[#6B7770] text-xs">
+                    {p?.last_sign_in_at
+                      ? new Date(p.last_sign_in_at).toLocaleDateString('en-US', {
+                          month: 'short', day: 'numeric', year: 'numeric',
+                        })
+                      : <span className="text-[#6B7770]/60 italic">Never</span>
+                    }
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {m.role === 'staff' && (
-                      <RemoveStaffButton
-                        targetUserId={m.user_id}
-                        courseId={courseId}
-                        slug={slug}
-                        name={name}
-                      />
-                    )}
+                    <div className="flex items-center justify-end gap-3">
+                      {isPending && email !== '—' && (
+                        <ResendInviteButton email={email} courseId={courseId} slug={slug} />
+                      )}
+                      {!isSelf && m.role === 'staff' && (
+                        <RemoveStaffButton
+                          targetUserId={m.user_id}
+                          courseId={courseId}
+                          slug={slug}
+                          name={name}
+                        />
+                      )}
+                    </div>
                   </td>
                 </tr>
               )
