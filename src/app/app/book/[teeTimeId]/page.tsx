@@ -47,10 +47,10 @@ export default async function BookPage({
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">
+        <h1 className="text-2xl font-bold text-white">
           {stripeEnabled ? 'Complete Booking' : 'Confirm Booking'}
         </h1>
-        <p className="text-[#6B7770] mt-1">
+        <p className="text-[#8FA889] mt-1">
           {course?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
             weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
           })}
