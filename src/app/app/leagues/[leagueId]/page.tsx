@@ -133,7 +133,7 @@ export default async function MemberLeagueDetailPage({
       {/* My rounds history */}
       {sessions && sessions.length > 0 && (
         <section className="space-y-3">
-          <p className="text-[8px] uppercase tracking-widest text-[#aaa]">Sessions</p>
+          <p className="text-[8px] uppercase tracking-widest text-[#aaa]">My Rounds</p>
           <div className="space-y-2">
             {sessions.map(sess => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -15,8 +15,14 @@ export default async function MemberLeaguesPage() {
     .eq('user_id', user.id)
     .order('joined_at', { ascending: false })
 
-  const active = (memberships ?? []).filter(m => m.status === 'active')
-  const past   = (memberships ?? []).filter(m => m.status !== 'active')
+  // Filter out memberships where the nested league join is null
+  // (RLS blocks draft leagues from being visible to members via league_members join)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const validMemberships = (memberships ?? []).filter((m: any) => m.leagues != null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const active = validMemberships.filter((m: any) => m.status === 'active' && m.leagues?.status !== 'completed')
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const past   = validMemberships.filter((m: any) => m.status !== 'active' || m.leagues?.status === 'completed')
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const LeagueCard = ({ m }: { m: any }) => {
@@ -56,7 +62,7 @@ export default async function MemberLeaguesPage() {
         <h1 className="text-2xl font-bold font-serif text-white italic">Your leagues.</h1>
       </div>
 
-      {(!memberships || memberships.length === 0) ? (
+      {validMemberships.length === 0 ? (
         <div className="rounded-xl p-8 text-center" style={{ background: '#163d2a' }}>
           <p className="text-4xl mb-3">🏆</p>
           <p className="font-semibold text-white">Not in any leagues yet</p>
