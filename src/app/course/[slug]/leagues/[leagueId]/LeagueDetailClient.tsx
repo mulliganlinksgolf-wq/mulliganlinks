@@ -206,7 +206,7 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
                   <tr key={s.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">{s.session_number}</td>
                     <td className="px-4 py-2.5 text-[#6B7770]">
-                      {new Date(s.session_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                      {new Date(s.session_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                     </td>
                     <td className="px-4 py-2.5 text-[#6B7770]">{s.notes ?? '—'}</td>
                     <td className="px-4 py-2.5">
