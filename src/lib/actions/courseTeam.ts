@@ -36,7 +36,7 @@ export async function inviteStaff(
 ): Promise<void> {
   await assertManager(courseId)
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://teeahead.com'
+  const siteUrl = 'https://teeahead.com'
   const admin = createAdminClient()
   const { data: invited, error } = await admin.auth.admin.inviteUserByEmail(email, {
     redirectTo: `${siteUrl}/course/${slug}`,
@@ -97,7 +97,7 @@ export async function resendInvite(
 ): Promise<void> {
   await assertManager(courseId)
 
-  const siteUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://teeahead.com'
+  const siteUrl = 'https://teeahead.com'
   const admin = createAdminClient()
   const { error } = await admin.auth.admin.inviteUserByEmail(email, {
     redirectTo: `${siteUrl}/course/${slug}`,
