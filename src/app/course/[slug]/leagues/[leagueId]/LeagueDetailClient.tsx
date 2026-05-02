@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { calcStandingsRank, formatLeagueFormat, type StandingRow } from '@/lib/leagues'
+import { calcStandingsRank, type StandingRow } from '@/lib/leagues'
 
 interface Member {
   id: string
@@ -52,9 +52,6 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
   const [addingSession, setAddingSession] = useState(false)
   const [sessionError, setSessionError] = useState<string | null>(null)
   const [statusLoading, setStatusLoading] = useState(false)
-
-  // suppress unused import warning — formatLeagueFormat is referenced below
-  void formatLeagueFormat
 
   const ranked = calcStandingsRank(standings)
 
