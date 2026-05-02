@@ -1,3 +1,5 @@
+export const metadata = { title: 'CRM Dashboard' }
+
 import { getCrmDashboardStats, getRecentActivity, getStaleLeads } from '@/lib/crm/queries'
 import { KPITiles } from '@/components/crm/KPITiles'
 import { ActivityFeed } from '@/components/crm/ActivityFeed'

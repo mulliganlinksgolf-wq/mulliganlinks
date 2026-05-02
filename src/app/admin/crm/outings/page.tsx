@@ -1,3 +1,5 @@
+export const metadata = { title: 'CRM Outings' }
+
 import { createAdminClient } from '@/lib/supabase/admin'
 import { OutingsTableWrapper } from './OutingsTableWrapper'
 import Link from 'next/link'

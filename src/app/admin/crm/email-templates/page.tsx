@@ -1,3 +1,5 @@
+export const metadata = { title: 'Email Templates' }
+
 import { createAdminClient } from '@/lib/supabase/admin'
 import { TemplatesClient } from './TemplatesClient'
 

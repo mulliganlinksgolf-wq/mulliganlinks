@@ -9,6 +9,13 @@ import { getActivityLog } from '@/app/actions/crm/activity'
 
 export const dynamic = 'force-dynamic'
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = createAdminClient()
+  const { data } = await supabase.from('crm_members').select('name').eq('id', id).single()
+  return { title: data?.name ? `${data.name} | CRM Members` : 'Member Detail' }
+}
+
 export default async function MemberDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = createAdminClient()

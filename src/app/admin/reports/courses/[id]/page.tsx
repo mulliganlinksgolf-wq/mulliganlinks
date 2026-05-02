@@ -5,6 +5,13 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const admin = createAdminClient()
+  const { data } = await admin.from('courses').select('name').eq('id', id).single()
+  return { title: data?.name ? `${data.name} | Course Reports` : 'Course Report' }
+}
+
 export default async function CourseDrilldownPage({
   params,
 }: {

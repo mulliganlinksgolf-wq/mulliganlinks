@@ -1,3 +1,5 @@
+export const metadata = { title: 'CRM Courses' }
+
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CourseKanban } from '@/components/crm/CourseKanban'
 import { CoursesTableWrapper } from './CoursesTableWrapper'

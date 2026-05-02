@@ -10,6 +10,13 @@ import type { CrmCourse } from '@/lib/crm/types'
 
 export const dynamic = 'force-dynamic'
 
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const supabase = createAdminClient()
+  const { data } = await supabase.from('crm_courses').select('name').eq('id', id).single()
+  return { title: data?.name ? `${data.name} | CRM Courses` : 'Course Detail' }
+}
+
 async function getCourse(id: string): Promise<CrmCourse | null> {
   const supabase = createAdminClient()
   const { data } = await supabase.from('crm_courses').select('*').eq('id', id).single()
