@@ -1,5 +1,5 @@
 // src/app/course/[slug]/leagues/page.tsx
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireManager } from '@/lib/courseRole'
@@ -14,18 +14,14 @@ export default async function CourseLeaguesPage({
   const ctx = await requireManager(slug)
 
   const admin = createAdminClient()
-  const { data: course } = await admin
-    .from('courses')
-    .select('id, name')
-    .eq('slug', slug)
-    .single()
-  if (!course) notFound()
 
   const { data: leagues } = await admin
     .from('leagues')
     .select('id, name, format, status, season_start, season_end, max_players')
-    .eq('course_id', course.id)
+    .eq('course_id', ctx.courseId)
     .order('created_at', { ascending: false })
+
+  if (leagues === null) notFound()
 
   const statusColor: Record<string, string> = {
     draft:     'bg-gray-100 text-gray-600',
