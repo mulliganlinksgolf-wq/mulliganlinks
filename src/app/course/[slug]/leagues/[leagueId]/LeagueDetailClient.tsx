@@ -8,7 +8,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { calcStandingsRank, type StandingRow } from '@/lib/leagues'
+import { calcStandingsRank, formatHoles, type StandingRow } from '@/lib/leagues'
 
 interface Member {
   id: string
@@ -32,6 +32,7 @@ interface Props {
     id: string
     name: string
     format: string
+    holes: number
     status: string
     season_start: string
     season_end: string
@@ -102,9 +103,11 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
           <p className="text-sm text-[#6B7770]">
             {league.format === 'stroke_play' ? 'Stroke Play' : 'Stableford'}
             {' · '}
-            {new Date(league.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+            {formatHoles(league.holes)}
+            {' · '}
+            {new Date(league.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}
             {' – '}
-            {new Date(league.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            {new Date(league.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
             {' · '}
             {members.filter(m => m.status === 'active').length}/{league.max_players} players
           </p>

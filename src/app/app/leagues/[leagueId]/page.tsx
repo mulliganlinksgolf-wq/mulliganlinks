@@ -3,7 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { calcStandingsRank, formatLeagueFormat, type StandingRow } from '@/lib/leagues'
+import { calcStandingsRank, formatLeagueFormat, formatHoles, type StandingRow } from '@/lib/leagues'
 
 export default async function MemberLeagueDetailPage({
   params,
@@ -19,7 +19,7 @@ export default async function MemberLeagueDetailPage({
 
   const { data: league } = await admin
     .from('leagues')
-    .select('id, name, format, status, season_start, season_end, courses(name, slug)')
+    .select('id, name, format, holes, status, season_start, season_end, courses(name, slug)')
     .eq('id', leagueId)
     .single()
   if (!league) notFound()
@@ -72,9 +72,11 @@ export default async function MemberLeagueDetailPage({
           {' · '}
           {formatLeagueFormat(league.format)}
           {' · '}
-          {new Date(league.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+          {formatHoles((league as any).holes ?? 18)}
+          {' · '}
+          {new Date(league.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}
           {' – '}
-          {new Date(league.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          {new Date(league.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
         </p>
       </div>
 

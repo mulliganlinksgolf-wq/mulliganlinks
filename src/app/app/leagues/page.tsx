@@ -2,7 +2,7 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { formatLeagueFormat, formatLeagueStatus } from '@/lib/leagues'
+import { formatLeagueFormat, formatLeagueStatus, formatHoles } from '@/lib/leagues'
 
 export default async function MemberLeaguesPage() {
   const supabase = await createClient()
@@ -11,7 +11,7 @@ export default async function MemberLeaguesPage() {
 
   const { data: memberships } = await supabase
     .from('league_members')
-    .select('id, handicap, status, joined_at, leagues(id, name, format, status, season_start, season_end, courses(name))')
+    .select('id, handicap, status, joined_at, leagues(id, name, format, holes, status, season_start, season_end, courses(name))')
     .eq('user_id', user.id)
     .order('joined_at', { ascending: false })
 
@@ -39,9 +39,11 @@ export default async function MemberLeaguesPage() {
             <p className="text-xs text-[#8FA889] mt-1">
               {formatLeagueFormat(l.format)}
               {' · '}
-              {new Date(l.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+              {formatHoles(l.holes ?? 18)}
+              {' · '}
+              {new Date(l.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}
               {' – '}
-              {new Date(l.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              {new Date(l.season_end).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
             </p>
           </div>
           <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium mt-0.5 ${

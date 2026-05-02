@@ -17,7 +17,7 @@ export default async function LeagueDetailPage({
 
   const { data: league } = await admin
     .from('leagues')
-    .select('id, name, format, status, season_start, season_end, max_players, notes')
+    .select('id, name, format, holes, status, season_start, season_end, max_players, notes')
     .eq('id', leagueId)
     .single()
   if (!league) notFound()

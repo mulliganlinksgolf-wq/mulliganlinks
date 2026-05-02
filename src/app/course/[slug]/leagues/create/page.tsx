@@ -18,6 +18,7 @@ export default function CreateLeaguePage() {
   const [form, setForm] = useState({
     name: '',
     format: 'stroke_play',
+    holes: '18',
     season_start: today,
     season_end: today,
     max_players: '20',
@@ -53,6 +54,7 @@ export default function CreateLeaguePage() {
         course_id: course.id,
         name: form.name.trim(),
         format: form.format,
+        holes: parseInt(form.holes),
         season_start: form.season_start,
         season_end: form.season_end,
         max_players: parseInt(form.max_players),
@@ -94,16 +96,29 @@ export default function CreateLeaguePage() {
               />
             </div>
 
-            <div className="space-y-1.5">
-              <Label>Format</Label>
-              <select
-                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-white"
-                value={form.format}
-                onChange={e => update('format', e.target.value)}
-              >
-                <option value="stroke_play">Stroke Play</option>
-                <option value="stableford">Stableford</option>
-              </select>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label>Format</Label>
+                <select
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-white"
+                  value={form.format}
+                  onChange={e => update('format', e.target.value)}
+                >
+                  <option value="stroke_play">Stroke Play</option>
+                  <option value="stableford">Stableford</option>
+                </select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Holes</Label>
+                <select
+                  className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-white"
+                  value={form.holes}
+                  onChange={e => update('holes', e.target.value)}
+                >
+                  <option value="18">18 Holes</option>
+                  <option value="9">9 Holes</option>
+                </select>
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">

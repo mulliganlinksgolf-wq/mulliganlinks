@@ -49,3 +49,7 @@ export function formatLeagueFormat(format: string): string {
   }
   return map[format] ?? format
 }
+
+export function formatHoles(holes: number): string {
+  return `${holes} Holes`
+}
