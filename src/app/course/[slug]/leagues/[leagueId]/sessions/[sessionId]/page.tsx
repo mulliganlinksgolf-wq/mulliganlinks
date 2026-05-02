@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
+import { calcNetScore } from '@/lib/leagues'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 
@@ -44,34 +45,39 @@ export default function ScoreEntryPage() {
         supabase.from('league_members')
           .select('id, handicap, profiles(full_name)')
           .eq('league_id', leagueId)
-          .eq('status', 'active')
-          .order('id'),
+          .eq('status', 'active'),
         supabase.from('league_scores')
           .select('league_member_id, gross_score, handicap_strokes')
           .eq('session_id', sessionId),
         supabase.from('leagues').select('name').eq('id', leagueId).single(),
       ])
 
+      if (!sess || !league) {
+        setError('Session or league not found.')
+        setLoading(false)
+        return
+      }
+
       setSession(sess)
-      setLeagueName(league?.name ?? '')
+      setLeagueName(league.name ?? '')
 
       const scoreMap = new Map(
         (existingScores ?? []).map(s => [s.league_member_id, s])
       )
 
-      setRows(
-        (members ?? []).map(m => {
-          const existing = scoreMap.get(m.id)
-          return {
-            league_member_id: m.id,
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            full_name: (m.profiles as any)?.full_name ?? '—',
-            handicap: m.handicap,
-            gross_score: existing ? String(existing.gross_score) : '',
-            handicap_strokes: existing ? String(existing.handicap_strokes) : String(m.handicap),
-          }
-        })
-      )
+      const mapped = (members ?? []).map(m => {
+        const existing = scoreMap.get(m.id)
+        return {
+          league_member_id: m.id,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          full_name: (m.profiles as any)?.full_name ?? '—',
+          handicap: m.handicap,
+          gross_score: existing ? String(existing.gross_score) : '',
+          handicap_strokes: existing ? String(existing.handicap_strokes) : String(m.handicap),
+        }
+      })
+      mapped.sort((a, b) => a.full_name.localeCompare(b.full_name))
+      setRows(mapped)
       setLoading(false)
     }
     load()
@@ -95,6 +101,12 @@ export default function ScoreEntryPage() {
         gross_score: parseInt(r.gross_score),
         handicap_strokes: parseInt(r.handicap_strokes) || 0,
       }))
+
+    if (toUpsert.length === 0) {
+      setError('Enter at least one score before saving.')
+      setSaving(false)
+      return
+    }
 
     const { error: upsertError } = await supabase
       .from('league_scores')
@@ -143,7 +155,7 @@ export default function ScoreEntryPage() {
             ) : rows.map((row, idx) => {
               const gross = parseInt(row.gross_score)
               const hdcp = parseInt(row.handicap_strokes) || 0
-              const net = row.gross_score !== '' && !isNaN(gross) ? Math.max(0, gross - hdcp) : null
+              const net = row.gross_score !== '' && !isNaN(gross) ? calcNetScore(gross, hdcp) : null
               return (
                 <tr key={row.league_member_id} className="hover:bg-gray-50">
                   <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">{row.full_name}</td>
