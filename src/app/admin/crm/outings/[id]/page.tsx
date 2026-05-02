@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = createAdminClient()
-  const { data } = await supabase.from('crm_outings').select('name').eq('id', id).single()
-  return { title: data?.name ? `${data.name} | CRM Outings` : 'Outing Detail' }
+  const { data } = await supabase.from('crm_outings').select('contact_name').eq('id', id).single()
+  return { title: data?.contact_name ? `${data.contact_name} | CRM Outings` : 'Outing Detail' }
 }
 
 export default async function OutingDetailPage({ params }: { params: Promise<{ id: string }> }) {
