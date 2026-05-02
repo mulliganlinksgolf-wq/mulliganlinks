@@ -16,8 +16,8 @@ describe('calcNetScore', () => {
     expect(calcNetScore(82, 0)).toBe(82)
   })
 
-  it('handles scratch golfer with no handicap', () => {
-    expect(calcNetScore(72, 0)).toBe(72)
+  it('clamps to 0 when handicap equals gross (exact boundary)', () => {
+    expect(calcNetScore(18, 18)).toBe(0)
   })
 
   it('never returns negative (clamps to 0)', () => {
