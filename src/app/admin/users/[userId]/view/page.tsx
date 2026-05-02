@@ -10,6 +10,8 @@ const tierLabels: Record<string, { label: string; color: string }> = {
   ace:    { label: 'Ace',     color: 'bg-[#1B4332]/10 text-[#1B4332]' },
 }
 
+export const metadata = { title: 'Member View' }
+
 export default async function ViewAsMemberPage({
   params,
 }: {

@@ -3,6 +3,13 @@ import { notFound } from 'next/navigation'
 import MemberDetailHeader from '@/components/admin/MemberDetailHeader'
 import MemberDetailTabs from '@/components/admin/MemberDetailTabs'
 
+export async function generateMetadata({ params }: { params: Promise<{ userId: string }> }) {
+  const { userId } = await params
+  const admin = createAdminClient()
+  const { data } = await admin.from('profiles').select('full_name').eq('id', userId).single()
+  return { title: data?.full_name ? `${data.full_name} | Members` : 'Member Detail' }
+}
+
 export default async function MemberDetailPage({
   params,
 }: {
