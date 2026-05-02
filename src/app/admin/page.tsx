@@ -50,8 +50,8 @@ export default async function AdminDashboardPage({
   ])
 
   const mrrHistory = buildMrrHistory(membershipsAll.data ?? [])
-  const newMembersDaily = buildDailyBuckets(recentProfiles.data ?? [], days > 90 ? 52 : 30)
-  const bookingVolumeDaily = buildDailyBuckets(recentBookings.data ?? [], days > 90 ? 52 : 30)
+  const newMembersDaily = buildDailyBuckets(recentProfiles.data ?? [], days)
+  const bookingVolumeDaily = buildDailyBuckets(recentBookings.data ?? [], days)
 
   const tierColor: Record<string, string> = {
     ace: 'bg-[#1B4332] text-[#FAF7F2]',
