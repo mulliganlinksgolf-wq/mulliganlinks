@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { SIDEBAR_NAV_ITEMS, BOTTOM_NAV_ITEMS, isNavItemActive } from '@/lib/nav'
 
 describe('SIDEBAR_NAV_ITEMS', () => {
-  it('has 6 items', () => {
-    expect(SIDEBAR_NAV_ITEMS).toHaveLength(6)
+  it('has 8 items', () => {
+    expect(SIDEBAR_NAV_ITEMS).toHaveLength(8)
   })
   it('first item is Dashboard with href /app and exact true', () => {
     expect(SIDEBAR_NAV_ITEMS[0]).toEqual({ href: '/app', label: 'Dashboard', icon: '⛳', exact: true })
