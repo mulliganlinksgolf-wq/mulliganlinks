@@ -60,17 +60,18 @@ export async function logRound({
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
-  // Verify caller is a course admin
-  const { data: admin } = await supabase
-    .from('course_admins')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('course_id', courseId)
-    .single()
-  if (!admin) return { error: 'Not authorized' }
-
-  // Get member tier
+  // Verify caller has access to this course (global admin, course_admin, or crm_course_user)
   const adminClient = createAdminClient()
+  const [
+    { data: profile },
+    { data: courseAdmin },
+    { data: courseUser },
+  ] = await Promise.all([
+    adminClient.from('profiles').select('is_admin').eq('id', user.id).single(),
+    adminClient.from('course_admins').select('id').eq('user_id', user.id).eq('course_id', courseId).single(),
+    adminClient.from('crm_course_users').select('id').eq('user_id', user.id).eq('course_id', courseId).single(),
+  ])
+  if (!profile?.is_admin && !courseAdmin && !courseUser) return { error: 'Not authorized' }
   const { data: membership } = await adminClient
     .from('memberships')
     .select('tier')
