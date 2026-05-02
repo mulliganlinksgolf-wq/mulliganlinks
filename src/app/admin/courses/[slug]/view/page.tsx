@@ -3,6 +3,13 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { TeeSheetGrid } from '@/components/course/TeeSheetGrid'
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const admin = createAdminClient()
+  const { data } = await admin.from('courses').select('name').eq('slug', slug).single()
+  return { title: data?.name ? `${data.name} | Course View` : 'Course View' }
+}
+
 export default async function ViewAsCoursePage({
   params,
   searchParams,
