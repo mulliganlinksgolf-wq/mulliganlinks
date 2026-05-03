@@ -2,8 +2,15 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendGolferWaitlistConfirmation } from '@/lib/resend'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 export async function joinGolferWaitlist(formData: FormData) {
+  const recaptchaToken = (formData.get('recaptcha_token') as string) ?? ''
+  const isHuman = await verifyRecaptcha(recaptchaToken)
+  if (!isHuman) {
+    return { error: 'reCAPTCHA verification failed. Please try again.' }
+  }
+
   const email = (formData.get('email') as string)?.toLowerCase().trim()
   const firstName = (formData.get('first_name') as string)?.trim()
   const lastName = (formData.get('last_name') as string)?.trim()

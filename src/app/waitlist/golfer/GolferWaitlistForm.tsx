@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useTransition, useRef } from 'react'
+import { useState, useTransition, useRef, useCallback } from 'react'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -9,6 +10,7 @@ import { joinGolferWaitlist } from './actions'
 type Course = { id: string; name: string }
 
 export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string; courses?: Course[] }) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const [selectedTier, setSelectedTier] = useState(tier)
   const [hearAboutUs, setHearAboutUs] = useState('')
   const [selectedCourseId, setSelectedCourseId] = useState('')
@@ -29,9 +31,13 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
     setShowCourseSuggestions(false)
   }
 
-  function handleSubmit(formData: FormData) {
+  const handleSubmit = useCallback(async (formData: FormData) => {
     setError(null)
     if (selectedCourseId) formData.set('selected_course_id', selectedCourseId)
+
+    const token = executeRecaptcha ? await executeRecaptcha('golfer_waitlist') : ''
+    formData.set('recaptcha_token', token)
+
     startTransition(async () => {
       const result = await joinGolferWaitlist(formData)
       if (result.success) {
@@ -41,7 +47,7 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
         setError(result.error ?? 'Something went wrong.')
       }
     })
-  }
+  }, [executeRecaptcha, selectedCourseId])
 
   const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-[#F4F1EA]/40"
 

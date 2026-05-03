@@ -2,8 +2,15 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendCourseWaitlistConfirmation, sendCourseAdminAlert } from '@/lib/resend'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 export async function joinCourseWaitlist(formData: FormData) {
+  const recaptchaToken = (formData.get('recaptcha_token') as string) ?? ''
+  const isHuman = await verifyRecaptcha(recaptchaToken)
+  if (!isHuman) {
+    return { error: 'reCAPTCHA verification failed. Please try again.' }
+  }
+
   const courseName = (formData.get('course_name') as string)?.trim()
   const contactName = (formData.get('contact_name') as string)?.trim()
   const contactRole = (formData.get('contact_role') as string)?.trim() || null

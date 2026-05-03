@@ -1,13 +1,15 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinCourseWaitlist } from './actions'
 
 export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: string }) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
   const searchParams = useSearchParams()
   const tier = searchParams.get('tier') ?? 'founding'
 
@@ -24,8 +26,10 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
       ? 2 * parseInt(avgGreenFee, 10) * 300
       : null
 
-  function handleSubmit(formData: FormData) {
+  const handleSubmit = useCallback(async (formData: FormData) => {
     setError(null)
+    const token = executeRecaptcha ? await executeRecaptcha('course_waitlist') : ''
+    formData.set('recaptcha_token', token)
     startTransition(async () => {
       const result = await joinCourseWaitlist(formData)
       if (result.success) {
@@ -35,7 +39,7 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
         setError(result.error ?? 'Something went wrong.')
       }
     })
-  }
+  }, [executeRecaptcha])
 
   const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
 
