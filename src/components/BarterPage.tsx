@@ -98,7 +98,7 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
               </h1>
 
               <p className="text-base leading-relaxed max-w-md mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
-                {content['barter.hero_subhead'] ?? "Drop in your numbers. We'll calculate the exact revenue GolfNow's barter model has extracted from your course — this year alone. No login. No email required."}
+                {content['barter.hero_subhead'] ?? "Drop in your numbers. We'll calculate the exact revenue GolfNow's barter model has cost your course — this year alone. No login. No email required."}
               </p>
 
               {/* Preset chips */}
