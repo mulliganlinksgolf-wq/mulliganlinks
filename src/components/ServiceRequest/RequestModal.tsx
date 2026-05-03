@@ -7,7 +7,7 @@ interface RequestModalProps {
   courseId: string
   bookingId: string | null
   onClose: () => void
-  onSubmitted: () => void
+  onSubmitted: (requestId: string) => void
 }
 
 export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: RequestModalProps) {
@@ -32,7 +32,8 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
         }),
       })
       if (!res.ok) throw new Error('Request failed')
-      onSubmitted()
+      const result = await res.json()
+      onSubmitted(result.id as string)
     } catch {
       setError(true)
     } finally {

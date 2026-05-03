@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { RequestModal } from './RequestModal'
 import { RequestConfirmation } from './RequestConfirmation'
 
@@ -22,6 +22,9 @@ function isWithinWindow(teeTime: string): boolean {
 export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonProps) {
   const [visible, setVisible] = useState(() => isWithinWindow(teeTime))
   const [uiState, setUiState] = useState<UIState>('idle')
+  const [pendingRequestId, setPendingRequestId] = useState<string | null>(null)
+  const [proShopOnIt, setProShopOnIt] = useState(false)
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -29,6 +32,36 @@ export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonPro
     }, 60_000)
     return () => clearInterval(interval)
   }, [teeTime])
+
+  // Poll for acknowledgment when we have a pending request ID
+  useEffect(() => {
+    if (!pendingRequestId) return
+
+    async function checkStatus() {
+      try {
+        const res = await fetch(`/api/service-requests/${pendingRequestId}/status`)
+        if (!res.ok) return
+        const data = await res.json() as { status: string }
+        if (data.status === 'acknowledged') {
+          setProShopOnIt(true)
+          if (pollRef.current) {
+            clearInterval(pollRef.current)
+            pollRef.current = null
+          }
+        }
+      } catch {
+        // Ignore network errors — will retry next interval
+      }
+    }
+
+    pollRef.current = setInterval(checkStatus, 10_000)
+    return () => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current)
+        pollRef.current = null
+      }
+    }
+  }, [pendingRequestId])
 
   if (!visible) return null
 
@@ -56,8 +89,18 @@ export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonPro
           courseId={courseId}
           bookingId={bookingId}
           onClose={() => setUiState('idle')}
-          onSubmitted={() => setUiState('confirmation')}
+          onSubmitted={(requestId: string) => {
+            setPendingRequestId(requestId)
+            setUiState('confirmation')
+          }}
         />
+      )}
+
+      {pendingRequestId && proShopOnIt && (
+        <div className="fixed bottom-24 left-4 right-4 bg-[#1B4332] text-white px-4 py-3 rounded-lg flex items-center gap-2 shadow-lg z-50">
+          <span>✓ The pro shop is on it.</span>
+          <button onClick={() => setProShopOnIt(false)} className="ml-auto text-white/70">✕</button>
+        </div>
       )}
     </>
   )

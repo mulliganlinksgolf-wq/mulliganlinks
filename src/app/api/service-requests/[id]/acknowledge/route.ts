@@ -33,7 +33,7 @@ export async function PATCH(
       })
       .eq('id', id)
       .eq('status', 'open')
-      .select('id, status, acknowledged_at')
+      .select('id, status, acknowledged_at, golfer_id')
       .maybeSingle()
 
     if (error) {
@@ -61,7 +61,38 @@ export async function PATCH(
       return NextResponse.json(existing)
     }
 
-    return NextResponse.json(data)
+    // Send push notification to golfer (fire-and-forget — never fail the response)
+    try {
+      const { data: tokenRow } = await admin
+        .from('push_tokens')
+        .select('token, platform')
+        .eq('user_id', data.golfer_id)
+        .maybeSingle()
+
+      if (tokenRow?.platform === 'expo') {
+        const pushRes = await fetch('https://exp.host/--/api/v2/push/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            to: tokenRow.token,
+            title: 'TeeAhead',
+            body: '✓ The pro shop is on it.',
+            data: { type: 'service_request_acknowledged', request_id: id },
+          }),
+        })
+        if (!pushRes.ok) {
+          console.error('[service-requests/acknowledge] Expo push failed', await pushRes.text())
+        }
+      }
+      // web push requires VAPID keys — skip for now
+
+      await admin.from('service_requests').update({ golfer_notified: true }).eq('id', id)
+    } catch (pushErr) {
+      console.error('[service-requests/acknowledge] Push notification error', pushErr)
+    }
+
+    const { golfer_id: _golfer_id, ...responseData } = data
+    return NextResponse.json(responseData)
   } catch (err) {
     console.error('[service-requests/acknowledge]', err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
