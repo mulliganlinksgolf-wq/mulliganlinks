@@ -198,7 +198,7 @@ export function PublicTeeTimeGrid({
       {/* TeeAhead footer */}
       <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
         <p className="text-xs text-gray-400">Powered by</p>
-        <Link href="https://teeahead.com" target="_blank" className="text-xs font-bold text-[#1B4332] hover:underline">
+        <Link href="https://teeahead.com" target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#1B4332] hover:underline">
           TeeAhead
         </Link>
       </div>

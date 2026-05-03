@@ -6,7 +6,7 @@ export async function proxy(request: NextRequest) {
 
   if (request.nextUrl.pathname.startsWith('/book/')) {
     // Allow /book/* to be embedded as iframes on course websites
-    response.headers.set('Content-Security-Policy', "frame-ancestors *")
+    response.headers.set('Content-Security-Policy', "frame-ancestors https:")
   } else {
     response.headers.set('X-Frame-Options', 'SAMEORIGIN')
     response.headers.set('Content-Security-Policy', "frame-ancestors 'self'")
