@@ -3,6 +3,7 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { calcListingExpiry, canCreateListing } from '@/lib/trading'
 
 // ─── Create Listing ───────────────────────────────────────────────────────────
@@ -118,16 +119,17 @@ export async function updateTradingSettings(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
-  const { data: isManager } = await supabase
-    .from('course_admins')
-    .select('id')
-    .eq('course_id', courseId)
-    .eq('user_id', user.id)
-    .maybeSingle()
+  // Check both course_admins and crm_course_users — same logic as requireManager
+  const admin = createAdminClient()
+  const [{ data: adminRow }, { data: crmRow }] = await Promise.all([
+    admin.from('course_admins').select('id').eq('course_id', courseId).eq('user_id', user.id).maybeSingle(),
+    admin.from('crm_course_users').select('id').eq('course_id', courseId).eq('user_id', user.id).maybeSingle(),
+  ])
 
-  if (!isManager) return { error: 'Not authorized' }
+  if (!adminRow && !crmRow) return { error: 'Not authorized' }
 
-  const { error } = await supabase
+  // Use admin client so RLS on courses table doesn't silently block the update
+  const { error } = await admin
     .from('courses')
     .update({ ...settings, updated_at: new Date().toISOString() })
     .eq('id', courseId)

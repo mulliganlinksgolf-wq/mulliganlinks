@@ -11,10 +11,10 @@ export default async function CourseTradingPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>
-  searchParams: Promise<{ saved?: string }>
+  searchParams: Promise<{ saved?: string; error?: string }>
 }) {
   const { slug } = await params
-  const { saved } = await searchParams
+  const { saved, error } = await searchParams
   await requireManager(slug)
 
   const supabase = await createClient()
@@ -56,10 +56,11 @@ export default async function CourseTradingPage({
 
   async function handleSettingsUpdate(formData: FormData) {
     'use server'
-    await updateTradingSettings(course!.id, {
+    const result = await updateTradingSettings(course!.id, {
       trading_enabled:           formData.get('trading_enabled') === 'on',
       trading_min_hours_before:  parseInt(formData.get('trading_min_hours_before') as string, 10),
     })
+    if (result.error) redirect(`/course/${slug}/trading?error=1`)
     redirect(`/course/${slug}/trading?saved=1`)
   }
 
@@ -75,6 +76,11 @@ export default async function CourseTradingPage({
       {saved === '1' && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
           <p className="text-emerald-700 text-sm font-semibold">✓ Settings saved</p>
+        </div>
+      )}
+      {error === '1' && (
+        <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+          <p className="text-red-700 text-sm font-semibold">Failed to save settings — you may not have permission to update this course.</p>
         </div>
       )}
 
