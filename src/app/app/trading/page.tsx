@@ -8,7 +8,7 @@ import { claimListing, cancelListing } from '@/app/actions/trading'
 export default async function TradingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ listed?: string; claimed?: string }>
+  searchParams: Promise<{ listed?: string; claimed?: string; error?: string }>
 }) {
   const sp = await searchParams
   const supabase = await createClient()
@@ -82,6 +82,12 @@ export default async function TradingPage({
           <p className="text-xs text-[#8FA889] mt-0.5">Show your booking confirmation at the pro shop.</p>
         </div>
       )}
+      {sp.error === 'taken' && (
+        <div className="rounded-xl px-4 py-3" style={{ background: '#163d2a' }}>
+          <p className="text-red-400 text-sm font-semibold">This time was just claimed by someone else.</p>
+          <p className="text-xs text-[#8FA889] mt-0.5">Check below for other available times.</p>
+        </div>
+      )}
 
       {/* Credit balance */}
       {creditCents > 0 && (
@@ -144,7 +150,8 @@ export default async function TradingPage({
             async function handleClaim() {
               'use server'
               const result = await claimListing(l.id)
-              if (!result.error) redirect('/app/trading?claimed=1')
+              if (result.error) redirect('/app/trading?error=taken')
+              else redirect('/app/trading?claimed=1')
             }
 
             return (

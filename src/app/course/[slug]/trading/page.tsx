@@ -8,10 +8,13 @@ import { updateTradingSettings } from '@/app/actions/trading'
 
 export default async function CourseTradingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>
+  searchParams: Promise<{ saved?: string }>
 }) {
   const { slug } = await params
+  const { saved } = await searchParams
   await requireManager(slug)
 
   const supabase = await createClient()
@@ -68,6 +71,12 @@ export default async function CourseTradingPage({
           Members can list tee times they can&apos;t use. Other members claim them. You keep your revenue — no refunds, no admin work.
         </p>
       </div>
+
+      {saved === '1' && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3">
+          <p className="text-emerald-700 text-sm font-semibold">✓ Settings saved</p>
+        </div>
+      )}
 
       {/* Settings */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">

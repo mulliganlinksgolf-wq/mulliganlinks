@@ -7,10 +7,13 @@ import { createListing } from '@/app/actions/trading'
 
 export default async function ListBookingPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ error?: string }>
 }) {
   const { id: bookingId } = await params
+  const { error: errorParam } = await searchParams
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
@@ -68,7 +71,8 @@ export default async function ListBookingPage({
   async function handleList() {
     'use server'
     const result = await createListing(bookingId)
-    if (!result.error) redirect('/app/trading?listed=1')
+    if (result.error) redirect(`/app/bookings/${bookingId}/list?error=1`)
+    else redirect('/app/trading?listed=1')
   }
 
   return (
@@ -92,6 +96,15 @@ export default async function ListBookingPage({
           Paid: {formatCredit(creditCents)}
         </p>
       </div>
+
+      {errorParam === '1' && (
+        <div className="rounded-xl p-4" style={{ background: '#163d2a', border: '1px solid #ef4444' }}>
+          <p className="text-red-400 text-sm font-semibold">Couldn't list this time</p>
+          <p className="text-xs text-[#8FA889] mt-1">
+            The course may have disabled trading, or this booking was already listed. Try again or contact support.
+          </p>
+        </div>
+      )}
 
       {existingListing ? (
         <div className="rounded-xl p-5" style={{ background: '#163d2a' }}>
