@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { MANAGER_ROLES } from '@/lib/courseRole'
+import { ServiceInboxWidget } from '@/components/ServiceInbox/ServiceInboxWidget'
 
 export default async function CourseAdminLayout({
   children,
@@ -18,7 +19,7 @@ export default async function CourseAdminLayout({
 
   const { data: course } = await supabase
     .from('courses')
-    .select('id, name, slug')
+    .select('id, name, slug, service_requests_enabled')
     .eq('slug', slug)
     .single()
 
@@ -86,6 +87,10 @@ export default async function CourseAdminLayout({
       <main className="max-w-7xl mx-auto px-6 py-6">
         {children}
       </main>
+      <ServiceInboxWidget
+        courseId={course.id}
+        serviceRequestsEnabled={course.service_requests_enabled ?? true}
+      />
     </div>
   )
 }

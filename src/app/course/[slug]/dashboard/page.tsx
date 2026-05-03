@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { requireManager } from '@/lib/courseRole'
 import { ReferralWidget } from './_components/ReferralWidget'
-import { ServiceInboxWidget } from '@/components/ServiceInbox/ServiceInboxWidget'
 
 export default async function CourseDashboardPage({
   params,
@@ -16,7 +15,7 @@ export default async function CourseDashboardPage({
 
   const { data: course } = await supabase
     .from('courses')
-    .select('id, name, referral_code, service_requests_enabled')
+    .select('id, name, referral_code')
     .eq('slug', slug)
     .single()
   if (!course) notFound()
@@ -139,11 +138,6 @@ export default async function CourseDashboardPage({
         </div>
       </div>
 
-      {/* Service requests — floating chat widget */}
-      <ServiceInboxWidget
-        courseId={course.id}
-        serviceRequestsEnabled={course.service_requests_enabled ?? true}
-      />
     </div>
   )
 }
