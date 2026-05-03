@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { requireManager } from '@/lib/courseRole'
+import { ReferralWidget } from './_components/ReferralWidget'
 
 export default async function CourseDashboardPage({
   params,
@@ -14,7 +15,7 @@ export default async function CourseDashboardPage({
 
   const { data: course } = await supabase
     .from('courses')
-    .select('id, name')
+    .select('id, name, referral_code')
     .eq('slug', slug)
     .single()
   if (!course) notFound()
@@ -108,6 +109,9 @@ export default async function CourseDashboardPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* Referral program */}
+      <ReferralWidget courseId={course.id} slug={slug} referralCode={course.referral_code} />
 
       {/* Top members */}
       <div>

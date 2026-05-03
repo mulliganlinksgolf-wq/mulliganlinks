@@ -12,7 +12,9 @@ type Tier = {
   features: string[]
 }
 
-export function TierPicker({ tiers, initialTier }: { tiers: Tier[]; initialTier: string }) {
+type Course = { id: string; name: string }
+
+export function TierPicker({ tiers, initialTier, courses }: { tiers: Tier[]; initialTier: string; courses: Course[] }) {
   const [selectedTier, setSelectedTier] = useState(initialTier)
 
   return (
@@ -92,7 +94,7 @@ export function TierPicker({ tiers, initialTier }: { tiers: Tier[]; initialTier:
             <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">GOLFER WAITLIST</p>
             <p className="text-lg font-semibold text-[#F4F1EA] mb-8">Claim your spot. Earn every round.</p>
             <Suspense fallback={null}>
-              <GolferWaitlistForm tier={selectedTier} />
+              <GolferWaitlistForm tier={selectedTier} courses={courses} />
             </Suspense>
           </div>
         </div>

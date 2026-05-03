@@ -4,6 +4,10 @@
     {
       "path": "/api/crm/stale-leads",
       "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/referral-payouts",
+      "schedule": "0 9 1 * *"
     }
   ],
   "redirects": [

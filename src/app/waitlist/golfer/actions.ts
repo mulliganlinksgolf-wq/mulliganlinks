@@ -12,7 +12,7 @@ export async function joinGolferWaitlist(formData: FormData) {
   const roundsPerYear = (formData.get('rounds_per_year') as string)?.trim() || null
   const currentMembership = (formData.get('current_membership') as string)?.trim() || null
   const interestedTier = (formData.get('interested_tier') as string)?.trim() || null
-  const referralSource = (formData.get('referral_source') as string)?.trim() || null
+  const hearAboutUs = (formData.get('hear_about_us') as string)?.trim() || null
 
   if (!email || !email.includes('@')) {
     return { error: 'Please enter a valid email address.' }
@@ -35,7 +35,8 @@ export async function joinGolferWaitlist(formData: FormData) {
     rounds_per_year: roundsPerYear,
     current_membership: currentMembership,
     interested_tier: interestedTier,
-    referral_source: referralSource,
+    // Store the structured hear_about_us value in referral_source for analytics
+    referral_source: hearAboutUs,
   })
 
   if (error) {

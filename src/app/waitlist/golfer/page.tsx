@@ -4,6 +4,7 @@ import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { TierPicker } from './TierPicker'
 import { createClient } from '@/lib/supabase/server'
+import { captureReferralCode } from '@/lib/referrals/capture'
 
 export const metadata: Metadata = {
   title: 'Join the Golfer Waitlist — TeeAhead',
@@ -58,14 +59,16 @@ const tiers = [
 export default async function GolferWaitlistPage({
   searchParams,
 }: {
-  searchParams: Promise<{ tier?: string }>
+  searchParams: Promise<{ tier?: string; ref?: string }>
 }) {
-  const { tier } = await searchParams
+  const { tier, ref } = await searchParams
+  await captureReferralCode(ref ?? null)
 
   const supabase = await createClient()
-  const [{ count: golferCount }, { data: contentRows }] = await Promise.all([
+  const [{ count: golferCount }, { data: contentRows }, { data: activeCourses }] = await Promise.all([
     supabase.from('golfer_waitlist').select('*', { count: 'exact', head: true }),
     supabase.from('content_blocks').select('key, value').ilike('key', 'waitlist.%'),
+    supabase.from('courses').select('id, name').eq('status', 'active').order('name'),
   ])
   const c: Record<string, string> = Object.fromEntries(
     (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
@@ -199,7 +202,7 @@ export default async function GolferWaitlistPage({
       </section>
 
       {/* ── Tier cards + Form ────────────────────────────────── */}
-      <TierPicker tiers={tiers} initialTier={tier ?? 'fairway'} />
+      <TierPicker tiers={tiers} initialTier={tier ?? 'fairway'} courses={activeCourses ?? []} />
 
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
