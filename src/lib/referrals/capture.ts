@@ -22,14 +22,20 @@ export async function captureReferralCode(code: string | null) {
 
   if (!data) return // silently ignore invalid or inactive codes
 
-  const cookieStore = await cookies()
-  cookieStore.set(COOKIE_NAME, code, {
-    maxAge: COOKIE_MAX_AGE,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-  })
+  // cookies().set() throws in Server Components — only works in Route Handlers/Actions.
+  // Wrap so a direct ?ref= on a page never crashes the render.
+  try {
+    const cookieStore = await cookies()
+    cookieStore.set(COOKIE_NAME, code, {
+      maxAge: COOKIE_MAX_AGE,
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+    })
+  } catch {
+    // swallow — /join route handler is the canonical path that sets the cookie
+  }
 }
 
 /** Read the active referral code from cookie (server-side). */
