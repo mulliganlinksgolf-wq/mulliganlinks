@@ -33,7 +33,22 @@ export async function PATCH(
 
     // Idempotent: if no rows were updated (already acknowledged, not found, or no RLS access)
     if (!data) {
-      return NextResponse.json({ id, status: 'acknowledged' })
+      const { data: existing, error: fetchError } = await supabase
+        .from('service_requests')
+        .select('id, status, acknowledged_at')
+        .eq('id', id)
+        .maybeSingle()
+
+      if (fetchError) {
+        console.error('[service-requests/acknowledge]', fetchError)
+        return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+      }
+
+      if (!existing) {
+        return NextResponse.json({ error: 'Not found' }, { status: 404 })
+      }
+
+      return NextResponse.json(existing)
     }
 
     return NextResponse.json(data)
