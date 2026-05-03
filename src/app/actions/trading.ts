@@ -118,6 +118,15 @@ export async function updateTradingSettings(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
+  const { data: isManager } = await supabase
+    .from('course_admins')
+    .select('id')
+    .eq('course_id', courseId)
+    .eq('user_id', user.id)
+    .maybeSingle()
+
+  if (!isManager) return { error: 'Not authorized' }
+
   const { error } = await supabase
     .from('courses')
     .update({ ...settings, updated_at: new Date().toISOString() })

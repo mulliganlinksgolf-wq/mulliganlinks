@@ -1,5 +1,5 @@
 // src/app/course/[slug]/trading/page.tsx
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireManager } from '@/lib/courseRole'
@@ -57,6 +57,7 @@ export default async function CourseTradingPage({
       trading_enabled:           formData.get('trading_enabled') === 'on',
       trading_min_hours_before:  parseInt(formData.get('trading_min_hours_before') as string, 10),
     })
+    redirect(`/course/${slug}/trading?saved=1`)
   }
 
   return (
