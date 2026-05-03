@@ -271,17 +271,18 @@ export default function BestTeeSheetSoftwarePage() {
                     <th className="text-center px-4 py-4 font-semibold">Barter?</th>
                     <th className="text-center px-4 py-4 font-semibold">Loyalty?</th>
                     <th className="text-center px-4 py-4 font-semibold">Leagues?</th>
+                    <th className="text-center px-4 py-4 font-semibold">In-Round Requests?</th>
                     <th className="text-center px-4 py-4 font-semibold">Rev Share?</th>
                     <th className="text-center px-4 py-4 font-semibold">Contract?</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5">
                   {[
-                    { name: 'TeeAhead', cost: '$0 / $349/mo', barter: 'None', loyalty: 'Built in', leagues: '✓ Built in', revShare: '✓ Yes', contract: 'None' },
-                    { name: 'foreUP', cost: '$400–$800/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', revShare: 'No', contract: 'Annual' },
-                    { name: 'Lightspeed Golf', cost: '$300–$700/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', revShare: 'No', contract: 'Annual' },
-                    { name: 'Club Caddie', cost: '$200–$500/mo', barter: 'None', loyalty: 'None', leagues: 'None', revShare: 'No', contract: 'Annual' },
-                    { name: 'GolfNow', cost: '$0 + ~$94K/yr barter', barter: '~2/day', loyalty: 'GolfPass+ (separate)', leagues: 'None', revShare: 'No', contract: 'Yes' },
+                    { name: 'TeeAhead', cost: '$0 / $349/mo', barter: 'None', loyalty: 'Built in', leagues: '✓ Built in', inRound: '✓ Built in', revShare: '✓ Yes', contract: 'None' },
+                    { name: 'foreUP', cost: '$400–$800/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', inRound: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'Lightspeed Golf', cost: '$300–$700/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', inRound: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'Club Caddie', cost: '$200–$500/mo', barter: 'None', loyalty: 'None', leagues: 'None', inRound: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'GolfNow', cost: '$0 + ~$94K/yr barter', barter: '~2/day', loyalty: 'GolfPass+ (separate)', leagues: 'None', inRound: 'None', revShare: 'No', contract: 'Yes' },
                   ].map((row, i) => (
                     <tr key={row.name} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
                       <td className="px-5 py-4 font-semibold text-[#1A1A1A]">{row.name}</td>
@@ -289,6 +290,7 @@ export default function BestTeeSheetSoftwarePage() {
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.barter}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.loyalty}</td>
                       <td className={`px-4 py-4 text-center font-medium ${row.leagues.startsWith('✓') ? 'text-[#1B4332]' : 'text-[#6B7770]'}`}>{row.leagues}</td>
+                      <td className={`px-4 py-4 text-center font-medium ${row.inRound.startsWith('✓') ? 'text-[#1B4332]' : 'text-[#6B7770]'}`}>{row.inRound}</td>
                       <td className={`px-4 py-4 text-center font-medium ${row.revShare.startsWith('✓') ? 'text-[#1B4332]' : 'text-[#6B7770]'}`}>{row.revShare}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.contract}</td>
                     </tr>
