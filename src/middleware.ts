@@ -1,7 +1,7 @@
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = await updateSession(request)
 
   // Allow /book/* to be embedded as iframes on course websites
