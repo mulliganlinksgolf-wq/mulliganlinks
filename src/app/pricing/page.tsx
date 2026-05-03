@@ -236,16 +236,45 @@ export default async function PricingPage() {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-10">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-          <nav className="flex items-center gap-6 text-sm text-[#F4F1EA]/60">
-            <Link href="/" className="hover:text-[#F4F1EA] transition-colors">Home</Link>
-            <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">Golfer Waitlist</Link>
-            <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Course Waitlist</Link>
-          </nav>
-          <p className="text-xs text-[#F4F1EA]/30">© 2026 TeeAhead, LLC.</p>
+      {/* ── Footer ────────────────────────────────────────────── */}
+      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
+
+            {/* Column 1 — Brand */}
+            <div className="space-y-3">
+              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
+              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
+              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
+            </div>
+
+            {/* Column 2 — For Courses */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
+                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
+                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
+                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
+              </nav>
+            </div>
+
+            {/* Column 3 — Company */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
+                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
+                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
+                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
+              </nav>
+            </div>
+
+          </div>
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
+            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+          </div>
         </div>
       </footer>
     </div>
