@@ -53,6 +53,11 @@ const features = [
     body: "Members who can't make a booked tee time can list it on the exchange. Another member claims it — the original booker earns TeeAhead platform credit automatically. No course involvement, no cash, no Stripe.",
   },
   {
+    icon: '🔔',
+    title: 'In-Round Service Requests',
+    body: 'Golfers tap "Need something?" mid-round to request a beverage cart, report a cart issue, or flag a pace concern. The pro shop gets a real-time alert and taps "On it" — the golfer is notified instantly.',
+  },
+  {
     icon: '💰',
     title: 'Revenue Share Back to Your Course',
     body: 'TeeAhead shares platform revenue with partner courses based on booking volume. Your course earns a share of the network — not just a software license.',
@@ -67,6 +72,7 @@ const comparison = [
   { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
   { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
   { feature: 'Member tee time exchange', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
+  { feature: 'In-round service requests', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
   { feature: 'Revenue share to course', teeahead: 'Yes', foreup: 'No', lightspeed: 'No', golfnow: 'No' },
   { feature: 'Stripe-native payments', teeahead: 'Yes', foreup: 'No (own processor)', lightspeed: 'Yes', golfnow: 'No' },
   { feature: 'Revenue & accounting reports', teeahead: 'Yes — revenue, rounds, GL, waitlist', foreup: 'Yes', lightspeed: 'Yes', golfnow: 'Limited' },

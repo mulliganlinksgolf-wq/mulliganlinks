@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { requireManager } from '@/lib/courseRole'
 import { ReferralWidget } from './_components/ReferralWidget'
+import { InboxPanel } from '@/components/ServiceInbox/InboxPanel'
 
 export default async function CourseDashboardPage({
   params,
@@ -136,6 +137,12 @@ export default async function CourseDashboardPage({
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Service requests */}
+      <div>
+        <h2 className="text-sm font-semibold text-[#1A1A1A] mb-3 uppercase tracking-wide">Service Requests</h2>
+        <InboxPanel courseId={course.id} />
       </div>
     </div>
   )

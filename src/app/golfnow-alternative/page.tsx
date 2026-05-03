@@ -210,6 +210,7 @@ export default async function GolfNowAlternativePage({
                     { feature: 'Golfer loyalty program', them: 'GolfPass+ (your competitor)', us: 'Branded to your network' },
                     { feature: 'League management', them: 'None', us: 'Built in (9 & 18 hole)' },
                     { feature: 'Member tee time exchange', them: 'None', us: 'Built in' },
+                    { feature: 'In-round service requests', them: 'None', us: 'Built in' },
                     { feature: 'Accounting & revenue reports', them: 'Limited', us: 'Full GL-ready reports' },
                     { feature: 'Discount anchoring', them: 'Yes — erodes rack rates', us: 'No discounting' },
                     { feature: 'Contract lock-in', them: 'Yes', us: 'None' },
