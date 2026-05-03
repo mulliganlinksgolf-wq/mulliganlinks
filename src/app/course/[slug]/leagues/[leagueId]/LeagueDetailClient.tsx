@@ -211,14 +211,14 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
               <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs font-medium">
                 <button
                   type="button"
-                  onClick={() => { setAddMode('member'); setAddMemberError(null) }}
+                  onClick={() => { setAddMode('member'); setAddMemberError(null); setGuestName(''); setNewHandicap('0') }}
                   className={`px-3 py-1.5 transition-colors ${addMode === 'member' ? 'bg-[#1B4332] text-white' : 'bg-white text-[#6B7770] hover:text-[#1A1A1A]'}`}
                 >
                   TeeAhead member
                 </button>
                 <button
                   type="button"
-                  onClick={() => { setAddMode('guest'); setAddMemberError(null) }}
+                  onClick={() => { setAddMode('guest'); setAddMemberError(null); setMemberSearch(''); setSelectedPlayer(null); setSearchResults([]); setNewHandicap('0') }}
                   className={`px-3 py-1.5 transition-colors ${addMode === 'guest' ? 'bg-[#1B4332] text-white' : 'bg-white text-[#6B7770] hover:text-[#1A1A1A]'}`}
                 >
                   Guest

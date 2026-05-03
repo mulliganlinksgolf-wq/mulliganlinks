@@ -29,7 +29,7 @@ export default async function LeagueDetailPage({
   ] = await Promise.all([
     admin
       .from('league_members')
-      .select('id, user_id, handicap, joined_at, status, profiles(full_name)')
+      .select('id, user_id, guest_name, handicap, joined_at, status, profiles(full_name)')
       .eq('league_id', leagueId)
       .order('joined_at'),
     admin
@@ -47,7 +47,7 @@ export default async function LeagueDetailPage({
     id: m.id,
     user_id: m.user_id,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    full_name: (m.profiles as any)?.full_name ?? '—',
+    full_name: (m.profiles as any)?.full_name ?? (m as any).guest_name ?? '—',
     handicap: m.handicap,
     status: m.status,
     joined_at: m.joined_at,
