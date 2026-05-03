@@ -63,7 +63,7 @@ describe('PublicTeeTimeGrid', () => {
   it('filters to afternoon tee times when Afternoon filter selected', async () => {
     const user = userEvent.setup()
     const morning = makeTeeTime({ id: 'morning', scheduled_at: `${BASE_DATE}T10:00:00+00:00`, base_price: 45 })
-    const afternoon = makeTeeTime({ id: 'afternoon', scheduled_at: `${BASE_DATE}T14:00:00+00:00`, base_price: 55 })
+    const afternoon = makeTeeTime({ id: 'afternoon', scheduled_at: `${BASE_DATE}T18:00:00+00:00`, base_price: 55 })
 
     render(
       <PublicTeeTimeGrid

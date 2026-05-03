@@ -19,10 +19,7 @@ function formatTime(iso: string) {
 }
 
 function localHour(iso: string) {
-  // Extract hour from ISO string without timezone conversion
-  // '2026-05-10T14:00:00+00:00' -> 14
-  const match = iso.match(/T(\d{2}):\d{2}:\d{2}/)
-  return match ? parseInt(match[1]) : 0
+  return parseInt(new Date(iso).toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: TZ }))
 }
 
 function formatDateLabel(s: string) {
