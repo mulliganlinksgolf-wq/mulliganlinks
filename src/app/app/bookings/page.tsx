@@ -22,46 +22,58 @@ export default async function BookingsPage() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const BookingRow = ({ b, isUpcoming = false }: { b: any; isUpcoming?: boolean }) => (
-    <Link
-      href={`/app/bookings/${b.id}`}
-      className="block border-b border-[#1d4c36] last:border-0 hover:bg-[#333]/30 transition-colors"
-    >
-      <div className="px-4 py-3 flex items-center justify-between">
-        <div>
-          <p className="font-semibold text-white text-sm">
-            {b.tee_times?.courses?.name ?? 'Course'}
-          </p>
-          <p className="text-xs mt-0.5" style={{ color: isUpcoming ? '#8FA889' : '#aaa' }}>
-            {new Date(b.tee_times?.scheduled_at).toLocaleDateString('en-US', {
-              weekday: 'short',
-              month: 'short',
-              day: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-            })}{' '}
-            · {b.players} player{b.players !== 1 ? 's' : ''}
-          </p>
+    <div className="border-b border-[#1d4c36] last:border-0">
+      <Link
+        href={`/app/bookings/${b.id}`}
+        className="block hover:bg-[#333]/30 transition-colors"
+      >
+        <div className="px-4 py-3 flex items-center justify-between">
+          <div>
+            <p className="font-semibold text-white text-sm">
+              {b.tee_times?.courses?.name ?? 'Course'}
+            </p>
+            <p className="text-xs mt-0.5" style={{ color: isUpcoming ? '#8FA889' : '#aaa' }}>
+              {new Date(b.tee_times?.scheduled_at).toLocaleDateString('en-US', {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+              })}{' '}
+              · {b.players} player{b.players !== 1 ? 's' : ''}
+            </p>
+          </div>
+          <div className="text-right">
+            <p className="font-semibold text-white text-sm">
+              ${(b.total_paid as number).toFixed(2)}
+            </p>
+            <span
+              className="text-[10px]"
+              style={{
+                color:
+                  b.status === 'confirmed'
+                    ? '#8FA889'
+                    : b.status === 'completed'
+                    ? '#aaa'
+                    : '#ef4444',
+              }}
+            >
+              {b.status}
+            </span>
+          </div>
         </div>
-        <div className="text-right">
-          <p className="font-semibold text-white text-sm">
-            ${(b.total_paid as number).toFixed(2)}
-          </p>
-          <span
-            className="text-[10px]"
-            style={{
-              color:
-                b.status === 'confirmed'
-                  ? '#8FA889'
-                  : b.status === 'completed'
-                  ? '#aaa'
-                  : '#ef4444',
-            }}
+      </Link>
+      {isUpcoming && b.status === 'confirmed' && (
+        <div className="px-4 pb-2">
+          <Link
+            href={`/app/bookings/${b.id}/list`}
+            className="text-[10px] text-[#8FA889] hover:text-white transition-colors"
           >
-            {b.status}
-          </span>
+            Can&apos;t make it? List this time →
+          </Link>
         </div>
-      </div>
-    </Link>
+      )}
+    </div>
   )
 
   return (
