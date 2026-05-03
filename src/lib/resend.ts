@@ -380,3 +380,39 @@ export async function sendFoundingPartnerApproval({
     `,
   })
 }
+
+export async function sendReferralAttributionAlert({
+  courseEmails,
+  golferFirstName,
+  tier,
+  revShareDollars,
+}: {
+  courseEmails: string[]
+  golferFirstName: string
+  tier: string
+  revShareDollars: number
+}) {
+  const client = getResend()
+  if (!client) return
+
+  const tierLabel = tier === 'eagle' ? 'Eagle ($89/yr)' : tier === 'ace' ? 'Ace ($159/yr)' : tier
+  const dollarStr = `$${revShareDollars.toFixed(2)}`
+
+  await client.emails.send({
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: courseEmails,
+    subject: `${golferFirstName} joined TeeAhead through your referral!`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+        <h2 style="color: #0F3D2E;">Referral signup: ${golferFirstName}</h2>
+        <p>${golferFirstName} just signed up as a <strong>${tierLabel}</strong> member through your referral link.</p>
+        <p>You'll earn <strong>${dollarStr}</strong> on the 1st of next month — and every month for 12 months.</p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
+        <p style="color: #6B7770; font-size: 13px;">
+          View your referral dashboard at teeahead.com/course/{your-slug}/referrals
+        </p>
+        <p style="color: #6B7770; font-size: 12px;">TeeAhead · teeahead.com</p>
+      </div>
+    `,
+  })
+}

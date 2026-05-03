@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { GolfnowAlternativeSchema } from '@/components/GolfnowAlternativeSchema'
 import { createClient } from '@/lib/supabase/server'
+import { captureReferralCode } from '@/lib/referrals/capture'
 
 export const metadata: Metadata = {
   title: 'Best GolfNow Alternative for Courses & Golfers',
@@ -13,7 +14,14 @@ export const metadata: Metadata = {
   },
 }
 
-export default async function GolfNowAlternativePage() {
+export default async function GolfNowAlternativePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>
+}) {
+  const params = await searchParams
+  await captureReferralCode(params.ref ?? null)
+
   const supabase = await createClient()
   const { data: contentRows } = await supabase
     .from('content_blocks')

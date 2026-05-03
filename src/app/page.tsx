@@ -8,6 +8,7 @@ import { FadeIn } from '@/components/FadeIn'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { createClient } from '@/lib/supabase/server'
 import { FoundersScorecard } from '@/components/FoundersScorecard'
+import { captureReferralCode } from '@/lib/referrals/capture'
 import { FoundingPartnerProgress } from '@/components/FoundingPartnerProgress'
 import { HomepageFaq } from '@/components/HomepageFaq'
 import { HomepageFaqSchema } from '@/components/HomepageFaqSchema'
@@ -18,7 +19,14 @@ export const metadata: Metadata = {
     'TeeAhead is free tee sheet software for golf courses with no barter and no commissions, paired with a golfer loyalty membership that beats GolfPass+ for $89/yr. Metro Detroit launch.',
 }
 
-export default async function HomePage() {
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>
+}) {
+  const params = await searchParams
+  await captureReferralCode(params.ref ?? null)
+
   const supabase = await createClient()
   const [{ data: counter }, { data: contentRows }, { count: golferCount }] = await Promise.all([
     supabase.from('founding_partner_counter').select('count, cap').single(),

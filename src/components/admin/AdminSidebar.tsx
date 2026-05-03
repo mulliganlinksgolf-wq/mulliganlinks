@@ -36,6 +36,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         />
 
         <SidebarSection label="Reports" />
+        <SidebarItem href="/admin/referrals" icon="🔗" label="Referrals" active={pathname.startsWith('/admin/referrals')} />
         <SidebarItem href="/admin/reports/financial" icon="💰" label="Financial" active={pathname.startsWith('/admin/reports/financial')} />
         <SidebarItem href="/admin/reports/members" icon="📈" label="Members" active={pathname.startsWith('/admin/reports/members')} />
         <SidebarItem href="/admin/reports/courses" icon="🏌️" label="Courses" active={pathname.startsWith('/admin/reports/courses')} />

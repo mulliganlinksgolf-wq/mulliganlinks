@@ -1,18 +1,37 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinGolferWaitlist } from './actions'
 
-export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
+type Course = { id: string; name: string }
+
+export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string; courses?: Course[] }) {
   const [selectedTier, setSelectedTier] = useState(tier)
+  const [hearAboutUs, setHearAboutUs] = useState('')
+  const [selectedCourseId, setSelectedCourseId] = useState('')
+  const [courseSearch, setCourseSearch] = useState('')
+  const [showCourseSuggestions, setShowCourseSuggestions] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const [submitted, setSubmitted] = useState<string | null>(null)
+  const courseInputRef = useRef<HTMLInputElement>(null)
+
+  const filteredCourses = courseSearch.length >= 1
+    ? courses.filter(c => c.name.toLowerCase().includes(courseSearch.toLowerCase())).slice(0, 8)
+    : courses.slice(0, 8)
+
+  function handleCourseSelect(course: Course) {
+    setSelectedCourseId(course.id)
+    setCourseSearch(course.name)
+    setShowCourseSuggestions(false)
+  }
+
   function handleSubmit(formData: FormData) {
     setError(null)
+    if (selectedCourseId) formData.set('selected_course_id', selectedCourseId)
     startTransition(async () => {
       const result = await joinGolferWaitlist(formData)
       if (result.success) {
@@ -106,6 +125,77 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
         <p className="text-xs text-[#F4F1EA]/60">We use this to prioritize by metro area.</p>
       </div>
 
+      {/* ── How did you hear about us? ─────────────────────── */}
+      <div className="space-y-3 pt-2 border-t border-white/10">
+        <div className="space-y-1.5">
+          <Label htmlFor="hear_about_us" className="text-[#F4F1EA]">How did you hear about us?</Label>
+          <select
+            id="hear_about_us"
+            name="hear_about_us"
+            value={hearAboutUs}
+            onChange={e => {
+              setHearAboutUs(e.target.value)
+              if (e.target.value !== 'my_home_course') {
+                setSelectedCourseId('')
+                setCourseSearch('')
+              }
+            }}
+            disabled={isPending}
+            className={selectClassName}
+          >
+            <option value="">Select…</option>
+            <option value="my_home_course">My home course</option>
+            <option value="friend">A friend</option>
+            <option value="online_search">Online search</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        {/* Course picker — shown only when "My home course" is selected */}
+        {hearAboutUs === 'my_home_course' && (
+          <div className="space-y-1.5">
+            <Label htmlFor="course_search" className="text-[#F4F1EA]">Which course?</Label>
+            <div className="relative">
+              <Input
+                id="course_search"
+                ref={courseInputRef}
+                value={courseSearch}
+                onChange={e => {
+                  setCourseSearch(e.target.value)
+                  setSelectedCourseId('')
+                  setShowCourseSuggestions(true)
+                }}
+                onFocus={() => setShowCourseSuggestions(true)}
+                onBlur={() => setTimeout(() => setShowCourseSuggestions(false), 150)}
+                disabled={isPending}
+                placeholder="Search courses…"
+                autoComplete="off"
+                className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+              />
+              {showCourseSuggestions && filteredCourses.length > 0 && (
+                <ul className="absolute z-50 w-full mt-1 bg-[#0F3D2E] border border-white/20 rounded-md shadow-lg max-h-48 overflow-auto">
+                  {filteredCourses.map(course => (
+                    <li key={course.id}>
+                      <button
+                        type="button"
+                        className="w-full text-left px-3 py-2 text-sm text-[#F4F1EA] hover:bg-white/10 transition-colors"
+                        onMouseDown={() => handleCourseSelect(course)}
+                      >
+                        {course.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            {/* Legal disclosure required by plan */}
+            <p className="text-xs text-[#F4F1EA]/60">
+              Your home course earns 10% from your first year of membership. <a href="/terms" className="underline">Terms apply.</a>
+            </p>
+          </div>
+        )}
+      </div>
+
       <Button
         type="submit"
         disabled={isPending}
@@ -121,7 +211,7 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
         </p>
 
         <div className="space-y-1.5">
-          <Label htmlFor="home_course" className="text-[#F4F1EA]">Home course</Label>
+          <Label htmlFor="home_course" className="text-[#F4F1EA]">Home course name</Label>
           <Input
             id="home_course"
             name="home_course"
@@ -177,17 +267,6 @@ export function GolferWaitlistForm({ tier = '' }: { tier?: string }) {
             ))}
           </div>
         </fieldset>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="referral_source" className="text-[#F4F1EA]">Where did you hear about us?</Label>
-          <Input
-            id="referral_source"
-            name="referral_source"
-            disabled={isPending}
-            placeholder="Instagram, friend, golf course, etc."
-            className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-          />
-        </div>
       </div>
     </form>
   )
