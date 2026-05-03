@@ -1,7 +1,7 @@
 // src/app/course/[slug]/leagues/[leagueId]/LeagueDetailClient.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { calcStandingsRank, formatHoles, type StandingRow } from '@/lib/leagues'
+import { searchProfiles, addLeagueMember, addGuestMember, type ProfileResult } from './actions'
 
 interface Member {
   id: string
@@ -54,7 +55,73 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
   const [sessionError, setSessionError] = useState<string | null>(null)
   const [statusLoading, setStatusLoading] = useState(false)
 
+  // Add member state
+  const [addMode, setAddMode] = useState<'member' | 'guest'>('member')
+  const [memberSearch, setMemberSearch] = useState('')
+  const [searchResults, setSearchResults] = useState<ProfileResult[]>([])
+  const [searchError, setSearchError] = useState<string | null>(null)
+  const [selectedPlayer, setSelectedPlayer] = useState<ProfileResult | null>(null)
+  const [guestName, setGuestName] = useState('')
+  const [newHandicap, setNewHandicap] = useState('0')
+  const [addMemberError, setAddMemberError] = useState<string | null>(null)
+  const [isSearching, startSearchTransition] = useTransition()
+  const [isAdding, startAddTransition] = useTransition()
+
   const ranked = calcStandingsRank(standings)
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault()
+    setSearchError(null)
+    setSelectedPlayer(null)
+    startSearchTransition(async () => {
+      const { results, error } = await searchProfiles(memberSearch, league.id, slug)
+      setSearchResults(results)
+      if (error) setSearchError(error)
+    })
+  }
+
+  function handleSelectPlayer(p: ProfileResult) {
+    setSelectedPlayer(p)
+    setSearchResults([])
+    setMemberSearch(p.full_name)
+    setAddMemberError(null)
+  }
+
+  function handleAddMember(e: React.FormEvent) {
+    e.preventDefault()
+    if (!selectedPlayer) return
+    setAddMemberError(null)
+    startAddTransition(async () => {
+      const hdcp = parseInt(newHandicap, 10)
+      const { error } = await addLeagueMember(league.id, selectedPlayer.id, isNaN(hdcp) ? 0 : hdcp, slug)
+      if (error) {
+        setAddMemberError(error)
+      } else {
+        setMemberSearch('')
+        setSelectedPlayer(null)
+        setNewHandicap('0')
+        setSearchResults([])
+        router.refresh()
+      }
+    })
+  }
+
+  function handleAddGuest(e: React.FormEvent) {
+    e.preventDefault()
+    if (!guestName.trim()) return
+    setAddMemberError(null)
+    startAddTransition(async () => {
+      const hdcp = parseInt(newHandicap, 10)
+      const { error } = await addGuestMember(league.id, guestName, isNaN(hdcp) ? 0 : hdcp, slug)
+      if (error) {
+        setAddMemberError(error)
+      } else {
+        setGuestName('')
+        setNewHandicap('0')
+        router.refresh()
+      }
+    })
+  }
 
   async function handleAddSession(e: React.FormEvent) {
     e.preventDefault()
@@ -137,6 +204,100 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
       {/* ROSTER TAB */}
       {tab === 'roster' && (
         <div className="space-y-4">
+          {/* Add member form */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold text-[#1A1A1A]">Add Member</h2>
+              <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs font-medium">
+                <button
+                  type="button"
+                  onClick={() => { setAddMode('member'); setAddMemberError(null) }}
+                  className={`px-3 py-1.5 transition-colors ${addMode === 'member' ? 'bg-[#1B4332] text-white' : 'bg-white text-[#6B7770] hover:text-[#1A1A1A]'}`}
+                >
+                  TeeAhead member
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setAddMode('guest'); setAddMemberError(null) }}
+                  className={`px-3 py-1.5 transition-colors ${addMode === 'guest' ? 'bg-[#1B4332] text-white' : 'bg-white text-[#6B7770] hover:text-[#1A1A1A]'}`}
+                >
+                  Guest
+                </button>
+              </div>
+            </div>
+
+            {addMode === 'member' && (
+              <>
+                <form onSubmit={handleSearch} className="flex items-end gap-3 mb-3">
+                  <div className="space-y-1 flex-1">
+                    <Label>Search by name</Label>
+                    <Input
+                      value={memberSearch}
+                      onChange={e => { setMemberSearch(e.target.value); setSelectedPlayer(null) }}
+                      placeholder="e.g. John Smith"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" disabled={isSearching} variant="outline" className="border-[#1B4332] text-[#1B4332]">
+                    {isSearching ? 'Searching…' : 'Search'}
+                  </Button>
+                </form>
+
+                {searchError && <p className="text-sm text-red-600 mb-2">{searchError}</p>}
+
+                {searchResults.length > 0 && (
+                  <ul className="border border-gray-200 rounded-lg divide-y divide-gray-100 mb-3">
+                    {searchResults.map(p => (
+                      <li key={p.id}>
+                        <button
+                          type="button"
+                          onClick={() => handleSelectPlayer(p)}
+                          className="w-full text-left px-4 py-2.5 text-sm hover:bg-gray-50 text-[#1A1A1A]"
+                        >
+                          {p.full_name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+                {!isSearching && memberSearch && searchResults.length === 0 && !selectedPlayer && (
+                  <p className="text-sm text-[#6B7770] mb-3">No TeeAhead members found matching that name.</p>
+                )}
+
+                {selectedPlayer && (
+                  <form onSubmit={handleAddMember} className="flex items-end gap-3 pt-1 border-t border-gray-100 mt-2">
+                    <div className="space-y-1">
+                      <Label>Handicap</Label>
+                      <Input type="number" min={0} max={54} value={newHandicap} onChange={e => setNewHandicap(e.target.value)} className="w-24" required />
+                    </div>
+                    <Button type="submit" disabled={isAdding} className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-[#FAF7F2]">
+                      {isAdding ? 'Adding…' : `Add ${selectedPlayer.full_name}`}
+                    </Button>
+                  </form>
+                )}
+              </>
+            )}
+
+            {addMode === 'guest' && (
+              <form onSubmit={handleAddGuest} className="flex items-end gap-3">
+                <div className="space-y-1 flex-1">
+                  <Label>Full name</Label>
+                  <Input value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="e.g. John Smith" required />
+                </div>
+                <div className="space-y-1">
+                  <Label>Handicap</Label>
+                  <Input type="number" min={0} max={54} value={newHandicap} onChange={e => setNewHandicap(e.target.value)} className="w-24" required />
+                </div>
+                <Button type="submit" disabled={isAdding} className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-[#FAF7F2]">
+                  {isAdding ? 'Adding…' : 'Add Guest'}
+                </Button>
+              </form>
+            )}
+
+            {addMemberError && <p className="text-sm text-red-600 mt-2">{addMemberError}</p>}
+          </div>
+
+          {/* Roster table */}
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <table className="w-full text-sm">
               <thead className="bg-gray-50 border-b border-gray-200">
@@ -148,7 +309,7 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {members.length === 0 ? (
-                  <tr><td colSpan={4} className="px-4 py-8 text-center text-[#6B7770]">No members yet. Members can join via the TeeAhead app.</td></tr>
+                  <tr><td colSpan={4} className="px-4 py-8 text-center text-[#6B7770]">No members yet. Use the form above to add members by name.</td></tr>
                 ) : members.map(m => (
                   <tr key={m.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">{m.full_name}</td>
