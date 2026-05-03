@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
 import InviteCoursePartner from '@/components/admin/InviteCoursePartner'
+import AddCourseModal from '@/components/admin/AddCourseModal'
 
 export const metadata = { title: 'Courses' }
 
@@ -32,7 +33,10 @@ export default async function AdminCoursesPage() {
             Active courses appear in the member booking flow.
           </p>
         </div>
-        <InviteCoursePartner courses={coursesForInvite ?? []} />
+        <div className="flex items-center gap-2">
+          <AddCourseModal />
+          <InviteCoursePartner courses={coursesForInvite ?? []} />
+        </div>
       </div>
 
       <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
