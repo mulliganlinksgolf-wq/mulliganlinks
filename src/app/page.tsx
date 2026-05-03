@@ -309,6 +309,7 @@ export default async function HomePage({
                     'Earn Fairway Points on every round',
                     'Eagle membership: $89/yr — beats GolfPass+ by $30',
                     'Priority booking, guest passes, birthday credit',
+                    'Tee time exchange — list a time you can\'t make, earn credit',
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">

@@ -209,6 +209,7 @@ export default async function GolfNowAlternativePage({
                     { feature: 'Direct booking channel', them: 'Competes with yours', us: 'Strengthens yours' },
                     { feature: 'Golfer loyalty program', them: 'GolfPass+ (your competitor)', us: 'Branded to your network' },
                     { feature: 'League management', them: 'None', us: 'Built in (9 & 18 hole)' },
+                    { feature: 'Member tee time exchange', them: 'None', us: 'Built in' },
                     { feature: 'Accounting & revenue reports', them: 'Limited', us: 'Full GL-ready reports' },
                     { feature: 'Discount anchoring', them: 'Yes — erodes rack rates', us: 'No discounting' },
                     { feature: 'Contract lock-in', them: 'Yes', us: 'None' },
@@ -263,6 +264,7 @@ export default async function GolfNowAlternativePage({
                     { feature: 'Birthday credit', them: 'None', us: '10% off' },
                     { feature: 'Points multiplier', them: '1× base', us: '2×' },
                     { feature: 'Priority booking access', them: 'None', us: '48hr early access' },
+                    { feature: 'Tee time exchange', them: 'None', us: 'List & claim via app' },
                     { feature: 'Local loyalty', them: 'National chain perks', us: 'Courses you actually play' },
                   ].map((row, i) => (
                     <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>

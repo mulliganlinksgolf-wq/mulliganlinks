@@ -48,6 +48,11 @@ const features = [
     body: 'Run 9-hole and 18-hole stroke play or Stableford leagues. Score entry, net scoring with handicaps, live standings, and session history — all included.',
   },
   {
+    icon: '🔄',
+    title: 'Member Tee Time Exchange',
+    body: "Members who can't make a booked tee time can list it on the exchange. Another member claims it — the original booker earns TeeAhead platform credit automatically. No course involvement, no cash, no Stripe.",
+  },
+  {
     icon: '💰',
     title: 'Revenue Share Back to Your Course',
     body: 'TeeAhead shares platform revenue with partner courses based on booking volume. Your course earns a share of the network — not just a software license.',
@@ -61,6 +66,7 @@ const comparison = [
   { feature: 'Contract lock-in', teeahead: 'None', foreup: 'Yes (annual)', lightspeed: 'Yes (annual)', golfnow: 'Yes' },
   { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
   { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
+  { feature: 'Member tee time exchange', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
   { feature: 'Revenue share to course', teeahead: 'Yes', foreup: 'No', lightspeed: 'No', golfnow: 'No' },
   { feature: 'Stripe-native payments', teeahead: 'Yes', foreup: 'No (own processor)', lightspeed: 'Yes', golfnow: 'No' },
   { feature: 'Revenue & accounting reports', teeahead: 'Yes — revenue, rounds, GL, waitlist', foreup: 'Yes', lightspeed: 'Yes', golfnow: 'Limited' },
