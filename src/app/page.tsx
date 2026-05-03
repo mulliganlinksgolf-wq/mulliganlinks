@@ -12,6 +12,7 @@ import { captureReferralCode } from '@/lib/referrals/capture'
 import { FoundingPartnerProgress } from '@/components/FoundingPartnerProgress'
 import { HomepageFaq } from '@/components/HomepageFaq'
 import { HomepageFaqSchema } from '@/components/HomepageFaqSchema'
+import { ImpersonateRedirect } from '@/components/ImpersonateRedirect'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
@@ -48,6 +49,7 @@ export default async function HomePage({
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <ImpersonateRedirect />
       <HomepageFaqSchema />
 
       {/* ── Header / Nav ──────────────────────────────────────── */}
