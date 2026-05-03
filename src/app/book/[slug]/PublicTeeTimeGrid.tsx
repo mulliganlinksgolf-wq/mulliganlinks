@@ -19,7 +19,8 @@ function formatTime(iso: string) {
 }
 
 function localHour(iso: string) {
-  return parseInt(new Date(iso).toLocaleString('en-US', { hour: 'numeric', hour12: false, timeZone: TZ }))
+  const parts = new Intl.DateTimeFormat('en-US', { hour: 'numeric', hour12: false, timeZone: TZ }).formatToParts(new Date(iso))
+  return Number(parts.find(p => p.type === 'hour')?.value ?? 0)
 }
 
 function formatDateLabel(s: string) {
@@ -34,7 +35,7 @@ function offsetDate(base: string, days: number) {
   return d.toISOString().split('T')[0]
 }
 
-function TeeTimeCard({ tt, courseSlug }: { tt: TeeTime; courseSlug: string }) {
+function TeeTimeCard({ tt }: { tt: TeeTime }) {
   const spotsLeft = tt.available_players
   const isLast = spotsLeft === 1
 
@@ -95,6 +96,7 @@ export function PublicTeeTimeGrid({
       <div className="flex items-center justify-between bg-[#1B4332] rounded-xl px-4 py-3 text-white">
         <Link
           href={`?date=${prevDate}`}
+          aria-label="Previous day"
           className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors text-lg"
         >
           ←
@@ -106,6 +108,7 @@ export function PublicTeeTimeGrid({
         </div>
         <Link
           href={`?date=${nextDate}`}
+          aria-label="Next day"
           className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition-colors text-lg"
         >
           →
@@ -154,7 +157,7 @@ export function PublicTeeTimeGrid({
 
         <p className="text-xs text-gray-400 ml-auto">
           Members save up to 15% ·{' '}
-          <Link href="/signup" target="_blank" className="text-[#1B4332] font-medium hover:underline">
+          <Link href="/signup" target="_blank" rel="noopener noreferrer" className="text-[#1B4332] font-medium hover:underline">
             Join free →
           </Link>
         </p>
@@ -177,7 +180,7 @@ export function PublicTeeTimeGrid({
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Morning</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} courseSlug={courseSlug} />)}
+                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} />)}
               </div>
             </div>
           )}
@@ -185,7 +188,7 @@ export function PublicTeeTimeGrid({
             <div>
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Afternoon</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} courseSlug={courseSlug} />)}
+                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} />)}
               </div>
             </div>
           )}
