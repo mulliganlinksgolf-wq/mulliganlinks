@@ -227,7 +227,7 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
             </div>
 
             {addMode === 'member' && (
-              <>
+              <div key="member">
                 <form onSubmit={handleSearch} className="flex items-end gap-3 mb-3">
                   <div className="space-y-1 flex-1">
                     <Label>Search by name</Label>
@@ -275,11 +275,11 @@ export default function LeagueDetailClient({ slug, league, members, sessions, st
                     </Button>
                   </form>
                 )}
-              </>
+              </div>
             )}
 
             {addMode === 'guest' && (
-              <form onSubmit={handleAddGuest} className="flex items-end gap-3">
+              <form key="guest" onSubmit={handleAddGuest} className="flex items-end gap-3">
                 <div className="space-y-1 flex-1">
                   <Label>Full name</Label>
                   <Input value={guestName} onChange={e => setGuestName(e.target.value)} placeholder="e.g. John Smith" required />
