@@ -198,7 +198,7 @@ export default async function CourseWaitlistPage() {
                 <p className="text-sm text-[#6B7770] leading-relaxed">{description}</p>
                 {multiYearNote && (
                   <p className="text-xs text-[#9DAA9F] mt-1">
-                    Multi-year contracts available at a discount — ask Neil.
+                    Multi-year contracts available at a discount — ask Neil or Billy.
                   </p>
                 )}
               </div>

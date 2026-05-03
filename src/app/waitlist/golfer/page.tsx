@@ -22,6 +22,7 @@ const tiers = [
       'Book tee times at partner courses',
       '1× Fairway Points per dollar',
       'Free cancellation (1hr policy)',
+      'In-round service requests (tap for help mid-round)',
     ],
   },
   {
@@ -37,6 +38,7 @@ const tiers = [
       'Always-on booking fee waiver',
       '1 guest pass per year',
       '10% birthday credit',
+      'In-round service requests (tap for help mid-round)',
     ],
   },
   {
@@ -52,6 +54,7 @@ const tiers = [
       'Always-on booking fee waiver',
       '2 guest passes per year',
       '15% birthday credit',
+      'In-round service requests (tap for help mid-round)',
     ],
   },
 ]

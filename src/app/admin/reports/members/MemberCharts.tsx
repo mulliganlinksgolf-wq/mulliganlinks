@@ -44,7 +44,7 @@ export function TierDonut({ eagle, ace, free }: { eagle: number; ace: number; fr
     <ResponsiveContainer width="100%" height={200}>
       <PieChart>
         <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80}
-          label={({ name, percent }) => `${name} ${((percent ?? 0) * 100).toFixed(0)}%`}>
+          label={({ name, percent }) => `${name} ${(Math.round((percent || 0) * 100))}%`}>
           {pieData.map(entry => <Cell key={entry.name} fill={entry.color} />)}
         </Pie>
         <Tooltip />
