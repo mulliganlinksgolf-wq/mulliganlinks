@@ -10,8 +10,11 @@ interface RequestModalProps {
   onSubmitted: (requestId: string) => void
 }
 
+const HOLES = Array.from({ length: 18 }, (_, i) => i + 1)
+
 export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: RequestModalProps) {
   const [selected, setSelected] = useState<ServiceRequestCategory | null>(null)
+  const [hole, setHole] = useState<number | null>(null)
   const [note, setNote] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(false)
@@ -29,6 +32,7 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
           booking_id: bookingId,
           category: selected,
           note: note.trim(),
+          hole: hole ?? undefined,
         }),
       })
       if (!res.ok) throw new Error('Request failed')
@@ -84,12 +88,36 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
           ))}
         </div>
 
+        {/* Hole picker — visible after category selection */}
+        {selected && (
+          <div className="px-4 pb-3">
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+              Which hole are you on?
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {HOLES.map((h) => (
+                <button
+                  key={h}
+                  onClick={() => setHole(hole === h ? null : h)}
+                  className={`w-8 h-8 rounded-lg text-xs font-semibold font-sans transition-all ${
+                    hole === h
+                      ? 'bg-[#1B4332] text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  {h}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Notes textarea — visible after selection */}
         {selected && (
           <div className="px-4 pb-3">
             <textarea
               className="w-full rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm font-sans text-gray-800 placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-[#1B4332] focus:border-transparent"
-              rows={3}
+              rows={2}
               maxLength={200}
               placeholder="Any details? (optional)"
               value={note}

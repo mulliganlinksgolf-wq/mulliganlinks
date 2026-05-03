@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json()
-    const { course_id, category, note, booking_id } = body
+    const { course_id, category, note, booking_id, hole } = body
 
     if (!course_id) {
       return NextResponse.json({ error: 'course_id is required' }, { status: 400 })
@@ -39,9 +39,11 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    let estimated_hole: number | null = null
+    // Use member-provided hole if given; otherwise estimate from tee time
+    let estimated_hole: number | null =
+      typeof hole === 'number' && hole >= 1 && hole <= 18 ? hole : null
 
-    if (booking_id) {
+    if (!estimated_hole && booking_id) {
       const { data: booking } = await supabase
         .from('bookings')
         .select('tee_time_id')

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
 import { RequestModal } from './RequestModal'
 import { RequestConfirmation } from './RequestConfirmation'
 
@@ -24,8 +25,7 @@ export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEna
   const [visible, setVisible] = useState(() => isWithinWindow(teeTime))
   const [uiState, setUiState] = useState<UIState>('idle')
   const [pendingRequestId, setPendingRequestId] = useState<string | null>(null)
-  const [proShopOnIt, setProShopOnIt] = useState(false)
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const [acknowledged, setAcknowledged] = useState(false)
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -34,34 +34,32 @@ export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEna
     return () => clearInterval(interval)
   }, [teeTime])
 
-  // Poll for acknowledgment when we have a pending request ID
+  // Subscribe to Realtime updates when we have a pending request
   useEffect(() => {
     if (!pendingRequestId) return
 
-    async function checkStatus() {
-      try {
-        const res = await fetch(`/api/service-requests/${pendingRequestId}/status`)
-        if (!res.ok) return
-        const data = await res.json() as { status: string }
-        if (data.status === 'acknowledged') {
-          setProShopOnIt(true)
-          setPendingRequestId(null)
-          if (pollRef.current) {
-            clearInterval(pollRef.current)
-            pollRef.current = null
+    const supabase = createClient()
+    const channel = supabase
+      .channel(`service_request_${pendingRequestId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'service_requests',
+          filter: `id=eq.${pendingRequestId}`,
+        },
+        (payload) => {
+          if (payload.new.status === 'acknowledged') {
+            setAcknowledged(true)
+            setPendingRequestId(null)
           }
-        }
-      } catch {
-        // Ignore network errors — will retry next interval
-      }
-    }
+        },
+      )
+      .subscribe()
 
-    pollRef.current = setInterval(checkStatus, 10_000)
     return () => {
-      if (pollRef.current) {
-        clearInterval(pollRef.current)
-        pollRef.current = null
-      }
+      supabase.removeChannel(channel)
     }
   }, [pendingRequestId])
 
@@ -69,7 +67,37 @@ export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEna
 
   return (
     <>
-      {uiState === 'idle' && (
+      {/* Acknowledgment banner — shown when course responds */}
+      {acknowledged && (
+        <div className="fixed bottom-24 left-4 right-4 z-50 sm:left-auto sm:right-5 sm:w-80">
+          <div
+            className="rounded-xl px-5 py-4 shadow-xl flex items-start gap-3"
+            style={{ background: '#166534' }}
+          >
+            <div
+              className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center mt-0.5"
+              style={{ background: '#15803d' }}
+            >
+              <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <p className="text-white font-semibold font-sans text-sm leading-snug">The pro shop is on it.</p>
+              <p className="text-[#86efac] font-sans text-xs mt-1">Someone is heading your way.</p>
+            </div>
+            <button
+              onClick={() => setAcknowledged(false)}
+              className="text-white/50 hover:text-white/80 text-lg leading-none ml-1 mt-0.5"
+              aria-label="Dismiss"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      )}
+
+      {uiState === 'idle' && !acknowledged && (
         <button
           onClick={() => setUiState('modal')}
           className="fixed bottom-6 right-5 z-40 flex items-center gap-2 rounded-full px-5 py-3 text-white font-semibold font-sans text-sm shadow-lg transition-opacity hover:opacity-90 active:opacity-80"
@@ -96,13 +124,6 @@ export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEna
             setUiState('confirmation')
           }}
         />
-      )}
-
-      {pendingRequestId && proShopOnIt && (
-        <div className="fixed bottom-24 left-4 right-4 bg-[#1B4332] text-white px-4 py-3 rounded-lg flex items-center gap-2 shadow-lg z-50">
-          <span>✓ The pro shop is on it.</span>
-          <button onClick={() => { setProShopOnIt(false); setPendingRequestId(null) }} className="ml-auto text-white/70">✕</button>
-        </div>
       )}
     </>
   )
