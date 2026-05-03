@@ -44,6 +44,7 @@ export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonPro
         const data = await res.json() as { status: string }
         if (data.status === 'acknowledged') {
           setProShopOnIt(true)
+          setPendingRequestId(null)
           if (pollRef.current) {
             clearInterval(pollRef.current)
             pollRef.current = null
@@ -99,7 +100,7 @@ export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonPro
       {pendingRequestId && proShopOnIt && (
         <div className="fixed bottom-24 left-4 right-4 bg-[#1B4332] text-white px-4 py-3 rounded-lg flex items-center gap-2 shadow-lg z-50">
           <span>✓ The pro shop is on it.</span>
-          <button onClick={() => setProShopOnIt(false)} className="ml-auto text-white/70">✕</button>
+          <button onClick={() => { setProShopOnIt(false); setPendingRequestId(null) }} className="ml-auto text-white/70">✕</button>
         </div>
       )}
     </>
