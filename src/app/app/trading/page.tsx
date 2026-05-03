@@ -100,7 +100,8 @@ export default async function TradingPage({
       {myActiveListings.length > 0 && (
         <section className="space-y-2">
           <p className="text-[8px] uppercase tracking-widest text-[#aaa]">My Active Listings</p>
-          {myActiveListings.map((l: { id: string; tee_times?: { courses?: { name?: string }; scheduled_at?: string }; credit_amount_cents: number }) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {myActiveListings.map((l: any) => (
             <div key={l.id} className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ background: '#163d2a' }}>
               <div>
                 <p className="text-sm font-medium text-white">{l.tee_times?.courses?.name}</p>
