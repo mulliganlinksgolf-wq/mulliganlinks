@@ -53,6 +53,7 @@ export default async function TradingPage({
   const listings = (availableListings ?? []) as any[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mine = (myListings ?? []) as any[]
+  const myActiveListings = mine.filter((l: { status: string }) => l.status === 'active')
 
   return (
     <div className="space-y-6">
@@ -96,10 +97,10 @@ export default async function TradingPage({
       )}
 
       {/* My active listings */}
-      {mine.filter(l => l.status === 'active').length > 0 && (
+      {myActiveListings.length > 0 && (
         <section className="space-y-2">
           <p className="text-[8px] uppercase tracking-widest text-[#aaa]">My Active Listings</p>
-          {mine.filter(l => l.status === 'active').map(l => (
+          {myActiveListings.map((l: { id: string; tee_times?: { courses?: { name?: string }; scheduled_at?: string }; credit_amount_cents: number }) => (
             <div key={l.id} className="rounded-xl px-4 py-3 flex items-center justify-between" style={{ background: '#163d2a' }}>
               <div>
                 <p className="text-sm font-medium text-white">{l.tee_times?.courses?.name}</p>
@@ -110,7 +111,7 @@ export default async function TradingPage({
                 </p>
                 <p className="text-xs text-[#8FA889]">Credit if claimed: {formatCredit(l.credit_amount_cents)}</p>
               </div>
-              <form action={async () => { 'use server'; await cancelListing(l.id) }}>
+              <form action={async () => { 'use server'; await cancelListing(l.id); redirect('/app/trading') }}>
                 <button type="submit" className="text-xs text-red-400 hover:text-red-300 transition-colors">
                   Cancel
                 </button>
