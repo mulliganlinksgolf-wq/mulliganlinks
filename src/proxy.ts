@@ -9,6 +9,7 @@ export async function proxy(request: NextRequest) {
     response.headers.set('Content-Security-Policy', "frame-ancestors *")
   } else {
     response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+    response.headers.set('Content-Security-Policy', "frame-ancestors 'self'")
   }
 
   return response
