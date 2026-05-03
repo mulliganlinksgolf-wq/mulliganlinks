@@ -1,5 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { requireManager } from '@/lib/courseRole'
 import PlatformInstallGuide from '@/components/onboarding/PlatformInstallGuide'
 
 export default async function InstallPage({
@@ -8,15 +7,7 @@ export default async function InstallPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const supabase = await createClient()
-
-  const { data: course } = await supabase
-    .from('courses')
-    .select('id, name, slug')
-    .eq('slug', slug)
-    .single()
-
-  if (!course) notFound()
+  await requireManager(slug)
 
   return (
     <div className="max-w-2xl space-y-6">
@@ -28,7 +19,7 @@ export default async function InstallPage({
       </div>
 
       <div className="bg-white border border-gray-200 rounded-xl p-6">
-        <PlatformInstallGuide courseSlug={course.slug} />
+        <PlatformInstallGuide courseSlug={slug} />
       </div>
 
       <div className="bg-[#F0F9E8] border border-[#C3E6A0] rounded-xl p-5">
