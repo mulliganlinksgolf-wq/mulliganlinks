@@ -3,7 +3,6 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { calcListingExpiry, canCreateListing } from '@/lib/trading'
 
 // ─── Create Listing ───────────────────────────────────────────────────────────
@@ -13,10 +12,8 @@ export async function createListing(bookingId: string): Promise<{ error?: string
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
-  const admin = createAdminClient()
-
   // Fetch the booking with its tee time and the course trading settings
-  const { data: booking } = await admin
+  const { data: booking } = await supabase
     .from('bookings')
     .select(`
       id, status, total_paid, user_id,
@@ -118,6 +115,9 @@ export async function updateTradingSettings(
   settings: { trading_enabled: boolean; trading_min_hours_before: number }
 ): Promise<{ error?: string }> {
   const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
   const { error } = await supabase
     .from('courses')
     .update({ ...settings, updated_at: new Date().toISOString() })
