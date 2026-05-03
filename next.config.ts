@@ -21,6 +21,13 @@ const nextConfig: NextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
         ],
       },
+      {
+        // Allow /book/* to be embedded as an iframe on course websites
+        source: '/book/(.*)',
+        headers: [
+          { key: 'X-Frame-Options', value: '' },
+        ],
+      },
     ]
   },
 };
