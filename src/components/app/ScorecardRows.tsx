@@ -109,6 +109,14 @@ export default function ScorecardRows({
   return (
     <>
       <RowTemplate {...nextRow} />
+      {upcomingBooking && (
+        <div className="border-t border-[#1d4c36] px-4 py-2 flex items-center gap-2" style={{ background: '#0f2d1d' }}>
+          <span className="text-sm leading-none">🛎️</span>
+          <p className="text-[11px] text-[#8FA889] font-sans">
+            Mid-round? A help button appears when your round starts.
+          </p>
+        </div>
+      )}
       <RowTemplate {...lastRow} />
       <RowTemplate {...thirdRow} />
     </>
