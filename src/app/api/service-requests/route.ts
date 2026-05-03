@@ -23,6 +23,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
     }
 
+    // Check the course has service requests enabled
+    const { data: courseRow } = await supabase
+      .from('courses')
+      .select('service_requests_enabled')
+      .eq('id', course_id)
+      .single()
+
+    if (!courseRow?.service_requests_enabled) {
+      return NextResponse.json(
+        { error: 'Service requests are not enabled for this course' },
+        { status: 403 },
+      )
+    }
+
     let estimated_hole: number | null = null
 
     if (booking_id) {

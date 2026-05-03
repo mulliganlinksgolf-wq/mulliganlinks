@@ -8,6 +8,7 @@ interface RequestButtonProps {
   courseId: string
   bookingId: string | null
   teeTime: string // ISO datetime
+  serviceRequestsEnabled?: boolean
 }
 
 type UIState = 'idle' | 'modal' | 'confirmation'
@@ -19,7 +20,7 @@ function isWithinWindow(teeTime: string): boolean {
   return now >= start && now <= end
 }
 
-export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonProps) {
+export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEnabled = true }: RequestButtonProps) {
   const [visible, setVisible] = useState(() => isWithinWindow(teeTime))
   const [uiState, setUiState] = useState<UIState>('idle')
   const [pendingRequestId, setPendingRequestId] = useState<string | null>(null)
@@ -64,7 +65,7 @@ export function RequestButton({ courseId, bookingId, teeTime }: RequestButtonPro
     }
   }, [pendingRequestId])
 
-  if (!visible) return null
+  if (!visible || !serviceRequestsEnabled) return null
 
   return (
     <>

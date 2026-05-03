@@ -26,7 +26,7 @@ export default async function DashboardPage() {
       supabase.from('fairway_points').select('amount').eq('user_id', user.id),
       supabase
         .from('bookings')
-        .select('id, total_paid, status, tee_times(scheduled_at, course_id, courses(name))')
+        .select('id, total_paid, status, tee_times(scheduled_at, course_id, courses(name, service_requests_enabled))')
         .eq('user_id', user.id)
         .in('status', ['confirmed', 'completed'])
         .order('created_at', { ascending: false })
@@ -83,6 +83,7 @@ export default async function DashboardPage() {
           courseId={upcomingRaw.tee_times.course_id}
           bookingId={upcomingRaw.id}
           teeTime={upcomingRaw.tee_times.scheduled_at}
+          serviceRequestsEnabled={upcomingRaw.tee_times.courses?.service_requests_enabled ?? true}
         />
       )}
     </>

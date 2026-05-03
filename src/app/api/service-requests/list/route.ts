@@ -22,14 +22,19 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = req.nextUrl
     const status = searchParams.get('status') ?? 'open'
+    const courseId = searchParams.get('course_id')
     const limit = Math.min(parseInt(searchParams.get('limit') ?? '50', 10), 200)
 
-    const { data, error } = await supabase
+    let query = supabase
       .from('service_requests')
       .select('id, golfer_id, category, note, estimated_hole, created_at, status, acknowledged_at, profiles!golfer_id(full_name)')
       .eq('status', status)
       .order('created_at', { ascending: false })
       .limit(limit)
+
+    if (courseId) query = query.eq('course_id', courseId)
+
+    const { data, error } = await query
 
     if (error) {
       console.error('[service-requests/list]', error)
