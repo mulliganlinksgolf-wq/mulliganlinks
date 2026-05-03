@@ -118,6 +118,7 @@ export default async function HomePage({
                 <div>
                   <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
                   <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free for your first year for Founding Partners. No barter. No data extraction. No commissions.</p>
+                  <p className="text-xs text-[#E0A800]/80 leading-relaxed mt-2">+ Earn 10% rev share on every golfer you refer.</p>
                 </div>
                 <Link
                   href="/waitlist/course"
