@@ -8,9 +8,9 @@ import { createListing } from '@/app/actions/trading'
 export default async function ListBookingPage({
   params,
 }: {
-  params: Promise<{ bookingId: string }>
+  params: Promise<{ id: string }>
 }) {
-  const { bookingId } = await params
+  const { id: bookingId } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
