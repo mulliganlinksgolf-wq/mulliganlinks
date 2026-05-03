@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function PATCH(
   _req: NextRequest,
@@ -12,6 +13,15 @@ export async function PATCH(
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const admin = createAdminClient()
+    const [{ data: adminRow }, { data: crmRow }] = await Promise.all([
+      admin.from('course_admins').select('course_id').eq('user_id', user.id).limit(1).single(),
+      admin.from('crm_course_users').select('course_id').eq('user_id', user.id).limit(1).single(),
+    ])
+    if (!adminRow && !crmRow) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
 
     const { data, error } = await supabase
