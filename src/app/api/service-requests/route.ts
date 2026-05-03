@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { isValidCategory } from '@/lib/serviceRequestCategories'
 import { estimateHole } from '@/lib/estimateHole'
 
@@ -23,8 +24,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid category' }, { status: 400 })
     }
 
-    // Check the course has service requests enabled
-    const { data: courseRow } = await supabase
+    // Check the course has service requests enabled (use admin client to bypass RLS)
+    const admin = createAdminClient()
+    const { data: courseRow } = await admin
       .from('courses')
       .select('service_requests_enabled')
       .eq('id', course_id)
