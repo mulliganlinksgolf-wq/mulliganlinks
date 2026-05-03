@@ -392,6 +392,7 @@ export default async function HomePage({
                       'Book tee times at partner courses',
                       '1× Fairway Points per dollar spent (100 pts = $1 toward future tee times or membership renewal)',
                       'Free cancellation (1hr policy)',
+                      'In-round service requests (tap for help mid-round)',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#8FA889] font-bold mt-0.5">✓</span>{f}
@@ -431,7 +432,7 @@ export default async function HomePage({
                       '1 complimentary round/yr (course-provided, subject to availability)',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '2× Fairway Points per dollar spent',
+                      '1.5× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
                       '1 guest pass per year',
                       '10% birthday credit',
@@ -468,7 +469,7 @@ export default async function HomePage({
                       '2 complimentary rounds/yr (course-provided, subject to availability)',
                       'Always-on booking fee waiver',
                       'Free cancellation unlimited (1hr)',
-                      '3× Fairway Points per dollar spent',
+                      '2× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
                       '2 guest passes per year',
                       '15% birthday credit',

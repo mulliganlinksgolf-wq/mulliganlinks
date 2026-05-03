@@ -137,6 +137,7 @@ export default function GolfCourseBookingSoftwarePage() {
                 'Rain check and credit system',
                 'Email notifications for bookings',
                 'Staff invite and role management',
+                'In-round service requests (golfer → pro shop)',
                 'No per-booking commissions',
               ].map(item => (
                 <div key={item} className="flex items-center gap-3 py-3 border-b border-black/5">
