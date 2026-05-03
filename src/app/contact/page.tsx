@@ -194,10 +194,10 @@ export default async function ContactPage() {
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
 
             {/* Column 1 — Brand */}
-            <div className="space-y-3">
+            <div className="col-span-2 sm:col-span-1 space-y-3">
               <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
               <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
               <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
@@ -214,7 +214,18 @@ export default async function ContactPage() {
               </nav>
             </div>
 
-            {/* Column 3 — Company */}
+            {/* Column 3 — Compare */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
+                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
+                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
+                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
+              </nav>
+            </div>
+
+            {/* Column 4 — Company */}
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">

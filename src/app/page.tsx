@@ -540,10 +540,10 @@ export default async function HomePage({
       {/* ── Footer ────────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
 
             {/* Column 1 — Brand */}
-            <div className="space-y-3">
+            <div className="col-span-2 sm:col-span-1 space-y-3">
               <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
               <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
                 Book ahead. Play more. Own your golf.
@@ -551,20 +551,29 @@ export default async function HomePage({
               <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
             </div>
 
-            {/* Column 2 — Product */}
+            {/* Column 2 — For Courses */}
             <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-1.5 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors pl-3">Pricing</Link>
-                <Link href="/waitlist/course" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors mt-1">For Courses</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors pl-3">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors pl-3">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors pl-3">Software Cost Calculator</Link>
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
+                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
+                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
+                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
               </nav>
             </div>
 
-            {/* Column 3 — Company */}
+            {/* Column 3 — Compare */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
+                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
+                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
+                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
+              </nav>
+            </div>
+
+            {/* Column 4 — Company */}
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
