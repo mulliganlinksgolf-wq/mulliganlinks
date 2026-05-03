@@ -143,6 +143,11 @@ export default async function CourseWaitlistPage() {
                 title: 'Live within 48 hours',
                 description: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right.",
               },
+              {
+                icon: '💰',
+                title: 'Earn while you sleep',
+                description: 'Refer a golfer to Eagle ($89/yr) and earn $8.90/mo for 12 months — automatically. Drop your QR code at the pro shop, send one email to your list. We handle the payouts.',
+              },
             ].map(({ icon, title, description }) => (
               <div
                 key={title}
