@@ -7,7 +7,7 @@ import { PublicTeeTimeGrid } from './PublicTeeTimeGrid'
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: course } = await supabase.from('courses').select('name').eq('slug', slug).single()
+  const { data: course } = await supabase.from('courses').select('name').eq('slug', slug).eq('status', 'active').single()
   return {
     title: course ? `Book Tee Times at ${course.name} | TeeAhead` : 'Book Tee Times | TeeAhead',
   }
@@ -33,7 +33,10 @@ export default async function PublicBookingPage({
 
   if (!course) notFound()
 
-  const selectedDate = dateParam ?? new Date().toISOString().split('T')[0]
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+  const selectedDate = (dateParam && DATE_RE.test(dateParam))
+    ? dateParam
+    : new Date().toISOString().split('T')[0]
   const startOfDay = `${selectedDate}T00:00:00+00:00`
   const endOfDay = `${selectedDate}T23:59:59+00:00`
 
@@ -51,7 +54,7 @@ export default async function PublicBookingPage({
     <div className="min-h-screen bg-gray-50">
       {/* Minimal header */}
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
-        <Link href="https://teeahead.com" target="_blank" className="flex items-center gap-2">
+        <Link href="https://teeahead.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
           <Image src="/logo.png" alt="TeeAhead" width={28} height={28} />
           <span className="font-bold text-[#1B4332] text-sm">TeeAhead</span>
         </Link>
