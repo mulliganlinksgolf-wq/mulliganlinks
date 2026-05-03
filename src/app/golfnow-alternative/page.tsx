@@ -204,9 +204,12 @@ export default async function GolfNowAlternativePage({
                     { feature: 'Barter tee times required', them: '~2/day at rack rate', us: 'None, ever' },
                     { feature: 'Annual cost in barter (avg)', them: '~$94,500+', us: '$0' },
                     { feature: 'Booking commissions', them: 'Yes', us: 'None' },
+                    { feature: 'Revenue share to your course', them: 'No', us: 'Yes' },
                     { feature: 'Your customer data', them: 'Retained by GolfNow', us: 'Stays with you' },
                     { feature: 'Direct booking channel', them: 'Competes with yours', us: 'Strengthens yours' },
                     { feature: 'Golfer loyalty program', them: 'GolfPass+ (your competitor)', us: 'Branded to your network' },
+                    { feature: 'League management', them: 'None', us: 'Built in (9 & 18 hole)' },
+                    { feature: 'Accounting & revenue reports', them: 'Limited', us: 'Full GL-ready reports' },
                     { feature: 'Discount anchoring', them: 'Yes — erodes rack rates', us: 'No discounting' },
                     { feature: 'Contract lock-in', them: 'Yes', us: 'None' },
                   ].map((row, i) => (

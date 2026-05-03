@@ -20,16 +20,18 @@ const platforms = [
       'No barter tee times — ever',
       'No commissions per booking',
       'Built-in golfer loyalty program',
+      'League management (9 & 18 hole) included',
+      'Revenue share back to partner courses',
       'Stripe Connect payments included',
       'No contract or lock-in',
-      'Revenue, rounds, and waitlist reports',
+      'Revenue, rounds, accounting & waitlist reports',
     ],
     cons: [
       'Currently Metro Detroit only (expanding)',
       'Newer platform — smaller existing user base',
       'Founding Partner spots are limited',
     ],
-    bestFor: 'Metro Detroit courses tired of the GolfNow barter model, or courses that want tee sheet software with loyalty built in at no extra cost.',
+    bestFor: 'Metro Detroit courses tired of the GolfNow barter model, or courses that want tee sheet software with loyalty, league management, and accounting reports built in at no extra cost.',
     url: '/waitlist/course',
     cta: 'Claim a Founding Spot',
     highlight: true,
@@ -268,22 +270,26 @@ export default function BestTeeSheetSoftwarePage() {
                     <th className="text-center px-4 py-4 font-semibold">Cost</th>
                     <th className="text-center px-4 py-4 font-semibold">Barter?</th>
                     <th className="text-center px-4 py-4 font-semibold">Loyalty?</th>
+                    <th className="text-center px-4 py-4 font-semibold">Leagues?</th>
+                    <th className="text-center px-4 py-4 font-semibold">Rev Share?</th>
                     <th className="text-center px-4 py-4 font-semibold">Contract?</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5">
                   {[
-                    { name: 'TeeAhead', cost: '$0 / $349/mo', barter: 'None', loyalty: 'Built in', contract: 'None' },
-                    { name: 'foreUP', cost: '$400–$800/mo', barter: 'None', loyalty: 'Add-on', contract: 'Annual' },
-                    { name: 'Lightspeed Golf', cost: '$300–$700/mo', barter: 'None', loyalty: 'Add-on', contract: 'Annual' },
-                    { name: 'Club Caddie', cost: '$200–$500/mo', barter: 'None', loyalty: 'None', contract: 'Annual' },
-                    { name: 'GolfNow', cost: '$0 + ~$94K/yr barter', barter: '~2/day', loyalty: 'GolfPass+ (separate)', contract: 'Yes' },
+                    { name: 'TeeAhead', cost: '$0 / $349/mo', barter: 'None', loyalty: 'Built in', leagues: '✓ Built in', revShare: '✓ Yes', contract: 'None' },
+                    { name: 'foreUP', cost: '$400–$800/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'Lightspeed Golf', cost: '$300–$700/mo', barter: 'None', loyalty: 'Add-on', leagues: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'Club Caddie', cost: '$200–$500/mo', barter: 'None', loyalty: 'None', leagues: 'None', revShare: 'No', contract: 'Annual' },
+                    { name: 'GolfNow', cost: '$0 + ~$94K/yr barter', barter: '~2/day', loyalty: 'GolfPass+ (separate)', leagues: 'None', revShare: 'No', contract: 'Yes' },
                   ].map((row, i) => (
                     <tr key={row.name} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
                       <td className="px-5 py-4 font-semibold text-[#1A1A1A]">{row.name}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.cost}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.barter}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.loyalty}</td>
+                      <td className={`px-4 py-4 text-center font-medium ${row.leagues.startsWith('✓') ? 'text-[#1B4332]' : 'text-[#6B7770]'}`}>{row.leagues}</td>
+                      <td className={`px-4 py-4 text-center font-medium ${row.revShare.startsWith('✓') ? 'text-[#1B4332]' : 'text-[#6B7770]'}`}>{row.revShare}</td>
                       <td className="px-4 py-4 text-center text-[#6B7770]">{row.contract}</td>
                     </tr>
                   ))}

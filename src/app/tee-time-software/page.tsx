@@ -34,13 +34,23 @@ const features = [
   },
   {
     icon: '📊',
-    title: 'Revenue & Rounds Reports',
-    body: 'Track revenue, rounds played, member growth, barter value recovered, and waitlist demand — all in one dashboard.',
+    title: 'Revenue, Rounds & Accounting Reports',
+    body: 'Track revenue, rounds played, member growth, barter value recovered, and waitlist demand. Export-ready reports act as your general ledger for TeeAhead bookings.',
   },
   {
     icon: '🏌️',
     title: 'Golfer Loyalty Built In',
     body: 'Every course on TeeAhead gets access to a loyalty network of local golfers. Members earn Fairway Points at your course — driving repeat rounds.',
+  },
+  {
+    icon: '🏆',
+    title: 'League Management',
+    body: 'Run 9-hole and 18-hole stroke play or Stableford leagues. Score entry, net scoring with handicaps, live standings, and session history — all included.',
+  },
+  {
+    icon: '💰',
+    title: 'Revenue Share Back to Your Course',
+    body: 'TeeAhead shares platform revenue with partner courses based on booking volume. Your course earns a share of the network — not just a software license.',
   },
 ]
 
@@ -50,8 +60,10 @@ const comparison = [
   { feature: 'Booking commissions', teeahead: 'None', foreup: 'None', lightspeed: 'None', golfnow: 'Yes' },
   { feature: 'Contract lock-in', teeahead: 'None', foreup: 'Yes (annual)', lightspeed: 'Yes (annual)', golfnow: 'Yes' },
   { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
+  { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
+  { feature: 'Revenue share to course', teeahead: 'Yes', foreup: 'No', lightspeed: 'No', golfnow: 'No' },
   { feature: 'Stripe-native payments', teeahead: 'Yes', foreup: 'No (own processor)', lightspeed: 'Yes', golfnow: 'No' },
-  { feature: 'Built-in reports', teeahead: 'Yes — revenue, rounds, waitlist', foreup: 'Yes', lightspeed: 'Yes', golfnow: 'Limited' },
+  { feature: 'Revenue & accounting reports', teeahead: 'Yes — revenue, rounds, GL, waitlist', foreup: 'Yes', lightspeed: 'Yes', golfnow: 'Limited' },
   { feature: 'Customer data ownership', teeahead: 'Stays with your course', foreup: 'Stays with your course', lightspeed: 'Stays with your course', golfnow: 'Retained by GolfNow' },
   { feature: 'Setup / onboarding fee', teeahead: '$0', foreup: 'Varies', lightspeed: 'Varies', golfnow: '$0' },
 ]
