@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "TeeAhead | Golf Tee Times & Loyalty — Metro Detroit",
     description:
-      "Zero booking fees. Beat GolfPass+ for $40 less. Free for partner courses.",
+      "Zero booking fees. Beat GolfPass+ for $30 less. Free for partner courses.",
     images: ["/og-image.png"],
   },
   alternates: {

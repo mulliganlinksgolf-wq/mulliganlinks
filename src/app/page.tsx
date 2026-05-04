@@ -135,7 +135,7 @@ export default async function HomePage({
                 <div className="text-2xl">⛳</div>
                 <div>
                   <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $40 less.</p>
+                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $30 less.</p>
                 </div>
                 <Link
                   href="/waitlist/golfer"

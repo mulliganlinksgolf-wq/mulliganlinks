@@ -146,7 +146,7 @@ export default async function CourseWaitlistPage() {
               {
                 icon: '💰',
                 title: 'Earn while you sleep',
-                description: 'Refer a golfer to Eagle ($89/yr) and earn $8.90/mo for 12 months — automatically. Drop your QR code at the pro shop, send one email to your list. We handle the payouts.',
+                description: 'Refer a golfer who sets your course as their home course and earn 10% of their membership back every month — automatically. Drop your QR code at the pro shop, send one email to your list. We handle the payouts.',
               },
             ].map(({ icon, title, description }) => (
               <div

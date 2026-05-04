@@ -213,7 +213,7 @@ export default async function GolfNowAlternativePage({
                     { feature: 'In-round service requests', them: 'None', us: 'Built in' },
                     { feature: 'Accounting & revenue reports', them: 'Limited', us: 'Full GL-ready reports' },
                     { feature: 'Discount anchoring', them: 'Yes — erodes rack rates', us: 'No discounting' },
-                    { feature: 'Contract lock-in', them: 'Yes', us: 'None' },
+                    { feature: 'Contract lock-in', them: '1, 2 or 3 year', us: 'None' },
                   ].map((row, i) => (
                     <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
                       <td className="px-6 py-4 font-medium text-[#1A1A1A]">{row.feature}</td>

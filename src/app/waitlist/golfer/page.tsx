@@ -33,6 +33,7 @@ const tiers = [
     badge: 'Most Popular',
     features: [
       '250 bonus Fairway Points',
+      '1 complimentary round/yr (course-provided, subject to availability)',
       '1.5× Fairway Points per dollar',
       'Priority booking: 48hr early access',
       'Always-on booking fee waiver',
@@ -124,7 +125,7 @@ export default async function GolferWaitlistPage({
 
             {/* Subhead */}
             <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              {c['waitlist.hero_subhead'] ?? 'TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $40 less than GolfPass+ with more credits and no expiration.'}
+              {c['waitlist.hero_subhead'] ?? 'TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $30 less than GolfPass+ with more credits and no expiration.'}
             </p>
 
             {/* Live count badge */}
@@ -145,7 +146,7 @@ export default async function GolferWaitlistPage({
           {[
             { value: '$0', label: 'Free to join' },
             { value: '$89/yr', label: 'Eagle membership' },
-            { value: '$40', label: 'Saved vs GolfPass+' },
+            { value: '$30', label: 'Saved vs GolfPass+' },
             { value: '0', label: 'Booking fees on Eagle+' },
           ].map(({ value, label }) => (
             <div key={label}>

@@ -68,7 +68,7 @@ const comparison = [
   { feature: 'Monthly software cost', teeahead: '$0 (Founding Partners)', foreup: '$400–$800/mo', lightspeed: '$300–$700/mo', golfnow: '$0 + barter' },
   { feature: 'Barter tee times required', teeahead: 'None, ever', foreup: 'None', lightspeed: 'None', golfnow: '~2/day at rack rate' },
   { feature: 'Booking commissions', teeahead: 'None', foreup: 'None', lightspeed: 'None', golfnow: 'Yes' },
-  { feature: 'Contract lock-in', teeahead: 'None', foreup: 'Yes (annual)', lightspeed: 'Yes (annual)', golfnow: 'Yes' },
+  { feature: 'Contract lock-in', teeahead: 'None', foreup: 'Varies', lightspeed: 'Month-to-month', golfnow: '1, 2 or 3 year' },
   { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
   { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
   { feature: 'Member tee time exchange', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
