@@ -58,7 +58,13 @@ export default async function HomePage({
           <Link href="/">
             <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
           </Link>
-          <div className="flex flex-col-reverse gap-2 min-[480px]:flex-row min-[480px]:gap-3">
+          <div className="flex items-center gap-2 min-[480px]:gap-3">
+            <Link
+              href="/features"
+              className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#F4F1EA]/30 px-5 py-2.5 text-sm font-semibold text-[#F4F1EA]/80 transition-colors hover:border-[#F4F1EA]/60 hover:text-[#F4F1EA]"
+            >
+              Features
+            </Link>
             <Link
               href="/waitlist/course"
               className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#E0A800] transition-colors hover:bg-[#E0A800]/10"
@@ -558,6 +564,7 @@ export default async function HomePage({
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/features" className="hover:text-[#F4F1EA] transition-colors">All Features</Link>
                 <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
                 <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
                 <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
