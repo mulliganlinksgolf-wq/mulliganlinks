@@ -53,10 +53,10 @@ function parseStat(stat: string): StatParts {
   return { prefix: m[1] ?? '', numeric: n, suffix: m[3] ?? '', countable: n > 5 }
 }
 
-function StatCard({ stat, statLabel, dark }: { stat: string; statLabel: string; dark: boolean }) {
+function StatCard({ stat, statLabel, dark, flip }: { stat: string; statLabel: string; dark: boolean; flip?: boolean }) {
   const { prefix, numeric, suffix, countable } = parseStat(stat)
   return (
-    <div data-reveal data-delay="2" className="flex items-center justify-center md:justify-end">
+    <div data-reveal data-delay="2" className={`flex items-center justify-center ${flip ? 'md:justify-start md:order-1' : 'md:justify-end'}`}>
       <div className={`rounded-3xl p-10 text-center space-y-2 min-w-[160px] ${
         dark ? 'bg-white/5 border border-white/8' : 'bg-white border border-black/8 shadow-sm'
       }`}>
@@ -258,10 +258,12 @@ export default function Features() {
 
       {/* Course features */}
       <div id="for-courses">
-        {courseFeatures.map((f) => (
+        {courseFeatures.map((f, i) => {
+          const flip = i % 2 !== 0
+          return (
           <section key={f.number} className={`px-6 py-28 sm:py-36 ${f.dark ? 'bg-[#0F3D2E]' : 'bg-[#FAF7F2]'}`}>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
+              <div className={`space-y-6${flip ? ' md:order-2' : ''}`}>
                 <div data-reveal className="flex items-center gap-3">
                   <span className={`text-xs font-bold tracking-[0.2em] uppercase ${f.dark ? 'text-[#E0A800]' : 'text-[#0F3D2E]/50'}`}>{f.number}</span>
                   <span className={`h-px w-8 ${f.dark ? 'bg-[#E0A800]/40' : 'bg-black/15'}`} />
@@ -275,10 +277,11 @@ export default function Features() {
                 </p>
                 <Pills tags={f.tags} dark={f.dark} />
               </div>
-              <StatCard stat={f.stat} statLabel={f.statLabel} dark={f.dark} />
+              <StatCard stat={f.stat} statLabel={f.statLabel} dark={f.dark} flip={flip} />
             </div>
           </section>
-        ))}
+          )
+        })}
       </div>
 
       {/* Course CTA */}
@@ -306,7 +309,7 @@ export default function Features() {
         {golferFeatures.map((f) => (
           <section key={f.number} className={`px-6 py-28 ${f.alt ? 'bg-[#071f17]' : 'bg-[#0F3D2E]'}`}>
             <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-              <div className="space-y-6">
+              <div className={`space-y-6${f.alt ? ' md:order-2' : ''}`}>
                 <div data-reveal className="flex items-center gap-3">
                   <span className="text-xs font-bold tracking-[0.2em] uppercase text-[#E0A800]">{f.number}</span>
                   <span className="h-px w-8 bg-[#E0A800]/40" />
@@ -318,7 +321,7 @@ export default function Features() {
                 <p data-reveal data-delay="2" className="text-lg text-[#F4F1EA]/60 leading-relaxed max-w-sm">{f.sub}</p>
                 <GolferPills tags={f.tags} />
               </div>
-              <div data-reveal data-delay="2" className="flex items-center justify-center md:justify-end">
+              <div data-reveal data-delay="2" className={`flex items-center justify-center ${f.alt ? 'md:justify-start md:order-1' : 'md:justify-end'}`}>
                 <div className="rounded-3xl p-10 text-center space-y-2 min-w-[160px] bg-white/5 border border-white/8">
                   {(() => {
                     const { prefix, numeric, suffix, countable } = parseStat(f.stat)
