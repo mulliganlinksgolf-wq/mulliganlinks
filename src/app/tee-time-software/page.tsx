@@ -5,7 +5,7 @@ import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 export const metadata: Metadata = {
   title: 'Free Tee Time Software for Golf Courses | TeeAhead',
   description:
-    'TeeAhead is free tee sheet software for golf courses — no barter tee times, no commissions, no contracts. Built-in golfer loyalty program, Stripe payments, and real-time reports. Metro Detroit launch.',
+    'TeeAhead is free tee sheet software for golf courses — no barter tee times, no commissions, annual contracts. Built-in golfer loyalty program, Stripe payments, and real-time reports. Metro Detroit launch.',
   alternates: {
     canonical: 'https://www.teeahead.com/tee-time-software',
   },
@@ -68,7 +68,7 @@ const comparison = [
   { feature: 'Monthly software cost', teeahead: '$0 (Founding Partners)', foreup: '$400–$800/mo', lightspeed: '$300–$700/mo', golfnow: '$0 + barter' },
   { feature: 'Barter tee times required', teeahead: 'None, ever', foreup: 'None', lightspeed: 'None', golfnow: '~2/day at rack rate' },
   { feature: 'Booking commissions', teeahead: 'None', foreup: 'None', lightspeed: 'None', golfnow: 'Yes' },
-  { feature: 'Contract lock-in', teeahead: 'None', foreup: 'Varies', lightspeed: 'Month-to-month', golfnow: '1, 2 or 3 year' },
+  { feature: 'Contract term', teeahead: 'Annual', foreup: 'Varies', lightspeed: 'Month-to-month', golfnow: '1, 2 or 3 year' },
   { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
   { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
   { feature: 'Member tee time exchange', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
@@ -113,7 +113,7 @@ export default function TeeTimeSoftwarePage() {
               Free Tee Time Software for Golf Courses
             </h1>
             <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-3xl mx-auto">
-              TeeAhead is tee sheet software that costs your course nothing — no barter tee times, no commissions, no lock-in contracts. Built-in golfer loyalty, real-time booking, QR check-in, and Stripe payments included.
+              TeeAhead is tee sheet software that costs your course nothing — no barter tee times, no commissions, no hidden fees. Annual contracts, simple and transparent. Built-in golfer loyalty, real-time booking, QR check-in, and Stripe payments included.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
               <Link
@@ -206,9 +206,8 @@ export default function TeeTimeSoftwarePage() {
                     'Full platform access — no feature gating',
                     'No barter tee times',
                     'No commissions per booking',
-                    'No contract — cancel any time',
+                    'Annual commitment — lock in $349/mo rate after year one',
                     'Direct onboarding with the TeeAhead team',
-                    'Lock in $349/mo rate after year one',
                   ].map(item => (
                     <li key={item} className="flex items-start gap-2">
                       <span className="text-[#E0A800] mt-0.5">✓</span>
@@ -228,12 +227,12 @@ export default function TeeTimeSoftwarePage() {
                   Standard — Course #11 and beyond
                 </div>
                 <div className="text-5xl font-bold text-[#1A1A1A]">$349<span className="text-2xl font-normal text-[#6B7770]">/mo</span></div>
-                <p className="text-[#6B7770] text-sm">Flat monthly rate, no variable fees</p>
+                <p className="text-[#6B7770] text-sm">Annual contract, billed monthly — no variable fees</p>
                 <ul className="space-y-2 text-sm text-[#6B7770]">
                   {[
                     'Full platform access',
                     'No barter, no commissions',
-                    'Month-to-month, no lock-in',
+                    'Annual commitment, billed monthly',
                     'Stripe Connect payouts',
                     'Loyalty network access',
                     '~96% cheaper than GolfNow barter costs',

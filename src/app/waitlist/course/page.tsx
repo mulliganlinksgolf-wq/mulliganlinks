@@ -179,7 +179,7 @@ export default async function CourseWaitlistPage() {
               {
                 title: 'Standard (Year 2 Onward)',
                 price: '$349/mo',
-                description: 'Flat monthly, no commissions, no barter.',
+                description: 'Annual contract, billed monthly. No commissions, no barter.',
                 multiYearNote: true,
               },
               {

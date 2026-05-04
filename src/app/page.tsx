@@ -440,8 +440,8 @@ export default async function HomePage({
                       'Free cancellation unlimited (1hr)',
                       '1.5× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
-                      '1 guest pass per year',
-                      '10% birthday credit',
+                      '1 guest pass per year (at participating courses)',
+                      '10% birthday credit (at participating courses)',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
@@ -477,8 +477,8 @@ export default async function HomePage({
                       'Free cancellation unlimited (1hr)',
                       '2× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
-                      '2 guest passes per year',
-                      '15% birthday credit',
+                      '2 guest passes per year (at participating courses)',
+                      '15% birthday credit (at participating courses)',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
