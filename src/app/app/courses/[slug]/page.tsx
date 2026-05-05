@@ -43,7 +43,7 @@ export default async function CourseDetailPage({
 
   const { data: teeTimes } = await supabase
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price')
+    .select('id, scheduled_at, available_players, base_price, special_price, special_label')
     .eq('course_id', course.id)
     .eq('status', 'open')
     .gte('scheduled_at', selectedDate + 'T00:00:00+00:00')

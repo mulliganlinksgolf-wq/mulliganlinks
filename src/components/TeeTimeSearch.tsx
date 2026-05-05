@@ -8,6 +8,8 @@ interface TeeTime {
   scheduled_at: string
   available_players: number
   base_price: number
+  special_price?: number | null
+  special_label?: string | null
 }
 
 const TZ = 'America/Detroit'
@@ -35,7 +37,9 @@ function TeeTimeCard({
   isMovingFast: boolean
   compact?: boolean
 }) {
-  const price = tt.base_price * (1 - discountPct / 100)
+  const hasDeal = tt.special_price != null
+  const price = hasDeal ? tt.special_price! : tt.base_price * (1 - discountPct / 100)
+  const savings = hasDeal ? tt.base_price - tt.special_price! : 0
   const spotsLeft = tt.available_players
   const lastSpot = spotsLeft === 1
 
@@ -45,7 +49,9 @@ function TeeTimeCard({
       className={`
         relative flex flex-col items-center text-center rounded-xl border-2 transition-all
         ${compact ? 'p-3 pt-5' : 'p-5 pt-6'}
-        ${isMovingFast && lastSpot
+        ${hasDeal
+          ? 'border-[#E0A800] bg-[#163d2a] hover:bg-[#1B4332]'
+          : isMovingFast && lastSpot
           ? 'border-[#8FA889] bg-[#163d2a] hover:bg-[#1B4332]'
           : isMovingFast
           ? 'border-[#E0A800] bg-[#163d2a] hover:bg-[#1B4332]'
@@ -53,7 +59,12 @@ function TeeTimeCard({
         }
       `}
     >
-      {isMovingFast && (
+      {hasDeal && tt.special_label && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap bg-[#E0A800] text-[#1A1A1A]">
+          {tt.special_label}
+        </div>
+      )}
+      {!hasDeal && isMovingFast && (
         <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap
           ${lastSpot
             ? 'bg-[#8FA889] text-[#0f2d1d]'
@@ -69,16 +80,37 @@ function TeeTimeCard({
       <p className={`text-[#E0A800] font-semibold ${compact ? 'text-sm mt-0.5' : 'text-lg mt-1'}`}>
         ${price.toFixed(2)}
       </p>
-      {discountPct > 0 && (
+      {hasDeal ? (
+        <>
+          <p className="text-xs text-[#8FA889] line-through">${tt.base_price.toFixed(2)}</p>
+          {savings > 0 && (
+            <p className="text-xs text-[#E0A800] font-semibold">Save ${savings.toFixed(2)}</p>
+          )}
+        </>
+      ) : discountPct > 0 ? (
         <p className="text-xs text-[#8FA889] line-through">${tt.base_price.toFixed(2)}</p>
+      ) : null}
+      {!isMovingFast && !hasDeal && (
+        <p className={`text-[#8FA889] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
+          {spotsLeft} spot{spotsLeft !== 1 ? 's' : ''} left
+        </p>
       )}
-      {!isMovingFast && (
+      {hasDeal && (
         <p className={`text-[#8FA889] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
           {spotsLeft} spot{spotsLeft !== 1 ? 's' : ''} left
         </p>
       )}
     </Link>
   )
+}
+
+function sortWithFeaturedFirst(tts: TeeTime[]): TeeTime[] {
+  return [...tts].sort((a, b) => {
+    const aFeatured = a.special_price != null ? 1 : 0
+    const bFeatured = b.special_price != null ? 1 : 0
+    if (bFeatured !== aFeatured) return bFeatured - aFeatured
+    return new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
+  })
 }
 
 export function TeeTimeSearch({
@@ -116,8 +148,8 @@ export function TeeTimeSearch({
     })
   }, [teeTimes, golfers, timeOfDay, fastOnly])
 
-  const morning = filtered.filter(tt => localHour(tt.scheduled_at) < 12)
-  const afternoon = filtered.filter(tt => localHour(tt.scheduled_at) >= 12)
+  const morning = sortWithFeaturedFirst(filtered.filter(tt => localHour(tt.scheduled_at) < 12))
+  const afternoon = sortWithFeaturedFirst(filtered.filter(tt => localHour(tt.scheduled_at) >= 12))
 
   const isMovingFast = (tt: TeeTime) => tt.available_players <= 2
 
