@@ -7,13 +7,6 @@ import { RequestsWithRating } from './RequestsWithRating'
 
 export const metadata: Metadata = { title: 'Partner Requests — TeeAhead' }
 
-function displayName(fullName: string | null): string {
-  if (!fullName) return 'Member'
-  const parts = fullName.trim().split(' ')
-  if (parts.length === 1) return parts[0]
-  return `${parts[0]} ${parts[parts.length - 1][0]}.`
-}
-
 const STATUS_BADGE: Record<string, string> = {
   pending: 'bg-yellow-500/20 text-yellow-300',
   accepted: 'bg-green-500/20 text-green-300',
@@ -79,6 +72,9 @@ export default async function RequestsPage({
       && !ratedRequestIds.has(r.id)
   }
 
+  const rateableReceivedIds = historicReceived.filter(isRateable).map(r => r.id)
+  const rateableSentIds = sentRequests.filter(isRateable).map(r => r.id)
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white">Partner Requests</h1>
@@ -115,7 +111,12 @@ export default async function RequestsPage({
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <p className="text-white font-medium text-sm">
-                        {displayName((r.requester as any)?.full_name ?? null)}
+                        {(() => {
+                          const n = (r.requester as any)?.full_name?.trim() ?? ''
+                          if (!n) return 'Member'
+                          const p = n.split(' ')
+                          return p.length === 1 ? p[0] : `${p[0]} ${p[p.length - 1][0]}.`
+                        })()}
                       </p>
                       {r.availability?.available_date && (
                         <p className="text-[#8FA889] text-xs">
@@ -142,10 +143,9 @@ export default async function RequestsPage({
               <h3 className="text-sm font-medium text-[#8FA889] uppercase tracking-wider mb-3">History</h3>
               <RequestsWithRating
                 requests={historicReceived}
-                isRateable={isRateable}
+                rateableIds={rateableReceivedIds}
                 otherPartyKey="requester"
                 statusBadge={STATUS_BADGE}
-                displayName={displayName}
               />
             </div>
           )}
@@ -157,10 +157,9 @@ export default async function RequestsPage({
           )}
           <RequestsWithRating
             requests={sentRequests}
-            isRateable={isRateable}
+            rateableIds={rateableSentIds}
             otherPartyKey="recipient"
             statusBadge={STATUS_BADGE}
-            displayName={displayName}
             showWithdraw
           />
         </div>

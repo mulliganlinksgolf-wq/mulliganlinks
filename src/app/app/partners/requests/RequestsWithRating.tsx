@@ -5,16 +5,23 @@ import { RatingModal } from '@/components/RatingModal'
 import { WithdrawButton } from './RequestActions'
 import type { ConnectionRequest } from '@/types/partners'
 
+function displayName(fullName: string | null): string {
+  if (!fullName) return 'Member'
+  const parts = fullName.trim().split(' ')
+  if (parts.length === 1) return parts[0]
+  return `${parts[0]} ${parts[parts.length - 1][0]}.`
+}
+
 interface Props {
   requests: (ConnectionRequest & { availability: { available_date: string } | null })[]
-  isRateable: (r: ConnectionRequest & { availability: { available_date: string } | null }) => boolean
+  rateableIds: string[]
   otherPartyKey: 'requester' | 'recipient'
   statusBadge: Record<string, string>
-  displayName: (name: string | null) => string
   showWithdraw?: boolean
 }
 
-export function RequestsWithRating({ requests, isRateable, otherPartyKey, statusBadge, displayName, showWithdraw }: Props) {
+export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statusBadge, showWithdraw }: Props) {
+  const rateableSet = new Set(rateableIds)
   const [ratingTarget, setRatingTarget] = useState<{
     requestId: string
     rateeId: string
@@ -28,7 +35,7 @@ export function RequestsWithRating({ requests, isRateable, otherPartyKey, status
         {requests.map(r => {
           const otherParty = (r as any)[otherPartyKey]
           const name = displayName(otherParty?.full_name ?? null)
-          const rateable = isRateable(r) && !ratedIds.has(r.id)
+          const rateable = rateableSet.has(r.id) && !ratedIds.has(r.id)
           const otherPartyId = otherPartyKey === 'requester' ? r.requester_id : r.recipient_id
 
           return (
