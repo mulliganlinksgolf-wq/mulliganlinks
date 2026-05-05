@@ -94,7 +94,7 @@ export function StructuredData() {
               unitCode: 'ANN',
             },
             description:
-              '$120/yr in tee time credits, 1 free round, always-on booking fee waiver, 10% green fee discount.',
+              '$120/yr in tee time credits, 1 free round, always-on booking fee waiver, $10 birthday credit.',
           },
           {
             '@type': 'Offer',
@@ -108,7 +108,7 @@ export function StructuredData() {
               unitCode: 'ANN',
             },
             description:
-              '$240/yr in tee time credits, 2 free rounds, 24 guest fee waivers, concierge booking, 15% green fee discount.',
+              '$240/yr in tee time credits, 2 free rounds, 2 guest passes, $20 birthday credit.',
           },
         ],
       },

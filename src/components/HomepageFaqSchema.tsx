@@ -16,7 +16,7 @@ export function HomepageFaqSchema() {
         name: 'How does TeeAhead compare to GolfPass+?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'TeeAhead Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every metric: 250 bonus Fairway Points on signup, 1 complimentary round/yr (course-provided), always-on booking fee waiver, 2× points multiplier, 48hr priority booking, and a 10% birthday credit.',
+          text: 'TeeAhead Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every metric: 250 bonus Fairway Points on signup, 1 complimentary round/yr (course-provided), always-on booking fee waiver, 1.5× points multiplier, 48hr priority booking, 1 guest pass per year, and a $10 birthday credit.',
         },
       },
       {

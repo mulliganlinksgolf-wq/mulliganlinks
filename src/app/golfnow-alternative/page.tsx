@@ -262,7 +262,7 @@ export default async function GolfNowAlternativePage({
                     { feature: 'Free rounds per year', them: '0', us: '1 (course-provided)' },
                     { feature: 'Booking fees waived', them: '12×/year only', us: 'Always, unlimited' },
                     { feature: 'Guest pass', them: 'None', us: '1 per year' },
-                    { feature: 'Birthday credit', them: 'None', us: '10% off' },
+                    { feature: 'Birthday credit', them: 'None', us: '$10 credit/yr' },
                     { feature: 'Points multiplier', them: '1× base', us: '2×' },
                     { feature: 'Priority booking access', them: 'None', us: '48hr early access' },
                     { feature: 'Tee time exchange', them: 'None', us: 'List & claim via app' },

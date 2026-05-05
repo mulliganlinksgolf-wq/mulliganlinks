@@ -32,7 +32,6 @@ export default async function CourseDetailPage({
     .single()
 
   const tier = membership?.tier ?? 'free'
-  const discountPct = tier === 'ace' ? 15 : tier === 'eagle' ? 10 : 0
 
   // Default to tomorrow if no date given (today likely has no slots yet)
   const selectedDate = dateParam ?? (() => {
@@ -64,7 +63,6 @@ export default async function CourseDetailPage({
         courseName={course.name}
         courseSlug={slug}
         selectedDate={selectedDate}
-        discountPct={discountPct}
         tier={tier}
       />
     </div>

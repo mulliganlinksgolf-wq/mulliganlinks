@@ -28,17 +28,15 @@ function formatDate(s: string) {
 
 function TeeTimeCard({
   tt,
-  discountPct,
   isMovingFast,
   compact = false,
 }: {
   tt: TeeTime
-  discountPct: number
   isMovingFast: boolean
   compact?: boolean
 }) {
   const hasDeal = tt.special_price != null
-  const price = hasDeal ? tt.special_price! : tt.base_price * (1 - discountPct / 100)
+  const price = hasDeal ? tt.special_price! : tt.base_price
   const savings = hasDeal ? tt.base_price - tt.special_price! : 0
   const spotsLeft = tt.available_players
   const lastSpot = spotsLeft === 1
@@ -87,8 +85,6 @@ function TeeTimeCard({
             <p className="text-xs text-[#E0A800] font-semibold">Save ${savings.toFixed(2)}</p>
           )}
         </>
-      ) : discountPct > 0 ? (
-        <p className="text-xs text-[#8FA889] line-through">${tt.base_price.toFixed(2)}</p>
       ) : null}
       {!isMovingFast && !hasDeal && (
         <p className={`text-[#8FA889] ${compact ? 'text-xs mt-0.5' : 'text-sm mt-1.5'}`}>
@@ -117,14 +113,12 @@ export function TeeTimeSearch({
   teeTimes,
   courseName,
   selectedDate,
-  discountPct,
   tier,
 }: {
   teeTimes: TeeTime[]
   courseName: string
   courseSlug: string
   selectedDate: string
-  discountPct: number
   tier: string
 }) {
   const [golfers, setGolfers] = useState<number | null>(null)
@@ -225,11 +219,6 @@ export function TeeTimeSearch({
           ))}
         </div>
 
-        {tier !== 'free' && (
-          <span className="ml-auto text-xs px-3 py-1.5 rounded-full bg-[#E0A800]/20 text-[#E0A800] font-semibold">
-            {discountPct}% {tier} discount applied
-          </span>
-        )}
       </div>
 
       {/* Moving Fast carousel */}
@@ -241,7 +230,7 @@ export function TeeTimeSearch({
           <div className="flex gap-3 overflow-x-auto pt-3 pb-3 pr-4 scrollbar-hide">
             {movingFast.slice(0, 8).map(tt => (
               <div key={tt.id} className="flex-shrink-0 w-32">
-                <TeeTimeCard tt={tt} discountPct={discountPct} isMovingFast compact />
+                <TeeTimeCard tt={tt} isMovingFast compact />
               </div>
             ))}
           </div>
@@ -265,7 +254,7 @@ export function TeeTimeSearch({
             <div>
               <h2 className="text-[9px] font-semibold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-3">Morning</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
+                {morning.map(tt => <TeeTimeCard key={tt.id} tt={tt} isMovingFast={isMovingFast(tt)} />)}
               </div>
             </div>
           )}
@@ -273,7 +262,7 @@ export function TeeTimeSearch({
             <div>
               <h2 className="text-[9px] font-semibold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-3">Afternoon</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} discountPct={discountPct} isMovingFast={isMovingFast(tt)} />)}
+                {afternoon.map(tt => <TeeTimeCard key={tt.id} tt={tt} isMovingFast={isMovingFast(tt)} />)}
               </div>
             </div>
           )}

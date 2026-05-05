@@ -15,7 +15,6 @@ interface TeeTime {
   courses: { id: string; name: string; slug: string }
 }
 
-const DISCOUNT: Record<string, number> = { free: 0, eagle: 10, ace: 15 }
 const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
 
 export function BookingForm({
@@ -41,14 +40,11 @@ export function BookingForm({
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
-  const discountPct = DISCOUNT[tier] ?? 0
   const multiplier = MULTIPLIER[tier] ?? 1
   const subtotal = teeTime.base_price * players
-  const discount = subtotal * (discountPct / 100)
-  const afterDiscount = subtotal - discount
   // Apply in order: credits → rain check → points
-  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, afterDiscount) : 0
-  const afterCredits = afterDiscount - creditsValue
+  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, subtotal) : 0
+  const afterCredits = subtotal - creditsValue
   const rainCheckValue = rainCheck ? Math.min(rainCheck.amountCents / 100, afterCredits) : 0
   const afterRainCheck = afterCredits - rainCheckValue
   // 100 points = $1
@@ -64,7 +60,7 @@ export function BookingForm({
         userId,
         players,
         subtotal,
-        discount,
+        discount: 0,
         pointsRedeemed: usePoints ? Math.round(pointsValue * 100) : 0,
         creditsRedeemedCents: useCredits ? Math.round(creditsValue * 100) : 0,
         rainCheckId: rainCheck?.id,
@@ -114,12 +110,6 @@ export function BookingForm({
             <span>${teeTime.base_price.toFixed(2)} × {players} player{players !== 1 ? 's' : ''}</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
-          {discountPct > 0 && (
-            <div className="flex justify-between text-[#1B4332]">
-              <span>{discountPct}% member discount</span>
-              <span>−${discount.toFixed(2)}</span>
-            </div>
-          )}
           {creditBalanceCents > 0 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
               <button

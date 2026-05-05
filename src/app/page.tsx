@@ -443,7 +443,7 @@ export default async function HomePage({
                       '1.5× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
                       '1 guest pass per year (at participating courses)',
-                      '10% birthday credit (at participating courses)',
+                      '$10 birthday credit',
                       'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
@@ -481,7 +481,7 @@ export default async function HomePage({
                       '2× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
                       '2 guest passes per year (at participating courses)',
-                      '15% birthday credit (at participating courses)',
+                      '$20 birthday credit',
                       'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">

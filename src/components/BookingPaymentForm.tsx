@@ -9,7 +9,6 @@ import { platformFeeCents } from '@/lib/stripe/fees'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-const DISCOUNT: Record<string, number> = { free: 0, fairway: 0, eagle: 10, ace: 15 }
 const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
 
 // Inner form rendered inside <Elements>
@@ -28,7 +27,6 @@ function CheckoutForm({
   appFee: number
   pointsEarned: number
   tier: string
-  discountAmt: number
 }) {
   const stripe = useStripe()
   const elements = useElements()
@@ -63,12 +61,6 @@ function CheckoutForm({
             <span>Green fee</span>
             <span>${greenFee.toFixed(2)}</span>
           </div>
-          {discountAmt > 0 && (
-            <div className="flex justify-between text-[#1B4332]">
-              <span>{DISCOUNT[tier]}% member discount</span>
-              <span>−${discountAmt.toFixed(2)}</span>
-            </div>
-          )}
           {appFee > 0 && (
             <div className="flex justify-between text-[#6B7770]">
               <span>Booking fee</span>
@@ -133,14 +125,11 @@ export function BookingPaymentForm({
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
-  const discountPct = DISCOUNT[tier] ?? 0
   const multiplier = MULTIPLIER[tier] ?? 1
   const baseSubtotal = teeTime.base_price * players
-  const discount = teeTime.base_price * (discountPct / 100)
-  const greenFee = baseSubtotal - discount
   const appFee = platformFeeCents(tier) / 100
-  const total = greenFee + appFee
-  const pointsEarned = Math.floor(greenFee * multiplier)
+  const total = baseSubtotal + appFee
+  const pointsEarned = Math.floor(baseSubtotal * multiplier)
 
   function handleProceed() {
     setError(null)
@@ -180,11 +169,10 @@ export function BookingPaymentForm({
         <CheckoutForm
           bookingId={bookingId}
           total={total}
-          greenFee={greenFee}
+          greenFee={baseSubtotal}
           appFee={platformFeeCents(tier)}
           pointsEarned={pointsEarned}
           tier={tier}
-          discountAmt={discount}
         />
       </Elements>
     )
@@ -222,12 +210,6 @@ export function BookingPaymentForm({
             <span>${teeTime.base_price.toFixed(2)} × {players} player{players !== 1 ? 's' : ''}</span>
             <span>${baseSubtotal.toFixed(2)}</span>
           </div>
-          {discountPct > 0 && (
-            <div className="flex justify-between text-[#1B4332]">
-              <span>{discountPct}% member discount</span>
-              <span>−${discount.toFixed(2)}</span>
-            </div>
-          )}
           {appFee > 0 ? (
             <div className="flex justify-between text-[#6B7770]">
               <span>Booking fee</span>

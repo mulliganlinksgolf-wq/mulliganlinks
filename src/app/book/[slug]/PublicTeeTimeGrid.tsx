@@ -184,7 +184,7 @@ export function PublicTeeTimeGrid({
         </div>
 
         <p className="text-xs text-gray-400 ml-auto">
-          Members save up to 15% ·{' '}
+          Members earn points on every round ·{' '}
           <Link href="/signup" target="_blank" rel="noopener noreferrer" className="text-[#1B4332] font-medium hover:underline">
             Join free →
           </Link>
