@@ -48,10 +48,12 @@ export async function createPendingBooking({
   teeTimeId,
   players,
   tier,
+  guestPassId,
 }: {
   teeTimeId: string
   players: number
   tier: string
+  guestPassId?: string
 }): Promise<{ bookingId?: string; error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -69,9 +71,24 @@ export async function createPendingBooking({
     return { error: 'This tee time is no longer available.' }
   }
 
+  // Validate guest pass server-side before applying
+  let verifiedPassId: string | null = null
+  if (guestPassId) {
+    const { data: pass } = await admin
+      .from('guest_passes')
+      .select('id')
+      .eq('id', guestPassId)
+      .eq('user_id', user.id)
+      .is('redeemed_at', null)
+      .gt('expires_at', new Date().toISOString())
+      .single()
+    verifiedPassId = pass?.id ?? null
+  }
+
+  const discountCents = verifiedPassId ? 1500 : 0
   const greenFeeCents = Math.round((teeTime.base_price as number) * players * 100)
   const appFeeCents = platformFeeCents(tier)
-  const totalCents = greenFeeCents + appFeeCents
+  const totalCents = greenFeeCents + appFeeCents - discountCents
 
   const { data: booking, error } = await admin
     .from('bookings')
@@ -86,11 +103,21 @@ export async function createPendingBooking({
       platform_fee_cents: appFeeCents,
       total_charged_cents: totalCents,
       points_awarded: 0,
+      discount_cents: discountCents,
+      guest_pass_id: verifiedPassId,
     })
     .select('id')
     .single()
 
   if (error || !booking) return { error: 'Failed to create booking.' }
+
+  // Mark pass redeemed immediately
+  if (verifiedPassId) {
+    await admin
+      .from('guest_passes')
+      .update({ redeemed_at: new Date().toISOString(), booking_id: booking.id })
+      .eq('id', verifiedPassId)
+  }
 
   return { bookingId: booking.id }
 }
@@ -107,6 +134,7 @@ export async function confirmBooking({
   total,
   pointsEarned,
   tier,
+  guestPassId,
 }: {
   teeTimeId: string
   userId: string
@@ -119,6 +147,7 @@ export async function confirmBooking({
   total: number
   pointsEarned: number
   tier: string
+  guestPassId?: string
 }) {
   const supabase = await createClient()
 
@@ -133,6 +162,24 @@ export async function confirmBooking({
     return { error: 'This tee time is no longer available.' }
   }
 
+  // Validate guest pass server-side
+  const guestPassAdmin = createAdminClient()
+  let verifiedPassId: string | null = null
+  if (guestPassId) {
+    const { data: pass } = await guestPassAdmin
+      .from('guest_passes')
+      .select('id')
+      .eq('id', guestPassId)
+      .eq('user_id', userId)
+      .is('redeemed_at', null)
+      .gt('expires_at', new Date().toISOString())
+      .single()
+    verifiedPassId = pass?.id ?? null
+  }
+
+  const discountCents = verifiedPassId ? 1500 : 0
+  const adjustedTotal = total - discountCents / 100
+
   // Create booking
   // TODO: Replace total_paid with Stripe PaymentIntent amount when Stripe is wired
   const { data: booking, error: bookingError } = await supabase
@@ -141,15 +188,25 @@ export async function confirmBooking({
       tee_time_id: teeTimeId,
       user_id: userId,
       players,
-      total_paid: total,
+      total_paid: adjustedTotal,
       status: 'confirmed',
       points_awarded: pointsEarned,
+      discount_cents: discountCents,
+      guest_pass_id: verifiedPassId,
     })
     .select('id')
     .single()
 
   if (bookingError || !booking) {
     return { error: 'Failed to create booking. Please try again.' }
+  }
+
+  // Mark guest pass redeemed
+  if (verifiedPassId) {
+    await guestPassAdmin
+      .from('guest_passes')
+      .update({ redeemed_at: new Date().toISOString(), booking_id: booking.id })
+      .eq('id', verifiedPassId)
   }
 
   // Decrement available players
