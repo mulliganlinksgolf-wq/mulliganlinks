@@ -21,7 +21,7 @@ export async function sendAdminNotification({
 
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
-    to: 'mulliganlinksgolf@gmail.com',
+    to: 'hello@teeahead.com',
     subject,
     html,
   })
