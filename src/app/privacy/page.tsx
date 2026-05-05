@@ -62,10 +62,11 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">4. Data Sharing</h2>
             <p className="text-[#6B7770] leading-relaxed">
               We share your data only with: (a) the partner course where you make a booking, so
-              they can prepare for your visit; (b) Stripe, for payment processing; (c) Resend,
-              for transactional email delivery; (d) Vercel, for platform hosting and analytics;
-              (e) LogRocket, for session recording and error monitoring (records user interactions
-              to help us diagnose bugs — sensitive fields are masked).
+              they can prepare for your visit; (b) Supabase, for database hosting and
+              authentication; (c) Stripe, for payment processing; (d) Resend, for transactional
+              email delivery; (e) Vercel, for platform hosting and analytics; (f) LogRocket, for
+              session recording and error monitoring (records user interactions to help us diagnose
+              bugs — sensitive fields are masked).
               All third-party providers are contractually bound to use your data only to provide
               services to TeeAhead.
             </p>
