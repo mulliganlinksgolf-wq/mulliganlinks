@@ -416,3 +416,85 @@ export async function sendReferralAttributionAlert({
     `,
   })
 }
+
+export async function sendPartnerRequestEmail({
+  requesterName,
+  recipientEmail,
+  availabilityDate,
+  message,
+}: {
+  requesterName: string
+  recipientEmail: string
+  availabilityDate: string
+  message?: string
+}) {
+  const client = getResend()
+  if (!client) return
+
+  const dateLabel = availabilityDate
+    ? new Date(availabilityDate + 'T12:00:00').toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric',
+      })
+    : 'an upcoming date'
+
+  await client.emails.send({
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: recipientEmail,
+    subject: `${requesterName} wants to play golf with you on ${dateLabel}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">You've got a tee time request ⛳</h2>
+        <p>${requesterName} wants to play golf with you on <strong>${dateLabel}</strong>.</p>
+        ${message ? `<blockquote style="border-left: 3px solid #1B4332; padding-left: 12px; color: #6B7770;">${message}</blockquote>` : ''}
+        <p style="margin: 24px 0;">
+          <a href="https://teeahead.com/app/partners/requests"
+             style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+            View request →
+          </a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">TeeAhead · Your home course, redone right.</p>
+      </div>
+    `,
+  })
+}
+
+export async function sendPartnerRequestAcceptedEmail({
+  recipientName,
+  requesterEmail,
+  availabilityDate,
+}: {
+  recipientName: string
+  requesterEmail: string
+  availabilityDate: string
+}) {
+  const client = getResend()
+  if (!client) return
+
+  const dateLabel = availabilityDate
+    ? new Date(availabilityDate + 'T12:00:00').toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric',
+      })
+    : 'your requested date'
+
+  await client.emails.send({
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: requesterEmail,
+    subject: `Your golf request was accepted — ${dateLabel}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">You're on! 🏌️</h2>
+        <p>${recipientName} accepted your request to play on <strong>${dateLabel}</strong>.</p>
+        <p>Reach out to coordinate the details — tee time, course, who's driving the cart.</p>
+        <p style="margin: 24px 0;">
+          <a href="https://teeahead.com/app/partners/requests"
+             style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+            View your requests →
+          </a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">TeeAhead · Your home course, redone right.</p>
+      </div>
+    `,
+  })
+}
