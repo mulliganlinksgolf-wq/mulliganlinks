@@ -307,3 +307,32 @@ export async function uploadAvatar(
   revalidatePath('/app/partners')
   return { url: publicUrl }
 }
+
+export async function submitRating(
+  connectionRequestId: string,
+  rateeId: string,
+  stars: number,
+  comment?: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+  if (stars < 1 || stars > 5) return { error: 'Stars must be between 1 and 5.' }
+  if (comment && comment.length > 280) return { error: 'Comment must be 280 characters or fewer.' }
+
+  const { error } = await supabase.from('partner_ratings').insert({
+    rater_id: user.id,
+    ratee_id: rateeId,
+    connection_request_id: connectionRequestId,
+    stars,
+    comment: comment ?? null,
+  })
+
+  if (error) {
+    if (error.code === '23505') return { error: 'You already rated this round.' }
+    return { error: error.message }
+  }
+
+  revalidatePath('/app/partners/requests')
+  return {}
+}
