@@ -297,8 +297,8 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
                 <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
                   neil@teeahead.com
                 </a>{' '}or{' '}
-                <a href="mailto:bill@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
-                  bill@teeahead.com
+                <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
+                  billy@teeahead.com
                 </a>. Not a contact form.
               </p>
             </div>
@@ -354,7 +354,7 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
                 <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>

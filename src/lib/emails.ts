@@ -51,7 +51,7 @@ export async function sendBookingConfirmation({
     const firstName = profile?.full_name?.split(' ')[0] ?? 'there'
 
     await resend.emails.send({
-      from: 'TeeAhead <notifications@teeahead.com>',
+      from: 'TeeAhead <hello@teeahead.com>',
       to: email,
       subject: `You're on the tee — ${course?.name} ${dateStr}`,
       html: `
@@ -121,7 +121,7 @@ export async function sendCourseBookingAlert({
     if (adminEmails.length === 0) return
 
     await resend.emails.send({
-      from: 'TeeAhead <notifications@teeahead.com>',
+      from: 'TeeAhead <hello@teeahead.com>',
       to: adminEmails,
       subject: `New booking — ${timeStr} ${dateStr.split(',')[0]}`,
       html: `
@@ -182,7 +182,7 @@ export async function sendCancellationConfirmation({
     const { date: dateStr, time: timeStr } = fmtDateTime(teeTimeIso)
 
     await resend.emails.send({
-      from: 'TeeAhead <notifications@teeahead.com>',
+      from: 'TeeAhead <hello@teeahead.com>',
       to: email,
       subject: `Booking canceled — ${courseName} ${dateStr}`,
       html: `
@@ -247,7 +247,7 @@ export async function sendRainCheckEmail({
     const amount = (amountCents / 100).toFixed(2)
 
     await resend.emails.send({
-      from: 'TeeAhead <notifications@teeahead.com>',
+      from: 'TeeAhead <hello@teeahead.com>',
       to: email,
       subject: `Your rain check — $${amount} at ${courseName}`,
       html: `
@@ -307,7 +307,7 @@ export async function sendPhoneBookingConfirmation({
     const resend = new Resend(resendKey)
 
     await resend.emails.send({
-      from: 'TeeAhead <notifications@teeahead.com>',
+      from: 'TeeAhead <hello@teeahead.com>',
       to: guestEmail,
       subject: `Tee time confirmed — ${courseName} ${dateStr}`,
       html: `
@@ -322,7 +322,7 @@ export async function sendPhoneBookingConfirmation({
             <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Total paid</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">$${totalPaid.toFixed(2)}</td></tr>
             <tr><td style="padding: 8px 0; color: #6B7770;">Payment method</td><td style="padding: 8px 0;">${paymentLabel}</td></tr>
           </table>
-          <p style="color: #6B7770; font-size: 13px;">Booked by calling the course. Questions? Contact us at support@teeahead.com</p>
+          <p style="color: #6B7770; font-size: 13px;">Booked by calling the course. Questions? Contact us at hello@teeahead.com</p>
           <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
           <p style="color: #6B7770; font-size: 12px;">TeeAhead &middot; Your home course, redone right.</p>
         </div>

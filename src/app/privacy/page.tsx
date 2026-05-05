@@ -20,7 +20,7 @@ export default function PrivacyPage() {
 
       <main className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-4xl font-bold text-[#1A1A1A] mb-2">Privacy Policy</h1>
-        <p className="text-[#6B7770] mb-12">Last updated: April 2026</p>
+        <p className="text-[#6B7770] mb-12">Last updated: May 2026</p>
 
         <div className="space-y-10 text-[#1A1A1A]">
 
@@ -31,7 +31,9 @@ export default function PrivacyPage() {
               <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Account data:</strong> email address, full name, phone number</span></li>
               <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Booking data:</strong> tee time bookings, courses played, number of players</span></li>
               <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Payment data:</strong> processed securely by Stripe — we do not store card numbers</span></li>
-              <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Usage data:</strong> pages visited, features used, session duration</span></li>
+              <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Profile data:</strong> optional partner-matching preferences (handicap, pace of play, play style, gender, bio) and profile photo</span></li>
+              <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Service request data:</strong> in-round request type and optional note submitted to course staff</span></li>
+              <li className="flex gap-2"><span className="text-[#1B4332] font-bold mt-0.5">•</span><span><strong className="text-[#1A1A1A]">Usage data:</strong> pages visited, features used, session duration (including session recordings via LogRocket)</span></li>
             </ul>
           </section>
 
@@ -61,7 +63,9 @@ export default function PrivacyPage() {
             <p className="text-[#6B7770] leading-relaxed">
               We share your data only with: (a) the partner course where you make a booking, so
               they can prepare for your visit; (b) Stripe, for payment processing; (c) Resend,
-              for transactional email delivery; (d) Vercel, for platform hosting and analytics.
+              for transactional email delivery; (d) Vercel, for platform hosting and analytics;
+              (e) LogRocket, for session recording and error monitoring (records user interactions
+              to help us diagnose bugs — sensitive fields are masked).
               All third-party providers are contractually bound to use your data only to provide
               services to TeeAhead.
             </p>
@@ -82,8 +86,8 @@ export default function PrivacyPage() {
             <p className="text-[#6B7770] leading-relaxed">
               You have the right to access, correct, or delete your personal data at any time.
               Email{' '}
-              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
-                support@teeahead.com
+              <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
+                hello@teeahead.com
               </a>{' '}
               to make a data request. We will respond within 30 days.
             </p>
@@ -92,9 +96,11 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">7. Cookies</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              We use session cookies required for authentication (managed by Supabase) and
-              analytics cookies (Vercel Analytics — anonymized, no cross-site tracking). We do
-              not use advertising cookies or third-party tracking pixels.
+              We use session cookies required for authentication (managed by Supabase),
+              analytics cookies (Vercel Analytics — anonymized, no cross-site tracking), and a
+              referral attribution cookie (<strong className="text-[#1A1A1A]">ta_ref</strong> — set when you arrive via a
+              course referral link, expires after 30 days, used only to credit the referring
+              course). We do not use advertising cookies or third-party tracking pixels.
             </p>
           </section>
 
@@ -111,8 +117,8 @@ export default function PrivacyPage() {
             <h2 className="text-xl font-bold mb-3">9. Contact</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Privacy questions or data requests:{' '}
-              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
-                support@teeahead.com
+              <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
+                hello@teeahead.com
               </a>
             </p>
           </section>

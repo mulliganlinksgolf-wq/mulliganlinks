@@ -20,7 +20,7 @@ export async function sendAdminNotification({
   }
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: 'mulliganlinksgolf@gmail.com',
     subject,
     html,
@@ -40,7 +40,7 @@ export async function sendWelcomeEmail({
   const firstName = fullName?.split(' ')[0] ?? 'there'
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: email,
     subject: 'Welcome to TeeAhead — confirm your email to get started',
     html: `
@@ -72,7 +72,7 @@ export async function sendWelcomeEmail({
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
           TeeAhead · Your home course, redone right.<br />
-          Questions? Reply to this email or reach us at support@teeahead.com
+          Questions? Reply to this email or reach us at hello@teeahead.com
         </p>
       </div>
     `,
@@ -95,7 +95,7 @@ export async function sendGolferWaitlistConfirmation({
   }
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: email,
     subject: `You're #${position} on the TeeAhead waitlist ⛳`,
     html: `
@@ -141,7 +141,7 @@ export async function sendCourseWaitlistConfirmation({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: email,
     subject: `${courseName} — Founding Partner application received`,
     html: `
@@ -202,7 +202,7 @@ export async function sendCourseAdminAlert({
     : ''
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: ['neil@teeahead.com', 'billy@teeahead.com'],
     subject: `New course application: ${courseName}`,
     html: `
@@ -255,7 +255,7 @@ export async function sendBarterReceipt({
   const nowMonth = now.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: email,
     subject: `Your TeeAhead Barter Receipt — ${nowMonth}`,
     html: `
@@ -319,7 +319,7 @@ export async function sendBroadcast({
   await Promise.all(
     recipients.map(r =>
       client.emails.send({
-        from: 'TeeAhead <notifications@teeahead.com>',
+        from: 'TeeAhead <hello@teeahead.com>',
         to: r.email,
         subject,
         html,
@@ -349,7 +349,7 @@ export async function sendFoundingPartnerApproval({
   const firstName = contactName.split(' ')[0]
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: email,
     subject: `Welcome, Founding Partner #${partnerNumber} of 10 — ${courseName}`,
     html: `
@@ -399,7 +399,7 @@ export async function sendReferralAttributionAlert({
   const dollarStr = `$${revShareDollars.toFixed(2)}`
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: courseEmails,
     subject: `${golferFirstName} joined TeeAhead through your referral!`,
     html: `
@@ -450,7 +450,7 @@ export async function sendPartnerRequestEmail({
   const escapedMessage = message ? escapeHtml(message) : undefined
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: recipientEmail,
     subject: `${escapedRequesterName} wants to play golf with you on ${dateLabel}`,
     html: `
@@ -492,7 +492,7 @@ export async function sendPartnerRequestAcceptedEmail({
   const escapedRecipientName = escapeHtml(recipientName)
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: requesterEmail,
     subject: `Your golf request was accepted — ${dateLabel}`,
     html: `
@@ -545,7 +545,7 @@ export async function sendPartnerBookedEmail({
         : 'a tee time'
 
   await client.emails.send({
-    from: 'TeeAhead <notifications@teeahead.com>',
+    from: 'TeeAhead <hello@teeahead.com>',
     to: otherEmail,
     subject: `${escapedBookerName} booked their tee time for ${dateLabel} — your turn!`,
     html: `

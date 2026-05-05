@@ -39,7 +39,7 @@ export async function sendCrmEmail(
     const { admin } = await assertAdmin()
 
     const { error: sendError } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead CRM <crm@teeahead.com>',
+      from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead <hello@teeahead.com>',
       to: params.to,
       subject: params.subject,
       html: params.bodyHtml,

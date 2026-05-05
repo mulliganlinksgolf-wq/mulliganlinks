@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
   ].filter(Boolean) as string[]
 
   const { error } = await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead CRM <crm@teeahead.com>',
+    from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead <hello@teeahead.com>',
     to: recipients,
     subject: `TeeAhead CRM — ${total} stale lead${total !== 1 ? 's' : ''} need attention`,
     html,

@@ -17,7 +17,7 @@ export function StructuredData() {
         description:
           "TeeAhead is Metro Detroit's local-first golf loyalty network. Free tee sheet software for courses, zero booking fees for golfers.",
         foundingDate: '2026',
-        email: 'support@teeahead.com',
+        email: 'hello@teeahead.com',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Detroit',
@@ -34,7 +34,7 @@ export function StructuredData() {
         ],
         contactPoint: {
           '@type': 'ContactPoint',
-          email: 'support@teeahead.com',
+          email: 'hello@teeahead.com',
           contactType: 'customer support',
           availableLanguage: 'English',
         },

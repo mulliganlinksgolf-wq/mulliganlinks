@@ -332,7 +332,7 @@ export default function WindsorParkeCaseStudy() {
           <nav className="flex gap-4 text-xs text-[#F4F1EA]/50">
             <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
             <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-            <a href="mailto:support@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
+            <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
           </nav>
         </div>
       </footer>

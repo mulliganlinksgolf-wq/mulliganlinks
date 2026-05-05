@@ -69,7 +69,7 @@ export default async function ContactPage() {
               { icon: '⭐', title: 'Loyalty engine', body: 'Fairway Points auto-awarded every round. Members come back to earn — not to price-hunt.' },
               { icon: '📊', title: 'Analytics dashboard', body: 'Utilization rates, revenue trends, member LTV. Data you actually own.' },
               { icon: '🔔', title: 'Waitlist & auto-fill', body: 'Cancellations auto-filled via SMS and email. Save staff time. Recover lost revenue.' },
-              { icon: '💳', title: 'Integrated payments', body: 'Stripe and Square — online and in-person. No middleman on the transaction.' },
+              { icon: '💳', title: 'Integrated payments', body: 'Stripe — online and in-person. No middleman on the transaction.' },
             ].map((f) => (
               <div key={f.title} className="bg-[#FAF7F2] rounded-xl p-6 space-y-2">
                 <div className="text-3xl">{f.icon}</div>
@@ -95,7 +95,8 @@ export default async function ContactPage() {
           </p>
           <div className="bg-[#1B4332] text-[#FAF7F2] rounded-xl p-8 text-center">
             <p className="text-4xl font-bold">$0</p>
-            <p className="text-[#FAF7F2]/80 mt-2">What TeeAhead costs your course. Forever.</p>
+            <p className="text-[#FAF7F2]/80 mt-2">Your first year as a Founding Partner — then $349/month.</p>
+            <p className="text-sm text-[#FAF7F2]/50 mt-1">No barter tee times. No commissions. No setup fee.</p>
           </div>
         </div>
       </section>

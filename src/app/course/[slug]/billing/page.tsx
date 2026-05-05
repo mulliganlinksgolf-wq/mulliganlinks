@@ -83,8 +83,8 @@ export default async function CourseBillingPage({
 
         <div className="text-sm text-[#6B7770]">
           To change your plan or discuss your contract, contact us at{' '}
-          <a href="mailto:partnerships@teeahead.com" className="text-[#1B4332] underline hover:no-underline">
-            partnerships@teeahead.com
+          <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline hover:no-underline">
+            hello@teeahead.com
           </a>
         </div>
       </div>
@@ -101,7 +101,7 @@ export default async function CourseBillingPage({
             ['Booking fee', 'TeeAhead collects 0% — you keep 100% of green fees.'],
             ['Tee sheet access', 'Full tee sheet management, real-time availability, waitlist automation.'],
             ['Fairway Points', 'Auto-awarded at 1pt per dollar. Redeemable at your course.'],
-            ['Cancellation', '30-day written notice to partnerships@teeahead.com. No early-termination fee.'],
+            ['Cancellation', '30-day written notice to hello@teeahead.com. No early-termination fee.'],
             ['Data ownership', 'All booking, member, and revenue data remains yours. Exportable at any time.'],
           ].map(([term, detail]) => (
             <div key={term} className="flex gap-4">
@@ -112,8 +112,8 @@ export default async function CourseBillingPage({
         </div>
         <div className="px-6 py-4 text-xs text-[#6B7770]">
           Agreement effective {contractStart}. For the full signed agreement, email{' '}
-          <a href="mailto:partnerships@teeahead.com" className="text-[#1B4332] underline">
-            partnerships@teeahead.com
+          <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
+            hello@teeahead.com
           </a>
         </div>
       </div>

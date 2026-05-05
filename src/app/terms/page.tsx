@@ -20,7 +20,7 @@ export default function TermsPage() {
 
       <main className="max-w-3xl mx-auto px-6 py-16">
         <h1 className="text-4xl font-bold text-[#1A1A1A] mb-2">Terms of Service</h1>
-        <p className="text-[#6B7770] mb-12">Last updated: April 2026</p>
+        <p className="text-[#6B7770] mb-12">Last updated: May 2026</p>
 
         <div className="prose prose-slate max-w-none space-y-10 text-[#1A1A1A]">
 
@@ -37,9 +37,11 @@ export default function TermsPage() {
             <h2 className="text-xl font-bold mb-3">2. The Service</h2>
             <p className="text-[#6B7770] leading-relaxed">
               TeeAhead provides a golf membership platform that connects golfers with partner
-              courses. We offer tee time booking, a loyalty points program (Fairway Points), and
-              paid membership tiers (Eagle and Ace). Course management tools are provided free of
-              charge to partner courses.
+              courses. We offer tee time booking, a loyalty points program (Fairway Points), paid
+              membership tiers (Eagle and Ace), a member tee time trading marketplace, golf league
+              management, playing partner matching (Eagle and Ace members), and in-round service
+              requests. Course management tools are provided to partner courses under separate
+              pricing terms.
             </p>
           </section>
 
@@ -49,8 +51,8 @@ export default function TermsPage() {
               You must be 18 or older to create an account. You are responsible for keeping your
               login credentials secure and for all activity that occurs under your account. Notify
               us immediately at{' '}
-              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
-                support@teeahead.com
+              <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
+                hello@teeahead.com
               </a>{' '}
               if you suspect unauthorized access.
             </p>
@@ -70,9 +72,11 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">5. Fairway Points</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              Fairway Points are earned on bookings made through the TeeAhead platform.
-              Points have no cash value and cannot be transferred to another account. TeeAhead
-              reserves the right to modify the points program with 30 days' notice.
+              Fairway Points are earned on bookings made through the TeeAhead platform. Earning
+              rates vary by membership tier: Fairway members earn 1×, Eagle members earn 1.5×,
+              and Ace members earn 2× points per dollar spent. Points have no cash value and
+              cannot be transferred to another account. TeeAhead reserves the right to modify the
+              points program with 30 days&apos; notice.
             </p>
           </section>
 
@@ -89,16 +93,39 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-bold mb-3">7. Course Operators</h2>
             <p className="text-[#6B7770] leading-relaxed">
-              Course management software is provided free of charge. Courses agree to honor
-              TeeAhead member benefits (zero booking fees, points accrual, member discounts)
-              for all bookings made through the platform. Courses own all booking data generated
-              on their property. TeeAhead does not sell or share course customer data with
-              third parties.
+              Founding Partner courses receive complimentary access for 12 months; standard
+              monthly subscription pricing applies thereafter. All courses agree to honor TeeAhead
+              member benefits (zero booking fees, points accrual, member discounts) for all
+              bookings made through the platform. Courses own all booking data generated on their
+              property. TeeAhead does not sell or share course customer data with third parties.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">8. Prohibited Conduct</h2>
+            <h2 className="text-xl font-bold mb-3">8. Tee Time Trading</h2>
+            <p className="text-[#6B7770] leading-relaxed">
+              TeeAhead members may list upcoming tee times they cannot use for other members to
+              claim. When a listing is claimed, the original holder receives platform credit and
+              the claiming member assumes the booking. TeeAhead platform credits issued through
+              trading have no cash value, are non-transferable, and expire 12 months from
+              issuance. TeeAhead does not guarantee that listed tee times will be claimed, nor
+              that claimed tee times will be honored in the event of course changes or closures.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold mb-3">9. In-Round Service Requests</h2>
+            <p className="text-[#6B7770] leading-relaxed">
+              During an active round, members may submit service requests to course staff through
+              the TeeAhead platform. This feature is subject to each partner course enabling it.
+              TeeAhead transmits your request to the course and is not responsible for the
+              course&apos;s response time, fulfillment, or any charges the course may apply for
+              services rendered.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold mb-3">10. Prohibited Conduct</h2>
             <p className="text-[#6B7770] leading-relaxed">
               You agree not to: (a) use the platform for any unlawful purpose; (b) create fake
               accounts or falsify booking records; (c) attempt to reverse-engineer or interfere
@@ -108,7 +135,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">9. Limitation of Liability</h2>
+            <h2 className="text-xl font-bold mb-3">11. Limitation of Liability</h2>
             <p className="text-[#6B7770] leading-relaxed">
               TeeAhead is not liable for any indirect, incidental, or consequential damages
               arising from use of the platform, including but not limited to missed tee times,
@@ -119,7 +146,7 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">10. Changes to These Terms</h2>
+            <h2 className="text-xl font-bold mb-3">12. Changes to These Terms</h2>
             <p className="text-[#6B7770] leading-relaxed">
               We may update these terms periodically. We will notify you by email at least 14 days
               before material changes take effect. Continued use of the platform after that date
@@ -128,11 +155,11 @@ export default function TermsPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-bold mb-3">11. Contact</h2>
+            <h2 className="text-xl font-bold mb-3">13. Contact</h2>
             <p className="text-[#6B7770] leading-relaxed">
               Questions about these terms?{' '}
-              <a href="mailto:support@teeahead.com" className="text-[#1B4332] underline">
-                support@teeahead.com
+              <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
+                hello@teeahead.com
               </a>
             </p>
           </section>
