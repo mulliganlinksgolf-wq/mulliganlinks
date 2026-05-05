@@ -417,6 +417,15 @@ export async function sendReferralAttributionAlert({
   })
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
 export async function sendPartnerRequestEmail({
   requesterName,
   recipientEmail,
@@ -437,15 +446,18 @@ export async function sendPartnerRequestEmail({
       })
     : 'an upcoming date'
 
+  const escapedRequesterName = escapeHtml(requesterName)
+  const escapedMessage = message ? escapeHtml(message) : undefined
+
   await client.emails.send({
     from: 'TeeAhead <notifications@teeahead.com>',
     to: recipientEmail,
-    subject: `${requesterName} wants to play golf with you on ${dateLabel}`,
+    subject: `${escapedRequesterName} wants to play golf with you on ${dateLabel}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">You've got a tee time request ⛳</h2>
-        <p>${requesterName} wants to play golf with you on <strong>${dateLabel}</strong>.</p>
-        ${message ? `<blockquote style="border-left: 3px solid #1B4332; padding-left: 12px; color: #6B7770;">${message}</blockquote>` : ''}
+        <p>${escapedRequesterName} wants to play golf with you on <strong>${dateLabel}</strong>.</p>
+        ${escapedMessage ? `<blockquote style="border-left: 3px solid #1B4332; padding-left: 12px; color: #6B7770;">${escapedMessage}</blockquote>` : ''}
         <p style="margin: 24px 0;">
           <a href="https://teeahead.com/app/partners/requests"
              style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
@@ -477,6 +489,8 @@ export async function sendPartnerRequestAcceptedEmail({
       })
     : 'your requested date'
 
+  const escapedRecipientName = escapeHtml(recipientName)
+
   await client.emails.send({
     from: 'TeeAhead <notifications@teeahead.com>',
     to: requesterEmail,
@@ -484,7 +498,7 @@ export async function sendPartnerRequestAcceptedEmail({
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">You're on! 🏌️</h2>
-        <p>${recipientName} accepted your request to play on <strong>${dateLabel}</strong>.</p>
+        <p>${escapedRecipientName} accepted your request to play on <strong>${dateLabel}</strong>.</p>
         <p>Reach out to coordinate the details — tee time, course, who's driving the cart.</p>
         <p style="margin: 24px 0;">
           <a href="https://teeahead.com/app/partners/requests"
