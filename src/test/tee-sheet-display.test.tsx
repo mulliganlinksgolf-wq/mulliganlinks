@@ -20,10 +20,15 @@ vi.mock('next/navigation', () => ({
 vi.mock('@/app/actions/teeTime', () => ({
   updateTeeTimeStatus: vi.fn().mockResolvedValue(undefined),
   updateBookingStatus: vi.fn().mockResolvedValue(undefined),
+  setTeeTimeDeal: vi.fn().mockResolvedValue(undefined),
 }))
 
 vi.mock('@/components/course/WalkInBookingModal', () => ({
   WalkInBookingModal: () => <div data-testid="walk-in-modal" />,
+}))
+
+vi.mock('@/components/course/SetDealForm', () => ({
+  SetDealForm: () => <div data-testid="deal-form" />,
 }))
 
 function makeBooking(overrides: Partial<{
@@ -52,6 +57,8 @@ function makeTeeTime(overrides: Partial<{
   available_players: number
   base_price: number
   status: string
+  special_price: number | null
+  special_label: string | null
   bookings: ReturnType<typeof makeBooking>[]
 }> = {}) {
   return {
@@ -61,6 +68,8 @@ function makeTeeTime(overrides: Partial<{
     available_players: 4,
     base_price: 30,
     status: 'open',
+    special_price: null,
+    special_label: null,
     bookings: [],
     ...overrides,
   }
@@ -231,5 +240,46 @@ describe('TeeSheetGrid — booking state reflection', () => {
     // Both golfers visible in the expanded detail
     expect(screen.getAllByText('Alice').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByText('Bob')).toBeInTheDocument()
+  })
+
+  it('shows DEAL pill in the price column when special_price is set', () => {
+    render(
+      <TeeSheetGrid
+        teeTimes={[makeTeeTime({ special_price: 19.99 })]}
+        slug="demo"
+        courseId="course-1"
+        courseName="Demo Course"
+      />
+    )
+    expect(screen.getByText('DEAL')).toBeInTheDocument()
+  })
+
+  it('shows "Set deal" button in the expanded row', async () => {
+    const user = userEvent.setup()
+    render(
+      <TeeSheetGrid
+        teeTimes={[makeTeeTime()]}
+        slug="demo"
+        courseId="course-1"
+        courseName="Demo Course"
+      />
+    )
+    await user.click(screen.getByRole('button', { name: /8:00/i }))
+    expect(screen.getByRole('button', { name: /set deal/i })).toBeInTheDocument()
+  })
+
+  it('shows the deal form when "Set deal" is clicked', async () => {
+    const user = userEvent.setup()
+    render(
+      <TeeSheetGrid
+        teeTimes={[makeTeeTime()]}
+        slug="demo"
+        courseId="course-1"
+        courseName="Demo Course"
+      />
+    )
+    await user.click(screen.getByRole('button', { name: /8:00/i }))
+    await user.click(screen.getByRole('button', { name: /set deal/i }))
+    expect(screen.getByTestId('deal-form')).toBeInTheDocument()
   })
 })
