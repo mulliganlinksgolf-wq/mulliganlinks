@@ -512,3 +512,56 @@ export async function sendPartnerRequestAcceptedEmail({
     `,
   })
 }
+
+export async function sendPartnerBookedEmail({
+  bookerName,
+  otherEmail,
+  availabilityDate,
+  teeTime,
+  courseName,
+}: {
+  bookerName: string
+  otherEmail: string
+  availabilityDate: string
+  teeTime: string | null
+  courseName: string | null
+}) {
+  const client = getResend()
+  if (!client) return
+
+  const dateLabel = new Date(availabilityDate + 'T12:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric',
+  })
+
+  const escapedBookerName = escapeHtml(bookerName)
+  const escapedCourseName = courseName ? escapeHtml(courseName) : null
+
+  const detailLine = teeTime && escapedCourseName
+    ? `<strong>${teeTime}</strong> at <strong>${escapedCourseName}</strong>`
+    : teeTime
+      ? `<strong>${teeTime}</strong>`
+      : escapedCourseName
+        ? `at <strong>${escapedCourseName}</strong>`
+        : 'a tee time'
+
+  await client.emails.send({
+    from: 'TeeAhead <notifications@teeahead.com>',
+    to: otherEmail,
+    subject: `${escapedBookerName} booked their tee time for ${dateLabel} — your turn!`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">Your partner booked! ⛳</h2>
+        <p>${escapedBookerName} booked ${detailLine} on <strong>${dateLabel}</strong>.</p>
+        <p>Head over to TeeAhead and book your spot so you're locked in together.</p>
+        <p style="margin: 24px 0;">
+          <a href="https://teeahead.com/app/partners/requests"
+             style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
+            Book your tee time →
+          </a>
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">TeeAhead · Your home course, redone right.</p>
+      </div>
+    `,
+  })
+}

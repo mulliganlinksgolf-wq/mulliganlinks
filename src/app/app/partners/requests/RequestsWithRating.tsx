@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { RatingModal } from '@/components/RatingModal'
 import { WithdrawButton } from './RequestActions'
+import { markBooked } from '../actions'
 import type { ConnectionRequest } from '@/types/partners'
 
 function displayName(fullName: string | null): string {
@@ -28,6 +29,15 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
     rateeName: string
   } | null>(null)
   const [ratedIds, setRatedIds] = useState<Set<string>>(new Set())
+  const [localBookedIds, setLocalBookedIds] = useState<Set<string>>(new Set())
+  const [bookingIds, setBookingIds] = useState<Set<string>>(new Set())
+
+  async function handleMarkBooked(requestId: string) {
+    setBookingIds(prev => new Set([...prev, requestId]))
+    const result = await markBooked(requestId)
+    setBookingIds(prev => { const s = new Set(prev); s.delete(requestId); return s })
+    if (!result?.error) setLocalBookedIds(prev => new Set([...prev, requestId]))
+  }
 
   return (
     <>
@@ -37,6 +47,13 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
           const name = displayName(otherParty?.full_name ?? null)
           const rateable = rateableSet.has(r.id) && !ratedIds.has(r.id)
           const otherPartyId = otherPartyKey === 'requester' ? r.requester_id : r.recipient_id
+
+          // If otherPartyKey === 'recipient', current user is the requester
+          const iAmRequester = otherPartyKey === 'recipient'
+          const iBooked = iAmRequester ? r.requester_booked : r.recipient_booked
+          const theyBooked = iAmRequester ? r.recipient_booked : r.requester_booked
+          const iBookedNow = localBookedIds.has(r.id)
+          const isBooking = bookingIds.has(r.id)
 
           return (
             <div
@@ -64,6 +81,21 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
                   >
                     Book a tee time →
                   </a>
+                )}
+                {r.status === 'accepted' && !iBooked && !iBookedNow && (
+                  <button
+                    onClick={() => handleMarkBooked(r.id)}
+                    disabled={isBooking}
+                    className="text-xs font-medium text-[#52B788] hover:text-white px-3 py-1.5 rounded-lg border border-[#52B788]/40 hover:border-white/30 transition-colors disabled:opacity-50"
+                  >
+                    {isBooking ? '…' : 'I booked! 🏌️'}
+                  </button>
+                )}
+                {(iBooked || iBookedNow) && (
+                  <span className="text-xs text-[#52B788] font-medium">You booked ✓</span>
+                )}
+                {theyBooked && !(iBooked || iBookedNow) && (
+                  <span className="text-xs text-[#8FA889]">{name.split(' ')[0]} booked ✓</span>
                 )}
                 {showWithdraw && r.status === 'pending' && <WithdrawButton requestId={r.id} />}
                 {rateable && (

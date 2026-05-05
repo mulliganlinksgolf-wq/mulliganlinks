@@ -33,6 +33,7 @@ export default async function RequestsPage({
       .from('partner_connection_requests')
       .select(`
         id, requester_id, recipient_id, availability_id, message, status, created_at, updated_at,
+        requester_booked, recipient_booked,
         requester:profiles!requester_id(full_name, avatar_url),
         availability:partner_availability(available_date)
       `)
@@ -42,6 +43,7 @@ export default async function RequestsPage({
       .from('partner_connection_requests')
       .select(`
         id, requester_id, recipient_id, availability_id, message, status, created_at, updated_at,
+        requester_booked, recipient_booked,
         recipient:profiles!recipient_id(full_name, avatar_url),
         availability:partner_availability(available_date)
       `)

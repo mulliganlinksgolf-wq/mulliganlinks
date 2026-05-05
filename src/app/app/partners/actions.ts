@@ -308,6 +308,94 @@ export async function uploadAvatar(
   return { url: publicUrl }
 }
 
+export async function markBooked(
+  requestId: string
+): Promise<{ error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  // Fetch the request to determine if user is requester or recipient
+  const { data: req } = await supabase
+    .from('partner_connection_requests')
+    .select('id, requester_id, recipient_id, availability_id, requester_booked, recipient_booked')
+    .eq('id', requestId)
+    .eq('status', 'accepted')
+    .single()
+
+  if (!req) return { error: 'Request not found.' }
+
+  const isRequester = req.requester_id === user.id
+  const isRecipient = req.recipient_id === user.id
+  if (!isRequester && !isRecipient) return { error: 'Forbidden.' }
+
+  const field = isRequester ? 'requester_booked' : 'recipient_booked'
+
+  const { error: updateError } = await supabase
+    .from('partner_connection_requests')
+    .update({ [field]: true })
+    .eq('id', requestId)
+
+  if (updateError) return { error: updateError.message }
+
+  // Auto-detect tee time from bookings on the availability date (best-effort)
+  let teeTime: string | null = null
+  let courseName: string | null = null
+  if (req.availability_id) {
+    const { data: avail } = await supabase
+      .from('partner_availability')
+      .select('available_date')
+      .eq('id', req.availability_id)
+      .single()
+
+    if (avail?.available_date) {
+      const { data: booking } = await supabase
+        .from('bookings')
+        .select('tee_times(scheduled_at, courses(name))')
+        .eq('user_id', user.id)
+        .neq('status', 'canceled')
+        .gte('created_at', avail.available_date + 'T00:00:00Z')
+        .lte('created_at', avail.available_date + 'T23:59:59Z')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      const tt = (booking as any)?.tee_times
+      if (tt?.scheduled_at) {
+        teeTime = new Date(tt.scheduled_at).toLocaleTimeString('en-US', {
+          hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
+        })
+      }
+      if (tt?.courses?.name) courseName = tt.courses.name
+
+      // Send notification email to the other party
+      try {
+        const { sendPartnerBookedEmail } = await import('@/lib/resend') as any
+        const otherId = isRequester ? req.recipient_id : req.requester_id
+        const adminClient = (await import('@/lib/supabase/admin')).createAdminClient()
+        const [{ data: bookerProfile }, { data: { user: otherAuthUser } }] = await Promise.all([
+          supabase.from('profiles').select('full_name').eq('id', user.id).single(),
+          adminClient.auth.admin.getUserById(otherId),
+        ])
+        if (otherAuthUser?.email) {
+          await sendPartnerBookedEmail({
+            bookerName: (bookerProfile?.full_name ?? '').split(' ')[0] || 'Your partner',
+            otherEmail: otherAuthUser.email,
+            availabilityDate: avail.available_date,
+            teeTime,
+            courseName,
+          })
+        }
+      } catch (err) {
+        console.error('[partner-finder] Failed to send booked notification email:', err)
+      }
+    }
+  }
+
+  revalidatePath('/app/partners/requests')
+  return {}
+}
+
 export async function submitRating(
   connectionRequestId: string,
   rateeId: string,

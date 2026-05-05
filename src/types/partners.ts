@@ -72,6 +72,8 @@ export interface ConnectionRequest {
   status: RequestStatus
   created_at: string
   updated_at: string
+  requester_booked: boolean
+  recipient_booked: boolean
   requester?: { full_name: string | null; avatar_url: string | null }
   recipient?: { full_name: string | null; avatar_url: string | null }
   availability?: { available_date: string } | null
