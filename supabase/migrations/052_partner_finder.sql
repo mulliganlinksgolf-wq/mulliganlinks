@@ -50,6 +50,15 @@ CREATE TABLE partner_connection_requests (
   CONSTRAINT one_active_request UNIQUE (requester_id, recipient_id, availability_id)
 );
 
+-- Prevent duplicate general requests (when availability_id IS NULL)
+CREATE UNIQUE INDEX one_general_request
+  ON partner_connection_requests (requester_id, recipient_id)
+  WHERE availability_id IS NULL;
+
+CREATE INDEX ON partner_connection_requests(recipient_id);
+CREATE INDEX ON partner_connection_requests(requester_id);
+CREATE INDEX ON partner_connection_requests(availability_id) WHERE availability_id IS NOT NULL;
+
 CREATE TABLE partner_blocks (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   blocker_id uuid NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
@@ -69,7 +78,7 @@ RETURNS boolean AS $$
     WHERE (blocker_id = user_a AND blocked_id = user_b)
        OR (blocker_id = user_b AND blocked_id = user_a)
   );
-$$ LANGUAGE sql SECURITY DEFINER;
+$$ LANGUAGE sql STABLE SET search_path = public, pg_temp;
 
 -- ============================================================
 -- RLS
@@ -93,12 +102,15 @@ CREATE POLICY "pp_delete" ON partner_preferences
 -- partner_availability
 CREATE POLICY "pa_select" ON partner_availability
   FOR SELECT USING (
-    is_active = true
-    AND available_date >= CURRENT_DATE
-    AND NOT EXISTS (
-      SELECT 1 FROM partner_blocks
-      WHERE (blocker_id = profile_id AND blocked_id = auth.uid())
-         OR (blocker_id = auth.uid() AND blocked_id = profile_id)
+    profile_id = auth.uid()
+    OR (
+      is_active = true
+      AND available_date >= CURRENT_DATE
+      AND NOT EXISTS (
+        SELECT 1 FROM partner_blocks
+        WHERE (blocker_id = profile_id AND blocked_id = auth.uid())
+           OR (blocker_id = auth.uid() AND blocked_id = profile_id)
+      )
     )
   );
 CREATE POLICY "pa_insert" ON partner_availability
