@@ -124,9 +124,7 @@ export default async function AdminUsersPage({
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-5 py-3 font-medium">Tier</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-[#6B7770] uppercase tracking-wider">
-                    Partner Profile
-                  </th>
+                  <th className="text-left px-5 py-3 font-medium">Partner Profile</th>
                   <th className="text-left px-5 py-3 font-medium">Founding</th>
                   <th className="text-left px-5 py-3 font-medium">Joined</th>
                   <th className="text-left px-4 py-3 font-medium">Actions</th>
@@ -183,7 +181,7 @@ export default async function AdminUsersPage({
                     </tr>
                   )
                 }) : (
-                  <tr><td colSpan={7} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
+                  <tr><td colSpan={8} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
                 )}
               </tbody>
             </table>
