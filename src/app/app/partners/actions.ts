@@ -269,3 +269,41 @@ export async function blockMember(
   revalidatePath('/app/partners')
   return {}
 }
+
+export async function uploadAvatar(
+  formData: FormData
+): Promise<{ url?: string; error?: string }> {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const file = formData.get('avatar') as File | null
+  if (!file || file.size === 0) return { error: 'No file provided.' }
+  if (file.size > 5 * 1024 * 1024) return { error: 'Photo must be under 5 MB.' }
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
+    return { error: 'Only JPEG, PNG, or WebP photos are supported.' }
+  }
+
+  const ext = file.type === 'image/png' ? 'png' : file.type === 'image/webp' ? 'webp' : 'jpg'
+  const path = `${user.id}/avatar.${ext}`
+  const buffer = Buffer.from(await file.arrayBuffer())
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(path, buffer, { contentType: file.type, upsert: true })
+
+  if (uploadError) return { error: uploadError.message }
+
+  const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path)
+
+  const { error: updateError } = await supabase
+    .from('profiles')
+    .update({ avatar_url: publicUrl })
+    .eq('id', user.id)
+
+  if (updateError) return { error: updateError.message }
+
+  revalidatePath('/app/partners/preferences')
+  revalidatePath('/app/partners')
+  return { url: publicUrl }
+}
