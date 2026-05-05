@@ -165,10 +165,26 @@ export default function AboutPage() {
             Get in touch
           </h2>
           <p className="text-[#4A5550] leading-relaxed">
-            <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] font-medium hover:underline">neil@teeahead.com</a>
-            {' '}and{' '}
-            <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] font-medium hover:underline">billy@teeahead.com</a>.
+            We&apos;re two founders, not a support queue. If you manage a course and want to talk
+            software, revenue, or GolfNow — email Neil. If you want to talk membership, loyalty
+            mechanics, or just have questions — email Billy. Either works.
           </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center text-sm">
+            <a
+              href="mailto:neil@teeahead.com"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[#0F3D2E]/20 text-[#0F3D2E] font-medium hover:border-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
+            >
+              <span className="size-7 rounded-full bg-[#0F3D2E]/10 flex items-center justify-center text-xs font-black text-[#0F3D2E]">NB</span>
+              Neil — neil@teeahead.com
+            </a>
+            <a
+              href="mailto:billy@teeahead.com"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[#0F3D2E]/20 text-[#0F3D2E] font-medium hover:border-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
+            >
+              <span className="size-7 rounded-full bg-[#0F3D2E]/10 flex items-center justify-center text-xs font-black text-[#0F3D2E]">BB</span>
+              Billy — billy@teeahead.com
+            </a>
+          </div>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               href="/waitlist/course"
