@@ -443,6 +443,7 @@ export default async function HomePage({
                       'Priority booking: 48hr early access',
                       '1 guest pass per year (at participating courses)',
                       '10% birthday credit (at participating courses)',
+                      'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
@@ -480,6 +481,7 @@ export default async function HomePage({
                       'Priority booking: 72hr early access',
                       '2 guest passes per year (at participating courses)',
                       '15% birthday credit (at participating courses)',
+                      'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
