@@ -34,7 +34,6 @@ export interface PartnerAvailability {
   profile?: {
     id: string
     full_name: string | null
-    avatar_url: string | null
   }
   preferences?: PartnerPreferences
   course?: {

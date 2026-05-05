@@ -39,10 +39,12 @@ export default async function PartnersPage() {
       .from('partner_availability')
       .select(`
         id, profile_id, available_date, time_preference, holes, notes, course_id, expires_at, is_active, created_at,
-        profile:profiles!profile_id(id, full_name, avatar_url),
-        preferences:partner_preferences(
-          id, profile_id, handicap_index, pace_preference, prefers_walking,
-          drinks_ok, smoking_ok, preferred_holes, skill_level, bio, is_visible, updated_at
+        profile:profiles!profile_id(
+          id, full_name,
+          partner_preferences(
+            id, profile_id, handicap_index, pace_preference, prefers_walking,
+            drinks_ok, smoking_ok, preferred_holes, skill_level, bio, is_visible, updated_at
+          )
         ),
         course:courses(id, name, slug)
       `)
@@ -59,7 +61,17 @@ export default async function PartnersPage() {
       .in('status', ['pending', 'accepted']),
   ])
 
-  const availabilities = (rows ?? []) as unknown as PartnerAvailability[]
+  // Hoist preferences out of the nested profile join onto the top-level shape
+  const availabilities = (rows ?? []).map((row: any) => ({
+    ...row,
+    profile: {
+      id: row.profile?.id,
+      full_name: row.profile?.full_name,
+    },
+    preferences: Array.isArray(row.profile?.partner_preferences)
+      ? row.profile.partner_preferences[0] ?? undefined
+      : row.profile?.partner_preferences ?? undefined,
+  })) as unknown as PartnerAvailability[]
   const sentToAvailabilityIds = (sentRequests ?? [])
     .map((r: { availability_id: string | null }) => r.availability_id)
     .filter((id): id is string => id !== null)

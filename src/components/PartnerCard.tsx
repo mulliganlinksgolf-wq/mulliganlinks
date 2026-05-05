@@ -40,18 +40,9 @@ export function PartnerCard({
     <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center gap-3">
-        {profile?.avatar_url ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={profile.avatar_url}
-            alt={name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-        ) : (
-          <div className="w-10 h-10 rounded-full bg-[#1B4332] flex items-center justify-center text-white text-sm font-bold">
-            {initials}
-          </div>
-        )}
+        <div className="w-10 h-10 rounded-full bg-[#1B4332] flex items-center justify-center text-white text-sm font-bold">
+          {initials}
+        </div>
         <div>
           <p className="text-white font-semibold text-sm">{name}</p>
           <p className="text-[#8FA889] text-xs">
