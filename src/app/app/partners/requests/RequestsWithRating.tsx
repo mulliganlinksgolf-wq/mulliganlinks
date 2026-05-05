@@ -53,10 +53,18 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
                   </p>
                 )}
               </div>
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize ${statusBadge[r.status] ?? 'bg-white/10 text-[#8FA889]'}`}>
                   {r.status}
                 </span>
+                {r.status === 'accepted' && r.availability?.available_date && (
+                  <a
+                    href={`/app/courses?date=${r.availability.available_date}`}
+                    className="text-xs font-medium text-white bg-[#1B4332] hover:bg-[#163d2a] px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    Book a tee time →
+                  </a>
+                )}
                 {showWithdraw && r.status === 'pending' && <WithdrawButton requestId={r.id} />}
                 {rateable && (
                   <button

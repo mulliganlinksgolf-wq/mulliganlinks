@@ -2,7 +2,12 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
-export default async function CoursesPage() {
+export default async function CoursesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ date?: string }>
+}) {
+  const { date: dateParam } = await searchParams
   const supabase = await createClient()
 
   const { data: courses } = await supabase
@@ -37,7 +42,7 @@ export default async function CoursesPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {courses.map(course => (
-                <Link key={course.id} href={`/app/courses/${course.slug}`}>
+                <Link key={course.id} href={`/app/courses/${course.slug}${dateParam ? `?date=${dateParam}` : ''}`}>
                   <div
                     className="rounded-lg overflow-hidden transition-colors cursor-pointer hover:bg-[#333]"
                     style={{ background: '#163d2a' }}
