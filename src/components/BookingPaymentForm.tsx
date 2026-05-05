@@ -136,7 +136,7 @@ export function BookingPaymentForm({
   const discountPct = DISCOUNT[tier] ?? 0
   const multiplier = MULTIPLIER[tier] ?? 1
   const baseSubtotal = teeTime.base_price * players
-  const discount = baseSubtotal * (discountPct / 100)
+  const discount = teeTime.base_price * (discountPct / 100)
   const greenFee = baseSubtotal - discount
   const appFee = platformFeeCents(tier) / 100
   const total = greenFee + appFee
