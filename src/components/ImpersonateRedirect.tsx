@@ -23,17 +23,15 @@ export function ImpersonateRedirect() {
       router.replace('/app')
     }
 
-    // Subscribe first to avoid missing the event due to a race
+    // Only redirect after SIGNED_IN fires — do not use getSession() as a
+    // fallback here because the admin is already signed in as themselves,
+    // and getSession() would return *their* session immediately, redirecting
+    // to /app before the magic-link tokens in the hash establish Dave's session.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         subscription.unsubscribe()
         go()
       }
-    })
-
-    // In case the session was already established before we subscribed
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) go()
     })
 
     return () => subscription.unsubscribe()
