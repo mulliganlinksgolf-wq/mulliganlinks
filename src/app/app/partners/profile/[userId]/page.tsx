@@ -56,17 +56,14 @@ export default async function PartnerProfilePage({
   if (!user) redirect('/login')
 
   // Security gate: only accepted partners can view each other's profiles
-  const { data: connection } = await supabase
-    .from('partner_connection_requests')
-    .select('id')
-    .eq('status', 'accepted')
-    .or(
-      `and(requester_id.eq.${user.id},recipient_id.eq.${targetUserId}),` +
-      `and(requester_id.eq.${targetUserId},recipient_id.eq.${user.id})`
-    )
-    .maybeSingle()
+  const [{ data: asRequester }, { data: asRecipient }] = await Promise.all([
+    supabase.from('partner_connection_requests').select('id')
+      .eq('status', 'accepted').eq('requester_id', user.id).eq('recipient_id', targetUserId).maybeSingle(),
+    supabase.from('partner_connection_requests').select('id')
+      .eq('status', 'accepted').eq('requester_id', targetUserId).eq('recipient_id', user.id).maybeSingle(),
+  ])
 
-  if (!connection) notFound()
+  if (!asRequester && !asRecipient) notFound()
 
   const [{ data: profile }, { data: prefs }, { data: ratings }] = await Promise.all([
     supabase.from('profiles').select('full_name, avatar_url').eq('id', targetUserId).single(),
