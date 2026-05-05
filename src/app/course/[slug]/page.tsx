@@ -40,7 +40,7 @@ export default async function TeeSheetPage({
   const { data: teeTimes } = await supabase
     .from('tee_times')
     .select(`
-      id, scheduled_at, max_players, available_players, base_price, status,
+      id, scheduled_at, max_players, available_players, base_price, status, special_price, special_label,
       bookings(id, players, total_paid, status, payment_status, points_awarded, user_id, guest_name, guest_phone, guest_email, payment_method,
         profiles(full_name)
       )

@@ -42,7 +42,7 @@ export default async function PublicBookingPage({
 
   const { data: teeTimes } = await supabase
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price')
+    .select('id, scheduled_at, available_players, base_price, special_price, special_label')
     .eq('course_id', course.id)
     .eq('status', 'open')
     .gt('available_players', 0)
