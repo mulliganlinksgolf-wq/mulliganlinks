@@ -442,7 +442,7 @@ export default async function HomePage({
                       'Free cancellation unlimited (1hr)',
                       '1.5× Fairway Points per dollar spent',
                       'Priority booking: 48hr early access',
-                      '1 guest pass per year (at participating courses)',
+                      '1 guest pass per year',
                       '$10 birthday credit',
                       'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
@@ -480,7 +480,7 @@ export default async function HomePage({
                       'Free cancellation unlimited (1hr)',
                       '2× Fairway Points per dollar spent',
                       'Priority booking: 72hr early access',
-                      '2 guest passes per year (at participating courses)',
+                      '2 guest passes per year',
                       '$20 birthday credit',
                       'Partner Finder — match with other members, rate rounds, view profiles',
                     ].map((f) => (
