@@ -165,9 +165,6 @@ export default function AboutPage() {
             Get in touch
           </h2>
           <p className="text-[#4A5550] leading-relaxed">
-            We&apos;re reachable at{' '}
-            <a href="mailto:hello@teeahead.com" className="text-[#0F3D2E] font-medium hover:underline">hello@teeahead.com</a>.
-            Or reach us directly —{' '}
             <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] font-medium hover:underline">neil@teeahead.com</a>
             {' '}and{' '}
             <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] font-medium hover:underline">billy@teeahead.com</a>.
