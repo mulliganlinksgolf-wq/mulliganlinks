@@ -14,27 +14,26 @@ export function ImpersonateRedirect() {
     // Must run client-side — hash is never visible during SSR
     if (!window.location.hash.includes('type=magiclink')) return
 
+    const params = new URLSearchParams(window.location.hash.slice(1))
+    const access_token = params.get('access_token')
+    const refresh_token = params.get('refresh_token')
+    if (!access_token || !refresh_token) return
+
     const supabase = createClient()
-    let redirected = false
 
-    const go = () => {
-      if (redirected) return
-      redirected = true
-      router.replace('/app')
-    }
-
-    // Only redirect after SIGNED_IN fires — do not use getSession() as a
-    // fallback here because the admin is already signed in as themselves,
-    // and getSession() would return *their* session immediately, redirecting
-    // to /app before the magic-link tokens in the hash establish Dave's session.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
-      if (event === 'SIGNED_IN') {
-        subscription.unsubscribe()
-        go()
+    // @supabase/ssr's browser client is PKCE-flow by default and does NOT
+    // auto-process implicit-flow hash tokens, so setSession() manually.
+    // This also overwrites the admin's existing session with the target
+    // member's session in cookies, which the SSR /app page then reads.
+    supabase.auth.setSession({ access_token, refresh_token }).then(({ error }) => {
+      if (error) {
+        console.error('Impersonation setSession failed', error)
+        return
       }
+      // Clear the hash so a refresh doesn't try to re-process it
+      history.replaceState(null, '', window.location.pathname)
+      router.replace('/app')
     })
-
-    return () => subscription.unsubscribe()
   }, [router])
 
   return null
