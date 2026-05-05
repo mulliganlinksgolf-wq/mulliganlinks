@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { issueGuestPasses } from '@/app/actions/guestPasses'
 import Stripe from 'stripe'
 
 export async function POST(req: NextRequest) {
@@ -41,6 +42,9 @@ export async function POST(req: NextRequest) {
       console.error('[webhook] Failed to upsert membership:', upsertError)
       return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
     }
+
+    // Issue guest passes for the new membership tier
+    await issueGuestPasses(userId, tier)
 
     // Mark founding_member permanently on the profile when payment is confirmed
     if (session.metadata?.founding_golfer === 'true') {
