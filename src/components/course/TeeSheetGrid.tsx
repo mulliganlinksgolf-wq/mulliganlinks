@@ -8,6 +8,7 @@ import { EditBookingModal } from './EditBookingModal'
 import { WaiveFeeModal } from './WaiveFeeModal'
 import { IssueRainCheckModal } from './IssueRainCheckModal'
 import { SendConfirmationPopover } from './SendConfirmationPopover'
+import { SetDealForm } from './SetDealForm'
 
 interface Booking {
   id: string
@@ -31,6 +32,8 @@ interface TeeTime {
   available_players: number
   base_price: number
   status: string
+  special_price: number | null
+  special_label: string | null
   bookings: Booking[]
 }
 
@@ -45,6 +48,7 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
   const [waiveTarget, setWaiveTarget] = useState<Booking | null>(null)
   const [rainCheckTarget, setRainCheckTarget] = useState<Booking | null>(null)
+  const [dealTarget, setDealTarget] = useState<string | null>(null)
   const [, startTransition] = useTransition()
   const router = useRouter()
 
@@ -134,7 +138,14 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                 <div className="col-span-2 text-[#6B7770]">
                   {bookedPlayers}/{tt.max_players}
                 </div>
-                <div className="col-span-2 text-[#6B7770]">${tt.base_price.toFixed(2)}</div>
+                <div className="col-span-2 text-[#6B7770] flex items-center gap-1.5">
+                  ${tt.base_price.toFixed(2)}
+                  {tt.special_price !== null && (
+                    <span className="text-xs bg-amber-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">
+                      DEAL
+                    </span>
+                  )}
+                </div>
                 <div className="col-span-4 text-[#6B7770] truncate">
                   {booking ? getDisplayName(booking) : '—'}
                 </div>
@@ -249,7 +260,28 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                           </div>
                         )
                     )}
+                    {displayStatus !== 'completed' && (
+                      <button
+                        onClick={() => setDealTarget(dealTarget === tt.id ? null : tt.id)}
+                        className="text-xs px-3 py-1 border border-amber-400 text-amber-700 rounded hover:bg-amber-50"
+                      >
+                        {tt.special_price !== null ? 'Edit deal' : 'Set deal'}
+                      </button>
+                    )}
                   </div>
+                  {dealTarget === tt.id && (
+                    <SetDealForm
+                      teeTimeId={tt.id}
+                      basePrice={tt.base_price}
+                      initialSpecialPrice={tt.special_price}
+                      initialSpecialLabel={tt.special_label}
+                      onSuccess={() => {
+                        setDealTarget(null)
+                        router.refresh()
+                      }}
+                      onClose={() => setDealTarget(null)}
+                    />
+                  )}
                 </div>
               )}
             </div>
