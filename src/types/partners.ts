@@ -3,6 +3,9 @@ export type TimePreference = 'morning' | 'afternoon' | 'evening' | 'flexible'
 export type HolePreference = '9' | '18' | 'either'
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'any'
 export type RequestStatus = 'pending' | 'accepted' | 'declined' | 'withdrawn'
+export type PlayStyle = 'casual' | 'moderate' | 'competitive'
+export type Gender = 'male' | 'female' | 'non_binary' | 'prefer_not_to_say'
+export type OpenTo = 'anyone' | 'same_gender_only' | 'men_only' | 'women_only'
 
 export interface PartnerPreferences {
   id: string
@@ -17,6 +20,20 @@ export interface PartnerPreferences {
   bio: string | null
   is_visible: boolean
   updated_at: string
+  // v2
+  play_style: PlayStyle
+  gender: Gender
+  open_to: OpenTo
+}
+
+export interface PartnerRating {
+  id: string
+  rater_id: string
+  ratee_id: string
+  connection_request_id: string
+  stars: number
+  comment: string | null
+  created_at: string
 }
 
 export interface PartnerAvailability {
@@ -34,6 +51,7 @@ export interface PartnerAvailability {
   profile?: {
     id: string
     full_name: string | null
+    avatar_url: string | null
   }
   preferences?: PartnerPreferences
   course?: {
@@ -41,6 +59,8 @@ export interface PartnerAvailability {
     name: string
     slug: string
   }
+  avg_rating?: number | null
+  rating_count?: number
 }
 
 export interface ConnectionRequest {
@@ -54,4 +74,5 @@ export interface ConnectionRequest {
   updated_at: string
   requester?: { full_name: string | null; avatar_url: string | null }
   recipient?: { full_name: string | null; avatar_url: string | null }
+  availability?: { available_date: string } | null
 }
