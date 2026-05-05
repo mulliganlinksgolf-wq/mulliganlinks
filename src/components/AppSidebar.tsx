@@ -3,9 +3,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import Image from 'next/image'
-import { SIDEBAR_NAV_ITEMS, isNavItemActive } from '@/lib/nav'
+import { isNavItemActive, type NavItem } from '@/lib/nav'
 
-export default function AppSidebar() {
+export default function AppSidebar({ items }: { items: NavItem[] }) {
   const pathname = usePathname()
 
   return (
@@ -20,7 +20,7 @@ export default function AppSidebar() {
         />
       </div>
       <nav className="flex-1 p-3 space-y-1">
-        {SIDEBAR_NAV_ITEMS.map((item) => {
+        {items.map((item) => {
           const active = isNavItemActive(pathname, item.href, item.exact)
           return (
             <Link
@@ -33,7 +33,12 @@ export default function AppSidebar() {
               }`}
             >
               <span>{item.icon}</span>
-              <span>{item.label}</span>
+              <span className="flex-1">{item.label}</span>
+              {item.badge && item.badge > 0 && (
+                <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
+                  {item.badge}
+                </span>
+              )}
             </Link>
           )
         })}
