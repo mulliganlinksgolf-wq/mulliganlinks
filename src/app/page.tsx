@@ -118,7 +118,7 @@ export default async function HomePage({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[620px] mx-auto pt-2">
 
               {/* Course card */}
-              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+              <div className="flex flex-col rounded-xl p-6 text-left gap-4 transition-transform hover:-translate-y-0.5 duration-150"
                    style={{ background: 'rgba(224,168,0,0.12)', border: '1.5px solid rgba(224,168,0,0.50)', backdropFilter: 'blur(8px)' }}>
                 <div className="text-2xl">🏌️</div>
                 <div>
@@ -126,30 +126,31 @@ export default async function HomePage({
                   <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free for your first year for Founding Partners. No barter. No data extraction. No commissions.</p>
                   <p className="text-xs text-[#E0A800]/80 leading-relaxed mt-2">+ Earn 10% rev share on every golfer you refer.</p>
                 </div>
+                <FoundingPartnerProgress claimed={spotsClaimed} total={totalSpots} />
                 <Link
                   href="/waitlist/course"
-                  className="block text-center rounded-lg bg-[#E0A800] px-4 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                  className="mt-auto block text-center rounded-lg bg-[#E0A800] px-4 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
                 >
                   {spotsRemaining > 0 ? 'Claim a Founding Spot' : 'Join the Course Waitlist'}
                 </Link>
-                <FoundingPartnerProgress claimed={spotsClaimed} total={totalSpots} />
               </div>
 
               {/* Golfer card */}
-              <div className="rounded-xl p-6 text-left space-y-4 transition-transform hover:-translate-y-0.5 duration-150"
+              <div className="flex flex-col rounded-xl p-6 text-left gap-4 transition-transform hover:-translate-y-0.5 duration-150"
                    style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.50)', backdropFilter: 'blur(8px)' }}>
                 <div className="text-2xl">⛳</div>
                 <div>
                   <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
                   <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $30 less.</p>
+                  <Link href="/pricing" className="text-xs text-[#F4F1EA]/60 leading-relaxed mt-2 inline-block hover:text-[#F4F1EA] transition-colors">See what&apos;s included →</Link>
                 </div>
+                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
                 <Link
                   href="/waitlist/golfer"
-                  className="block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                  className="mt-auto block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
                 >
                   Join the Waitlist
                 </Link>
-                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
               </div>
 
             </div>
