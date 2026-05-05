@@ -260,3 +260,17 @@ export async function sendWalkInEmail({
   }).catch(err => console.error('[send-walk-in-email]', err))
   return {}
 }
+
+export async function setTeeTimeDeal(
+  teeTimeId: string,
+  specialPrice: number | null,
+  specialLabel: string | null,
+): Promise<void> {
+  const supabase = await createClient()
+  await supabase
+    .from('tee_times')
+    .update({ special_price: specialPrice, special_label: specialLabel })
+    .eq('id', teeTimeId)
+  revalidatePath('/course/[slug]', 'page')
+  revalidatePath('/book/[slug]', 'page')
+}
