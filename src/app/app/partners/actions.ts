@@ -351,12 +351,12 @@ export async function markBooked(
     if (avail?.available_date) {
       const { data: booking } = await supabase
         .from('bookings')
-        .select('tee_times(scheduled_at, courses(name))')
+        .select('tee_times!inner(scheduled_at, courses(name))')
         .eq('user_id', user.id)
         .neq('status', 'canceled')
-        .gte('created_at', avail.available_date + 'T00:00:00Z')
-        .lte('created_at', avail.available_date + 'T23:59:59Z')
-        .order('created_at', { ascending: false })
+        .gte('tee_times.scheduled_at', avail.available_date + 'T00:00:00Z')
+        .lte('tee_times.scheduled_at', avail.available_date + 'T23:59:59Z')
+        .order('tee_times.scheduled_at', { ascending: true })
         .limit(1)
         .maybeSingle()
 
