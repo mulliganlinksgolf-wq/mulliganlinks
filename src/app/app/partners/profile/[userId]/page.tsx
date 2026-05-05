@@ -1,7 +1,9 @@
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import type { Metadata } from 'next'
+import { ProfileRatingButton } from './ProfileRatingButton'
 
 export const metadata: Metadata = { title: 'Partner Profile — TeeAhead' }
 
@@ -65,10 +67,33 @@ export default async function PartnerProfilePage({
 
   if (!asRequester && !asRecipient) notFound()
 
-  const [{ data: profile }, { data: prefs }, { data: ratings }] = await Promise.all([
+  const today = new Date().toISOString().slice(0, 10)
+  const admin = createAdminClient()
+
+  const [
+    { data: profile },
+    { data: prefs },
+    { data: ratings },
+    { count: roundCount },
+    { data: connAsReq },
+    { data: connAsRec },
+    { data: alreadyRated },
+  ] = await Promise.all([
     supabase.from('profiles').select('full_name, avatar_url').eq('id', targetUserId).single(),
     supabase.from('partner_preferences').select('*').eq('profile_id', targetUserId).maybeSingle(),
     supabase.from('partner_ratings').select('stars').eq('ratee_id', targetUserId),
+    admin.from('bookings').select('id', { count: 'exact', head: true })
+      .eq('user_id', targetUserId).neq('status', 'canceled'),
+    supabase.from('partner_connection_requests')
+      .select('id, availability:partner_availability(available_date)')
+      .eq('status', 'accepted').eq('requester_id', user.id).eq('recipient_id', targetUserId)
+      .maybeSingle(),
+    supabase.from('partner_connection_requests')
+      .select('id, availability:partner_availability(available_date)')
+      .eq('status', 'accepted').eq('requester_id', targetUserId).eq('recipient_id', user.id)
+      .maybeSingle(),
+    supabase.from('partner_ratings').select('id')
+      .eq('rater_id', user.id).eq('ratee_id', targetUserId).maybeSingle(),
   ])
 
   if (!profile) notFound()
@@ -79,6 +104,12 @@ export default async function PartnerProfilePage({
     ? ratings.reduce((sum: number, r: any) => sum + r.stars, 0) / ratings.length
     : null
   const ratingCount = ratings?.length ?? 0
+
+  // Find a past accepted connection to rate (availability date already passed)
+  const rateableConnection = [connAsReq, connAsRec]
+    .filter(Boolean)
+    .find(c => (c as any)?.availability?.available_date < today) ?? null
+  const canRate = !!rateableConnection && !alreadyRated
 
   return (
     <div className="max-w-lg mx-auto space-y-5">
@@ -114,6 +145,16 @@ export default async function PartnerProfilePage({
           </div>
         </div>
 
+        {/* Rounds booked stat */}
+        {(roundCount ?? 0) > 0 && (
+          <div className="flex items-center gap-2 border-t border-white/10 pt-4 mb-4">
+            <span className="text-2xl font-bold text-white">{roundCount}</span>
+            <span className="text-sm text-[#8FA889]">
+              {roundCount === 1 ? 'round booked' : 'rounds booked'} on TeeAhead
+            </span>
+          </div>
+        )}
+
         {/* Bio */}
         {prefs?.bio && (
           <p className="text-[#8FA889] text-sm leading-relaxed border-t border-white/10 pt-4">
@@ -121,6 +162,15 @@ export default async function PartnerProfilePage({
           </p>
         )}
       </div>
+
+      {/* Rate this partner */}
+      {canRate && (
+        <ProfileRatingButton
+          connectionRequestId={rateableConnection!.id}
+          rateeId={targetUserId}
+          rateeName={name}
+        />
+      )}
 
       {/* Preferences */}
       {prefs && (
