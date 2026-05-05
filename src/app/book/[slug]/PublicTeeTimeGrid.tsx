@@ -8,6 +8,8 @@ interface TeeTime {
   scheduled_at: string
   available_players: number
   base_price: number
+  special_price: number | null
+  special_label: string | null
 }
 
 const TZ = 'America/Detroit'
@@ -38,16 +40,33 @@ function offsetDate(base: string, days: number) {
 function TeeTimeCard({ tt }: { tt: TeeTime }) {
   const spotsLeft = tt.available_players
   const isLast = spotsLeft === 1
+  const hasDeal = tt.special_price != null
+  const savings = hasDeal ? tt.base_price - tt.special_price! : 0
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-3 shadow-sm">
+      {hasDeal && tt.special_label && (
+        <p className="text-xs font-semibold text-red-600 uppercase tracking-wide">
+          {tt.special_label}
+        </p>
+      )}
       <div>
         <p className="text-lg font-bold text-gray-900">{formatTime(tt.scheduled_at)}</p>
         <p className={`text-xs font-medium mt-0.5 ${isLast ? 'text-red-500' : 'text-gray-400'}`}>
           {isLast ? '1 spot left' : `${spotsLeft} spots left`}
         </p>
       </div>
-      <p className="text-2xl font-bold text-[#1B4332]">${tt.base_price.toFixed(2)}</p>
+      {hasDeal ? (
+        <div>
+          <p className="text-sm text-gray-400" style={{ textDecoration: 'line-through' }}>${tt.base_price.toFixed(2)}</p>
+          <p className="text-2xl font-bold text-red-600">${tt.special_price!.toFixed(2)}</p>
+          {savings > 0 && (
+            <p className="text-xs text-red-500 font-semibold">Save ${savings.toFixed(2)}</p>
+          )}
+        </div>
+      ) : (
+        <p className="text-2xl font-bold text-[#1B4332]">${tt.base_price.toFixed(2)}</p>
+      )}
       <Link
         href={`/app/book/${tt.id}`}
         target="_blank"
@@ -58,6 +77,15 @@ function TeeTimeCard({ tt }: { tt: TeeTime }) {
       </Link>
     </div>
   )
+}
+
+function sortWithFeaturedFirst(tts: TeeTime[]): TeeTime[] {
+  return [...tts].sort((a, b) => {
+    const aFeatured = a.special_price != null ? 1 : 0
+    const bFeatured = b.special_price != null ? 1 : 0
+    if (bFeatured !== aFeatured) return bFeatured - aFeatured
+    return new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
+  })
 }
 
 export function PublicTeeTimeGrid({
@@ -87,8 +115,8 @@ export function PublicTeeTimeGrid({
     })
   }, [teeTimes, golfers, timeOfDay])
 
-  const morning = filtered.filter(tt => localHour(tt.scheduled_at) < 12)
-  const afternoon = filtered.filter(tt => localHour(tt.scheduled_at) >= 12)
+  const morning = sortWithFeaturedFirst(filtered.filter(tt => localHour(tt.scheduled_at) < 12))
+  const afternoon = sortWithFeaturedFirst(filtered.filter(tt => localHour(tt.scheduled_at) >= 12))
 
   return (
     <div className="space-y-6">
