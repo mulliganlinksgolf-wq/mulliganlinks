@@ -32,6 +32,12 @@ export default async function AdminReportsPage() {
       description: 'Health scores, all-courses summary, individual course drilldowns',
       icon: '🏌️',
     },
+    {
+      href: '/admin/reports/partner-finder',
+      title: 'Partner Finder Activity',
+      description: 'Members with preferences set, active availability windows, connection request breakdown',
+      icon: '🤝',
+    },
   ]
 
   return (

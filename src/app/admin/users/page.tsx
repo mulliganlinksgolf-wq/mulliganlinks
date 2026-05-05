@@ -43,7 +43,7 @@ export default async function AdminUsersPage({
   const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
     admin
       .from('profiles')
-      .select('id, full_name, phone, is_admin, founding_member, created_at, memberships(tier, status)')
+      .select('id, full_name, phone, is_admin, founding_member, created_at, memberships(tier, status), partner_preferences(is_visible)')
       .order('created_at', { ascending: false }),
     admin.auth.admin.listUsers({ perPage: 1000 }),
   ])
@@ -61,6 +61,9 @@ export default async function AdminUsersPage({
     .map(p => ({
       ...p,
       email: emailMap[p.id] ?? '',
+      hasPartnerProfile: Array.isArray((p as any).partner_preferences)
+        ? (p as any).partner_preferences[0]?.is_visible === true
+        : (p as any).partner_preferences?.is_visible === true,
     }))
     .filter(m => {
       const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
@@ -121,6 +124,9 @@ export default async function AdminUsersPage({
                   <th className="text-left px-5 py-3 font-medium">Email</th>
                   <th className="text-left px-5 py-3 font-medium">Tier</th>
                   <th className="text-left px-5 py-3 font-medium">Status</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-[#6B7770] uppercase tracking-wider">
+                    Partner Profile
+                  </th>
                   <th className="text-left px-5 py-3 font-medium">Founding</th>
                   <th className="text-left px-5 py-3 font-medium">Joined</th>
                   <th className="text-left px-4 py-3 font-medium">Actions</th>
@@ -155,6 +161,13 @@ export default async function AdminUsersPage({
                           {memberStatus.replace('_', ' ')}
                         </span>
                       </td>
+                      <td className="px-4 py-3 text-sm text-center">
+                        {m.hasPartnerProfile ? (
+                          <span title="Has visible partner profile">✅</span>
+                        ) : (
+                          <span className="text-[#D1D5D4]">—</span>
+                        )}
+                      </td>
                       <td className="px-5 py-3 text-[#6B7770] text-xs">
                         {m.founding_member ? '★ Founding' : '—'}
                       </td>
@@ -170,7 +183,7 @@ export default async function AdminUsersPage({
                     </tr>
                   )
                 }) : (
-                  <tr><td colSpan={6} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
+                  <tr><td colSpan={7} className="px-5 py-8 text-center text-[#6B7770]">No members found.</td></tr>
                 )}
               </tbody>
             </table>
