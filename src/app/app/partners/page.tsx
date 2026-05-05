@@ -96,12 +96,20 @@ export default async function PartnersPage() {
           <h1 className="text-2xl font-bold text-white">Find a Playing Partner</h1>
           <p className="text-[#8FA889] mt-1">Members available to play in the next 14 days.</p>
         </div>
-        <a
-          href="/app/partners/my-availability"
-          className="bg-white text-[#1B4332] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FAF7F2]"
-        >
-          + My Availability
-        </a>
+        <div className="flex items-center gap-2">
+          <a
+            href="/app/partners/preferences"
+            className="bg-white/10 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-white/20"
+          >
+            My Profile
+          </a>
+          <a
+            href="/app/partners/my-availability"
+            className="bg-white text-[#1B4332] font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#FAF7F2]"
+          >
+            + My Availability
+          </a>
+        </div>
       </div>
 
       <BrowseFeed
