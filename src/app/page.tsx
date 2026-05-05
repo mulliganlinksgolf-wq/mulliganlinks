@@ -315,6 +315,7 @@ export default async function HomePage({
                     'Earn Fairway Points on every round',
                     'Eagle membership: $89/yr — beats GolfPass+ by $30',
                     'Priority booking, guest passes, birthday credit',
+                    'Find a playing partner — browse member availability by date',
                     'Tee time exchange — list a time you can\'t make, earn credit',
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (

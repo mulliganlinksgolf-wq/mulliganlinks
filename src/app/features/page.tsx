@@ -198,6 +198,14 @@ const golferFeatures = [
     tags: ['Tee Time Exchange', 'Auto credit'],
     alt: true,
   },
+  {
+    number: '11', label: 'Find a partner',
+    headline: 'Find someone\nto play with.',
+    sub: 'Post your availability and browse other members playing in the next 14 days. Filter by date, course, and preferences. Send a request — Eagle and Ace members only.',
+    stat: '14', statLabel: 'days of visibility',
+    tags: ['Eagle & Ace', 'Browse by date', 'Connect instantly'],
+    alt: false,
+  },
 ]
 
 export default function Features() {
