@@ -304,7 +304,7 @@ export default async function HomePage({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
               {/* Golfer card */}
-              <div className="rounded-2xl p-8 space-y-5"
+              <div className="flex flex-col rounded-2xl p-8 gap-5"
                    style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}>
                 <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#F4F1EA]/50">For Golfers</div>
                 <h3 className="font-display font-bold text-[#F4F1EA] text-xl leading-snug">
@@ -328,14 +328,14 @@ export default async function HomePage({
                 </ul>
                 <Link
                   href="/waitlist/golfer"
-                  className="block text-center rounded-lg bg-[#F4F1EA] px-5 py-3 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                  className="mt-auto block text-center rounded-lg bg-[#F4F1EA] px-5 py-3 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
                 >
                   Join the Golfer Waitlist →
                 </Link>
               </div>
 
               {/* Course card */}
-              <div className="rounded-2xl p-8 space-y-5"
+              <div className="flex flex-col rounded-2xl p-8 gap-5"
                    style={{ background: 'rgba(224,168,0,0.10)', border: '1px solid rgba(224,168,0,0.30)' }}>
                 <div className="text-xs font-bold tracking-[0.12em] uppercase text-[#E0A800]/70">For Courses</div>
                 <h3 className="font-display font-bold text-[#E0A800] text-xl leading-snug">
@@ -358,7 +358,7 @@ export default async function HomePage({
                 </ul>
                 <Link
                   href="/waitlist/course"
-                  className="block text-center rounded-lg bg-[#E0A800] px-5 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                  className="mt-auto block text-center rounded-lg bg-[#E0A800] px-5 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
                 >
                   {spotsRemaining > 0 ? 'Claim a Founding Partner Spot →' : 'Join the Course Waitlist →'}
                 </Link>
