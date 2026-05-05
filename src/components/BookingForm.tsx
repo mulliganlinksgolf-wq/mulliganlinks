@@ -23,16 +23,19 @@ export function BookingForm({
   pointsBalance,
   creditBalanceCents = 0,
   userId,
+  availablePasses = [],
 }: {
   teeTime: TeeTime
   tier: string
   pointsBalance: number
   creditBalanceCents?: number
   userId: string
+  availablePasses?: { id: string; expires_at: string }[]
 }) {
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
   const [useCredits, setUseCredits] = useState(false)
+  const [useGuestPass, setUseGuestPass] = useState(false)
   const [rainCheckCode, setRainCheckCode] = useState('')
   const [rainCheck, setRainCheck] = useState<{ id: string; amountCents: number } | null>(null)
   const [rainCheckError, setRainCheckError] = useState<string | null>(null)
@@ -42,9 +45,10 @@ export function BookingForm({
 
   const multiplier = MULTIPLIER[tier] ?? 1
   const subtotal = teeTime.base_price * players
-  // Apply in order: credits → rain check → points
-  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, subtotal) : 0
-  const afterCredits = subtotal - creditsValue
+  const guestDiscount = useGuestPass ? 15 : 0
+  // Apply in order: guest pass → credits → rain check → points
+  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, subtotal - guestDiscount) : 0
+  const afterCredits = subtotal - guestDiscount - creditsValue
   const rainCheckValue = rainCheck ? Math.min(rainCheck.amountCents / 100, afterCredits) : 0
   const afterRainCheck = afterCredits - rainCheckValue
   // 100 points = $1
@@ -67,6 +71,7 @@ export function BookingForm({
         total,
         pointsEarned,
         tier,
+        guestPassId: useGuestPass && availablePasses[0] ? availablePasses[0].id : undefined,
       })
       if (result.error) {
         setError(result.error)
@@ -86,7 +91,7 @@ export function BookingForm({
             {[1, 2, 3, 4].map(n => (
               <button
                 key={n}
-                onClick={() => setPlayers(n)}
+                onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
                 disabled={n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
@@ -110,6 +115,20 @@ export function BookingForm({
             <span>${teeTime.base_price.toFixed(2)} × {players} player{players !== 1 ? 's' : ''}</span>
             <span>${subtotal.toFixed(2)}</span>
           </div>
+          {availablePasses.length > 0 && players > 1 && (
+            <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+              <button
+                onClick={() => setUseGuestPass(v => !v)}
+                className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
+              >
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
+                  {useGuestPass && <span className="text-white text-xs">✓</span>}
+                </div>
+                Use a guest pass — save $15 ({availablePasses.length} remaining)
+              </button>
+              {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
+            </div>
+          )}
           {creditBalanceCents > 0 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
               <button

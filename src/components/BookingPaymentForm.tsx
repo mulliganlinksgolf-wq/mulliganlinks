@@ -19,7 +19,7 @@ function CheckoutForm({
   appFee,
   pointsEarned,
   tier,
-  discountAmt,
+  guestDiscount,
 }: {
   bookingId: string
   total: number
@@ -27,6 +27,7 @@ function CheckoutForm({
   appFee: number
   pointsEarned: number
   tier: string
+  guestDiscount: number
 }) {
   const stripe = useStripe()
   const elements = useElements()
@@ -61,6 +62,12 @@ function CheckoutForm({
             <span>Green fee</span>
             <span>${greenFee.toFixed(2)}</span>
           </div>
+          {guestDiscount > 0 && (
+            <div className="flex justify-between text-[#1B4332]">
+              <span>Guest pass</span>
+              <span>−$15.00</span>
+            </div>
+          )}
           {appFee > 0 && (
             <div className="flex justify-between text-[#6B7770]">
               <span>Booking fee</span>
@@ -113,12 +120,15 @@ export function BookingPaymentForm({
   teeTime,
   tier,
   userId,
+  availablePasses = [],
 }: {
   teeTime: TeeTime
   tier: string
   userId: string
+  availablePasses?: { id: string; expires_at: string }[]
 }) {
   const [players, setPlayers] = useState(1)
+  const [useGuestPass, setUseGuestPass] = useState(false)
   const [step, setStep] = useState<'select' | 'pay'>('select')
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [bookingId, setBookingId] = useState<string | null>(null)
@@ -127,20 +137,26 @@ export function BookingPaymentForm({
 
   const multiplier = MULTIPLIER[tier] ?? 1
   const baseSubtotal = teeTime.base_price * players
+  const guestDiscount = useGuestPass ? 15 : 0
   const appFee = platformFeeCents(tier) / 100
-  const total = baseSubtotal + appFee
+  const total = baseSubtotal - guestDiscount + appFee
   const pointsEarned = Math.floor(baseSubtotal * multiplier)
+  const selectedPass = availablePasses[0] ?? null
 
   function handleProceed() {
     setError(null)
     startTransition(async () => {
-      const result = await createPendingBooking({ teeTimeId: teeTime.id, players, tier })
+      const result = await createPendingBooking({
+        teeTimeId: teeTime.id,
+        players,
+        tier,
+        guestPassId: useGuestPass && selectedPass ? selectedPass.id : undefined,
+      })
       if (result.error || !result.bookingId) {
         setError(result.error ?? 'Failed to create booking')
         return
       }
 
-      // Get PaymentIntent client secret
       const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok || !data.client_secret) {
@@ -173,6 +189,7 @@ export function BookingPaymentForm({
           appFee={platformFeeCents(tier)}
           pointsEarned={pointsEarned}
           tier={tier}
+          guestDiscount={guestDiscount}
         />
       </Elements>
     )
@@ -187,7 +204,7 @@ export function BookingPaymentForm({
             {[1, 2, 3, 4].map(n => (
               <button
                 key={n}
-                onClick={() => setPlayers(n)}
+                onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
                 disabled={n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
@@ -210,6 +227,20 @@ export function BookingPaymentForm({
             <span>${teeTime.base_price.toFixed(2)} × {players} player{players !== 1 ? 's' : ''}</span>
             <span>${baseSubtotal.toFixed(2)}</span>
           </div>
+          {selectedPass && players > 1 && (
+            <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+              <button
+                onClick={() => setUseGuestPass(v => !v)}
+                className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
+              >
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
+                  {useGuestPass && <span className="text-white text-xs">✓</span>}
+                </div>
+                Use a guest pass — save $15 ({availablePasses.length} remaining)
+              </button>
+              {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
+            </div>
+          )}
           {appFee > 0 ? (
             <div className="flex justify-between text-[#6B7770]">
               <span>Booking fee</span>
