@@ -74,6 +74,14 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
                 <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize ${statusBadge[r.status] ?? 'bg-white/10 text-[#8FA889]'}`}>
                   {r.status}
                 </span>
+                {r.status === 'accepted' && (
+                  <a
+                    href={`/app/partners/profile/${otherPartyId}`}
+                    className="text-xs font-medium text-[#8FA889] hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:border-white/30 transition-colors"
+                  >
+                    View profile
+                  </a>
+                )}
                 {r.status === 'accepted' && r.availability?.available_date && (
                   <a
                     href={`/app/courses?date=${r.availability.available_date}`}
