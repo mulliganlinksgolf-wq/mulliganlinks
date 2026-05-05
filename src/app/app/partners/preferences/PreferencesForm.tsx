@@ -1,13 +1,20 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import Link from 'next/link'
 import { upsertPartnerPreferences, uploadAvatar } from '../actions'
 import type {
   PartnerPreferences, PacePreference, HolePreference, SkillLevel,
   PlayStyle, Gender, OpenTo,
 } from '@/types/partners'
 
-function AvatarSection({ currentUrl }: { currentUrl: string | null }) {
+function AvatarSection({
+  currentUrl,
+  onUploaded,
+}: {
+  currentUrl: string | null
+  onUploaded: () => void
+}) {
   const [preview, setPreview] = useState<string | null>(currentUrl)
   const [uploading, startUpload] = useTransition()
   const [err, setErr] = useState<string | null>(null)
@@ -23,42 +30,48 @@ function AvatarSection({ currentUrl }: { currentUrl: string | null }) {
     startUpload(async () => {
       const result = await uploadAvatar(fd)
       if (result.error) { setErr(result.error); setPreview(currentUrl) }
+      else { onUploaded() }
     })
   }
 
   return (
-    <div className="flex items-center gap-4">
-      <div className="relative w-16 h-16 flex-shrink-0">
-        {preview ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={preview} alt="Your avatar" className="w-16 h-16 rounded-full object-cover" />
-        ) : (
-          <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-[#8FA889] text-2xl">
-            👤
-          </div>
-        )}
-        {uploading && (
-          <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center">
-            <span className="text-white text-xs">…</span>
-          </div>
-        )}
-      </div>
-      <div>
-        <label
-          htmlFor="avatar-upload"
-          className="cursor-pointer text-sm font-medium text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg"
-        >
-          {preview ? 'Change photo' : 'Upload photo'}
-        </label>
-        <input
-          id="avatar-upload"
-          type="file"
-          accept="image/jpeg,image/png,image/webp"
-          className="sr-only"
-          onChange={handleFile}
-        />
-        <p className="text-xs text-[#8FA889] mt-1">JPEG, PNG or WebP · max 5 MB</p>
-        {err && <p className="text-red-400 text-xs mt-1">{err}</p>}
+    <div>
+      <div className="flex items-center gap-4">
+        <div className="relative w-16 h-16 flex-shrink-0">
+          {preview ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={preview} alt="Your avatar" className="w-16 h-16 rounded-full object-cover" />
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center text-[#8FA889] text-2xl">
+              👤
+            </div>
+          )}
+          {uploading && (
+            <div className="absolute inset-0 rounded-full bg-black/40 flex items-center justify-center">
+              <span className="text-white text-xs">…</span>
+            </div>
+          )}
+        </div>
+        <div>
+          <label
+            htmlFor="avatar-upload"
+            className="cursor-pointer text-sm font-medium text-white bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg"
+          >
+            {preview ? 'Change photo' : 'Upload photo'}
+            <span className="text-red-400 ml-1" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="avatar-upload"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={handleFile}
+          />
+          <p className="text-xs text-[#8FA889] mt-1">
+            Required · JPEG, PNG or WebP · max 5 MB
+          </p>
+          {err && <p className="text-red-400 text-xs mt-1">{err}</p>}
+        </div>
       </div>
     </div>
   )
@@ -74,6 +87,7 @@ export function PreferencesForm({
   const [isPending, startTransition] = useTransition()
   const [saved, setSaved] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasAvatar, setHasAvatar] = useState(!!avatarUrl)
 
   const [handicap, setHandicap] = useState(existing?.handicap_index?.toString() ?? '')
   const [pace, setPace] = useState<PacePreference | ''>(existing?.pace_preference ?? '')
@@ -92,6 +106,10 @@ export function PreferencesForm({
     e.preventDefault()
     setError(null)
     setSaved(false)
+    if (!hasAvatar) {
+      setError('Please upload a profile photo before saving.')
+      return
+    }
     startTransition(async () => {
       const result = await upsertPartnerPreferences({
         handicap_index: handicap ? parseFloat(handicap) : null,
@@ -136,7 +154,7 @@ export function PreferencesForm({
     <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
 
       {/* Photo */}
-      <AvatarSection currentUrl={avatarUrl} />
+      <AvatarSection currentUrl={avatarUrl} onUploaded={() => setHasAvatar(true)} />
 
       {/* Play style */}
       <div>
@@ -295,12 +313,30 @@ export function PreferencesForm({
       </div>
 
       {error && <p className="text-red-400 text-sm">{error}</p>}
-      {saved && <p className="text-[#52B788] text-sm">Preferences saved!</p>}
 
-      <button type="submit" disabled={isPending}
-        className="w-full bg-white text-[#1B4332] font-semibold py-2.5 rounded-lg hover:bg-[#FAF7F2] disabled:opacity-50">
-        {isPending ? 'Saving…' : 'Save Preferences'}
-      </button>
+      {saved ? (
+        <div className="space-y-3">
+          <p className="text-[#52B788] text-sm">Preferences saved!</p>
+          <Link
+            href="/app/partners"
+            className="block w-full text-center bg-white text-[#1B4332] font-semibold py-2.5 rounded-lg hover:bg-[#FAF7F2]"
+          >
+            ← Back to Find a Partner
+          </Link>
+          <button
+            type="submit"
+            disabled={isPending}
+            className="block w-full text-center text-[#8FA889] hover:text-white text-sm py-2"
+          >
+            Save again
+          </button>
+        </div>
+      ) : (
+        <button type="submit" disabled={isPending}
+          className="w-full bg-white text-[#1B4332] font-semibold py-2.5 rounded-lg hover:bg-[#FAF7F2] disabled:opacity-50">
+          {isPending ? 'Saving…' : 'Save Preferences'}
+        </button>
+      )}
     </form>
   )
 }
