@@ -55,6 +55,12 @@ export default async function PartnersPage() {
   const today = new Date().toISOString().slice(0, 10)
   const fourteenDays = new Date(Date.now() + 14 * 86_400_000).toISOString().slice(0, 10)
 
+  const { count: pendingRequestCount } = await supabase
+    .from('partner_connection_requests')
+    .select('id', { count: 'exact', head: true })
+    .eq('recipient_id', user.id)
+    .eq('status', 'pending')
+
   const [{ data: rows }, { data: sentRequests }, { data: viewerPrefs }] = await Promise.all([
     supabase
       .from('partner_availability')
@@ -159,6 +165,17 @@ export default async function PartnersPage() {
           <p className="text-[#8FA889] mt-1">Members available to play in the next 14 days.</p>
         </div>
         <div className="flex items-center gap-2">
+          <a
+            href="/app/partners/requests"
+            className="relative bg-white/10 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-white/20"
+          >
+            Requests
+            {(pendingRequestCount ?? 0) > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {pendingRequestCount}
+              </span>
+            )}
+          </a>
           <a
             href="/app/partners/preferences"
             className="bg-white/10 text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-white/20"
