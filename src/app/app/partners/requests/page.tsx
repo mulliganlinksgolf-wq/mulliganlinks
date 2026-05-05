@@ -4,6 +4,8 @@ import type { Metadata } from 'next'
 import type { ConnectionRequest } from '@/types/partners'
 import { RespondButtons } from './RequestActions'
 import { RequestsWithRating } from './RequestsWithRating'
+import { PendingRatings } from './PendingRatings'
+import type { RatingPrompt } from './PendingRatings'
 
 export const metadata: Metadata = { title: 'Partner Requests — TeeAhead' }
 
@@ -77,9 +79,35 @@ export default async function RequestsPage({
   const rateableReceivedIds = historicReceived.filter(isRateable).map(r => r.id)
   const rateableSentIds = sentRequests.filter(isRateable).map(r => r.id)
 
+  function formatDate(d: string) {
+    return new Date(d + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  }
+  function shortName(fullName: string | null) {
+    if (!fullName) return 'Member'
+    const p = fullName.trim().split(' ')
+    return p.length === 1 ? p[0] : `${p[0]} ${p[p.length - 1][0]}.`
+  }
+
+  const ratingPrompts: RatingPrompt[] = [
+    ...historicReceived.filter(isRateable).map(r => ({
+      requestId: r.id,
+      rateeId: r.requester_id,
+      rateeName: shortName((r.requester as any)?.full_name ?? null),
+      dateLabel: r.availability?.available_date ? formatDate(r.availability.available_date) : '',
+    })),
+    ...sentRequests.filter(isRateable).map(r => ({
+      requestId: r.id,
+      rateeId: r.recipient_id,
+      rateeName: shortName((r.recipient as any)?.full_name ?? null),
+      dateLabel: r.availability?.available_date ? formatDate(r.availability.available_date) : '',
+    })),
+  ]
+
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold text-white">Partner Requests</h1>
+
+      <PendingRatings prompts={ratingPrompts} />
 
       {/* Tabs */}
       <div className="flex gap-1 bg-white/5 rounded-xl p-1 w-fit">
