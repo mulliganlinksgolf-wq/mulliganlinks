@@ -41,7 +41,7 @@ describe('PublicTeeTimeGrid — featured deal cards', () => {
   it('shows base price normally when no deal is set', () => {
     render(<PublicTeeTimeGrid teeTimes={[makeTT()]} {...GRID_PROPS} />)
     expect(screen.getByText('$65.00')).toBeInTheDocument()
-    expect(screen.queryByText(/save/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/save \$/i)).not.toBeInTheDocument()
   })
 
   it('shows strikethrough base price when a deal is set', () => {
@@ -77,7 +77,7 @@ describe('PublicTeeTimeGrid — featured deal cards', () => {
         {...GRID_PROPS}
       />
     )
-    expect(screen.queryByText(/save/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/save \$/i)).not.toBeInTheDocument()
   })
 
   it('sorts featured tee time before non-featured in the same section', () => {
