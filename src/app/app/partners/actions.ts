@@ -151,9 +151,8 @@ export async function sendConnectionRequest(
       supabase!.from('profiles').select('full_name').eq('id', user!.id).single(),
       supabase!.from('partner_availability').select('available_date').eq('id', availabilityId).single(),
     ])
-    const { createAdminClient } = await import('@/lib/supabase/admin')
-    const { data: { users } } = await createAdminClient().auth.admin.listUsers({ perPage: 1000 })
-    const recipientAuthUser = (users ?? []).find((u: { id: string }) => u.id === recipientId)
+    const adminClient = (await import('@/lib/supabase/admin')).createAdminClient()
+    const { data: { user: recipientAuthUser } } = await adminClient.auth.admin.getUserById(recipientId)
     if (recipientAuthUser?.email) {
       const requesterFirstName = (requesterProfile?.full_name ?? '').split(' ')[0] || 'Someone'
       await sendPartnerRequestEmail({
@@ -163,8 +162,8 @@ export async function sendConnectionRequest(
         message,
       })
     }
-  } catch {
-    // non-fatal
+  } catch (err) {
+    console.error('[partner-finder] Failed to send notification email:', err)
   }
 
   revalidatePath('/app/partners/requests')
@@ -202,9 +201,8 @@ export async function respondToRequest(
             ? supabase.from('partner_availability').select('available_date').eq('id', req.availability_id).single()
             : Promise.resolve({ data: null }),
         ])
-        const { createAdminClient } = await import('@/lib/supabase/admin')
-        const { data: { users } } = await createAdminClient().auth.admin.listUsers({ perPage: 1000 })
-        const requesterAuthUser = (users ?? []).find((u: { id: string }) => u.id === req.requester_id)
+        const adminClient = (await import('@/lib/supabase/admin')).createAdminClient()
+        const { data: { user: requesterAuthUser } } = await adminClient.auth.admin.getUserById(req.requester_id)
         if (requesterAuthUser?.email) {
           await sendPartnerRequestAcceptedEmail({
             recipientName: (recipientProfile?.full_name ?? '').split(' ')[0] || 'Your partner',
@@ -213,8 +211,8 @@ export async function respondToRequest(
           })
         }
       }
-    } catch {
-      // non-fatal
+    } catch (err) {
+      console.error('[partner-finder] Failed to send notification email:', err)
     }
   }
 
@@ -258,7 +256,15 @@ export async function blockMember(
     .from('partner_connection_requests')
     .update({ status: 'declined', updated_at: new Date().toISOString() })
     .eq('status', 'pending')
-    .or(`and(requester_id.eq.${user.id},recipient_id.eq.${blockedId}),and(requester_id.eq.${blockedId},recipient_id.eq.${user.id})`)
+    .eq('requester_id', user.id)
+    .eq('recipient_id', blockedId)
+
+  await supabase
+    .from('partner_connection_requests')
+    .update({ status: 'declined', updated_at: new Date().toISOString() })
+    .eq('status', 'pending')
+    .eq('requester_id', blockedId)
+    .eq('recipient_id', user.id)
 
   revalidatePath('/app/partners')
   return {}

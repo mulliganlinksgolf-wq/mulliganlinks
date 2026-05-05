@@ -4,7 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 const { mockAuthGetUser, mockFrom, mockRpc } = vi.hoisted(() => ({
   mockAuthGetUser: vi.fn(),
   mockFrom: vi.fn(),
-  mockRpc: vi.fn(),
+  mockRpc: vi.fn().mockResolvedValue({ data: false, error: null }),
 }))
 
 vi.mock('@/lib/supabase/server', () => ({
@@ -12,6 +12,16 @@ vi.mock('@/lib/supabase/server', () => ({
     auth: { getUser: mockAuthGetUser },
     from: mockFrom,
     rpc: mockRpc,
+  }),
+}))
+
+vi.mock('@/lib/supabase/admin', () => ({
+  createAdminClient: vi.fn().mockReturnValue({
+    auth: {
+      admin: {
+        getUserById: vi.fn().mockResolvedValue({ data: { user: { email: 'test@example.com' } } }),
+      },
+    },
   }),
 }))
 
