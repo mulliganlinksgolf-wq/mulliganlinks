@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
-import type { PartnerAvailability } from '@/types/partners'
+import type { PartnerAvailability, Gender, OpenTo } from '@/types/partners'
 import { BrowseFeed } from './BrowseFeed'
 
 export const metadata: Metadata = { title: 'Find a Partner — TeeAhead' }
@@ -15,6 +15,27 @@ function buildDateLabel(dateStr: string): string {
   if (diff === 0) return `Today — ${formatted}`
   if (diff === 1) return `Tomorrow — ${formatted}`
   return formatted
+}
+
+function isGenderCompatible(
+  viewerGender: Gender,
+  viewerOpenTo: OpenTo,
+  posterGender: Gender,
+  posterOpenTo: OpenTo,
+): boolean {
+  // Check poster's preference: are they open to the viewer?
+  if (posterOpenTo !== 'anyone') {
+    if (posterOpenTo === 'same_gender_only' && posterGender !== viewerGender) return false
+    if (posterOpenTo === 'men_only' && viewerGender !== 'male') return false
+    if (posterOpenTo === 'women_only' && viewerGender !== 'female') return false
+  }
+  // Check viewer's preference: are they open to the poster?
+  if (viewerOpenTo !== 'anyone') {
+    if (viewerOpenTo === 'same_gender_only' && viewerGender !== posterGender) return false
+    if (viewerOpenTo === 'men_only' && posterGender !== 'male') return false
+    if (viewerOpenTo === 'women_only' && posterGender !== 'female') return false
+  }
+  return true
 }
 
 export default async function PartnersPage() {
@@ -34,16 +55,17 @@ export default async function PartnersPage() {
   const today = new Date().toISOString().slice(0, 10)
   const fourteenDays = new Date(Date.now() + 14 * 86_400_000).toISOString().slice(0, 10)
 
-  const [{ data: rows }, { data: sentRequests }] = await Promise.all([
+  const [{ data: rows }, { data: sentRequests }, { data: viewerPrefs }] = await Promise.all([
     supabase
       .from('partner_availability')
       .select(`
         id, profile_id, available_date, time_preference, holes, notes, course_id, expires_at, is_active, created_at,
         profile:profiles!profile_id(
-          id, full_name,
+          id, full_name, avatar_url,
           partner_preferences(
             id, profile_id, handicap_index, pace_preference, prefers_walking,
-            drinks_ok, smoking_ok, preferred_holes, skill_level, bio, is_visible, updated_at
+            drinks_ok, smoking_ok, preferred_holes, skill_level, bio, is_visible, updated_at,
+            play_style, gender, open_to
           )
         ),
         course:courses(id, name, slug)
@@ -59,26 +81,66 @@ export default async function PartnersPage() {
       .select('availability_id')
       .eq('requester_id', user.id)
       .in('status', ['pending', 'accepted']),
+    supabase
+      .from('partner_preferences')
+      .select('gender, open_to')
+      .eq('profile_id', user.id)
+      .maybeSingle(),
   ])
 
-  // Hoist preferences out of the nested profile join onto the top-level shape
-  const availabilities = (rows ?? []).map((row: any) => ({
-    ...row,
-    profile: {
-      id: row.profile?.id,
-      full_name: row.profile?.full_name,
-    },
-    preferences: Array.isArray(row.profile?.partner_preferences)
-      ? row.profile.partner_preferences[0] ?? undefined
-      : row.profile?.partner_preferences ?? undefined,
-  })) as unknown as PartnerAvailability[]
+  const viewerGender = (viewerPrefs?.gender ?? 'prefer_not_to_say') as Gender
+  const viewerOpenTo = (viewerPrefs?.open_to ?? 'anyone') as OpenTo
+
+  // Hoist preferences out of nested profile join; apply mutual gender filter
+  const availabilities = (rows ?? [])
+    .map((row: any) => ({
+      ...row,
+      profile: {
+        id: row.profile?.id,
+        full_name: row.profile?.full_name,
+        avatar_url: row.profile?.avatar_url ?? null,
+      },
+      preferences: Array.isArray(row.profile?.partner_preferences)
+        ? row.profile.partner_preferences[0] ?? undefined
+        : row.profile?.partner_preferences ?? undefined,
+    }))
+    .filter((av: any) => {
+      const prefs = av.preferences
+      if (!prefs) return true // no prefs set — show them
+      const posterGender = (prefs.gender ?? 'prefer_not_to_say') as Gender
+      const posterOpenTo = (prefs.open_to ?? 'anyone') as OpenTo
+      return isGenderCompatible(viewerGender, viewerOpenTo, posterGender, posterOpenTo)
+    }) as unknown as PartnerAvailability[]
+
   const sentToAvailabilityIds = (sentRequests ?? [])
     .map((r: { availability_id: string | null }) => r.availability_id)
     .filter((id): id is string => id !== null)
 
+  // Fetch avg ratings for all poster profile_ids
+  const profileIds = [...new Set(availabilities.map(av => av.profile_id))]
+  const ratingsMap: Record<string, { avg: number; count: number }> = {}
+  if (profileIds.length > 0) {
+    const { data: ratings } = await supabase
+      .from('partner_ratings')
+      .select('ratee_id, stars')
+      .in('ratee_id', profileIds)
+    for (const r of (ratings ?? [])) {
+      const entry = ratingsMap[r.ratee_id] ?? { avg: 0, count: 0 }
+      entry.count += 1
+      entry.avg = (entry.avg * (entry.count - 1) + r.stars) / entry.count
+      ratingsMap[r.ratee_id] = entry
+    }
+  }
+
+  const availabilitiesWithRatings = availabilities.map(av => ({
+    ...av,
+    avg_rating: ratingsMap[av.profile_id]?.count >= 3 ? ratingsMap[av.profile_id].avg : null,
+    rating_count: ratingsMap[av.profile_id]?.count ?? 0,
+  }))
+
   // Group by date
   const groupMap = new Map<string, PartnerAvailability[]>()
-  for (const av of availabilities) {
+  for (const av of availabilitiesWithRatings) {
     const existing = groupMap.get(av.available_date) ?? []
     existing.push(av)
     groupMap.set(av.available_date, existing)
