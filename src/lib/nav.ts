@@ -14,6 +14,7 @@ export const SIDEBAR_NAV_ITEMS: NavItem[] = [
   { href: '/app/leagues',      label: 'Leagues',        icon: '🏆' },
   { href: '/app/trading',      label: 'Exchange',       icon: '🔄' },
   { href: '/app/points',       label: 'Points',         icon: '⭐' },
+  { href: '/app/benefits',     label: 'Benefits',       icon: '🎁' },
   { href: '/app/card',         label: 'My Card',        icon: '🃏' },
   { href: '/app/billing',      label: 'Billing',        icon: '💳' },
   { href: '/app/profile',      label: 'Profile',        icon: '👤' },
