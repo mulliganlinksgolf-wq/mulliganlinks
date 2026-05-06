@@ -139,11 +139,16 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                   {bookedPlayers}/{tt.max_players}
                 </div>
                 <div className="col-span-2 text-[#6B7770] flex items-center gap-1.5">
-                  ${tt.base_price.toFixed(2)}
-                  {tt.special_price != null && (
-                    <span className="text-xs bg-amber-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">
-                      DEAL
-                    </span>
+                  {tt.special_price != null ? (
+                    <>
+                      <span className="text-gray-400 line-through">${tt.base_price.toFixed(2)}</span>
+                      <span className="font-semibold text-[#1A1A1A]">${Number(tt.special_price).toFixed(2)}</span>
+                      <span className="text-xs bg-amber-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">
+                        DEAL
+                      </span>
+                    </>
+                  ) : (
+                    <>${tt.base_price.toFixed(2)}</>
                   )}
                 </div>
                 <div className="col-span-4 text-[#6B7770] truncate">
