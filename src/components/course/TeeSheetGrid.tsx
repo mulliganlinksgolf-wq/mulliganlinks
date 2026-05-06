@@ -140,7 +140,7 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                 </div>
                 <div className="col-span-2 text-[#6B7770] flex items-center gap-1.5">
                   ${tt.base_price.toFixed(2)}
-                  {tt.special_price !== null && (
+                  {tt.special_price != null && (
                     <span className="text-xs bg-amber-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">
                       DEAL
                     </span>
@@ -265,7 +265,7 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                         onClick={() => setDealTarget(dealTarget === tt.id ? null : tt.id)}
                         className="text-xs px-3 py-1 border border-amber-400 text-amber-700 rounded hover:bg-amber-50"
                       >
-                        {tt.special_price !== null ? 'Edit deal' : 'Set deal'}
+                        {tt.special_price != null ? 'Edit deal' : 'Set deal'}
                       </button>
                     )}
                   </div>
