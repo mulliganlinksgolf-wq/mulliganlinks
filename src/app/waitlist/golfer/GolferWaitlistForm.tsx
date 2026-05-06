@@ -35,7 +35,12 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
     setError(null)
     if (selectedCourseId) formData.set('selected_course_id', selectedCourseId)
 
-    const token = executeRecaptcha ? await executeRecaptcha('golfer_waitlist') : ''
+    if (!executeRecaptcha) {
+      setError('Security check still loading — please try again in a moment.')
+      return
+    }
+
+    const token = await executeRecaptcha('golfer_waitlist')
     formData.set('recaptcha_token', token)
 
     startTransition(async () => {

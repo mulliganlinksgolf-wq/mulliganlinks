@@ -6,12 +6,26 @@ export async function verifyRecaptcha(token: string): Promise<boolean> {
     return true
   }
 
-  const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: token }),
-  })
+  if (!token) {
+    console.warn('[recaptcha] empty token received — reCAPTCHA script may not have loaded on client')
+    return false
+  }
 
-  const data = await res.json()
-  return data.success === true && (data.score ?? 0) >= 0.5
+  try {
+    const res = await fetch('https://www.google.com/recaptcha/api/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ secret: RECAPTCHA_SECRET, response: token }),
+    })
+
+    const data = await res.json()
+    if (!data.success) {
+      console.warn('[recaptcha] verification failed:', data['error-codes'])
+    }
+    return data.success === true && (data.score ?? 0) >= 0.3
+  } catch (err) {
+    console.error('[recaptcha] fetch error:', err)
+    // Allow through on network error so infra issues don't block signups
+    return true
+  }
 }

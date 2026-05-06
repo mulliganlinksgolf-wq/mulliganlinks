@@ -28,7 +28,13 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
 
   const handleSubmit = useCallback(async (formData: FormData) => {
     setError(null)
-    const token = executeRecaptcha ? await executeRecaptcha('course_waitlist') : ''
+
+    if (!executeRecaptcha) {
+      setError('Security check still loading — please try again in a moment.')
+      return
+    }
+
+    const token = await executeRecaptcha('course_waitlist')
     formData.set('recaptcha_token', token)
     startTransition(async () => {
       const result = await joinCourseWaitlist(formData)
