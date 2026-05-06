@@ -54,11 +54,11 @@ export default async function HomePage({
 
       {/* ── Header / Nav ──────────────────────────────────────── */}
       <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
+            <TeeAheadLogo className="h-8 sm:h-14 w-auto brightness-0 invert" />
           </Link>
-          <div className="flex items-center gap-2 min-[480px]:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/features"
               className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#F4F1EA]/30 px-5 py-2.5 text-sm font-semibold text-[#F4F1EA]/80 transition-colors hover:border-[#F4F1EA]/60 hover:text-[#F4F1EA]"
@@ -67,13 +67,13 @@ export default async function HomePage({
             </Link>
             <Link
               href="/waitlist/course"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#E0A800] transition-colors hover:bg-[#E0A800]/10"
+              className="hidden min-[400px]:inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#E0A800] px-3 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-[#E0A800] transition-colors hover:bg-[#E0A800]/10"
             >
               I Run a Course
             </Link>
             <Link
               href="/waitlist/golfer"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-[#E0A800] px-5 py-2.5 text-sm font-semibold text-[#0a0a0a] transition-colors hover:bg-[#E0A800]/90"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-[#E0A800] px-3 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-[#0a0a0a] transition-colors hover:bg-[#E0A800]/90"
             >
               I&apos;m a Golfer →
             </Link>
