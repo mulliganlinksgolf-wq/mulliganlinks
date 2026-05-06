@@ -21,7 +21,7 @@ export function SetDealForm({
   const [price, setPrice] = useState(initialSpecialPrice?.toString() ?? '')
   const [label, setLabel] = useState(initialSpecialLabel ?? '')
   const [error, setError] = useState('')
-  const [, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition()
 
   function handleSave() {
     const parsed = parseFloat(price)
@@ -31,23 +31,32 @@ export function SetDealForm({
     }
     setError('')
     startTransition(async () => {
-      const result = await setTeeTimeDeal(teeTimeId, parsed, label.trim() || null)
-      if (result?.error) {
-        setError(result.error)
-        return
+      try {
+        const result = await setTeeTimeDeal(teeTimeId, parsed, label.trim() || null)
+        if (result?.error) {
+          setError(result.error)
+          return
+        }
+        onSuccess()
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to save deal')
       }
-      onSuccess()
     })
   }
 
   function handleRemove() {
+    setError('')
     startTransition(async () => {
-      const result = await setTeeTimeDeal(teeTimeId, null, null)
-      if (result?.error) {
-        setError(result.error)
-        return
+      try {
+        const result = await setTeeTimeDeal(teeTimeId, null, null)
+        if (result?.error) {
+          setError(result.error)
+          return
+        }
+        onSuccess()
+      } catch (e) {
+        setError(e instanceof Error ? e.message : 'Failed to remove deal')
       }
-      onSuccess()
     })
   }
 
@@ -72,22 +81,28 @@ export function SetDealForm({
           className="border border-gray-300 rounded px-2 py-1 text-xs w-32"
         />
         <button
+          type="button"
           onClick={handleSave}
-          className="text-xs px-3 py-1 bg-[#1B4332] text-white rounded hover:bg-[#1B4332]/90"
+          disabled={isPending}
+          className="text-xs px-3 py-1 bg-[#1B4332] text-white rounded hover:bg-[#1B4332]/90 disabled:opacity-50"
         >
-          Save
+          {isPending ? 'Saving…' : 'Save'}
         </button>
         {initialSpecialPrice !== null && (
           <button
+            type="button"
             onClick={handleRemove}
-            className="text-xs px-3 py-1 border border-red-300 text-red-600 rounded hover:bg-red-50"
+            disabled={isPending}
+            className="text-xs px-3 py-1 border border-red-300 text-red-600 rounded hover:bg-red-50 disabled:opacity-50"
           >
             Remove
           </button>
         )}
         <button
+          type="button"
           onClick={onClose}
-          className="text-xs px-2 py-1 text-[#6B7770] hover:text-gray-800"
+          disabled={isPending}
+          className="text-xs px-2 py-1 text-[#6B7770] hover:text-gray-800 disabled:opacity-50"
         >
           Cancel
         </button>

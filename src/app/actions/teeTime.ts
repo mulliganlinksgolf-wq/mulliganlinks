@@ -1,6 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import { sendPhoneBookingConfirmation } from '@/lib/emails'
 
@@ -265,13 +266,50 @@ export async function setTeeTimeDeal(
   teeTimeId: string,
   specialPrice: number | null,
   specialLabel: string | null,
-): Promise<{ error: string } | void> {
-  const supabase = await createClient()
-  const { error } = await supabase
-    .from('tee_times')
-    .update({ special_price: specialPrice, special_label: specialLabel })
-    .eq('id', teeTimeId)
-  if (error) return { error: error.message }
-  revalidatePath('/course/[slug]', 'page')
-  revalidatePath('/book/[slug]', 'page')
+): Promise<{ error?: string; ok?: true }> {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) return { error: 'Not signed in' }
+
+    const admin = createAdminClient()
+
+    const { data: tt, error: ttErr } = await admin
+      .from('tee_times')
+      .select('course_id')
+      .eq('id', teeTimeId)
+      .single()
+    if (ttErr || !tt) return { error: ttErr?.message ?? 'Tee time not found' }
+
+    const { data: ca } = await admin
+      .from('course_admins')
+      .select('user_id')
+      .eq('course_id', tt.course_id)
+      .eq('user_id', user.id)
+      .maybeSingle()
+    if (!ca) {
+      const { data: crm } = await admin
+        .from('crm_course_users')
+        .select('user_id')
+        .eq('course_id', tt.course_id)
+        .eq('user_id', user.id)
+        .maybeSingle()
+      if (!crm) return { error: 'Not authorized for this course' }
+    }
+
+    const { error: updErr, data: updated } = await admin
+      .from('tee_times')
+      .update({ special_price: specialPrice, special_label: specialLabel })
+      .eq('id', teeTimeId)
+      .select('id, special_price, special_label')
+    if (updErr) return { error: updErr.message }
+    if (!updated || updated.length === 0) return { error: 'Update affected 0 rows' }
+
+    revalidatePath('/course/[slug]', 'page')
+    revalidatePath('/book/[slug]', 'page')
+    revalidatePath('/app/courses/[slug]', 'page')
+    return { ok: true }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Unknown error' }
+  }
 }
