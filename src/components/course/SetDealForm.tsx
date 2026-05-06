@@ -31,14 +31,22 @@ export function SetDealForm({
     }
     setError('')
     startTransition(async () => {
-      await setTeeTimeDeal(teeTimeId, parsed, label.trim() || null)
+      const result = await setTeeTimeDeal(teeTimeId, parsed, label.trim() || null)
+      if (result?.error) {
+        setError(result.error)
+        return
+      }
       onSuccess()
     })
   }
 
   function handleRemove() {
     startTransition(async () => {
-      await setTeeTimeDeal(teeTimeId, null, null)
+      const result = await setTeeTimeDeal(teeTimeId, null, null)
+      if (result?.error) {
+        setError(result.error)
+        return
+      }
       onSuccess()
     })
   }

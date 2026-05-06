@@ -265,12 +265,13 @@ export async function setTeeTimeDeal(
   teeTimeId: string,
   specialPrice: number | null,
   specialLabel: string | null,
-): Promise<void> {
+): Promise<{ error: string } | void> {
   const supabase = await createClient()
-  await supabase
+  const { error } = await supabase
     .from('tee_times')
     .update({ special_price: specialPrice, special_label: specialLabel })
     .eq('id', teeTimeId)
+  if (error) return { error: error.message }
   revalidatePath('/course/[slug]', 'page')
   revalidatePath('/book/[slug]', 'page')
 }
