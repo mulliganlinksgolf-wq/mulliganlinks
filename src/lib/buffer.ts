@@ -60,7 +60,7 @@ async function gqlRequest<T>(
 export async function getChannels(orgId: string): Promise<BufferChannel[]> {
   const data = await gqlRequest<{ channels: BufferChannel[] }>(
     `query GetChannels($organizationId: String!) {
-      channels(organizationId: $organizationId) {
+      channels(input: { organizationId: $organizationId }) {
         id name service avatar
       }
     }`,
