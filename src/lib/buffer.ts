@@ -151,17 +151,17 @@ export async function createIdea(
   title: string,
   text: string
 ): Promise<{ id: string }> {
-  const data = await gqlRequest<{ createIdea: { id: string } }>(
-    `mutation CreateIdea(
-      $organizationId: String!
-      $title: String!
-      $text: String!
-    ) {
-      createIdea(organizationId: $organizationId, title: $title, text: $text) {
-        id
+  const data = await gqlRequest<{ createIdea: { id?: string; message?: string } }>(
+    `mutation CreateIdea($input: CreateIdeaInput!) {
+      createIdea(input: $input) {
+        ... on Idea { id }
+        ... on InvalidInputError { message }
+        ... on UnauthorizedError { message }
+        ... on UnexpectedError { message }
       }
     }`,
-    { organizationId: orgId, title, text }
+    { input: { organizationId: orgId, content: { title, text } } }
   )
-  return data.createIdea
+  if (data.createIdea.message) throw new Error(data.createIdea.message)
+  return { id: data.createIdea.id! }
 }
