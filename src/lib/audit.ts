@@ -15,8 +15,10 @@ export type AuditEventType =
   | 'email_sent'
   | 'admin_note_added'
   | 'profile_updated'
+  | 'social_post_scheduled'
+  | 'social_idea_saved'
 
-export type AuditTargetType = 'member' | 'config' | 'content' | 'dispute' | 'communication'
+export type AuditTargetType = 'member' | 'config' | 'content' | 'dispute' | 'communication' | 'social'
 
 interface WriteAuditLogParams {
   eventType: AuditEventType
