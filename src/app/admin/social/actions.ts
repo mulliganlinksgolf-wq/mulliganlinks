@@ -1,0 +1,76 @@
+'use server'
+
+import { createAdminClient } from '@/lib/supabase/admin'
+import { createClient } from '@/lib/supabase/server'
+import { writeAuditLog } from '@/lib/audit'
+import { createPost, createIdea } from '@/lib/buffer'
+
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+
+async function assertAdmin() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+  const admin = createAdminClient()
+  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
+  if (!ADMIN_EMAILS.includes(user.email ?? '') && !profile?.is_admin) throw new Error('Not authorized')
+  return { user }
+}
+
+export async function schedulePost(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    await assertAdmin()
+
+    const text = formData.get('text') as string
+    const channelIdsRaw = formData.get('channelIds') as string
+    const dueAt = formData.get('dueAt') as string | null
+    const mode = (formData.get('mode') as string) || 'addToQueue'
+
+    const channelIds: string[] = JSON.parse(channelIdsRaw)
+
+    await createPost({
+      text,
+      channelIds,
+      dueAt: dueAt || undefined,
+      mode: mode as 'addToQueue' | 'customScheduled',
+    })
+
+    await writeAuditLog({
+      eventType: 'social_post_scheduled',
+      targetType: 'social',
+      details: {
+        channelCount: channelIds.length,
+        dueAt: dueAt || null,
+        textPreview: text.slice(0, 60),
+      },
+    })
+
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+  }
+}
+
+export async function saveIdea(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    await assertAdmin()
+
+    const title = formData.get('title') as string
+    const text = formData.get('text') as string
+    const orgId = process.env.BUFFER_ORG_ID ?? ''
+
+    if (!orgId) return { success: false, error: 'BUFFER_ORG_ID not configured' }
+
+    await createIdea(orgId, title, text)
+
+    await writeAuditLog({
+      eventType: 'social_idea_saved',
+      targetType: 'social',
+      details: { title },
+    })
+
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+  }
+}
