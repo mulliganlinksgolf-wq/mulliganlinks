@@ -66,22 +66,22 @@ export async function getChannels(orgId: string): Promise<BufferChannel[]> {
 }
 
 export async function getScheduledPosts(orgId: string): Promise<BufferPost[]> {
-  const data = await gqlRequest<{ posts: BufferPost[] }>(
-    `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { id text channelId dueAt status assets { url } } }`,
+  const data = await gqlRequest<{ posts: { edges: { node: BufferPost }[] } }>(
+    `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { edges { node { id text channelId dueAt status } } } }`,
     {}
   )
-  return data.posts ?? []
+  return data.posts?.edges?.map(e => e.node) ?? []
 }
 
 export async function getSentPosts(
   orgId: string,
   limit = 10
 ): Promise<BufferPost[]> {
-  const data = await gqlRequest<{ posts: BufferPost[] }>(
-    `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { id text channelId dueAt status assets { url } } }`,
+  const data = await gqlRequest<{ posts: { edges: { node: BufferPost }[] } }>(
+    `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { edges { node { id text channelId dueAt status } } } }`,
     {}
   )
-  return data.posts ?? []
+  return data.posts?.edges?.map(e => e.node) ?? []
 }
 
 export async function createPost(
