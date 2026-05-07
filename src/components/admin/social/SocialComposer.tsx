@@ -486,6 +486,9 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
         >
           {isScheduling ? 'Scheduling...' : 'Schedule Post'}
         </button>
+        {!captions[activeTab]?.caption && !isScheduling && (
+          <p className="text-xs text-[#6B7770] text-center">Generate captions above or type one in the caption box first</p>
+        )}
         <button
           onClick={handleSaveAsIdea}
           disabled={isScheduling || !captions[activeTab]?.caption}
