@@ -132,10 +132,12 @@ export async function POST(req: NextRequest) {
     })
 
     const raw = message.content[0].type === 'text' ? message.content[0].text : ''
+    // Strip markdown code fences if the model wraps its JSON output
+    const cleaned = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim()
 
     let captions: Record<string, CaptionResult>
     try {
-      captions = JSON.parse(raw)
+      captions = JSON.parse(cleaned)
     } catch {
       return NextResponse.json({ error: 'Parse failed' }, { status: 500 })
     }
