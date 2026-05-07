@@ -153,6 +153,25 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault()
+    const file = e.dataTransfer.files?.[0]
+    if (!file) return
+    setImageError(null)
+
+    const fd = new FormData()
+    fd.append('image', file)
+    const res = await fetch('/api/social/upload-image', { method: 'POST', body: fd })
+    const data = await res.json()
+
+    if (data.error) {
+      setImageError(data.error)
+    } else {
+      setImageDataUrl(data.dataUrl)
+      setImageFilename(data.filename)
+    }
+  }
+
   function handleSchedulePost() {
     const activePlatform = activeTab
     const text = captions[activePlatform]?.caption ?? ''
@@ -351,6 +370,8 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
         ) : (
           <div
             onClick={() => fileInputRef.current?.click()}
+            onDragOver={e => e.preventDefault()}
+            onDrop={handleDrop}
             className="border-2 border-dashed border-black/15 rounded-lg p-4 text-center cursor-pointer hover:border-[#1B4332]/40 transition-colors"
           >
             <p className="text-sm text-[#6B7770]">
