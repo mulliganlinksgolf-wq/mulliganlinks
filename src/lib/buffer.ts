@@ -89,37 +89,26 @@ export async function createPost(
 ): Promise<{ id: string; dueAt: string }[]> {
   const results: { id: string; dueAt: string }[] = []
   for (const channelId of input.channelIds) {
+    const dueAtField = input.dueAt ? `, dueAt: "${input.dueAt}"` : ''
     const data = await gqlRequest<{
-      createPost: {
-        __typename: string
-        post?: { id: string; dueAt: string }
-        error?: { message: string }
-      }
+      createPost: { post?: { id: string; dueAt: string }; message?: string }
     }>(
-      `mutation CreatePost(
-        $channelId: String!
-        $text: String!
-        $dueAt: String
-        $mode: String!
-      ) {
+      `mutation {
         createPost(input: {
-          channelId: $channelId
-          text: $text
-          dueAt: $dueAt
-          mode: $mode
+          channelId: "${channelId}"
+          text: ${JSON.stringify(input.text)}
+          mode: ${input.mode}
+          schedulingType: automatic
+          ${dueAtField}
         }) {
-          ... on PostActionSuccess {
-            post { id dueAt }
-          }
-          ... on MutationError {
-            error { message }
-          }
+          ... on PostActionSuccess { post { id dueAt } }
+          ... on MutationError { message }
         }
       }`,
-      { channelId, text: input.text, dueAt: input.dueAt ?? null, mode: input.mode }
+      {}
     )
-    if (data.createPost.__typename === 'MutationError') {
-      throw new Error(data.createPost.error?.message ?? 'Buffer mutation failed')
+    if (data.createPost.message) {
+      throw new Error(data.createPost.message)
     }
     if (data.createPost.post) {
       results.push(data.createPost.post)
