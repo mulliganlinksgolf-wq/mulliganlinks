@@ -59,27 +59,16 @@ async function gqlRequest<T>(
 
 export async function getChannels(orgId: string): Promise<BufferChannel[]> {
   const data = await gqlRequest<{ channels: BufferChannel[] }>(
-    `query GetChannels($organizationId: String!) {
-      channels(input: { organizationId: $organizationId }) {
-        id name service avatar
-      }
-    }`,
-    { organizationId: orgId }
+    `{ channels(input: { organizationId: "${orgId}" }) { id name service avatar } }`,
+    {}
   )
   return data.channels ?? []
 }
 
 export async function getScheduledPosts(orgId: string): Promise<BufferPost[]> {
   const data = await gqlRequest<{ posts: BufferPost[] }>(
-    `query GetScheduledPosts($organizationId: String!) {
-      posts(
-        first: 50
-        input: { organizationId: $organizationId, filter: { status: [scheduled] } }
-      ) {
-        id text channelId dueAt status assets { url }
-      }
-    }`,
-    { organizationId: orgId }
+    `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { id text channelId dueAt status assets { url } } }`,
+    {}
   )
   return data.posts ?? []
 }
@@ -89,15 +78,8 @@ export async function getSentPosts(
   limit = 10
 ): Promise<BufferPost[]> {
   const data = await gqlRequest<{ posts: BufferPost[] }>(
-    `query GetSentPosts($organizationId: String!, $limit: Int!) {
-      posts(
-        first: $limit
-        input: { organizationId: $organizationId, filter: { status: [sent] } }
-      ) {
-        id text channelId dueAt status assets { url }
-      }
-    }`,
-    { organizationId: orgId, limit }
+    `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { id text channelId dueAt status assets { url } } }`,
+    {}
   )
   return data.posts ?? []
 }
