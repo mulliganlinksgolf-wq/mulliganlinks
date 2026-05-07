@@ -116,19 +116,28 @@ type CaptionResult = {
 
 export async function POST(req: NextRequest) {
   try {
-    const { topic, pillar, platforms, audience } = await req.json()
+    const { topic, pillar, platforms, audience, imageDataUrl, imageMimeType } = await req.json()
+
+    const textPrompt = `Write captions for: ${(platforms as string[]).join(', ')}.\nPillar: ${pillar}. Topic: ${topic}. Audience: ${audience}.`
+
+    type UserContent = Anthropic.TextBlockParam | Anthropic.ImageBlockParam
+    const userContent: UserContent[] = []
+
+    if (imageDataUrl && imageMimeType) {
+      const base64 = (imageDataUrl as string).replace(/^data:[^;]+;base64,/, '')
+      userContent.push({
+        type: 'image',
+        source: { type: 'base64', media_type: imageMimeType as 'image/jpeg' | 'image/png' | 'image/webp', data: base64 },
+      })
+    }
+    userContent.push({ type: 'text', text: textPrompt })
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
     const message = await client.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1000,
       system: SYSTEM_PROMPT,
-      messages: [
-        {
-          role: 'user',
-          content: `Write captions for: ${(platforms as string[]).join(', ')}.\nPillar: ${pillar}. Topic: ${topic}. Audience: ${audience}.`,
-        },
-      ],
+      messages: [{ role: 'user', content: userContent }],
     })
 
     const raw = message.content[0].type === 'text' ? message.content[0].text : ''

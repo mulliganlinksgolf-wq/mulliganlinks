@@ -58,6 +58,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
   const [captions, setCaptions] = useState<Partial<Record<Platform, CaptionData>>>({})
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null)
   const [imageFilename, setImageFilename] = useState<string>('')
+  const [imageMimeType, setImageMimeType] = useState<string>('')
   const [imageError, setImageError] = useState<string | null>(null)
   const [scheduleMode, setScheduleMode] = useState<'queue' | 'custom'>('queue')
   const [scheduledAt, setScheduledAt] = useState(toLocalDatetimeValue(getNextSaturday8am()))
@@ -118,6 +119,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
           pillar,
           platforms: Array.from(platforms),
           audience,
+          ...(imageDataUrl && imageMimeType ? { imageDataUrl, imageMimeType } : {}),
         }),
       })
       const data = await res.json()
@@ -148,6 +150,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     } else {
       setImageDataUrl(data.dataUrl)
       setImageFilename(data.filename)
+      setImageMimeType(data.mimeType)
     }
     // Reset input so same file can be re-selected
     if (fileInputRef.current) fileInputRef.current.value = ''
@@ -169,6 +172,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     } else {
       setImageDataUrl(data.dataUrl)
       setImageFilename(data.filename)
+      setImageMimeType(data.mimeType)
     }
   }
 
@@ -361,7 +365,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageDataUrl} alt={imageFilename} className="h-24 w-24 rounded-lg object-cover border border-black/10" />
             <button
-              onClick={() => setImageDataUrl(null)}
+              onClick={() => { setImageDataUrl(null); setImageMimeType('') }}
               className="absolute -top-1.5 -right-1.5 bg-white border border-black/15 rounded-full w-5 h-5 text-xs text-[#6B7770] hover:text-[#1A1A1A] flex items-center justify-center shadow"
             >
               ×
