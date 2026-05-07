@@ -184,10 +184,18 @@ memberships: tier, status, created_at
   Expires: [date]
   [badge if unused: "1 unused pass"]
 
+  Individual pass rows (one per issued pass):
+  - Unredeemed: full opacity, green dot, "Available · expires [date]"
+  - Redeemed: muted/dimmed, strikethrough on "Guest Pass", grey dot, "Used [date]"
+
   Complimentary Rounds
   ─────────────────────
   X of Y used this year
   [progress bar]
+
+  Individual round rows (one per issued credit):
+  - Available: full opacity, green dot, "Available · expires [date]"
+  - Used: muted/dimmed, strikethrough on "Complimentary Round", grey dot, "Used [date]"
 
   Birthday Credit
   ─────────────────────

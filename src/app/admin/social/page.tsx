@@ -44,15 +44,29 @@ export default async function SocialPage() {
     )
   }
 
-  const [channels, scheduledPosts, sentPosts] = await Promise.all([
-    getChannels(orgId).catch(() => []),
-    getScheduledPosts(orgId).catch(() => []),
-    getSentPosts(orgId, 5).catch(() => []),
+  const [channelsResult, scheduledResult, sentResult] = await Promise.all([
+    getChannels(orgId).then(c => ({ ok: true as const, data: c })).catch((e: Error) => ({ ok: false as const, error: e.message })),
+    getScheduledPosts(orgId).then(d => ({ ok: true as const, data: d })).catch((e: Error) => ({ ok: false as const, error: e.message })),
+    getSentPosts(orgId, 5).then(d => ({ ok: true as const, data: d })).catch((e: Error) => ({ ok: false as const, error: e.message })),
   ])
+
+  const channels = channelsResult.ok ? channelsResult.data : []
+  const scheduledPosts = scheduledResult.ok ? scheduledResult.data : []
+  const sentPosts = sentResult.ok ? sentResult.data : []
+  const bufferError = !channelsResult.ok ? channelsResult.error : null
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-[#1A1A1A] mb-6">Social</h1>
+      {bufferError && (
+        <div className="rounded-xl bg-red-50 border border-red-200 p-4 mb-6">
+          <p className="font-bold text-red-900 text-sm mb-1">Buffer API error</p>
+          <p className="text-red-800 text-sm">{bufferError}</p>
+          {bufferError.includes('429') && (
+            <p className="text-red-800 text-xs mt-2">Buffer&apos;s free plan allows 100 requests per day. The limit will reset within 24 hours.</p>
+          )}
+        </div>
+      )}
       <SocialManager
         channels={channels}
         scheduledPosts={scheduledPosts}
