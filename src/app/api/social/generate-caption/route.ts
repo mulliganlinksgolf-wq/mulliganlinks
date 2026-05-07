@@ -118,7 +118,9 @@ export async function POST(req: NextRequest) {
   try {
     const { topic, pillar, platforms, audience, imageDataUrl, imageMimeType } = await req.json()
 
-    const textPrompt = `Write captions for: ${(platforms as string[]).join(', ')}.\nPillar: ${pillar}. Topic: ${topic}. Audience: ${audience}.`
+    const textPrompt = topic?.trim()
+      ? `Write captions for: ${(platforms as string[]).join(', ')}.\nPillar: ${pillar}. Topic: ${topic}. Audience: ${audience}.`
+      : `An image has been provided. First infer what this post should be about from the image, then write captions for: ${(platforms as string[]).join(', ')}.\nPillar: ${pillar}. Audience: ${audience}. Let the image content drive the topic.`
 
     type UserContent = Anthropic.TextBlockParam | Anthropic.ImageBlockParam
     const userContent: UserContent[] = []
