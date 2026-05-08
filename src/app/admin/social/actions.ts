@@ -25,14 +25,17 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
     const channelsRaw = formData.get('channels') as string
     const dueAt = formData.get('dueAt') as string | null
     const mode = (formData.get('mode') as string) || 'addToQueue'
+    const mediaUrlsRaw = formData.get('mediaUrls') as string | null
 
     const channels: { id: string; service: 'instagram' | 'facebook' | 'linkedin' | 'twitter' }[] = JSON.parse(channelsRaw)
+    const mediaUrls: string[] | undefined = mediaUrlsRaw ? JSON.parse(mediaUrlsRaw) : undefined
 
     await createPost({
       text,
       channels,
       dueAt: dueAt || undefined,
       mode: mode as 'addToQueue' | 'customScheduled',
+      mediaUrls,
     })
 
     await writeAuditLog({

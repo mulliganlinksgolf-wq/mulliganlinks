@@ -57,6 +57,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
   const [activeTab, setActiveTab] = useState<Platform>('instagram')
   const [captions, setCaptions] = useState<Partial<Record<Platform, CaptionData>>>({})
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null)
+  const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [imageFilename, setImageFilename] = useState<string>('')
   const [imageMimeType, setImageMimeType] = useState<string>('')
   const [imageError, setImageError] = useState<string | null>(null)
@@ -149,6 +150,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
       setImageError(data.error)
     } else {
       setImageDataUrl(data.dataUrl)
+      setImageUrl(data.url)
       setImageFilename(data.filename)
       setImageMimeType(data.mimeType)
     }
@@ -171,6 +173,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
       setImageError(data.error)
     } else {
       setImageDataUrl(data.dataUrl)
+      setImageUrl(data.url)
       setImageFilename(data.filename)
       setImageMimeType(data.mimeType)
     }
@@ -197,6 +200,9 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     fd.append('mode', scheduleMode === 'custom' ? 'customScheduled' : 'addToQueue')
     if (scheduleMode === 'custom' && scheduledAt) {
       fd.append('dueAt', new Date(scheduledAt).toISOString())
+    }
+    if (imageUrl) {
+      fd.append('mediaUrls', JSON.stringify([imageUrl]))
     }
 
     startScheduling(async () => {
@@ -375,7 +381,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imageDataUrl} alt={imageFilename} className="h-24 w-24 rounded-lg object-cover border border-black/10" />
             <button
-              onClick={() => { setImageDataUrl(null); setImageMimeType('') }}
+              onClick={() => { setImageDataUrl(null); setImageUrl(null); setImageMimeType('') }}
               className="absolute -top-1.5 -right-1.5 bg-white border border-black/15 rounded-full w-5 h-5 text-xs text-[#6B7770] hover:text-[#1A1A1A] flex items-center justify-center shadow"
             >
               ×
@@ -423,7 +429,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
           </a>
         </div>
         <p className="text-xs text-[#6B7770]">
-          📌 Image preview only — image hosting required to attach images to Buffer posts. Coming in a future update.
+          🖼️ Images upload to Supabase and attach to all platforms. Required for Instagram.
         </p>
       </div>
 

@@ -101,10 +101,13 @@ export async function createPost(
   const results: { id: string; dueAt: string }[] = []
   for (const channel of input.channels) {
     if (channel.service === 'instagram' && !input.mediaUrls?.length) {
-      throw new Error('Instagram posts require an image. Image hosting is not yet implemented — skip Instagram for now.')
+      throw new Error('Instagram posts require an image — attach one and try again')
     }
     const dueAtField = input.dueAt ? `, dueAt: "${input.dueAt}"` : ''
     const metadataField = metadataForService(channel.service)
+    const assetsField = input.mediaUrls?.length
+      ? `, assets: { images: [${input.mediaUrls.map(u => `{ url: ${JSON.stringify(u)} }`).join(', ')}] }`
+      : ''
     const data = await gqlRequest<{
       createPost: { post?: { id: string; dueAt: string }; message?: string }
     }>(
@@ -116,6 +119,7 @@ export async function createPost(
           schedulingType: automatic
           ${dueAtField}
           ${metadataField ? ',' + metadataField : ''}
+          ${assetsField}
         }) {
           ... on PostActionSuccess { post { id dueAt } }
           ... on MutationError { message }

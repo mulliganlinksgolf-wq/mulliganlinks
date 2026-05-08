@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const MAX_BYTES = 5 * 1024 * 1024
+const MAX_BYTES = 10 * 1024 * 1024
+const BUCKET = 'social-media'
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData()
@@ -20,22 +22,30 @@ export async function POST(req: NextRequest) {
 
   if (file.size > MAX_BYTES) {
     return NextResponse.json(
-      { error: 'File must be under 5MB' },
+      { error: 'File must be under 10MB' },
       { status: 400 }
     )
   }
 
-  const buffer = await file.arrayBuffer()
-  const base64 = Buffer.from(buffer).toString('base64')
-  const dataUrl = `data:${file.type};base64,${base64}`
+  const ext = file.name.includes('.') ? file.name.slice(file.name.lastIndexOf('.')) : ''
+  const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`
 
-  // TODO: Replace dataUrl with a public URL once image hosting is configured.
-  // Buffer requires a publicly accessible URL for mediaUrls. Options:
-  // - Supabase Storage: supabase.storage.from('social-images').upload(...)
-  // - Cloudflare Images: POST to api.cloudflare.com/client/v4/accounts/{id}/images/v1
-  // For MVP: return dataUrl for preview only. Text-only posts are sent to Buffer.
+  const buffer = await file.arrayBuffer()
+  const dataUrl = `data:${file.type};base64,${Buffer.from(buffer).toString('base64')}`
+
+  const supabase = createAdminClient()
+  const { error: uploadError } = await supabase.storage
+    .from(BUCKET)
+    .upload(path, buffer, { contentType: file.type, upsert: false })
+
+  if (uploadError) {
+    return NextResponse.json({ error: `Upload failed: ${uploadError.message}` }, { status: 500 })
+  }
+
+  const { data: { publicUrl } } = supabase.storage.from(BUCKET).getPublicUrl(path)
 
   return NextResponse.json({
+    url: publicUrl,
     dataUrl,
     filename: file.name,
     mimeType: file.type,
