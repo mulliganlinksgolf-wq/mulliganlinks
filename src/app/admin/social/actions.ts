@@ -3,8 +3,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { writeAuditLog } from '@/lib/audit'
-import { createPost, createIdea, deletePost, editPost } from '@/lib/buffer'
-import { revalidatePath } from 'next/cache'
+import { createPost, createIdea, deletePost, editPost, BUFFER_CACHE_TAG } from '@/lib/buffer'
+import { revalidatePath, updateTag } from 'next/cache'
 
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
 
@@ -49,6 +49,7 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
       },
     })
 
+    updateTag(BUFFER_CACHE_TAG)
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
@@ -86,6 +87,7 @@ export async function updateScheduledPost(formData: FormData): Promise<{ success
       details: { postId, edited: true, dueAt: dueAt || null, textPreview: text.slice(0, 60) },
     })
 
+    updateTag(BUFFER_CACHE_TAG)
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
@@ -130,6 +132,7 @@ export async function deleteScheduledPost(postId: string): Promise<{ success: bo
       details: { postId },
     })
 
+    updateTag(BUFFER_CACHE_TAG)
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {

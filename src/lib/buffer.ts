@@ -1,4 +1,7 @@
+import { unstable_cache } from 'next/cache'
+
 const BUFFER_API_URL = 'https://api.buffer.com/graphql'
+export const BUFFER_CACHE_TAG = 'buffer-social'
 
 export type BufferChannel = {
   id: string
@@ -102,13 +105,19 @@ async function gqlRequest<T>(
   return json.data as T
 }
 
-export async function getChannels(orgId: string): Promise<BufferChannel[]> {
+async function fetchChannels(orgId: string): Promise<BufferChannel[]> {
   const data = await gqlRequest<{ channels: BufferChannel[] }>(
     `{ channels(input: { organizationId: "${orgId}" }) { id name service avatar } }`,
     {}
   )
   return data.channels ?? []
 }
+
+export const getChannels = unstable_cache(
+  async (orgId: string) => fetchChannels(orgId),
+  ['buffer-channels'],
+  { tags: [BUFFER_CACHE_TAG], revalidate: 3600 }
+)
 
 type RawPostNode = {
   id: string
@@ -138,7 +147,7 @@ function mapPost(node: RawPostNode): BufferPost {
   }
 }
 
-export async function getScheduledPosts(orgId: string): Promise<BufferPost[]> {
+async function fetchScheduledPosts(orgId: string): Promise<BufferPost[]> {
   const data = await gqlRequest<{ posts: { edges: { node: RawPostNode }[] } }>(
     `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { edges { node { ${POST_FIELDS} } } } }`,
     {}
@@ -146,16 +155,25 @@ export async function getScheduledPosts(orgId: string): Promise<BufferPost[]> {
   return data.posts?.edges?.map(e => mapPost(e.node)) ?? []
 }
 
-export async function getSentPosts(
-  orgId: string,
-  limit = 10
-): Promise<BufferPost[]> {
+export const getScheduledPosts = unstable_cache(
+  async (orgId: string) => fetchScheduledPosts(orgId),
+  ['buffer-scheduled-posts'],
+  { tags: [BUFFER_CACHE_TAG], revalidate: 600 }
+)
+
+async function fetchSentPosts(orgId: string, limit: number): Promise<BufferPost[]> {
   const data = await gqlRequest<{ posts: { edges: { node: RawPostNode }[] } }>(
     `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { edges { node { ${POST_FIELDS} } } } }`,
     {}
   )
   return data.posts?.edges?.map(e => mapPost(e.node)) ?? []
 }
+
+export const getSentPosts = unstable_cache(
+  async (orgId: string, limit = 10) => fetchSentPosts(orgId, limit),
+  ['buffer-sent-posts'],
+  { tags: [BUFFER_CACHE_TAG], revalidate: 600 }
+)
 
 export async function createPost(
   input: CreatePostInput
