@@ -76,23 +76,51 @@ export async function getChannels(orgId: string): Promise<BufferChannel[]> {
   return data.channels ?? []
 }
 
+type RawPostNode = {
+  id: string
+  text: string
+  channelId: string
+  dueAt: string
+  status: BufferPost['status']
+  assets?: { __typename: string; thumbnail?: string; source?: string }[]
+}
+
+const POST_FIELDS = `id text channelId dueAt status assets {
+  __typename
+  ... on ImageAsset { thumbnail source }
+  ... on VideoAsset { thumbnail }
+}`
+
+function mapPost(node: RawPostNode): BufferPost {
+  return {
+    id: node.id,
+    text: node.text,
+    channelId: node.channelId,
+    dueAt: node.dueAt,
+    status: node.status,
+    assets: (node.assets ?? [])
+      .map(a => ({ url: a.thumbnail || a.source || '' }))
+      .filter(a => a.url),
+  }
+}
+
 export async function getScheduledPosts(orgId: string): Promise<BufferPost[]> {
-  const data = await gqlRequest<{ posts: { edges: { node: BufferPost }[] } }>(
-    `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { edges { node { id text channelId dueAt status } } } }`,
+  const data = await gqlRequest<{ posts: { edges: { node: RawPostNode }[] } }>(
+    `{ posts(first: 50, input: { organizationId: "${orgId}", filter: { status: [scheduled] } }) { edges { node { ${POST_FIELDS} } } } }`,
     {}
   )
-  return data.posts?.edges?.map(e => e.node) ?? []
+  return data.posts?.edges?.map(e => mapPost(e.node)) ?? []
 }
 
 export async function getSentPosts(
   orgId: string,
   limit = 10
 ): Promise<BufferPost[]> {
-  const data = await gqlRequest<{ posts: { edges: { node: BufferPost }[] } }>(
-    `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { edges { node { id text channelId dueAt status } } } }`,
+  const data = await gqlRequest<{ posts: { edges: { node: RawPostNode }[] } }>(
+    `{ posts(first: ${limit}, input: { organizationId: "${orgId}", filter: { status: [sent] } }) { edges { node { ${POST_FIELDS} } } } }`,
     {}
   )
-  return data.posts?.edges?.map(e => e.node) ?? []
+  return data.posts?.edges?.map(e => mapPost(e.node)) ?? []
 }
 
 export async function createPost(
