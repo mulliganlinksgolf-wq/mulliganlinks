@@ -108,7 +108,7 @@ export default function SocialQueue({ scheduledPosts, onFillSaturdaySlot }: Prop
               </span>
             </div>
             <p className="text-sm text-[#1A1A1A] line-clamp-2">{post.text}</p>
-            {post.assets[0]?.url && (
+            {post.assets?.[0]?.url && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={post.assets[0].url}
