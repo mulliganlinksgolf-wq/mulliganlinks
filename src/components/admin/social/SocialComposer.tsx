@@ -63,7 +63,6 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
   const [imageError, setImageError] = useState<string | null>(null)
   const [scheduleMode, setScheduleMode] = useState<'queue' | 'custom'>('queue')
   const [scheduledAt, setScheduledAt] = useState(toLocalDatetimeValue(getNextSaturday8am()))
-  const [selectedChannelIds, setSelectedChannelIds] = useState<string[]>([])
   const [generating, setGenerating] = useState(false)
   const [captionError, setCaptionError] = useState<string | null>(null)
   const [isScheduling, startScheduling] = useTransition()
@@ -79,13 +78,6 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     }
   }, [fillSaturdaySlot, onFillHandled])
 
-  // Default selected channels to match checked platforms
-  useEffect(() => {
-    const matching = channels
-      .filter(ch => platforms.has(ch.service as Platform))
-      .map(ch => ch.id)
-    setSelectedChannelIds(matching)
-  }, [platforms, channels])
 
   function togglePlatform(p: Platform) {
     setPlatforms(prev => {
@@ -184,13 +176,12 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     const text = captions[activePlatform]?.caption ?? ''
     if (!text.trim()) return
 
-    // Use manually selected channels, or fall back to all channels matching checked platforms
-    const targetChannels = selectedChannelIds.length > 0
-      ? channels.filter(ch => selectedChannelIds.includes(ch.id))
-      : channels.filter(ch => platforms.has(ch.service as Platform))
+    // Schedule only the active tab's platform — other platforms get scheduled
+    // by switching tabs and clicking Schedule Post for each one independently
+    const targetChannels = channels.filter(ch => ch.service === activePlatform)
 
     if (targetChannels.length === 0) {
-      onToast('No Buffer channels connected — check your Buffer account')
+      onToast(`No Buffer channel connected for ${activePlatform}`)
       return
     }
 
@@ -208,10 +199,11 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     startScheduling(async () => {
       const result = await schedulePost(fd)
       if (result.success) {
+        const platformName = activePlatform.charAt(0).toUpperCase() + activePlatform.slice(1)
         const msg =
           scheduleMode === 'custom'
-            ? `Scheduled for ${new Date(scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} ✓`
-            : 'Added to queue ✓'
+            ? `${platformName} scheduled for ${new Date(scheduledAt).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })} ✓`
+            : `${platformName} added to queue ✓`
         onToast(msg)
       } else {
         onToast(result.error ?? 'Scheduling failed')
@@ -463,32 +455,15 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
           </div>
         )}
 
-        {/* Channel selector */}
-        {channels.length > 0 && (
-          <div className="space-y-1">
-            <label className="text-xs font-medium text-[#6B7770]">Channels</label>
-            <div className="space-y-1 max-h-32 overflow-y-auto">
-              {channels.map(ch => (
-                <label key={ch.id} className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={selectedChannelIds.includes(ch.id)}
-                    onChange={e => {
-                      setSelectedChannelIds(prev =>
-                        e.target.checked ? [...prev, ch.id] : prev.filter(id => id !== ch.id)
-                      )
-                    }}
-                    className="text-[#1B4332]"
-                  />
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full capitalize ${PLATFORM_BADGES[ch.service as Platform] ?? 'bg-gray-200 text-gray-800'}`}
-                  >
-                    {ch.service}
-                  </span>
-                  <span className="text-sm text-[#1A1A1A]">{ch.name}</span>
-                </label>
-              ))}
-            </div>
+        {/* Show which channel will receive this post */}
+        {channels.filter(ch => ch.service === activeTab).length > 0 && (
+          <div className="text-xs text-[#6B7770]">
+            Posting to{' '}
+            {channels
+              .filter(ch => ch.service === activeTab)
+              .map(ch => ch.name)
+              .join(', ')}{' '}
+            ({activeTab})
           </div>
         )}
       </div>
@@ -500,7 +475,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
           disabled={isScheduling || !captions[activeTab]?.caption}
           className="w-full rounded-lg bg-[#1B4332] px-4 py-2 text-sm font-semibold text-white hover:bg-[#1B4332]/90 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isScheduling ? 'Scheduling...' : 'Schedule Post'}
+          {isScheduling ? 'Scheduling...' : `Schedule ${activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Post`}
         </button>
         {!captions[activeTab]?.caption && !isScheduling && (
           <p className="text-xs text-[#6B7770] text-center">Generate or type a caption in the box above first</p>

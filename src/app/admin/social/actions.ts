@@ -3,7 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { writeAuditLog } from '@/lib/audit'
-import { createPost, createIdea, deletePost } from '@/lib/buffer'
+import { createPost, createIdea, deletePost, editPost } from '@/lib/buffer'
 import { revalidatePath } from 'next/cache'
 
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
@@ -49,6 +49,44 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
       },
     })
 
+    revalidatePath('/admin/social')
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+  }
+}
+
+export async function updateScheduledPost(formData: FormData): Promise<{ success: boolean; error?: string }> {
+  try {
+    await assertAdmin()
+
+    const postId = formData.get('postId') as string
+    const text = formData.get('text') as string
+    const service = formData.get('service') as 'instagram' | 'facebook' | 'linkedin' | 'twitter'
+    const dueAt = formData.get('dueAt') as string | null
+    const mode = (formData.get('mode') as string) || 'customScheduled'
+    const mediaUrlsRaw = formData.get('mediaUrls') as string | null
+
+    const mediaUrls: string[] | undefined = mediaUrlsRaw ? JSON.parse(mediaUrlsRaw) : undefined
+
+    if (!postId) return { success: false, error: 'Missing post id' }
+
+    await editPost({
+      postId,
+      text,
+      service,
+      dueAt: dueAt || undefined,
+      mode: mode as 'addToQueue' | 'customScheduled',
+      mediaUrls,
+    })
+
+    await writeAuditLog({
+      eventType: 'social_post_scheduled',
+      targetType: 'social',
+      details: { postId, edited: true, dueAt: dueAt || null, textPreview: text.slice(0, 60) },
+    })
+
+    revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }

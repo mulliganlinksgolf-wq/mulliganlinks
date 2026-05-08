@@ -137,6 +137,43 @@ export async function createPost(
   return results
 }
 
+export async function editPost(input: {
+  postId: string
+  text: string
+  service: BufferChannel['service']
+  dueAt?: string
+  mode: 'addToQueue' | 'customScheduled'
+  mediaUrls?: string[]
+}): Promise<void> {
+  const dueAtField = input.dueAt ? `, dueAt: "${input.dueAt}"` : ''
+  const metadataField = metadataForService(input.service)
+  const assetsField = input.mediaUrls?.length
+    ? `, assets: { images: [${input.mediaUrls.map(u => `{ url: ${JSON.stringify(u)} }`).join(', ')}] }`
+    : ''
+  const data = await gqlRequest<{
+    editPost: { post?: { id: string; dueAt: string }; message?: string }
+  }>(
+    `mutation {
+      editPost(input: {
+        id: "${input.postId}"
+        text: ${JSON.stringify(input.text)}
+        mode: ${input.mode}
+        schedulingType: automatic
+        ${dueAtField}
+        ${metadataField ? ',' + metadataField : ''}
+        ${assetsField}
+      }) {
+        ... on PostActionSuccess { post { id dueAt } }
+        ... on MutationError { message }
+      }
+    }`,
+    {}
+  )
+  if (data.editPost.message) {
+    throw new Error(data.editPost.message)
+  }
+}
+
 export async function deletePost(postId: string): Promise<void> {
   const data = await gqlRequest<{
     deletePost: { id?: string; message?: string }
