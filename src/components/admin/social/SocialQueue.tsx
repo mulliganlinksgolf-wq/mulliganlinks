@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import type { BufferChannel, BufferPost } from '@/lib/buffer'
 import { deleteScheduledPost, updateScheduledPost } from '@/app/admin/social/actions'
 
@@ -54,6 +54,17 @@ function formatDueAt(iso: string): string {
   })
 }
 
+function formatCountdown(iso: string, now: number): string {
+  const diff = new Date(iso).getTime() - now
+  if (diff <= 0) return 'posting now'
+  const mins = Math.floor(diff / 60000)
+  if (mins < 60) return `in ${mins}m`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `in ${hrs}h ${mins % 60}m`
+  const days = Math.floor(hrs / 24)
+  return `in ${days}d ${hrs % 24}h`
+}
+
 function toLocalDatetimeValue(iso: string): string {
   const d = new Date(iso)
   const pad = (n: number) => String(n).padStart(2, '0')
@@ -66,6 +77,12 @@ export default function SocialQueue({ channels, scheduledPosts, onFillSaturdaySl
   const [editText, setEditText] = useState('')
   const [editDueAt, setEditDueAt] = useState('')
   const [, startMutation] = useTransition()
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60000)
+    return () => clearInterval(interval)
+  }, [])
 
   const channelMap = Object.fromEntries(channels.map(c => [c.id, c]))
 
@@ -178,7 +195,10 @@ export default function SocialQueue({ channels, scheduledPosts, onFillSaturdaySl
                 />
               )}
               <div className="flex items-center justify-between">
-                <p className="text-xs text-[#6B7770]">{formatDueAt(post.dueAt)}</p>
+                <div>
+                  <p className="text-xs text-[#6B7770]">{formatDueAt(post.dueAt)}</p>
+                  <p className="text-[10px] text-[#1B4332] font-medium">{formatCountdown(post.dueAt, now)}</p>
+                </div>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => openEdit(post)}
