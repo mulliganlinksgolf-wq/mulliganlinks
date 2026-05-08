@@ -18,10 +18,21 @@ export type BufferPost = {
 
 export type CreatePostInput = {
   text: string
-  channelIds: string[]
+  channels: { id: string; service: BufferChannel['service'] }[]
   dueAt?: string
   mode: 'addToQueue' | 'customScheduled'
   mediaUrls?: string[]
+}
+
+function metadataForService(service: BufferChannel['service']): string {
+  switch (service) {
+    case 'facebook':
+      return 'metadata: { facebook: { type: post } }'
+    case 'instagram':
+      return 'metadata: { instagram: { type: post, shouldShareToFeed: true } }'
+    default:
+      return ''
+  }
 }
 
 function getApiKey(): string {
@@ -88,18 +99,23 @@ export async function createPost(
   input: CreatePostInput
 ): Promise<{ id: string; dueAt: string }[]> {
   const results: { id: string; dueAt: string }[] = []
-  for (const channelId of input.channelIds) {
+  for (const channel of input.channels) {
+    if (channel.service === 'instagram' && !input.mediaUrls?.length) {
+      throw new Error('Instagram posts require an image. Image hosting is not yet implemented — skip Instagram for now.')
+    }
     const dueAtField = input.dueAt ? `, dueAt: "${input.dueAt}"` : ''
+    const metadataField = metadataForService(channel.service)
     const data = await gqlRequest<{
       createPost: { post?: { id: string; dueAt: string }; message?: string }
     }>(
       `mutation {
         createPost(input: {
-          channelId: "${channelId}"
+          channelId: "${channel.id}"
           text: ${JSON.stringify(input.text)}
           mode: ${input.mode}
           schedulingType: automatic
           ${dueAtField}
+          ${metadataField ? ',' + metadataField : ''}
         }) {
           ... on PostActionSuccess { post { id dueAt } }
           ... on MutationError { message }
@@ -108,7 +124,7 @@ export async function createPost(
       {}
     )
     if (data.createPost.message) {
-      throw new Error(data.createPost.message)
+      throw new Error(`${channel.service}: ${data.createPost.message}`)
     }
     if (data.createPost.post) {
       results.push(data.createPost.post)

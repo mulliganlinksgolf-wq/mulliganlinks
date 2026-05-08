@@ -182,18 +182,18 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     if (!text.trim()) return
 
     // Use manually selected channels, or fall back to all channels matching checked platforms
-    const channelIds = selectedChannelIds.length > 0
-      ? selectedChannelIds
-      : channels.filter(ch => platforms.has(ch.service as Platform)).map(ch => ch.id)
+    const targetChannels = selectedChannelIds.length > 0
+      ? channels.filter(ch => selectedChannelIds.includes(ch.id))
+      : channels.filter(ch => platforms.has(ch.service as Platform))
 
-    if (channelIds.length === 0) {
+    if (targetChannels.length === 0) {
       onToast('No Buffer channels connected — check your Buffer account')
       return
     }
 
     const fd = new FormData()
     fd.append('text', text)
-    fd.append('channelIds', JSON.stringify(channelIds))
+    fd.append('channels', JSON.stringify(targetChannels.map(ch => ({ id: ch.id, service: ch.service }))))
     fd.append('mode', scheduleMode === 'custom' ? 'customScheduled' : 'addToQueue')
     if (scheduleMode === 'custom' && scheduledAt) {
       fd.append('dueAt', new Date(scheduledAt).toISOString())

@@ -22,15 +22,15 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
     await assertAdmin()
 
     const text = formData.get('text') as string
-    const channelIdsRaw = formData.get('channelIds') as string
+    const channelsRaw = formData.get('channels') as string
     const dueAt = formData.get('dueAt') as string | null
     const mode = (formData.get('mode') as string) || 'addToQueue'
 
-    const channelIds: string[] = JSON.parse(channelIdsRaw)
+    const channels: { id: string; service: 'instagram' | 'facebook' | 'linkedin' | 'twitter' }[] = JSON.parse(channelsRaw)
 
     await createPost({
       text,
-      channelIds,
+      channels,
       dueAt: dueAt || undefined,
       mode: mode as 'addToQueue' | 'customScheduled',
     })
@@ -39,7 +39,7 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
       eventType: 'social_post_scheduled',
       targetType: 'social',
       details: {
-        channelCount: channelIds.length,
+        channelCount: channels.length,
         dueAt: dueAt || null,
         textPreview: text.slice(0, 60),
       },
