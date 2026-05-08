@@ -137,6 +137,21 @@ export async function createPost(
   return results
 }
 
+export async function deletePost(postId: string): Promise<void> {
+  const data = await gqlRequest<{
+    deletePost: { id?: string; message?: string }
+  }>(
+    `mutation { deletePost(input: { id: "${postId}" }) {
+      ... on DeletePostSuccess { id }
+      ... on VoidMutationError { message }
+    } }`,
+    {}
+  )
+  if (data.deletePost.message) {
+    throw new Error(data.deletePost.message)
+  }
+}
+
 export async function createIdea(
   orgId: string,
   title: string,

@@ -49,6 +49,7 @@ export default function SocialManager({ channels, scheduledPosts, sentPosts }: P
         <SocialQueue
           scheduledPosts={scheduledPosts}
           onFillSaturdaySlot={handleFillSaturdaySlot}
+          onToast={handleToast}
         />
         <SocialIdeasPanel sentPosts={sentPosts} />
       </div>

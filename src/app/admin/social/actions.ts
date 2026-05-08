@@ -3,7 +3,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { writeAuditLog } from '@/lib/audit'
-import { createPost, createIdea } from '@/lib/buffer'
+import { createPost, createIdea, deletePost } from '@/lib/buffer'
+import { revalidatePath } from 'next/cache'
 
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
 
@@ -72,6 +73,26 @@ export async function saveIdea(formData: FormData): Promise<{ success: boolean; 
       details: { title },
     })
 
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+  }
+}
+
+export async function deleteScheduledPost(postId: string): Promise<{ success: boolean; error?: string }> {
+  try {
+    await assertAdmin()
+    if (!postId) return { success: false, error: 'Missing post id' }
+
+    await deletePost(postId)
+
+    await writeAuditLog({
+      eventType: 'social_post_deleted',
+      targetType: 'social',
+      details: { postId },
+    })
+
+    revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
     return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }

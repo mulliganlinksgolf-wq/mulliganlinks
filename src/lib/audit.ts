@@ -16,6 +16,7 @@ export type AuditEventType =
   | 'admin_note_added'
   | 'profile_updated'
   | 'social_post_scheduled'
+  | 'social_post_deleted'
   | 'social_idea_saved'
 
 export type AuditTargetType = 'member' | 'config' | 'content' | 'dispute' | 'communication' | 'social'

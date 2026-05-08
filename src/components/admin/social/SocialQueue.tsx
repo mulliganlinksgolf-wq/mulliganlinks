@@ -1,10 +1,13 @@
 'use client'
 
+import { useState, useTransition } from 'react'
 import type { BufferPost } from '@/lib/buffer'
+import { deleteScheduledPost } from '@/app/admin/social/actions'
 
 type Props = {
   scheduledPosts: BufferPost[]
   onFillSaturdaySlot: () => void
+  onToast?: (msg: string) => void
 }
 
 function getNextSaturdayRange(): { start: Date; end: Date } {
@@ -51,11 +54,27 @@ function formatDueAt(iso: string): string {
   })
 }
 
-export default function SocialQueue({ scheduledPosts, onFillSaturdaySlot }: Props) {
+export default function SocialQueue({ scheduledPosts, onFillSaturdaySlot, onToast }: Props) {
+  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [, startDelete] = useTransition()
   const sorted = [...scheduledPosts].sort(
     (a, b) => new Date(a.dueAt).getTime() - new Date(b.dueAt).getTime()
   )
   const missingSaturdaySlot = !hasSaturdayPost(scheduledPosts)
+
+  function handleDelete(postId: string) {
+    if (!confirm('Delete this scheduled post? This cannot be undone.')) return
+    setDeletingId(postId)
+    startDelete(async () => {
+      const result = await deleteScheduledPost(postId)
+      setDeletingId(null)
+      if (result.success) {
+        onToast?.('Post deleted ✓')
+      } else {
+        onToast?.(`Delete failed: ${result.error ?? 'Unknown error'}`)
+      }
+    })
+  }
 
   return (
     <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 space-y-4">
@@ -116,7 +135,16 @@ export default function SocialQueue({ scheduledPosts, onFillSaturdaySlot }: Prop
                 className="h-12 w-12 rounded object-cover"
               />
             )}
-            <p className="text-xs text-[#6B7770]">{formatDueAt(post.dueAt)}</p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-[#6B7770]">{formatDueAt(post.dueAt)}</p>
+              <button
+                onClick={() => handleDelete(post.id)}
+                disabled={deletingId === post.id}
+                className="text-xs text-red-600 hover:text-red-800 hover:underline disabled:opacity-50"
+              >
+                {deletingId === post.id ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
           </div>
         ))}
       </div>
