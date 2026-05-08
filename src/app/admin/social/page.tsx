@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getChannels, getScheduledPosts, getSentPosts } from '@/lib/buffer'
+import { getChannels, getScheduledPosts, getSentPosts, getLastBufferRateLimit } from '@/lib/buffer'
 import SocialManager from '@/components/admin/SocialManager'
 
 export const metadata = { title: 'Social' }
@@ -54,10 +54,29 @@ export default async function SocialPage() {
   const scheduledPosts = scheduledResult.ok ? scheduledResult.data : []
   const sentPosts = sentResult.ok ? sentResult.data : []
   const bufferError = !channelsResult.ok ? channelsResult.error : null
+  const rateLimit = getLastBufferRateLimit()
+  const resetIn = rateLimit
+    ? (() => {
+        const h = Math.floor(rateLimit.dailyResetSeconds / 3600)
+        const m = Math.floor((rateLimit.dailyResetSeconds % 3600) / 60)
+        return h > 0 ? `${h}h ${m}m` : `${m}m`
+      })()
+    : null
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-[#1A1A1A] mb-6">Social</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-[#1A1A1A]">Social</h1>
+        {rateLimit && (
+          <div className="text-xs text-[#6B7770] text-right">
+            <span className={rateLimit.dailyRemaining < 20 ? 'text-red-600 font-semibold' : 'text-[#1B4332] font-semibold'}>
+              {rateLimit.dailyRemaining}
+            </span>
+            {' '}/ {rateLimit.dailyLimit} Buffer API calls left today
+            <div className="text-[10px] opacity-75">resets in {resetIn}</div>
+          </div>
+        )}
+      </div>
       {bufferError && (
         <div className="rounded-xl bg-red-50 border border-red-200 p-4 mb-6">
           <p className="font-bold text-red-900 text-sm mb-1">Buffer API error</p>

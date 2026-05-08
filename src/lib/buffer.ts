@@ -35,6 +35,38 @@ function metadataForService(service: BufferChannel['service']): string {
   }
 }
 
+export type BufferRateLimit = {
+  dailyRemaining: number
+  dailyLimit: number
+  dailyResetSeconds: number
+  windowRemaining: number
+  windowLimit: number
+}
+
+let lastRateLimit: BufferRateLimit | null = null
+
+function parseRateLimit(headers: Headers): BufferRateLimit | null {
+  // Headers come as multiple "ratelimit" values like '"100-in-15min"; r=99; t=900'
+  const all = headers.get('ratelimit')
+  if (!all) return null
+  // fetch combines duplicate headers with comma. Split by comma at top level.
+  const entries = all.split(/,(?=\s*"\d+-in)/).map(s => s.trim())
+  let dailyR = 0, dailyL = 0, dailyT = 0, winR = 0, winL = 0
+  for (const e of entries) {
+    const m = e.match(/"(\d+)-in-(15min|1day|30days)";\s*r=(\d+);\s*t=(\d+)/)
+    if (!m) continue
+    const limit = Number(m[1]); const window = m[2]; const r = Number(m[3]); const t = Number(m[4])
+    if (window === '1day') { dailyL = limit; dailyR = r; dailyT = t }
+    else if (window === '15min') { winL = limit; winR = r }
+  }
+  if (!dailyL && !winL) return null
+  return { dailyRemaining: dailyR, dailyLimit: dailyL, dailyResetSeconds: dailyT, windowRemaining: winR, windowLimit: winL }
+}
+
+export function getLastBufferRateLimit(): BufferRateLimit | null {
+  return lastRateLimit
+}
+
 function getApiKey(): string {
   const key = process.env.BUFFER_API_KEY
   if (!key) {
@@ -58,6 +90,8 @@ async function gqlRequest<T>(
     },
     body: JSON.stringify({ query, variables }),
   })
+  const parsed = parseRateLimit(res.headers)
+  if (parsed) lastRateLimit = parsed
   if (!res.ok) {
     throw new Error(`Buffer API error: ${res.status} ${res.statusText}`)
   }
