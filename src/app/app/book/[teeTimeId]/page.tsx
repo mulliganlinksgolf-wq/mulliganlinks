@@ -64,7 +64,7 @@ export default async function BookPage({
   // Resolve cart fee from pricing tiers
   const rateName = (teeTime as any).rate_name as string | undefined
   const matchedTier = rateName
-    ? coursePricing.find(p => p.rate_name === rateName)
+    ? (coursePricing.find(p => p.rate_name === rateName) ?? coursePricing[0])
     : coursePricing[0] // already ordered by display_order ascending
   const resolvedCartFeeCents = matchedTier?.cart_fee_cents ?? 0
 
