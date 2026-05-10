@@ -135,6 +135,7 @@ export async function confirmBooking({
   pointsEarned,
   tier,
   guestPassId,
+  redemptionType,
 }: {
   teeTimeId: string
   userId: string
@@ -148,13 +149,14 @@ export async function confirmBooking({
   pointsEarned: number
   tier: string
   guestPassId?: string
+  redemptionType?: 'points' | 'complimentary'
 }) {
   const supabase = await createClient()
 
   // Verify tee time is still available
   const { data: teeTime } = await supabase
     .from('tee_times')
-    .select('id, available_players, status, course_id')
+    .select('id, available_players, status, course_id, scheduled_at')
     .eq('id', teeTimeId)
     .single()
 
@@ -180,6 +182,45 @@ export async function confirmBooking({
   const discountCents = verifiedPassId ? 1500 : 0
   const adjustedTotal = total - discountCents / 100
 
+  // Redemption enforcement — runs for both complimentary and points free-round paths
+  if (redemptionType === 'points' || redemptionType === 'complimentary') {
+    const { checkRedemptionAllowed, resetCompRoundsIfNeeded } = await import('@/lib/redemption')
+
+    // Fetch membership for comp balance + anniversary date
+    const { data: membership } = await supabase
+      .from('memberships')
+      .select('comp_rounds_remaining, created_at')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .single()
+
+    if (redemptionType === 'complimentary') {
+      const remaining = await resetCompRoundsIfNeeded(supabase, userId, tier)
+      if (remaining <= 0) return { error: 'No complimentary rounds remaining.' }
+    }
+
+    // Fetch actual points balance server-side (don't trust client value)
+    let pointsBalance = 0
+    if (redemptionType === 'points') {
+      const { data: pointsRows } = await supabase
+        .from('fairway_points')
+        .select('amount')
+        .eq('user_id', userId)
+      pointsBalance = (pointsRows ?? []).reduce((s, r) => s + (r.amount as number), 0)
+    }
+
+    const check = await checkRedemptionAllowed(supabase, {
+      courseId: teeTime.course_id as string,
+      userId,
+      tier,
+      teeTimeAt: teeTime.scheduled_at as string,
+      membershipCreatedAt: membership?.created_at ?? new Date().toISOString(),
+      redemptionType,
+      pointsBalance,
+    })
+    if (!check.ok) return { error: check.error }
+  }
+
   // Create booking
   // TODO: Replace total_paid with Stripe PaymentIntent amount when Stripe is wired
   const { data: booking, error: bookingError } = await supabase
@@ -193,6 +234,8 @@ export async function confirmBooking({
       points_awarded: pointsEarned,
       discount_cents: discountCents,
       guest_pass_id: verifiedPassId,
+      course_id: teeTime.course_id,
+      redemption_type: redemptionType ?? null,
     })
     .select('id')
     .single()
@@ -228,8 +271,25 @@ export async function confirmBooking({
       course_id: teeTime.course_id,
       booking_id: booking.id,
       amount: -pointsRedeemed,
-      reason: 'Points redeemed at booking',
+      reason: redemptionType === 'points' ? 'Free round redeemed' : 'Points redeemed at booking',
     })
+  }
+
+  // Supabase doesn't support inline arithmetic in .update(); fetch and decrement explicitly
+  if (redemptionType === 'complimentary') {
+    const { data: mem } = await supabase
+      .from('memberships')
+      .select('comp_rounds_remaining')
+      .eq('user_id', userId)
+      .eq('status', 'active')
+      .single()
+    if (mem) {
+      await supabase
+        .from('memberships')
+        .update({ comp_rounds_remaining: (mem.comp_rounds_remaining as number) - 1 })
+        .eq('user_id', userId)
+        .eq('status', 'active')
+    }
   }
 
   // Mark member credits as used (oldest first, up to creditsRedeemedCents)
