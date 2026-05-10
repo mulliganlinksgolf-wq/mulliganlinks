@@ -21,7 +21,7 @@ export default async function CourseArticlePage({
 
   if (!article) notFound()
 
-  const category = (article as any).kb_categories
+  const category = (article as typeof article & { kb_categories: { title: string; slug: string } | null }).kb_categories
 
   return (
     <div className="max-w-3xl">
