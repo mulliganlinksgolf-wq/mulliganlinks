@@ -98,12 +98,12 @@ export function BookingForm({
         subtotal,
         discount: 0,
         pointsRedeemed,
-        creditsRedeemedCents: useCredits && !isFreeRound ? Math.round(creditsValue * 100) : 0,
+        creditsRedeemedCents: useCredits ? Math.round(creditsValue * 100) : 0,
         rainCheckId: rainCheck?.id,
         total,
         pointsEarned,
         tier,
-        guestPassId: useGuestPass && availablePasses[0] && !isFreeRound ? availablePasses[0].id : undefined,
+        guestPassId: useGuestPass && availablePasses[0] ? availablePasses[0].id : undefined,
         redemptionType: useCompRound ? 'complimentary' : useFreeRound ? 'points' : undefined,
       })
       if (result.error) {
