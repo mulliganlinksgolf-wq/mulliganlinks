@@ -161,6 +161,20 @@ describe('updateCoursePricing', () => {
       { onConflict: 'course_id,rate_name' },
     )
   })
+
+  it('returns error when upsert fails', async () => {
+    mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
+
+    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const upsertChain = makeChain({ error: { message: 'DB error' } })
+    mockFrom
+      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(upsertChain)
+
+    const { updateCoursePricing } = await import('@/lib/actions/teeSheetSettings')
+    const result = await updateCoursePricing(COURSE_ID, SAMPLE_TIERS)
+    expect(result.error).toBe('DB error')
+  })
 })
 
 // ---------------------------------------------------------------------------
@@ -202,5 +216,19 @@ describe('updateTeeSheetConfig', () => {
       expect.objectContaining({ course_id: COURSE_ID, interval_minutes: 10, max_players: 4 }),
       { onConflict: 'course_id' },
     )
+  })
+
+  it('returns error when upsert fails', async () => {
+    mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
+
+    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const upsertChain = makeChain({ error: { message: 'DB error' } })
+    mockFrom
+      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(upsertChain)
+
+    const { updateTeeSheetConfig } = await import('@/lib/actions/teeSheetSettings')
+    const result = await updateTeeSheetConfig(COURSE_ID, SAMPLE_CONFIG)
+    expect(result.error).toBe('DB error')
   })
 })
