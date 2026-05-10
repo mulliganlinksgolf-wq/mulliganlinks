@@ -1,4 +1,5 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export type RedemptionCheckResult = { ok: true } | { ok: false; error: string }
 
@@ -173,7 +174,8 @@ export async function resetCompRoundsIfNeeded(
   }
 
   const newRemaining = COMP_DEFAULT[tier] ?? 0
-  await supabase
+  const admin = createAdminClient()
+  await admin
     .from('memberships')
     .update({
       comp_rounds_remaining: newRemaining,

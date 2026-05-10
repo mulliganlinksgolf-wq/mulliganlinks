@@ -275,16 +275,18 @@ export async function confirmBooking({
     })
   }
 
-  // Supabase doesn't support inline arithmetic in .update(); fetch and decrement explicitly
+  // Supabase doesn't support inline arithmetic in .update(); fetch and decrement explicitly.
+  // Must use admin client — members have no UPDATE policy on memberships.
   if (redemptionType === 'complimentary') {
-    const { data: mem } = await supabase
+    const adminComp = createAdminClient()
+    const { data: mem } = await adminComp
       .from('memberships')
       .select('comp_rounds_remaining')
       .eq('user_id', userId)
       .eq('status', 'active')
       .single()
     if (mem) {
-      await supabase
+      await adminComp
         .from('memberships')
         .update({ comp_rounds_remaining: (mem.comp_rounds_remaining as number) - 1 })
         .eq('user_id', userId)
@@ -405,10 +407,12 @@ export async function cancelBooking(bookingId: string) {
     })
   }
 
-  // Restore comp round if the canceled booking used one
+  // Restore comp round if the canceled booking used one.
+  // Must use admin client — members have no UPDATE policy on memberships.
   if ((booking as any).redemption_type === 'complimentary') {
     const COMP_MAX: Record<string, number> = { eagle: 1, ace: 2 }
-    const { data: mem } = await supabase
+    const adminCancel = createAdminClient()
+    const { data: mem } = await adminCancel
       .from('memberships')
       .select('tier, comp_rounds_remaining')
       .eq('user_id', user.id)
@@ -417,7 +421,7 @@ export async function cancelBooking(bookingId: string) {
     if (mem) {
       const cap = COMP_MAX[(mem as any).tier] ?? 0
       const restored = Math.min((mem as any).comp_rounds_remaining + 1, cap)
-      await supabase
+      await adminCancel
         .from('memberships')
         .update({ comp_rounds_remaining: restored })
         .eq('user_id', user.id)
