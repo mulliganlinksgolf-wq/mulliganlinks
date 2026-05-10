@@ -153,7 +153,8 @@ Complimentary round and points free round are mutually exclusive. Both are mutua
 - Fairway: no change
 
 ### Benefits page (`/app/benefits`)
-- Eagle/Ace: new "Complimentary Rounds" card showing remaining balance and reset date
+- Eagle/Ace: new "Complimentary Rounds" card showing the full annual allotment as individual round indicators (e.g., Eagle shows 2 circles). Used rounds render with strikethrough text and a muted/crossed visual treatment; remaining rounds render normally. Example: Eagle member who has used 1 of 1 sees "~~Round 1~~" struck through. Ace member who has used 1 of 2 sees "~~Round 1~~" struck, "Round 2" active.
+- Reset date shown below the indicators: "Resets [date]"
 - Fairway: new informational note — "Earn 5,000 points for a free round at participating courses"
 
 ### Error states in booking form
