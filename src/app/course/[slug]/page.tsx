@@ -78,6 +78,12 @@ export default async function TeeSheetPage({
             Next →
           </Link>
           <Link
+            href={`/course/${slug}/tee-times/settings`}
+            className="px-3 py-1.5 text-sm border rounded hover:bg-gray-50 text-[#6B7770]"
+          >
+            Settings
+          </Link>
+          <Link
             href={`/course/${slug}/tee-times/create`}
             className="px-3 py-1.5 text-sm bg-[#1B4332] text-[#FAF7F2] rounded hover:bg-[#1B4332]/90"
           >
