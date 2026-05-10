@@ -32,6 +32,7 @@ export function KbArticleForm({ action, categories, article, isEdit }: KbArticle
   const [title, setTitle] = useState(article?.title ?? '')
   const [slug, setSlug] = useState(article?.slug ?? '')
   const [excerpt, setExcerpt] = useState(article?.excerpt ?? '')
+  const [userEditedSlug, setUserEditedSlug] = useState(isEdit ? true : false)
 
   useEffect(() => {
     if (state.success) router.push('/admin/knowledge-base')
@@ -40,7 +41,7 @@ export function KbArticleForm({ action, categories, article, isEdit }: KbArticle
   function handleTitleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const val = e.target.value
     setTitle(val)
-    if (!isEdit && !slug) setSlug(slugify(val))
+    if (!userEditedSlug) setSlug(slugify(val))
   }
 
   return (
@@ -78,7 +79,7 @@ export function KbArticleForm({ action, categories, article, isEdit }: KbArticle
             type="text"
             required
             value={slug}
-            onChange={e => setSlug(slugify(e.target.value))}
+            onChange={e => { setUserEditedSlug(true); setSlug(slugify(e.target.value)) }}
             className="w-full rounded-lg border border-slate-200 px-3 py-2 text-sm font-mono focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
           />
         </div>
