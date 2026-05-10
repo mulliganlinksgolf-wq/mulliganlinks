@@ -6,6 +6,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { getAndIssueMemberCredits } from '@/app/actions/booking'
 import { getAvailablePasses } from '@/app/actions/guestPasses'
 import { COMP_DEFAULT } from '@/lib/redemption'
+import { getTeeSheetConfig, getCoursePricing } from '@/lib/db/onboarding'
 
 export default async function BookPage({
   params,
@@ -45,16 +46,27 @@ export default async function BookPage({
     ? (COMP_DEFAULT[tier] ?? 0)
     : (membership?.comp_rounds_remaining ?? 0)
 
-  const [{ data: pointsRows }, creditBalanceCents, availablePasses, { data: redemptionSettings }] = await Promise.all([
+  const courseId = (teeTime.courses as any)?.id
+
+  const [{ data: pointsRows }, creditBalanceCents, availablePasses, { data: redemptionSettings }, teeSheetConfig, coursePricing] = await Promise.all([
     supabase.from('fairway_points').select('amount').eq('user_id', user.id),
     getAndIssueMemberCredits(user.id, tier),
     getAvailablePasses(user.id),
     supabase
       .from('course_redemption_settings')
       .select('points_threshold')
-      .eq('course_id', (teeTime.courses as any)?.id)
+      .eq('course_id', courseId)
       .single(),
+    getTeeSheetConfig(courseId),
+    getCoursePricing(courseId),
   ])
+
+  // Resolve cart fee from pricing tiers
+  const rateName = (teeTime as any).rate_name as string | undefined
+  const matchedTier = rateName
+    ? coursePricing.find(p => p.rate_name === rateName)
+    : coursePricing[0] // already ordered by display_order ascending
+  const resolvedCartFeeCents = matchedTier?.cart_fee_cents ?? 0
 
   const pointsThreshold = (redemptionSettings as { points_threshold: number } | null)?.points_threshold ?? 5000
 
@@ -91,6 +103,8 @@ export default async function BookPage({
           compRoundsRemaining={compRoundsRemaining}
           compRoundsResetAt={membership?.comp_rounds_reset_at}
           pointsThreshold={pointsThreshold}
+          cartPolicy={teeSheetConfig?.cart_policy ?? 'optional'}
+          cartFeeCents={resolvedCartFeeCents}
         />
       )}
     </div>

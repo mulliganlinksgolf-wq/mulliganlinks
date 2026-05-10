@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { confirmBooking } from '@/app/actions/booking'
 import { lookupRainCheck } from '@/app/actions/rainCheck'
+import CartSelector from '@/components/CartSelector'
 
 interface TeeTime {
   id: string
@@ -27,6 +28,8 @@ export function BookingForm({
   compRoundsRemaining = 0,
   compRoundsResetAt,
   pointsThreshold = 5000,
+  cartPolicy = 'optional',
+  cartFeeCents = 0,
 }: {
   teeTime: TeeTime
   tier: string
@@ -37,6 +40,8 @@ export function BookingForm({
   compRoundsRemaining?: number
   compRoundsResetAt?: string | null
   pointsThreshold?: number
+  cartPolicy?: 'optional' | 'mandatory' | 'walking_only'
+  cartFeeCents?: number
 }) {
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
@@ -47,6 +52,7 @@ export function BookingForm({
   const [rainCheckError, setRainCheckError] = useState<string | null>(null)
   const [useCompRound, setUseCompRound] = useState(false)
   const [useFreeRound, setUseFreeRound] = useState(false)
+  const [cartSelected, setCartSelected] = useState(cartPolicy === 'mandatory')
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
@@ -63,11 +69,13 @@ export function BookingForm({
 
   const multiplier = MULTIPLIER[tier] ?? 1
   const subtotal = teeTime.base_price * players
+  const greenFeeCents = Math.round(teeTime.base_price * players * 100)
 
   // Comp/free round covers the member's own green fee (1 player) — others still pay
   const memberFeeDiscount = (useCompRound || useFreeRound) ? teeTime.base_price : 0
   const guestDiscount = useGuestPass ? 15 : 0
-  const afterFreeDiscounts = subtotal - memberFeeDiscount - guestDiscount
+  const cartFeeAdded = (cartSelected && cartPolicy !== 'walking_only') ? cartFeeCents / 100 : 0
+  const afterFreeDiscounts = subtotal - memberFeeDiscount - guestDiscount + cartFeeAdded
   const creditsValue = useCredits
     ? Math.min(creditBalanceCents / 100, afterFreeDiscounts)
     : 0
@@ -91,7 +99,7 @@ export function BookingForm({
   function handleSubmit() {
     setError(null)
     startTransition(async () => {
-      const result = await confirmBooking({
+      const result = await (confirmBooking as any)({
         teeTimeId: teeTime.id,
         userId,
         players,
@@ -105,6 +113,9 @@ export function BookingForm({
         tier,
         guestPassId: useGuestPass && availablePasses[0] ? availablePasses[0].id : undefined,
         redemptionType: useCompRound ? 'complimentary' : useFreeRound ? 'points' : undefined,
+        // cart fields — action updated in Task 8
+        cartSelected: cartSelected,
+        cartFeeCents: cartSelected ? cartFeeCents : 0,
       })
       if (result.error) {
         setError(result.error)
@@ -138,6 +149,20 @@ export function BookingForm({
               </button>
             ))}
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Walk or Ride? */}
+      <Card className="bg-white border-0 shadow-sm">
+        <CardContent className="pt-5 pb-5">
+          <p className="text-sm font-medium text-[#1A1A1A] mb-3">Walk or ride?</p>
+          <CartSelector
+            greenFeeCents={greenFeeCents}
+            cartFeeCents={cartFeeCents}
+            cartPolicy={cartPolicy}
+            value={cartSelected}
+            onChange={setCartSelected}
+          />
         </CardContent>
       </Card>
 
