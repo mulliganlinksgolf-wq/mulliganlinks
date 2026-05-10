@@ -32,8 +32,6 @@ export default async function CompRoundsReportPage({
   const dateRange = resolveDateRange(sp.preset, sp.from, sp.to)
   const data = await getCompData(course.id, dateRange.from, dateRange.to)
 
-  const estimatedCostDollars = (data.estimatedCostCents / 100).toFixed(2)
-
   const csvData = data.perMember.map(row => ({
     Member: row.fullName,
     Tier: row.tier,
@@ -53,10 +51,10 @@ export default async function CompRoundsReportPage({
       <DateRangePicker />
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <KpiTile label="Comps Redeemed" value={data.redeemed.toString()} accent />
-        <KpiTile label="Redemption Rate" value={`${data.redemptionRate.toFixed(1)}%`} />
-        <KpiTile label="Estimated Cost" value={`$${estimatedCostDollars}`} />
-        <KpiTile label="Members w/ Comps" value={data.perMember.length.toString()} />
+        <KpiTile label="Comps Redeemed" value={data.totalRedeemed.toString()} accent />
+        <KpiTile label="Est. Cost to Course" value={`$${(data.estimatedCostCents / 100).toFixed(2)}`} />
+        <KpiTile label="Members Using Comps" value={data.membersUsingComps.toString()} />
+        <KpiTile label="Avg Comps / Member" value={data.avgCompsPerMember.toFixed(1)} />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">

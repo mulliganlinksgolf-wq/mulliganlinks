@@ -83,18 +83,18 @@ describe('aggregateLoyaltyData', () => {
 describe('aggregateCompData', () => {
   it('counts redeemed comps', () => {
     const bookings = [
-      { redemption_type: 'complimentary', base_price: 45 },
-      { redemption_type: 'complimentary', base_price: 45 },
-      { redemption_type: null, base_price: 45 },
+      { redemption_type: 'complimentary', total_paid: 45 },
+      { redemption_type: 'complimentary', total_paid: 45 },
+      { redemption_type: null, total_paid: 45 },
     ]
     const result = aggregateCompData(bookings)
     expect(result.redeemed).toBe(2)
   })
 
-  it('calculates estimated cost from avg green fee', () => {
+  it('calculates estimated cost from total_paid', () => {
     const bookings = [
-      { redemption_type: 'complimentary', base_price: 50 },
-      { redemption_type: 'complimentary', base_price: 50 },
+      { redemption_type: 'complimentary', total_paid: 50 },
+      { redemption_type: 'complimentary', total_paid: 50 },
     ]
     const result = aggregateCompData(bookings)
     expect(result.estimatedCostCents).toBe(10000)

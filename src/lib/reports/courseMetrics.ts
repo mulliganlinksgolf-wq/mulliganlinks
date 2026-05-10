@@ -360,29 +360,31 @@ export async function getLoyaltyData(
 
 // ── Comp Rounds ────────────────────────────────────────────────────────────────
 
+const DEFAULT_GREEN_FEE_CENTS = 4500 // fallback when no paid rounds exist in range
+
 export interface CompAggregate {
   redeemed: number
   estimatedCostCents: number
 }
 
 export function aggregateCompData(
-  bookings: Array<{ redemption_type: string | null; base_price: number }>
+  bookings: Array<{ redemption_type: string | null; total_paid: number }>
 ): CompAggregate {
   const comps = bookings.filter(b => b.redemption_type === 'complimentary')
-  const estimatedCostCents = comps.reduce((s, b) => s + Math.round(b.base_price * 100), 0)
+  const estimatedCostCents = comps.reduce((s, b) => s + Math.round(b.total_paid * 100), 0)
   return { redeemed: comps.length, estimatedCostCents }
 }
 
 export interface CompMonthRow {
   month: string
   redeemed: number
-  estimatedCostCents: number
 }
 
 export interface CompData {
-  redeemed: number
-  redemptionRate: number
+  totalRedeemed: number
   estimatedCostCents: number
+  membersUsingComps: number
+  avgCompsPerMember: number
   monthly: CompMonthRow[]
   perMember: Array<{ userId: string; fullName: string; tier: string; redeemed: number; lastRedemption: string }>
 }
@@ -409,13 +411,12 @@ export async function getCompData(
 
   const total = flatBookings.length
   const compBookings = flatBookings.filter(b => b.redemption_type === 'complimentary')
-  const redeemed = compBookings.length
-  const redemptionRate = total > 0 ? Math.round((redeemed / total) * 100) : 0
+  const totalRedeemed = compBookings.length
 
   const avgGreenFeeCents = total > 0
     ? Math.round(flatBookings.reduce((s, b) => s + Math.round((b.total_paid ?? 0) * 100), 0) / total)
-    : 4500
-  const estimatedCostCents = redeemed * avgGreenFeeCents
+    : DEFAULT_GREEN_FEE_CENTS
+  const estimatedCostCents = totalRedeemed * avgGreenFeeCents
 
   const monthMap = new Map<string, number>()
   for (const b of compBookings) {
@@ -427,7 +428,6 @@ export async function getCompData(
     .map(([month, count]) => ({
       month,
       redeemed: count,
-      estimatedCostCents: count * avgGreenFeeCents,
     }))
 
   const userMap = new Map<string, { count: number; lastRedemption: string }>()
@@ -458,7 +458,10 @@ export async function getCompData(
       }))
   }
 
-  return { redeemed, redemptionRate, estimatedCostCents, monthly, perMember }
+  const membersUsingComps = userMap.size
+  const avgCompsPerMember = membersUsingComps > 0 ? Math.round((totalRedeemed / membersUsingComps) * 10) / 10 : 0
+
+  return { totalRedeemed, estimatedCostCents, membersUsingComps, avgCompsPerMember, monthly, perMember }
 }
 
 // ── Guest Passes & Referrals ───────────────────────────────────────────────────
