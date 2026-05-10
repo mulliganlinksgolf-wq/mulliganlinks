@@ -79,7 +79,7 @@ export default async function GuestReportPage({
             </thead>
             <tbody>
               {data.details.map((row) => (
-                <tr key={`${row.fullName}-${row.source}`} className="border-b border-gray-50 hover:bg-gray-50">
+                <tr key={row.userId} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3 font-medium">{row.fullName}</td>
                   <td className="py-2 px-3">{row.source}</td>
                   <td className="py-2 px-3">{row.joinDate}</td>

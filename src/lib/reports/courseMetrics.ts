@@ -472,7 +472,7 @@ export interface GuestData {
   membersViaReferral: number
   totalAttributions: number
   monthly: Array<{ month: string; redemptions: number }>
-  details: Array<{ fullName: string; source: string; joinDate: string; tier: string }>
+  details: Array<{ userId: string; fullName: string; source: string; joinDate: string; tier: string }>
 }
 
 export async function getGuestData(
@@ -528,12 +528,14 @@ export async function getGuestData(
 
     details = [
       ...guestUserIds.map(id => ({
+        userId: id,
         fullName: (profileMap.get(id) as any)?.full_name ?? 'Member',
         source: 'Guest Pass',
         joinDate: (profileMap.get(id) as any)?.created_at?.slice(0, 10) ?? '',
         tier: tierMap.get(id) ?? 'fairway',
       })),
       ...referralProfileIds.map(id => ({
+        userId: id,
         fullName: (profileMap.get(id) as any)?.full_name ?? 'Member',
         source: 'Referral Link',
         joinDate: (profileMap.get(id) as any)?.created_at?.slice(0, 10) ?? '',

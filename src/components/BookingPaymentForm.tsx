@@ -157,6 +157,7 @@ export function BookingPaymentForm({
         return
       }
 
+      // TODO: Cart selection (cartPolicy, cartFeeCents) not wired here — add alongside Stripe integration
       const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok || !data.client_secret) {
