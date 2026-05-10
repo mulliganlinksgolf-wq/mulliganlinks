@@ -106,7 +106,7 @@ export interface UtilizationData {
   peakSlot: string
   avgPartySize: number
   offPeakPct: number
-  monthlySummary: Array<{ month: string; rounds: number; avgPartySize: number }>
+  monthlySummary: Array<{ month: string; rounds: number; peakDay: string; peakSlot: string; avgPartySize: number }>
 }
 
 const TZ = 'America/Detroit'
@@ -200,6 +200,16 @@ export async function getUtilizationData(
   const avgPartySize = allBookings > 0 ? Math.round((totalParty / allBookings) * 10) / 10 : 0
   const offPeakPct = calcOffPeakPct(cells)
 
+  // Group slots by month for per-month peak day/slot computation
+  const monthSlotMap = new Map<string, Array<{ scheduled_at: string; confirmedPlayers: number[] }>>()
+  for (const slot of normalized) {
+    if (slot.confirmedPlayers.length === 0) continue
+    const month = slot.scheduled_at.slice(0, 7)
+    const existing = monthSlotMap.get(month) ?? []
+    existing.push(slot)
+    monthSlotMap.set(month, existing)
+  }
+
   const monthMap = new Map<string, { rounds: number; totalParty: number }>()
   for (const slot of normalized) {
     if (slot.confirmedPlayers.length === 0) continue
@@ -212,11 +222,27 @@ export async function getUtilizationData(
   }
   const monthlySummary = Array.from(monthMap.entries())
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, val]) => ({
-      month,
-      rounds: val.rounds,
-      avgPartySize: val.rounds > 0 ? Math.round((val.totalParty / val.rounds) * 10) / 10 : 0,
-    }))
+    .map(([month, val]) => {
+      // Compute peak day and peak slot for this month
+      const monthCells = aggregateUtilizationCells(monthSlotMap.get(month) ?? [])
+      const mByDay = new Map<number, number>()
+      for (const c of monthCells) mByDay.set(c.dayOfWeek, (mByDay.get(c.dayOfWeek) ?? 0) + c.count)
+      let mPeakDayNum = 0, mPeakDayCount = 0
+      for (const [d, cnt] of mByDay) { if (cnt > mPeakDayCount) { mPeakDayCount = cnt; mPeakDayNum = d } }
+      const mPeakDay = DAY_FULL[mPeakDayNum] ?? '—'
+      const mTopCell = [...monthCells].sort((a, b) => b.count - a.count)[0]
+      const mph = mTopCell?.hourSlot ?? 0
+      const mPeakSlot = monthCells.length > 0
+        ? `${mph === 0 ? 12 : mph > 12 ? mph - 12 : mph}:00 ${mph >= 12 ? 'PM' : 'AM'}`
+        : '—'
+      return {
+        month,
+        rounds: val.rounds,
+        peakDay: mPeakDay,
+        peakSlot: mPeakSlot,
+        avgPartySize: val.rounds > 0 ? Math.round((val.totalParty / val.rounds) * 10) / 10 : 0,
+      }
+    })
 
   return { cells, peakDay, peakSlot: peakSlotLabel, avgPartySize, offPeakPct, monthlySummary }
 }

@@ -35,6 +35,8 @@ export default async function UtilizationReportPage({
   const csvData = data.monthlySummary.map(row => ({
     Month: row.month,
     Rounds: row.rounds,
+    'Peak Day': row.peakDay,
+    'Peak Slot': row.peakSlot,
     'Avg Party Size': row.avgPartySize,
   }))
 
@@ -42,7 +44,7 @@ export default async function UtilizationReportPage({
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Tee Sheet Utilization</h1>
-        <CsvExportButton data={csvData} filename={`${slug}-utilization.csv`} />
+        <CsvExportButton data={csvData} filename={`${slug}-utilization.csv`} disabled={csvData.length === 0} />
       </div>
 
       <DateRangePicker />
@@ -68,7 +70,7 @@ export default async function UtilizationReportPage({
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100">
-                {['Month', 'Rounds', 'Avg Party Size'].map(h => (
+                {['Month', 'Rounds', 'Peak Day', 'Peak Slot', 'Avg Party Size'].map(h => (
                   <th key={h} scope="col" className="text-left py-2 px-3 text-xs text-[#6B7770] font-medium">{h}</th>
                 ))}
               </tr>
@@ -78,6 +80,8 @@ export default async function UtilizationReportPage({
                 <tr key={row.month} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3">{row.month}</td>
                   <td className="py-2 px-3 font-medium">{row.rounds.toLocaleString()}</td>
+                  <td className="py-2 px-3">{row.peakDay}</td>
+                  <td className="py-2 px-3">{row.peakSlot}</td>
                   <td className="py-2 px-3">{row.avgPartySize}</td>
                 </tr>
               ))}

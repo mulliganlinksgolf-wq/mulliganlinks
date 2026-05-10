@@ -4,9 +4,10 @@ interface CsvExportButtonProps {
   data: Record<string, string | number | null>[]
   filename: string
   label?: string
+  disabled?: boolean
 }
 
-export default function CsvExportButton({ data, filename, label = 'Export CSV' }: CsvExportButtonProps) {
+export default function CsvExportButton({ data, filename, label = 'Export CSV', disabled = false }: CsvExportButtonProps) {
   function download() {
     if (!data.length) return
     const headers = Object.keys(data[0])
@@ -33,8 +34,8 @@ export default function CsvExportButton({ data, filename, label = 'Export CSV' }
   }
 
   return (
-    <button onClick={download}
-      className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-[#6B7770] hover:border-[#1B4332] hover:text-[#1A1A1A] transition-colors">
+    <button onClick={download} disabled={disabled}
+      className="px-3 py-1.5 border border-gray-200 rounded-lg text-sm text-[#6B7770] hover:border-[#1B4332] hover:text-[#1A1A1A] transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
       {label}
     </button>
   )
