@@ -231,7 +231,7 @@ export async function confirmBooking({
       players,
       total_paid: adjustedTotal,
       status: 'confirmed',
-      points_awarded: pointsEarned,
+      points_awarded: redemptionType === 'complimentary' ? 0 : pointsEarned,
       discount_cents: discountCents,
       guest_pass_id: verifiedPassId,
       course_id: teeTime.course_id,

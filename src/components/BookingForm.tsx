@@ -81,7 +81,7 @@ export function BookingForm({
     : 0
 
   const total = Math.max(0, afterRainCheck - pointsValue)
-  const pointsEarned = Math.floor(total * multiplier)
+  const pointsEarned = useCompRound ? 0 : Math.floor(total * multiplier)
   const pointsRedeemed = useFreeRound
     ? pointsThreshold
     : usePoints
