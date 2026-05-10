@@ -9,7 +9,11 @@ export function DeleteArticleButton({ articleId }: { articleId: string }) {
   function handleDelete() {
     if (!confirm('Delete this article? This cannot be undone.')) return
     startTransition(async () => {
-      await deleteKbArticle({}, articleId)
+      const result = await deleteKbArticle({}, articleId)
+      if (result?.error) {
+        alert(`Delete failed: ${result.error}`)
+        return
+      }
       window.location.reload()
     })
   }

@@ -3,6 +3,8 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { DeleteArticleButton } from '@/components/admin/DeleteArticleButton'
 import type { KbArticle, KbCategory } from '@/types/knowledge-base'
 
+type ArticleRow = KbArticle & { kb_categories: { title: string } | null }
+
 export const metadata = { title: 'Knowledge Base' }
 
 export default async function AdminKnowledgeBasePage({
@@ -13,7 +15,7 @@ export default async function AdminKnowledgeBasePage({
   const { tab = 'articles' } = await searchParams
   const admin = createAdminClient()
 
-  const [{ data: articles }, { data: categories }] = await Promise.all([
+  const [{ data: rawArticles }, { data: categories }] = await Promise.all([
     admin
       .from('kb_articles')
       .select('*, kb_categories(title)')
@@ -24,10 +26,12 @@ export default async function AdminKnowledgeBasePage({
       .order('sort_order'),
   ])
 
+  const articles = (rawArticles ?? []) as ArticleRow[]
+
   const countMap: Record<string, number> = {}
-  for (const a of articles ?? []) {
-    if ((a as any).category_id) {
-      countMap[(a as any).category_id] = (countMap[(a as any).category_id] ?? 0) + 1
+  for (const a of articles) {
+    if (a.category_id) {
+      countMap[a.category_id] = (countMap[a.category_id] ?? 0) + 1
     }
   }
 
@@ -63,7 +67,7 @@ export default async function AdminKnowledgeBasePage({
       </div>
 
       {tab === 'articles' && (
-        <ArticlesTable articles={(articles ?? []) as KbArticle[]} />
+        <ArticlesTable articles={articles} />
       )}
       {tab === 'categories' && (
         <CategoriesTable
@@ -75,7 +79,7 @@ export default async function AdminKnowledgeBasePage({
   )
 }
 
-function ArticlesTable({ articles }: { articles: (KbArticle & { kb_categories?: { title: string } | null })[] }) {
+function ArticlesTable({ articles }: { articles: ArticleRow[] }) {
   return (
     <div className="rounded-xl border border-slate-200 bg-white overflow-hidden">
       <table className="w-full text-sm">
