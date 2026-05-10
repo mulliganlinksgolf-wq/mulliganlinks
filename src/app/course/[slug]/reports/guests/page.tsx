@@ -39,12 +39,12 @@ export default async function GuestReportPage({
     Tier: row.tier,
   }))
 
-  const hasMonthlyData = data.monthly.some(m => m.passesRedeemed > 0)
+  const hasMonthlyData = data.monthly.some(m => m.redemptions > 0)
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Guest Passes &amp; Referral Activity</h1>
+        <h1 className="text-2xl font-bold text-[#1A1A1A]">Guest Passes & Referral Activity</h1>
         <CsvExportButton data={csvData} filename={`${slug}-guests.csv`} disabled={csvData.length === 0} />
       </div>
 
@@ -65,7 +65,7 @@ export default async function GuestReportPage({
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="font-semibold text-[#1A1A1A] mb-4">Referral &amp; Conversion Detail</h2>
+        <h2 className="font-semibold text-[#1A1A1A] mb-4">Referral & Conversion Detail</h2>
         {data.details.length === 0 ? (
           <p className="text-sm text-gray-500">No guest or referral activity for this period.</p>
         ) : (
@@ -78,8 +78,8 @@ export default async function GuestReportPage({
               </tr>
             </thead>
             <tbody>
-              {data.details.map((row, i) => (
-                <tr key={i} className="border-b border-gray-50 hover:bg-gray-50">
+              {data.details.map((row) => (
+                <tr key={`${row.fullName}-${row.source}`} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-2 px-3 font-medium">{row.fullName}</td>
                   <td className="py-2 px-3">{row.source}</td>
                   <td className="py-2 px-3">{row.joinDate}</td>

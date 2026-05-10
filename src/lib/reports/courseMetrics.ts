@@ -468,7 +468,7 @@ export interface GuestData {
   guestToMemberConversions: number
   membersViaReferral: number
   totalAttributions: number
-  monthly: Array<{ month: string; passesRedeemed: number }>
+  monthly: Array<{ month: string; redemptions: number }>
   details: Array<{ fullName: string; source: string; joinDate: string; tier: string }>
 }
 
@@ -497,7 +497,7 @@ export async function getGuestData(
   for (const b of passBookings) monthMap.set(b.month, (monthMap.get(b.month) ?? 0) + 1)
   const monthly = Array.from(monthMap.entries())
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, passesRedeemed]) => ({ month, passesRedeemed }))
+    .map(([month, count]) => ({ month, redemptions: count }))
 
   // course_referrals table (profile_id = member who was referred)
   const { data: referrals } = await admin
