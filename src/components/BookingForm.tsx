@@ -278,7 +278,10 @@ export function BookingForm({
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
-          <p className="text-xs text-[#6B7770]">+{pointsEarned} Fairway Points earned</p>
+          {useCompRound
+            ? <p className="text-xs text-[#6B7770]">No Fairway Points earned on complimentary rounds</p>
+            : <p className="text-xs text-[#6B7770]">+{pointsEarned} Fairway Points earned</p>
+          }
         </CardContent>
       </Card>
 
