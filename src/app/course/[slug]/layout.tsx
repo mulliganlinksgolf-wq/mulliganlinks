@@ -55,6 +55,7 @@ export default async function CourseAdminLayout({
     { href: `/course/${slug}/billing`,    label: 'Billing',    managerOnly: true },
     { href: `/course/${slug}/settings`,   label: 'Settings',   managerOnly: true },
     { href: `/course/${slug}/install`,    label: 'Install',    managerOnly: true },
+    { href: `/course/${slug}/help`,       label: 'Help',       managerOnly: false },
   ]
 
   const navItems = allNavItems.filter(item => !item.managerOnly || isManager)
