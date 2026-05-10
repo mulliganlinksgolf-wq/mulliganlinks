@@ -358,7 +358,7 @@ export async function cancelBooking(bookingId: string) {
 
   const { data: booking } = await supabase
     .from('bookings')
-    .select('id, tee_time_id, players, status, points_awarded, tee_times(scheduled_at, courses(name))')
+    .select('id, tee_time_id, players, status, points_awarded, redemption_type, tee_times(scheduled_at, courses(name))')
     .eq('id', bookingId)
     .eq('user_id', user.id)
     .single()
@@ -403,6 +403,26 @@ export async function cancelBooking(bookingId: string) {
       amount: -totalRedeemed,
       reason: 'Booking canceled — redeemed points restored',
     })
+  }
+
+  // Restore comp round if the canceled booking used one
+  if ((booking as any).redemption_type === 'complimentary') {
+    const COMP_MAX: Record<string, number> = { eagle: 1, ace: 2 }
+    const { data: mem } = await supabase
+      .from('memberships')
+      .select('tier, comp_rounds_remaining')
+      .eq('user_id', user.id)
+      .eq('status', 'active')
+      .single()
+    if (mem) {
+      const cap = COMP_MAX[(mem as any).tier] ?? 0
+      const restored = Math.min((mem as any).comp_rounds_remaining + 1, cap)
+      await supabase
+        .from('memberships')
+        .update({ comp_rounds_remaining: restored })
+        .eq('user_id', user.id)
+        .eq('status', 'active')
+    }
   }
 
   // TODO: Stripe refund goes here when payment is wired

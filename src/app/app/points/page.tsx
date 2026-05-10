@@ -1,6 +1,7 @@
 // src/app/app/points/page.tsx
 import { createClient } from '@/lib/supabase/server'
 import { getAndIssueMemberCredits } from '@/app/actions/booking'
+import { COMP_DEFAULT } from '@/lib/redemption'
 
 export default async function PointsPage() {
   const supabase = await createClient()
@@ -17,7 +18,6 @@ export default async function PointsPage() {
   const earnRate = tier === 'ace' ? '2×' : tier === 'eagle' ? '1.5×' : '1×'
   const isPaid = tier === 'eagle' || tier === 'ace'
 
-  const COMP_DEFAULT: Record<string, number> = { eagle: 1, ace: 2 }
   const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
   const compRoundsRemaining = resetAt && resetAt < new Date()
     ? (COMP_DEFAULT[tier] ?? 0)

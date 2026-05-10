@@ -53,12 +53,12 @@ export function BookingForm({
 
   function handleCompRoundToggle(checked: boolean) {
     setUseCompRound(checked)
-    if (checked) { setUseFreeRound(false); setUsePoints(false) }
+    if (checked) { setUseFreeRound(false); setUsePoints(false); setUseGuestPass(false) }
   }
 
   function handleFreeRoundToggle(checked: boolean) {
     setUseFreeRound(checked)
-    if (checked) { setUseCompRound(false); setUsePoints(false) }
+    if (checked) { setUseCompRound(false); setUsePoints(false); setUseGuestPass(false) }
   }
 
   const multiplier = MULTIPLIER[tier] ?? 1

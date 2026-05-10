@@ -1,4 +1,6 @@
 -- 058_redemption_limits.sql
+-- NOTE: RLS, indexes, trigger, and corrected backfill are in 059_redemption_limits_fixes.sql.
+-- This migration reflects what was actually applied to production — without those additions.
 
 create table course_redemption_settings (
   course_id               uuid    primary key references courses(id) on delete cascade,
@@ -15,54 +17,20 @@ create table course_redemption_settings (
   updated_at              timestamptz not null default now()
 );
 
-ALTER TABLE public.course_redemption_settings ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Authenticated users can read redemption settings"
-  ON public.course_redemption_settings FOR SELECT
-  TO authenticated
-  USING (true);
-
-CREATE POLICY "Course managers can upsert redemption settings"
-  ON public.course_redemption_settings FOR ALL
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.course_admins
-      WHERE course_admins.course_id = course_redemption_settings.course_id
-        AND course_admins.user_id = auth.uid()
-        AND course_admins.role IN ('owner', 'manager')
-    )
-  );
-
-CREATE TRIGGER course_redemption_settings_updated_at
-  BEFORE UPDATE ON public.course_redemption_settings
-  FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
-
 alter table memberships
   add column if not exists comp_rounds_remaining int         not null default 0,
   add column if not exists comp_rounds_reset_at  timestamptz;
 
 alter table bookings
   add column if not exists redemption_type text check (redemption_type in ('points', 'complimentary')),
-  add column if not exists course_id       uuid references courses(id) ON DELETE SET NULL;
+  add column if not exists course_id       uuid references courses(id) ON DELETE CASCADE;
 
-CREATE INDEX idx_bookings_user_course_redemption
-  ON public.bookings (user_id, course_id, redemption_type, created_at)
-  WHERE redemption_type IS NOT NULL;
-
-CREATE INDEX idx_bookings_course_redemption_monthly
-  ON public.bookings (course_id, redemption_type, created_at)
-  WHERE redemption_type IS NOT NULL;
-
--- Backfill existing active memberships
+-- Backfill existing active memberships (anniversary formula corrected in 059)
 update memberships set
   comp_rounds_remaining = case
     when tier = 'ace'   then 2
     when tier = 'eagle' then 1
     else 0
   end,
-  comp_rounds_reset_at = (
-    created_at + (
-      (date_part('year', age(now(), created_at))::int + 1) * interval '1 year'
-    )
-  )
+  comp_rounds_reset_at = now() + interval '1 year'
 where status = 'active';

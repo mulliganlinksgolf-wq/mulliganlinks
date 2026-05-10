@@ -5,6 +5,7 @@ import { BookingPaymentForm } from '@/components/BookingPaymentForm'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getAndIssueMemberCredits } from '@/app/actions/booking'
 import { getAvailablePasses } from '@/app/actions/guestPasses'
+import { COMP_DEFAULT } from '@/lib/redemption'
 
 export default async function BookPage({
   params,
@@ -39,7 +40,6 @@ export default async function BookPage({
   const stripeEnabled = course?.stripe_charges_enabled === true
 
   // Display-correct comp rounds (if anniversary has passed, show the reset value without writing)
-  const COMP_DEFAULT: Record<string, number> = { eagle: 1, ace: 2 }
   const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
   const compRoundsRemaining = resetAt && resetAt < new Date()
     ? (COMP_DEFAULT[tier] ?? 0)
