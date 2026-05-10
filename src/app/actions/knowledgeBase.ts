@@ -5,6 +5,10 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import type { KbArticle } from '@/types/knowledge-base'
 
+export type KbSearchResult = Pick<KbArticle, 'id' | 'title' | 'slug' | 'category_id' | 'excerpt'> & {
+  kb_categories: { title: string; slug: string } | null
+}
+
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
 
 async function assertAdmin() {
@@ -19,7 +23,7 @@ async function assertAdmin() {
 
 // ── Course-facing ──────────────────────────────────────────────────────────────
 
-export async function searchKbArticles(query: string): Promise<KbArticle[]> {
+export async function searchKbArticles(query: string): Promise<KbSearchResult[]> {
   const admin = createAdminClient()
   const { data } = await admin
     .from('kb_articles')
@@ -28,12 +32,13 @@ export async function searchKbArticles(query: string): Promise<KbArticle[]> {
     .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
     .order('sort_order')
     .limit(10)
-  return (data ?? []) as KbArticle[]
+  return (data ?? []) as KbSearchResult[]
 }
 
 export async function voteKbArticle(articleId: string, vote: 'yes' | 'no'): Promise<void> {
   const admin = createAdminClient()
-  await admin.rpc('vote_kb_article', { p_article_id: articleId, p_vote: vote })
+  const { error } = await admin.rpc('vote_kb_article', { p_article_id: articleId, p_vote: vote })
+  if (error) throw new Error(error.message)
 }
 
 // ── Admin CRUD ─────────────────────────────────────────────────────────────────
