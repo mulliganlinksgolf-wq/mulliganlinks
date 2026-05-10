@@ -63,7 +63,9 @@ export default async function LoyaltyReportPage({
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="font-semibold text-[#1A1A1A] mb-4">Visit Frequency Distribution</h2>
         <p className="text-xs text-gray-500 mb-4">Number of members by how many times they visited</p>
-        <LoyaltyChart buckets={data.frequencyBuckets} />
+        {data.frequencyBuckets.every(b => b.count === 0)
+          ? <p className="text-sm text-gray-500">No visit data for this period.</p>
+          : <LoyaltyChart buckets={data.frequencyBuckets} />}
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">

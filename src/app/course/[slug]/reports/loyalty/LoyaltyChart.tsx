@@ -23,7 +23,7 @@ export function LoyaltyChart({ buckets }: Props) {
           tick={{ fontSize: 12 }}
           label={{ value: 'Members', angle: -90, position: 'insideLeft', offset: 10, style: { fontSize: 12 } }}
         />
-        <Tooltip formatter={(value) => [value, 'Members']} />
+        <Tooltip formatter={(value) => [(value as number).toLocaleString(), 'Members']} />
         <Bar dataKey="count" fill="#10b981" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
