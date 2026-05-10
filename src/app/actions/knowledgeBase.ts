@@ -32,7 +32,7 @@ export async function searchKbArticles(query: string): Promise<KbSearchResult[]>
     .or(`title.ilike.%${query}%,content.ilike.%${query}%`)
     .order('sort_order')
     .limit(10)
-  return (data ?? []) as KbSearchResult[]
+  return (data ?? []) as unknown as KbSearchResult[]
 }
 
 export async function voteKbArticle(articleId: string, vote: 'yes' | 'no'): Promise<void> {
