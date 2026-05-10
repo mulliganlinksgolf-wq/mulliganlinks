@@ -12,14 +12,15 @@ async function assertCourseStaff(courseId: string): Promise<{ user: { id: string
   if (!user) return { error: 'Not authenticated' }
 
   const admin = createAdminClient()
-  const { data: staffRow } = await admin
-    .from('course_staff')
-    .select('user_id')
-    .eq('user_id', user.id)
-    .eq('course_id', courseId)
-    .maybeSingle()
+  const [{ data: profile }, { data: courseAdmin }] = await Promise.all([
+    admin.from('profiles').select('is_admin').eq('id', user.id).single(),
+    admin.from('course_admins').select('role').eq('user_id', user.id).eq('course_id', courseId).maybeSingle(),
+  ])
 
-  if (!staffRow) return { error: 'Unauthorized' }
+  const isGlobalAdmin = profile?.is_admin === true
+  const isCourseManager = courseAdmin != null
+
+  if (!isGlobalAdmin && !isCourseManager) return { error: 'Unauthorized' }
 
   return { user }
 }
