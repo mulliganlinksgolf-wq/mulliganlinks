@@ -28,7 +28,7 @@ export default async function BookPage({
 
   const { data: membership } = await supabase
     .from('memberships')
-    .select('tier')
+    .select('tier, comp_rounds_remaining, comp_rounds_reset_at')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .maybeSingle()
@@ -38,11 +38,25 @@ export default async function BookPage({
   const course = teeTime.courses as any
   const stripeEnabled = course?.stripe_charges_enabled === true
 
-  const [{ data: pointsRows }, creditBalanceCents, availablePasses] = await Promise.all([
+  // Display-correct comp rounds (if anniversary has passed, show the reset value without writing)
+  const COMP_DEFAULT: Record<string, number> = { eagle: 1, ace: 2 }
+  const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
+  const compRoundsRemaining = resetAt && resetAt < new Date()
+    ? (COMP_DEFAULT[tier] ?? 0)
+    : (membership?.comp_rounds_remaining ?? 0)
+
+  const [{ data: pointsRows }, creditBalanceCents, availablePasses, { data: redemptionSettings }] = await Promise.all([
     supabase.from('fairway_points').select('amount').eq('user_id', user.id),
     getAndIssueMemberCredits(user.id, tier),
     getAvailablePasses(user.id),
+    supabase
+      .from('course_redemption_settings')
+      .select('points_threshold')
+      .eq('course_id', (teeTime.courses as any)?.id)
+      .single(),
   ])
+
+  const pointsThreshold = (redemptionSettings as { points_threshold: number } | null)?.points_threshold ?? 5000
 
   const pointsBalance = pointsRows?.reduce((s, r) => s + r.amount, 0) ?? 0
 
@@ -74,6 +88,9 @@ export default async function BookPage({
           creditBalanceCents={creditBalanceCents}
           userId={user.id}
           availablePasses={availablePasses}
+          compRoundsRemaining={compRoundsRemaining}
+          compRoundsResetAt={membership?.comp_rounds_reset_at}
+          pointsThreshold={pointsThreshold}
         />
       )}
     </div>
