@@ -8,13 +8,23 @@ export default async function PointsPage() {
 
   const { data: membership } = await supabase
     .from('memberships')
-    .select('tier')
+    .select('tier, comp_rounds_remaining, comp_rounds_reset_at')
     .eq('user_id', user!.id)
     .eq('status', 'active')
     .single()
 
   const tier = membership?.tier ?? 'free'
   const earnRate = tier === 'ace' ? '2×' : tier === 'eagle' ? '1.5×' : '1×'
+  const isPaid = tier === 'eagle' || tier === 'ace'
+
+  const COMP_DEFAULT: Record<string, number> = { eagle: 1, ace: 2 }
+  const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
+  const compRoundsRemaining = resetAt && resetAt < new Date()
+    ? (COMP_DEFAULT[tier] ?? 0)
+    : (membership?.comp_rounds_remaining ?? 0)
+  const compResetDisplay = resetAt && resetAt > new Date()
+    ? resetAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+    : null
 
   const [{ data: transactions }, creditBalanceCents] = await Promise.all([
     supabase
@@ -62,6 +72,15 @@ export default async function PointsPage() {
                 earn rate
               </p>
             </div>
+            {isPaid && (
+              <div>
+                <p className="text-2xl font-bold font-serif text-white leading-none">{compRoundsRemaining}</p>
+                <p className="text-[10px] font-sans mt-1" style={{ color: '#8FA889' }}>
+                  comp round{compRoundsRemaining !== 1 ? 's' : ''} left
+                  {compResetDisplay && ` · resets ${compResetDisplay}`}
+                </p>
+              </div>
+            )}
           </div>
           <p className="text-[10px] font-sans mt-3" style={{ color: '#555' }}>
             100 pts = $1 toward future rounds.

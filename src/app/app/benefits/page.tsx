@@ -33,13 +33,23 @@ export default async function BenefitsPage() {
 
   const { data: membership } = await supabase
     .from('memberships')
-    .select('tier, status, created_at')
+    .select('tier, status, created_at, comp_rounds_remaining, comp_rounds_reset_at')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .single()
 
   const tier = membership?.tier ?? 'fairway'
   const isPaid = tier === 'eagle' || tier === 'ace'
+
+  const COMP_DEFAULT_ALLOTMENT: Record<string, number> = { eagle: 1, ace: 2 }
+  const compAllotment = COMP_DEFAULT_ALLOTMENT[tier] ?? 0
+  const compResetAt = membership?.comp_rounds_reset_at
+    ? new Date(membership.comp_rounds_reset_at)
+    : null
+  const compRoundsRemaining = compResetAt && compResetAt < new Date()
+    ? compAllotment
+    : (membership?.comp_rounds_remaining ?? 0)
+  const compRoundsUsed = compAllotment - compRoundsRemaining
 
   // Issue birthday credit if today is the member's birthday
   if (isPaid) await issueIfBirthdayToday(user.id, tier)
@@ -174,26 +184,36 @@ export default async function BenefitsPage() {
         {/* Complimentary rounds */}
         {isPaid && (
           <BenefitCard title="Complimentary Rounds">
-            <p className="text-2xl font-bold font-serif text-white">{roundsUsedCount} <span className="text-base font-sans text-[#8FA889]">of {roundsAllotment} used</span></p>
-            <ProgressBar used={roundsUsedCount} total={roundsAllotment} />
-            <div className="space-y-2 mt-2">
-              {freeRoundCredits.map((c, i) => (
-                <div key={i} className={`flex items-center gap-2 text-xs font-sans ${c.status === 'used' ? 'opacity-40' : ''}`}>
-                  <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${c.status === 'used' ? 'bg-[#555]' : 'bg-[#8FA889]'}`} />
-                  <span className={c.status === 'used' ? 'line-through text-[#555]' : 'text-[#ddd]'}>
-                    Complimentary Round
-                  </span>
-                  <span className="text-[#555] ml-auto">
-                    {c.status === 'used'
-                      ? 'Used'
-                      : `Expires ${new Date(c.expires_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`}
-                  </span>
-                </div>
-              ))}
-              {freeRoundCredits.length === 0 && (
-                <p className="text-xs text-[#555]">Credited at the course — contact staff to redeem.</p>
-              )}
+            <div className="space-y-1.5">
+              {Array.from({ length: compAllotment }, (_, i) => {
+                const isUsed = i < compRoundsUsed
+                return (
+                  <div key={i} className={`flex items-center gap-2 text-xs font-sans ${isUsed ? 'opacity-40' : ''}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isUsed ? 'bg-[#555]' : 'bg-[#8FA889]'}`} />
+                    <span className={isUsed ? 'line-through text-[#555]' : 'text-[#ddd]'}>
+                      Round {i + 1}
+                    </span>
+                  </div>
+                )
+              })}
             </div>
+            {compResetAt && compResetAt > new Date() && (
+              <p className="text-[10px] font-sans mt-2" style={{ color: '#555' }}>
+                Resets {compResetAt.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+              </p>
+            )}
+          </BenefitCard>
+        )}
+
+        {/* Fairway upgrade prompt */}
+        {!isPaid && (
+          <BenefitCard title="Free Rounds">
+            <p className="text-xs font-sans text-[#8FA889]">
+              Earn 5,000 points for a free round at participating courses.
+            </p>
+            <p className="text-[10px] font-sans mt-1" style={{ color: '#555' }}>
+              Upgrade to Eagle or Ace for included complimentary rounds.
+            </p>
           </BenefitCard>
         )}
 
