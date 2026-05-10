@@ -123,7 +123,7 @@ export function BookingForm({
             {[1, 2, 3, 4].map(n => (
               <button
                 key={n}
-                onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
+                onClick={() => { setPlayers(n); if (n > 1) { setUseGuestPass(false); setUseCompRound(false) } }}
                 disabled={n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
@@ -220,8 +220,8 @@ export function BookingForm({
             {rainCheckError && <p className="text-xs text-red-600">{rainCheckError}</p>}
           </div>
 
-          {/* Complimentary round toggle — Eagle/Ace only */}
-          {compRoundsRemaining > 0 && (
+          {/* Complimentary round toggle — Eagle/Ace only, single player only */}
+          {players === 1 && compRoundsRemaining > 0 && (
             <div className="flex items-center justify-between py-2 border-b border-[#e5e7eb]">
               <div>
                 <p className="text-sm font-medium text-[#1A1A1A]">Use complimentary round</p>
