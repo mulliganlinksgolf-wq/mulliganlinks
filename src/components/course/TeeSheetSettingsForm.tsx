@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 import HoursEditor from '@/components/onboarding/HoursEditor'
 import type { DayHours } from '@/components/onboarding/HoursEditor'
@@ -41,11 +41,16 @@ function useSectionState(): [SectionState, {
     error: null,
   })
 
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => () => { if (timerRef.current) clearTimeout(timerRef.current) }, [])
+
   const toggle = () => setState(s => ({ ...s, open: !s.open }))
   const setSaving = (v: boolean) => setState(s => ({ ...s, saving: v }))
   const setSuccess = () => {
     setState(s => ({ ...s, success: true, error: null }))
-    setTimeout(() => setState(s => ({ ...s, success: false })), 2000)
+    if (timerRef.current) clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => setState(s => ({ ...s, success: false })), 2000)
   }
   const setError = (msg: string) => setState(s => ({ ...s, error: msg, success: false }))
   const clearStatus = () => setState(s => ({ ...s, error: null, success: false }))
@@ -100,6 +105,7 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
         <button
           type="button"
           onClick={hoursActions.toggle}
+          aria-expanded={hoursSection.open}
           className="w-full flex items-center justify-between px-5 py-4 text-left"
         >
           <span className="text-base font-semibold text-[#1A1A1A]">Hours of Operation</span>
@@ -139,6 +145,7 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
         <button
           type="button"
           onClick={pricingActions.toggle}
+          aria-expanded={pricingSection.open}
           className="w-full flex items-center justify-between px-5 py-4 text-left"
         >
           <span className="text-base font-semibold text-[#1A1A1A]">Pricing Tiers</span>
@@ -178,6 +185,7 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
         <button
           type="button"
           onClick={configActions.toggle}
+          aria-expanded={configSection.open}
           className="w-full flex items-center justify-between px-5 py-4 text-left"
         >
           <span className="text-base font-semibold text-[#1A1A1A]">Tee Sheet Configuration</span>
@@ -192,10 +200,11 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
             <div className="pt-4 space-y-4">
               {/* Interval between tee times */}
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-gray-700">
+                <label htmlFor="interval_minutes" className="block text-sm font-medium text-gray-700">
                   Interval between tee times (minutes)
                 </label>
                 <input
+                  id="interval_minutes"
                   type="number"
                   min={5}
                   max={60}
@@ -207,10 +216,11 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
 
               {/* Max players per slot */}
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-gray-700">
+                <label htmlFor="max_players" className="block text-sm font-medium text-gray-700">
                   Max players per slot
                 </label>
                 <input
+                  id="max_players"
                   type="number"
                   min={1}
                   max={8}
@@ -222,10 +232,11 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
 
               {/* Advance booking days */}
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-gray-700">
+                <label htmlFor="advance_booking_days" className="block text-sm font-medium text-gray-700">
                   Advance booking days
                 </label>
                 <input
+                  id="advance_booking_days"
                   type="number"
                   min={1}
                   max={365}
@@ -237,10 +248,11 @@ export function TeeSheetSettingsForm({ courseId, initialHours, initialPricing, i
 
               {/* Cart policy */}
               <div className="space-y-1.5">
-                <label className="block text-sm font-medium text-gray-700">
+                <label htmlFor="cart_policy" className="block text-sm font-medium text-gray-700">
                   Cart policy
                 </label>
                 <select
+                  id="cart_policy"
                   value={config.cart_policy}
                   onChange={e => updateConfig({ cart_policy: e.target.value as TeeSheetConfig['cart_policy'] })}
                   className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3B6D11] w-64"
