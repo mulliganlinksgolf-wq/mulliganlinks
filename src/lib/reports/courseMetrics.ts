@@ -93,6 +93,11 @@ export async function getCourseMetricHistory(
 
 // ── Utilization ────────────────────────────────────────────────────────────────
 
+function formatPeakSlot(hour: number): string {
+  const h = hour === 0 ? 12 : hour > 12 ? hour - 12 : hour
+  return `${h}:00 ${hour >= 12 ? 'PM' : 'AM'}`
+}
+
 export interface UtilizationCell {
   dayOfWeek: number   // 0=Sun … 6=Sat (JS convention)
   hourSlot: number    // local hour 0–23
@@ -187,13 +192,13 @@ export async function getUtilizationData(
 
   const byDay = new Map<number, number>()
   for (const c of cells) byDay.set(c.dayOfWeek, (byDay.get(c.dayOfWeek) ?? 0) + c.count)
-  let peakDayNum = 0, peakDayCount = 0
+  let peakDayNum = -1, peakDayCount = 0
   for (const [d, cnt] of byDay) { if (cnt > peakDayCount) { peakDayCount = cnt; peakDayNum = d } }
   const peakDay = DAY_FULL[peakDayNum] ?? '—'
 
   const topCell = [...cells].sort((a, b) => b.count - a.count)[0]
   const ph = topCell?.hourSlot ?? 0
-  const peakSlotLabel = `${ph === 0 ? 12 : ph > 12 ? ph - 12 : ph}:00 ${ph >= 12 ? 'PM' : 'AM'}`
+  const peakSlotLabel = topCell ? formatPeakSlot(ph) : '—'
 
   const allBookings = cells.reduce((s, c) => s + c.count, 0)
   const totalParty = normalized.flatMap(s => s.confirmedPlayers).reduce((s, p) => s + p, 0)
@@ -227,14 +232,12 @@ export async function getUtilizationData(
       const monthCells = aggregateUtilizationCells(monthSlotMap.get(month) ?? [])
       const mByDay = new Map<number, number>()
       for (const c of monthCells) mByDay.set(c.dayOfWeek, (mByDay.get(c.dayOfWeek) ?? 0) + c.count)
-      let mPeakDayNum = 0, mPeakDayCount = 0
+      let mPeakDayNum = -1, mPeakDayCount = 0
       for (const [d, cnt] of mByDay) { if (cnt > mPeakDayCount) { mPeakDayCount = cnt; mPeakDayNum = d } }
       const mPeakDay = DAY_FULL[mPeakDayNum] ?? '—'
       const mTopCell = [...monthCells].sort((a, b) => b.count - a.count)[0]
       const mph = mTopCell?.hourSlot ?? 0
-      const mPeakSlot = monthCells.length > 0
-        ? `${mph === 0 ? 12 : mph > 12 ? mph - 12 : mph}:00 ${mph >= 12 ? 'PM' : 'AM'}`
-        : '—'
+      const mPeakSlot = mTopCell ? formatPeakSlot(mph) : '—'
       return {
         month,
         rounds: val.rounds,
