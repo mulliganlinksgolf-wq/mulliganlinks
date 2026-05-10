@@ -52,6 +52,7 @@ export default function CartSelector({
       {/* Walk card */}
       <button
         type="button"
+        aria-pressed={!value}
         onClick={() => onChange(false)}
         className={`rounded-lg p-4 text-left cursor-pointer transition-colors ${
           !value ? selectedClass : unselectedClass
@@ -64,6 +65,7 @@ export default function CartSelector({
       {/* Ride card */}
       <button
         type="button"
+        aria-pressed={value}
         onClick={() => onChange(true)}
         className={`rounded-lg p-4 text-left cursor-pointer transition-colors ${
           value ? selectedClass : unselectedClass
