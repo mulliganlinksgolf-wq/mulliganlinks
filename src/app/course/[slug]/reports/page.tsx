@@ -44,6 +44,11 @@ export default async function CourseReportsDashboard({
     { href: `/course/${slug}/reports/members`, label: 'Member Activity', icon: '👥' },
     { href: `/course/${slug}/reports/waitlist`, label: 'Waitlist & Recovery', icon: '📋' },
     { href: `/course/${slug}/reports/barter`, label: 'The TeeAhead Difference', icon: '🏆', highlight: true },
+    { href: `/course/${slug}/reports/utilization`, label: 'Tee Sheet Utilization', description: 'When members book — peak days, times, and party size', icon: '📅' },
+    { href: `/course/${slug}/reports/loyalty`, label: 'Member Loyalty', description: 'Repeat visit rates and your most frequent visitors', icon: '🔄' },
+    { href: `/course/${slug}/reports/guests`, label: 'Guest Passes & Referrals', description: 'Guest redemptions, conversions, and referral attribution', icon: '🎟️' },
+    { href: `/course/${slug}/reports/comps`, label: 'Comp Rounds', description: 'Comps redeemed, cost exposure, and member breakdown', icon: '🆓' },
+    { href: `/course/${slug}/reports/leagues`, label: 'League Performance', description: 'Active leagues, rounds played, and revenue contribution', icon: '🏌️' },
   ]
 
   return (
@@ -74,6 +79,9 @@ export default async function CourseReportsDashboard({
             <h2 className={`font-semibold group-hover:text-[#1B4332] ${p.highlight ? 'text-amber-900' : 'text-[#1A1A1A]'}`}>
               {p.label}
             </h2>
+            {'description' in p && p.description && (
+              <p className="text-sm text-[#6B7770] mt-1">{p.description}</p>
+            )}
           </Link>
         ))}
       </div>
