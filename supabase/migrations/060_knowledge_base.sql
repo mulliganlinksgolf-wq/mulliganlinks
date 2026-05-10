@@ -34,6 +34,8 @@ CREATE TRIGGER kb_articles_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- RLS
+-- Help center is course-staff-only. The course portal layout enforces auth via redirect.
+-- anon users intentionally get no rows.
 ALTER TABLE kb_categories ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Authenticated read kb_categories" ON kb_categories
   FOR SELECT TO authenticated USING (true);
@@ -47,6 +49,7 @@ CREATE OR REPLACE FUNCTION vote_kb_article(p_article_id uuid, p_vote text)
 RETURNS void
 LANGUAGE plpgsql
 SECURITY DEFINER
+SET search_path = public, pg_catalog
 AS $$
 BEGIN
   IF p_vote = 'yes' THEN
@@ -58,6 +61,9 @@ BEGIN
   END IF;
 END;
 $$;
+
+REVOKE EXECUTE ON FUNCTION public.vote_kb_article(uuid, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.vote_kb_article(uuid, text) TO authenticated;
 
 -- Seed categories
 INSERT INTO kb_categories (title, slug, description, icon, sort_order) VALUES
