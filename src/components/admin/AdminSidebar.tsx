@@ -43,6 +43,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
 
         <SidebarSection label="Platform" />
         <SidebarItem href="/admin/content" icon="📝" label="Content" active={pathname === '/admin/content'} />
+        <SidebarItem href="/admin/knowledge-base" icon="📚" label="Knowledge Base" active={pathname.startsWith('/admin/knowledge-base')} />
         <SidebarItem href="/admin/social" icon="📣" label="Social" active={pathname === '/admin/social'} />
         <SidebarItem href="/admin/courses" icon="🏌️" label="Courses" active={pathname.startsWith('/admin/courses')} />
         <SidebarItem href="/admin/waitlist" icon="📋" label="Waitlist" active={pathname === '/admin/waitlist'} />
