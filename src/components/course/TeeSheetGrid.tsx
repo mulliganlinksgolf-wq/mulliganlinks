@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { ShoppingCart } from 'lucide-react'
 import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
 import { WalkInBookingModal } from './WalkInBookingModal'
 import { EditBookingModal } from './EditBookingModal'
@@ -22,6 +23,7 @@ interface Booking {
   guest_phone?: string | null
   guest_email?: string | null
   payment_method?: string | null
+  cart_selected?: boolean
   profiles: { full_name: string } | null
 }
 
@@ -165,6 +167,7 @@ export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTime
                       <div key={b.id} className="flex items-center justify-between">
                         <div>
                           <span className="font-medium text-[#1A1A1A]">{getDisplayName(b)}</span>
+                          {b.cart_selected && <ShoppingCart className="h-3 w-3 inline ml-1 text-emerald-600" />}
                           <span className="text-[#6B7770] ml-2">
                             {b.players} player{b.players !== 1 ? 's' : ''}
                           </span>
