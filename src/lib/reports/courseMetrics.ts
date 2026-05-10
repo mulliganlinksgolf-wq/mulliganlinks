@@ -346,7 +346,7 @@ export async function getLoyaltyData(
     { label: '2×', count: Array.from(agg.visitsByUser.values()).filter(v => v === 2).length },
     { label: '3×', count: Array.from(agg.visitsByUser.values()).filter(v => v === 3).length },
     { label: '4×', count: Array.from(agg.visitsByUser.values()).filter(v => v === 4).length },
-    { label: '5×+', count: Array.from(agg.visitsByUser.values()).filter(v => v >= 5).length },
+    { label: '5+×', count: Array.from(agg.visitsByUser.values()).filter(v => v >= 5).length },
   ]
 
   return {
