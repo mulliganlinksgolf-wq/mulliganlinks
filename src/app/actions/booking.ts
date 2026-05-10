@@ -241,6 +241,7 @@ export async function confirmBooking({
       course_id: teeTime.course_id,
       redemption_type: redemptionType ?? null,
       cart_selected: cartSelected ?? false,
+      // cart_fee_cents records the fee at booking time; caller must include it in `total` (Stripe TODO)
       cart_fee_cents: cartFeeCents ?? 0,
     })
     .select('id')
