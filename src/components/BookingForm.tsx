@@ -24,6 +24,9 @@ export function BookingForm({
   creditBalanceCents = 0,
   userId,
   availablePasses = [],
+  compRoundsRemaining = 0,
+  compRoundsResetAt,
+  pointsThreshold = 5000,
 }: {
   teeTime: TeeTime
   tier: string
@@ -31,6 +34,9 @@ export function BookingForm({
   creditBalanceCents?: number
   userId: string
   availablePasses?: { id: string; expires_at: string }[]
+  compRoundsRemaining?: number
+  compRoundsResetAt?: string | null
+  pointsThreshold?: number
 }) {
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
@@ -39,22 +45,47 @@ export function BookingForm({
   const [rainCheckCode, setRainCheckCode] = useState('')
   const [rainCheck, setRainCheck] = useState<{ id: string; amountCents: number } | null>(null)
   const [rainCheckError, setRainCheckError] = useState<string | null>(null)
+  const [useCompRound, setUseCompRound] = useState(false)
+  const [useFreeRound, setUseFreeRound] = useState(false)
   const [isPending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
 
+  function handleCompRoundToggle(checked: boolean) {
+    setUseCompRound(checked)
+    if (checked) { setUseFreeRound(false); setUsePoints(false) }
+  }
+
+  function handleFreeRoundToggle(checked: boolean) {
+    setUseFreeRound(checked)
+    if (checked) { setUseCompRound(false); setUsePoints(false) }
+  }
+
   const multiplier = MULTIPLIER[tier] ?? 1
   const subtotal = teeTime.base_price * players
-  const guestDiscount = useGuestPass ? 15 : 0
-  // Apply in order: guest pass → credits → rain check → points
-  const creditsValue = useCredits ? Math.min(creditBalanceCents / 100, subtotal - guestDiscount) : 0
+
+  // Free round modes zero out the total regardless of other discounts
+  const isFreeRound = useCompRound || useFreeRound
+  const guestDiscount = useGuestPass && !isFreeRound ? 15 : 0
+  const creditsValue = useCredits && !isFreeRound
+    ? Math.min(creditBalanceCents / 100, subtotal - guestDiscount)
+    : 0
   const afterCredits = subtotal - guestDiscount - creditsValue
-  const rainCheckValue = rainCheck ? Math.min(rainCheck.amountCents / 100, afterCredits) : 0
+  const rainCheckValue = rainCheck && !isFreeRound
+    ? Math.min(rainCheck.amountCents / 100, afterCredits)
+    : 0
   const afterRainCheck = afterCredits - rainCheckValue
-  // 100 points = $1
-  const pointsValue = usePoints ? Math.min(pointsBalance / 100, afterRainCheck) : 0
-  const total = Math.max(0, afterRainCheck - pointsValue)
-  const pointsEarned = Math.floor(total * multiplier)
+  const pointsValue = usePoints && !isFreeRound
+    ? Math.min(pointsBalance / 100, afterRainCheck)
+    : 0
+
+  const total = isFreeRound ? 0 : Math.max(0, afterRainCheck - pointsValue)
+  const pointsEarned = isFreeRound ? 0 : Math.floor(total * multiplier)
+  const pointsRedeemed = useFreeRound
+    ? pointsThreshold
+    : usePoints
+      ? Math.round(pointsValue * 100)
+      : 0
 
   function handleSubmit() {
     setError(null)
@@ -65,13 +96,14 @@ export function BookingForm({
         players,
         subtotal,
         discount: 0,
-        pointsRedeemed: usePoints ? Math.round(pointsValue * 100) : 0,
-        creditsRedeemedCents: useCredits ? Math.round(creditsValue * 100) : 0,
+        pointsRedeemed,
+        creditsRedeemedCents: useCredits && !isFreeRound ? Math.round(creditsValue * 100) : 0,
         rainCheckId: rainCheck?.id,
         total,
         pointsEarned,
         tier,
-        guestPassId: useGuestPass && availablePasses[0] ? availablePasses[0].id : undefined,
+        guestPassId: useGuestPass && availablePasses[0] && !isFreeRound ? availablePasses[0].id : undefined,
+        redemptionType: useCompRound ? 'complimentary' : useFreeRound ? 'points' : undefined,
       })
       if (result.error) {
         setError(result.error)
@@ -187,6 +219,41 @@ export function BookingForm({
             )}
             {rainCheckError && <p className="text-xs text-red-600">{rainCheckError}</p>}
           </div>
+
+          {/* Complimentary round toggle — Eagle/Ace only */}
+          {compRoundsRemaining > 0 && (
+            <div className="flex items-center justify-between py-2 border-b border-[#e5e7eb]">
+              <div>
+                <p className="text-sm font-medium text-[#1A1A1A]">Use complimentary round</p>
+                <p className="text-[11px] text-[#6B7770]">
+                  {compRoundsRemaining} remaining
+                  {compRoundsResetAt && ` · resets ${new Date(compRoundsResetAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                checked={useCompRound}
+                onChange={e => handleCompRoundToggle(e.target.checked)}
+                className="w-4 h-4 accent-[#1B4332]"
+              />
+            </div>
+          )}
+
+          {/* Free round via points */}
+          {!useCompRound && pointsBalance >= pointsThreshold && (
+            <div className="flex items-center justify-between py-2 border-b border-[#e5e7eb]">
+              <div>
+                <p className="text-sm font-medium text-[#1A1A1A]">Redeem free round</p>
+                <p className="text-[11px] text-[#6B7770]">{pointsThreshold.toLocaleString()} pts · green fee covered</p>
+              </div>
+              <input
+                type="checkbox"
+                checked={useFreeRound}
+                onChange={e => handleFreeRoundToggle(e.target.checked)}
+                className="w-4 h-4 accent-[#1B4332]"
+              />
+            </div>
+          )}
 
           {pointsBalance > 0 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
