@@ -258,7 +258,11 @@ export function BookingForm({
           {pointsBalance > 0 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
               <button
-                onClick={() => setUsePoints(!usePoints)}
+                onClick={() => {
+                  const newValue = !usePoints
+                  setUsePoints(newValue)
+                  if (newValue) { setUseCompRound(false); setUseFreeRound(false) }
+                }}
                 className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
               >
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${usePoints ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
