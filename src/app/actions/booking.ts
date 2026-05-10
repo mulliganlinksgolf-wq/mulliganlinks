@@ -182,11 +182,6 @@ export async function confirmBooking({
   const discountCents = verifiedPassId ? 1500 : 0
   const adjustedTotal = total - discountCents / 100
 
-  // Complimentary rounds cover the member's slot only
-  if (redemptionType === 'complimentary' && players > 1) {
-    return { error: 'Complimentary rounds can only be used for single-player bookings.' }
-  }
-
   // Redemption enforcement — runs for both complimentary and points free-round paths
   if (redemptionType === 'points' || redemptionType === 'complimentary') {
     const { checkRedemptionAllowed, resetCompRoundsIfNeeded } = await import('@/lib/redemption')

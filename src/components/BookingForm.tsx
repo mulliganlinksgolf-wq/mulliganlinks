@@ -53,7 +53,7 @@ export function BookingForm({
 
   function handleCompRoundToggle(checked: boolean) {
     setUseCompRound(checked)
-    if (checked) { setUseFreeRound(false); setUsePoints(false); setUseGuestPass(false) }
+    if (checked) { setUseFreeRound(false); setUsePoints(false) }
   }
 
   function handleFreeRoundToggle(checked: boolean) {
@@ -64,23 +64,24 @@ export function BookingForm({
   const multiplier = MULTIPLIER[tier] ?? 1
   const subtotal = teeTime.base_price * players
 
-  // Free round modes zero out the total regardless of other discounts
-  const isFreeRound = useCompRound || useFreeRound
-  const guestDiscount = useGuestPass && !isFreeRound ? 15 : 0
-  const creditsValue = useCredits && !isFreeRound
-    ? Math.min(creditBalanceCents / 100, subtotal - guestDiscount)
+  // Comp/free round covers the member's own green fee (1 player) — others still pay
+  const memberFeeDiscount = (useCompRound || useFreeRound) ? teeTime.base_price : 0
+  const guestDiscount = useGuestPass ? 15 : 0
+  const afterFreeDiscounts = subtotal - memberFeeDiscount - guestDiscount
+  const creditsValue = useCredits
+    ? Math.min(creditBalanceCents / 100, afterFreeDiscounts)
     : 0
-  const afterCredits = subtotal - guestDiscount - creditsValue
-  const rainCheckValue = rainCheck && !isFreeRound
+  const afterCredits = afterFreeDiscounts - creditsValue
+  const rainCheckValue = rainCheck
     ? Math.min(rainCheck.amountCents / 100, afterCredits)
     : 0
   const afterRainCheck = afterCredits - rainCheckValue
-  const pointsValue = usePoints && !isFreeRound
+  const pointsValue = usePoints && !useFreeRound
     ? Math.min(pointsBalance / 100, afterRainCheck)
     : 0
 
-  const total = isFreeRound ? 0 : Math.max(0, afterRainCheck - pointsValue)
-  const pointsEarned = isFreeRound ? 0 : Math.floor(total * multiplier)
+  const total = Math.max(0, afterRainCheck - pointsValue)
+  const pointsEarned = Math.floor(total * multiplier)
   const pointsRedeemed = useFreeRound
     ? pointsThreshold
     : usePoints
@@ -123,7 +124,7 @@ export function BookingForm({
             {[1, 2, 3, 4].map(n => (
               <button
                 key={n}
-                onClick={() => { setPlayers(n); if (n > 1) { setUseGuestPass(false); setUseCompRound(false) } }}
+                onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
                 disabled={n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
@@ -220,13 +221,13 @@ export function BookingForm({
             {rainCheckError && <p className="text-xs text-red-600">{rainCheckError}</p>}
           </div>
 
-          {/* Complimentary round toggle — Eagle/Ace only, single player only */}
-          {players === 1 && compRoundsRemaining > 0 && (
+          {/* Complimentary round toggle — Eagle/Ace only */}
+          {compRoundsRemaining > 0 && (
             <div className="flex items-center justify-between py-2 border-b border-[#e5e7eb]">
               <div>
                 <p className="text-sm font-medium text-[#1A1A1A]">Use complimentary round</p>
                 <p className="text-[11px] text-[#6B7770]">
-                  {compRoundsRemaining} remaining
+                  {compRoundsRemaining} remaining · covers your green fee
                   {compRoundsResetAt && ` · resets ${new Date(compRoundsResetAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`}
                 </p>
               </div>
