@@ -136,6 +136,8 @@ export async function confirmBooking({
   tier,
   guestPassId,
   redemptionType,
+  cartSelected,
+  cartFeeCents,
 }: {
   teeTimeId: string
   userId: string
@@ -150,6 +152,8 @@ export async function confirmBooking({
   tier: string
   guestPassId?: string
   redemptionType?: 'points' | 'complimentary'
+  cartSelected?: boolean
+  cartFeeCents?: number
 }) {
   const supabase = await createClient()
 
@@ -236,6 +240,8 @@ export async function confirmBooking({
       guest_pass_id: verifiedPassId,
       course_id: teeTime.course_id,
       redemption_type: redemptionType ?? null,
+      cart_selected: cartSelected ?? false,
+      cart_fee_cents: cartFeeCents ?? 0,
     })
     .select('id')
     .single()
