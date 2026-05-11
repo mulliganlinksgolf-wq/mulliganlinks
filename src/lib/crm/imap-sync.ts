@@ -18,7 +18,19 @@ export const MAILBOXES = [
 
 const IMAP_HOST = 'mail.privateemail.com'
 const IMAP_PORT = 993
-const SENT_FOLDER = 'Sent'
+const SENT_FOLDER_CANDIDATES = ['Sent', 'Sent Items', 'INBOX.Sent', 'INBOX/Sent']
+
+async function findSentFolder(client: ImapFlow): Promise<string | null> {
+  const list = await client.list()
+  // Prefer special-use \Sent flag
+  const flagged = list.find(m => m.specialUse === '\\Sent')
+  if (flagged) return flagged.path
+  // Fall back to common names
+  for (const name of SENT_FOLDER_CANDIDATES) {
+    if (list.some(m => m.path === name)) return name
+  }
+  return null
+}
 
 type RecordType = 'course' | 'outing' | 'member'
 
@@ -83,7 +95,15 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
 
   try {
     await client.connect()
-    const lock = await client.getMailboxLock(SENT_FOLDER)
+    const sentFolder = await findSentFolder(client)
+    if (!sentFolder) {
+      const folders = (await client.list()).map(m => m.path).join(', ')
+      errors.push(`No Sent folder found. Available: ${folders}`)
+      await client.logout()
+      return { logged, skipped, errors }
+    }
+    console.log(`[imap-sync] ${config.mailbox} using Sent folder: ${sentFolder}`)
+    const lock = await client.getMailboxLock(sentFolder)
 
     try {
       const searchRange = lastUid > 0 ? `${lastUid + 1}:*` : '1:*'
