@@ -2,6 +2,19 @@ import { NextRequest, NextResponse } from 'next/server'
 import { Webhook } from 'svix'
 import { createAdminClient } from '@/lib/supabase/admin'
 
+export function parseOpenEvent(body: unknown): { emailId: string } | null {
+  if (
+    typeof body !== 'object' ||
+    body === null ||
+    (body as Record<string, unknown>).type !== 'email.opened'
+  ) return null
+
+  const data = (body as Record<string, unknown>).data as Record<string, unknown> | undefined
+  const emailId = data?.email_id
+  if (typeof emailId !== 'string' || !emailId) return null
+  return { emailId }
+}
+
 export async function POST(req: NextRequest) {
   const secret = process.env.RESEND_WEBHOOK_SECRET
   if (!secret) {
@@ -24,15 +37,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
-  if (payload.type !== 'email.opened') {
+  const parsed = parseOpenEvent(payload)
+  if (!parsed) {
     return NextResponse.json({ received: true })
   }
 
-  const data = payload.data as Record<string, unknown> | undefined
-  const emailId = data?.email_id
-  if (typeof emailId !== 'string' || !emailId) {
-    return NextResponse.json({ received: true })
-  }
+  const { emailId } = parsed
 
   const admin = createAdminClient()
   const { data: activity } = await admin
@@ -42,13 +52,18 @@ export async function POST(req: NextRequest) {
     .single()
 
   if (activity) {
-    await admin
+    const { error: updateError } = await admin
       .from('crm_activity_log')
       .update({
         opened_at: activity.opened_at ?? new Date().toISOString(),
         open_count: (activity.open_count ?? 0) + 1,
       })
       .eq('id', activity.id)
+
+    if (updateError) {
+      console.error('[resend-webhook] DB update failed:', updateError.message)
+      return NextResponse.json({ error: 'DB error' }, { status: 500 })
+    }
   }
 
   return NextResponse.json({ received: true })

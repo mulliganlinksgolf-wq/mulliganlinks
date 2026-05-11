@@ -1,18 +1,5 @@
 import { describe, it, expect } from 'vitest'
-
-// Isolated handler logic — no Supabase or svix imported here
-function parseOpenEvent(body: unknown): { emailId: string } | null {
-  if (
-    typeof body !== 'object' ||
-    body === null ||
-    (body as Record<string, unknown>).type !== 'email.opened'
-  ) return null
-
-  const data = (body as Record<string, unknown>).data as Record<string, unknown> | undefined
-  const emailId = data?.email_id
-  if (typeof emailId !== 'string' || !emailId) return null
-  return { emailId }
-}
+import { parseOpenEvent } from '@/app/api/webhooks/resend/route'
 
 describe('parseOpenEvent', () => {
   it('returns emailId for valid email.opened event', () => {
