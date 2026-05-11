@@ -16,6 +16,8 @@ interface Props {
 
 export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, variables = {}, onClose, onSent }: Props) {
   const [templates, setTemplates] = useState<CrmEmailTemplate[]>([])
+  const [appliedTemplateId, setAppliedTemplateId] = useState<string | null>(null)
+  const [filter, setFilter] = useState('')
   const [to, setTo] = useState(toEmail ?? '')
   const [subject, setSubject] = useState('')
   const [bodyHtml, setBodyHtml] = useState('')
@@ -34,7 +36,21 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   function applyTemplate(template: CrmEmailTemplate) {
     setSubject(substituteVars(template.subject))
     setBodyHtml(substituteVars(template.body_html))
+    setAppliedTemplateId(template.id)
   }
+
+  function clearTemplate() {
+    setSubject('')
+    setBodyHtml('')
+    setAppliedTemplateId(null)
+  }
+
+  const filtered = filter.trim()
+    ? templates.filter(t =>
+        t.name.toLowerCase().includes(filter.toLowerCase()) ||
+        t.subject.toLowerCase().includes(filter.toLowerCase())
+      )
+    : templates
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()
@@ -67,20 +83,52 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
         <form onSubmit={handleSend} className="p-6 space-y-4">
           {templates.length > 0 && (
             <div>
-              <label className="text-xs font-medium text-slate-500 uppercase tracking-wide block mb-1">Template</label>
-              <select
-                defaultValue=""
-                onChange={(e) => {
-                  const t = templates.find((t) => t.id === e.target.value)
-                  if (t) applyTemplate(t)
-                }}
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-300"
-              >
-                <option value="">Select a template…</option>
-                {templates.map((t) => (
-                  <option key={t.id} value={t.id}>{t.name}</option>
-                ))}
-              </select>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                  Templates <span className="text-slate-400 normal-case">({templates.length})</span>
+                </label>
+                {appliedTemplateId && (
+                  <button
+                    type="button"
+                    onClick={clearTemplate}
+                    className="text-xs text-slate-500 hover:text-red-500"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+              <input
+                type="text"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                placeholder="Filter templates…"
+                className="w-full text-xs border border-slate-200 rounded-lg px-3 py-1.5 mb-2 focus:outline-none focus:ring-1 focus:ring-emerald-300"
+              />
+              <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto p-1">
+                {filtered.map((t) => {
+                  const active = appliedTemplateId === t.id
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => applyTemplate(t)}
+                      title={t.subject}
+                      className={`text-left p-2 rounded-lg border transition-colors text-xs
+                        ${active
+                          ? 'bg-emerald-50 border-emerald-500 text-emerald-900'
+                          : 'bg-white border-slate-200 hover:bg-slate-50 hover:border-slate-300 text-slate-700'}`}
+                    >
+                      <div className="font-medium truncate">{t.name}</div>
+                      <div className="text-slate-400 truncate text-[10px] mt-0.5">{t.subject}</div>
+                    </button>
+                  )
+                })}
+                {filtered.length === 0 && (
+                  <div className="col-span-2 text-xs text-slate-400 text-center py-3">
+                    No templates match "{filter}"
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
