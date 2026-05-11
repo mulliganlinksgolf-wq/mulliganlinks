@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { sendCrmEmail, getEmailTemplatesByType } from '@/app/actions/crm/email'
+import { htmlToPlainText, plainTextToHtml } from '@/lib/crm/email-format'
 import type { CrmRecordType, CrmEmailTemplate } from '@/lib/crm/types'
 
 interface Props {
@@ -20,7 +21,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [filter, setFilter] = useState('')
   const [to, setTo] = useState(toEmail ?? '')
   const [subject, setSubject] = useState('')
-  const [bodyHtml, setBodyHtml] = useState('')
+  const [bodyText, setBodyText] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPreview, setShowPreview] = useState(false)
@@ -35,13 +36,14 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
   function applyTemplate(template: CrmEmailTemplate) {
     setSubject(substituteVars(template.subject))
-    setBodyHtml(substituteVars(template.body_html))
+    setBodyText(htmlToPlainText(substituteVars(template.body_html)))
     setAppliedTemplateId(template.id)
+    setShowPreview(false)
   }
 
   function clearTemplate() {
     setSubject('')
-    setBodyHtml('')
+    setBodyText('')
     setAppliedTemplateId(null)
   }
 
@@ -55,8 +57,10 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()
     if (!to) { setError('Recipient email is required'); return }
+    if (!bodyText.trim()) { setError('Email body is required'); return }
     setSending(true)
     setError(null)
+    const bodyHtml = plainTextToHtml(bodyText)
     const result = await sendCrmEmail({ recordType, recordId, to, subject, bodyHtml, sentBy })
     setSending(false)
     if (result.error) {
@@ -156,7 +160,9 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">Body *</label>
+              <label className="text-xs font-medium text-slate-500 uppercase tracking-wide">
+                Body * <span className="text-slate-400 normal-case">(separate paragraphs with a blank line)</span>
+              </label>
               <button
                 type="button"
                 onClick={() => setShowPreview((v) => !v)}
@@ -167,17 +173,17 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
             </div>
             {showPreview ? (
               <div
-                className="w-full min-h-48 text-sm border border-slate-200 rounded-lg px-3 py-2 bg-slate-50 prose prose-sm max-w-none"
-                dangerouslySetInnerHTML={{ __html: bodyHtml }}
+                className="w-full min-h-48 text-sm border border-slate-200 rounded-lg px-4 py-3 bg-slate-50"
+                dangerouslySetInnerHTML={{ __html: plainTextToHtml(bodyText) }}
               />
             ) : (
               <textarea
-                value={bodyHtml}
-                onChange={(e) => setBodyHtml(e.target.value)}
+                value={bodyText}
+                onChange={(e) => setBodyText(e.target.value)}
                 required
-                rows={8}
-                placeholder="HTML email body…"
-                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none font-mono text-xs"
+                rows={12}
+                placeholder="Hi {{name}}, ..."
+                className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-300 leading-relaxed"
               />
             )}
           </div>
