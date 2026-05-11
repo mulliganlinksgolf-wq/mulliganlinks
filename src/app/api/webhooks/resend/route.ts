@@ -33,25 +33,35 @@ export async function POST(req: NextRequest) {
   try {
     const wh = new Webhook(secret)
     payload = wh.verify(body, headers) as Record<string, unknown>
-  } catch {
+  } catch (err) {
+    console.error('[resend-webhook] signature verify failed:', (err as Error).message)
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
 
+  console.log('[resend-webhook] event received:', payload.type)
+
   const parsed = parseOpenEvent(payload)
   if (!parsed) {
+    console.log('[resend-webhook] not an open event, ignoring')
     return NextResponse.json({ received: true })
   }
 
   const { emailId } = parsed
+  console.log('[resend-webhook] looking up activity for email_id:', emailId)
 
   const admin = createAdminClient()
-  const { data: activity } = await admin
+  const { data: activity, error: lookupError } = await admin
     .from('crm_activity_log')
     .select('id, opened_at, open_count')
     .eq('resend_email_id', emailId)
     .single()
 
+  if (lookupError) {
+    console.error('[resend-webhook] lookup error:', lookupError.message)
+  }
+
   if (activity) {
+    console.log('[resend-webhook] updating activity:', activity.id)
     const { error: updateError } = await admin
       .from('crm_activity_log')
       .update({
@@ -64,6 +74,9 @@ export async function POST(req: NextRequest) {
       console.error('[resend-webhook] DB update failed:', updateError.message)
       return NextResponse.json({ error: 'DB error' }, { status: 500 })
     }
+    console.log('[resend-webhook] activity updated successfully')
+  } else {
+    console.log('[resend-webhook] no matching activity found for email_id:', emailId)
   }
 
   return NextResponse.json({ received: true })

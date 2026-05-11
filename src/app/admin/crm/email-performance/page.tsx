@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export const metadata = { title: 'Email Performance' }
+export const dynamic = 'force-dynamic'
 
 function pct(opened: number, sent: number) {
   if (!sent) return '—'
