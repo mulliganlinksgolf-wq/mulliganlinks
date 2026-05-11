@@ -22,11 +22,11 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: {
-    default: "TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit",
+    default: "TeeAhead | Free Golf Tee Sheet Software — Metro Detroit",
     template: "%s | TeeAhead",
   },
   description:
-    "Free tee sheet software for golf courses — no barter, no commissions, no lock-in. Plus a golfer loyalty membership that beats GolfPass+ for $89/yr. Metro Detroit launch.",
+    "Free tee sheet software for golf courses — no barter, no commissions, no lock-in. Golfer loyalty that beats GolfPass+ for $89/yr. Metro Detroit.",
   metadataBase: new URL("https://www.teeahead.com"),
   openGraph: {
     type: "website",
@@ -46,6 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@teeahead",
     title: "TeeAhead | Golf Tee Times & Loyalty — Metro Detroit",
     description:
       "Zero booking fees. Beat GolfPass+ for $30 less. Free for partner courses.",

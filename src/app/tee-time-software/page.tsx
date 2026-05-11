@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { TeeTimeSoftwareSchema } from '@/components/TeeTimeSoftwareSchema'
 
 export const metadata: Metadata = {
-  title: 'Free Tee Time Software for Golf Courses | TeeAhead',
+  title: 'Free Tee Time Software for Golf Courses',
   description:
-    'TeeAhead is free tee sheet software for golf courses — no barter tee times, no commissions, annual contracts. Built-in golfer loyalty program, Stripe payments, and real-time reports. Metro Detroit launch.',
+    'Free tee sheet software for golf courses — no barter tee times, no commissions, no lock-in. Windsor Parke grew online revenue 382% after switching. Metro Detroit launch.',
   alternates: {
     canonical: 'https://www.teeahead.com/tee-time-software',
   },
@@ -83,6 +84,7 @@ const comparison = [
 export default function TeeTimeSoftwarePage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <TeeTimeSoftwareSchema />
       {/* Nav */}
       <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">

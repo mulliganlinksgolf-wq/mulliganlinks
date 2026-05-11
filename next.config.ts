@@ -4,6 +4,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'teeahead.com' }],
+        destination: 'https://www.teeahead.com/:path*',
+        permanent: true,
+      },
+      {
         source: '/cost',
         destination: '/software-cost',
         permanent: true,

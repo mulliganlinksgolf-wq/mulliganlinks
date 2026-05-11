@@ -12,7 +12,7 @@ TeeAhead is Metro Detroit's local-first golf loyalty network and tee time bookin
 
 - Golf courses in Metro Detroit currently on GolfNow who want to stop losing $94,500+/yr in barter tee times
 - Golfers who play 10–30 rounds per year at 1–3 consistent home courses and want real local loyalty
-- Golf courses on legacy software (foreUP, Jonas, Club Prophet) looking to modernize at zero cost
+- Golf courses on legacy software (foreUP, Jonas, Club Prophet, Lightspeed Golf) looking to modernize at zero cost
 
 ## Key facts
 
@@ -21,17 +21,41 @@ TeeAhead is Metro Detroit's local-first golf loyalty network and tee time bookin
 - Fairway membership: $0 — basic booking at partner courses, 1x points multiplier, zero booking fees
 - Founding Partner program: First 10 courses get the full platform free for year one; course #11+ pays $349/month
 - GolfNow charges courses ~$94,500/year in barter tee times; TeeAhead charges $0
-- Windsor Parke Golf Club saw 382% online revenue increase after leaving GolfNow
+- Windsor Parke Golf Club saw 382% online revenue increase (from $81,000 to $393,000) after leaving GolfNow
 - Missouri Bluffs Golf Club saw 36.3% green fee revenue increase after switching platforms
+- Brown Golf: 39.6% of all rounds over a 3-year period went to zero-revenue GolfNow barter slots
+- 100+ golf courses left GolfNow in Q1 2025 (NGCOA)
+
+## Pricing
+
+- Course software: $0 for Founding Partners (first year free); $349/month thereafter — no barter, no commissions
+- Golfer memberships: Fairway ($0), Eagle ($89/yr), Ace ($159/yr)
+- GolfPass+ comparison: $119/yr for GolfPass+; TeeAhead Eagle is $89/yr with more local benefits
 
 ## Founders
 
-- Neil Barris — co-founder, previously built Outing.golf (golf group booking platform), neil@teeahead.com
-- Billy Beslock — co-founder, career at Ford Motor Company, lifelong golfer, billy@teeahead.com
+- Neil Barris — co-founder & CEO, 10 years enterprise software (Samsung, FinTech, Observability), previously built Outing.golf, neil@teeahead.com
+- Billy Beslock — co-founder & CTO, career engineer at Ford Motor Company, lifelong golfer, billy@teeahead.com
 
 ## Location
 
 Metro Detroit, Michigan, USA. Targeting Oakland County, Macomb County, Wayne County golf courses.
+
+## Case Studies
+
+- [Windsor Parke Golf Club: 382% Revenue Increase After Leaving GolfNow](https://www.teeahead.com/case-studies/windsor-parke): Online revenue grew from $81,000 to $393,000 after eliminating GolfNow barter tee times.
+
+## Tee Sheet Software Comparisons
+
+- [Free Tee Time Software for Golf Courses](https://www.teeahead.com/tee-time-software): TeeAhead vs. GolfNow, foreUP, and Lightspeed Golf — pricing, features, and barter cost breakdown.
+- [Best GolfNow Alternative for Courses & Golfers](https://www.teeahead.com/golfnow-alternative): Side-by-side comparison for course operators and golfers considering leaving GolfNow.
+- [Best Tee Sheet Software for Golf Courses in 2026](https://www.teeahead.com/best-tee-sheet-software): Honest comparison of TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow.
+- [Free Golf Course Booking Software](https://www.teeahead.com/golf-course-booking-software): No commissions, no barter, Stripe-native payments.
+
+## Tools
+
+- [GolfNow Barter Cost Calculator](https://www.teeahead.com/barter): Calculate exactly how much your course loses to GolfNow barter tee times annually.
+- [GolfNow Damage Report](https://www.teeahead.com/damage): Estimate total revenue lost to GolfNow over your contract term.
 
 ## Key pages
 

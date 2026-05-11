@@ -18,6 +18,15 @@ function WindsorParkeSchema() {
   const schema = [
     {
       '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.teeahead.com' },
+        { '@type': 'ListItem', position: 2, name: 'Case Studies', item: 'https://www.teeahead.com/case-studies' },
+        { '@type': 'ListItem', position: 3, name: 'Windsor Parke Golf Club', item: 'https://www.teeahead.com/case-studies/windsor-parke' },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
       '@type': 'Article',
       '@id': 'https://www.teeahead.com/case-studies/windsor-parke#article',
       headline: 'Windsor Parke Golf Club: 382% Revenue Increase After Leaving GolfNow',
@@ -29,7 +38,7 @@ function WindsorParkeSchema() {
         '@id': 'https://www.teeahead.com/case-studies/windsor-parke',
       },
       datePublished: '2026-04-30',
-      dateModified: '2026-04-30',
+      dateModified: '2026-05-11',
       author: { '@id': 'https://www.teeahead.com/#neil-barris' },
       publisher: { '@id': 'https://www.teeahead.com/#organization' },
       image: {
