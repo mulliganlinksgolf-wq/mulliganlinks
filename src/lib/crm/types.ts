@@ -78,6 +78,11 @@ export interface CrmActivityLog {
   body: string | null
   created_by: string
   created_at: string
+  // email tracking (null on non-email activities)
+  resend_email_id: string | null
+  opened_at: string | null
+  open_count: number
+  from_email: string | null
 }
 
 export interface CrmEmailTemplate {
