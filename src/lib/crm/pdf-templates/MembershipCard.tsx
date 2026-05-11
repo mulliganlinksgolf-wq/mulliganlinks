@@ -95,7 +95,7 @@ export function MembershipCardPDF({ member, generatedAt }: Props) {
           </View>
         </View>
 
-        <Text style={S.instruction}>Present this card at the pro shop or show on your device · Questions? nbarris11@gmail.com</Text>
+        <Text style={S.instruction}>Present this card at the pro shop or show on your device · Questions? neil@teeahead.com</Text>
       </Page>
     </Document>
   )

@@ -99,7 +99,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
         <View style={S.infoBox}>
           <Text style={S.infoTitle}>Your TeeAhead Contact</Text>
           <View style={S.infoRow}><Text style={S.infoLabel}>Name:</Text><Text style={S.infoValue}>Neil Barris, Co-Founder</Text></View>
-          <View style={S.infoRow}><Text style={S.infoLabel}>Email:</Text><Text style={S.infoValue}>nbarris11@gmail.com</Text></View>
+          <View style={S.infoRow}><Text style={S.infoLabel}>Email:</Text><Text style={S.infoValue}>neil@teeahead.com</Text></View>
           <View style={S.infoRow}><Text style={S.infoLabel}>Website:</Text><Text style={S.infoValue}>teeahead.com</Text></View>
           <View style={S.infoRow}><Text style={S.infoLabel}>Reports:</Text><Text style={S.infoValue}>Monthly, delivered by email on the 1st</Text></View>
         </View>

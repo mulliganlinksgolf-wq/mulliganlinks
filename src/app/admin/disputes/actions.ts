@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { writeAuditLog } from '@/lib/audit'
 import { revalidatePath } from 'next/cache'
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
 async function assertAdmin() {
   const supabase = await createClient()

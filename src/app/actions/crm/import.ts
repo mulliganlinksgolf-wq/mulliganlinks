@@ -3,7 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 const VALID_STAGES = ['lead','contacted','demo','negotiating','partner','churned']
 const VALID_ASSIGNEES = ['neil','billy']
 

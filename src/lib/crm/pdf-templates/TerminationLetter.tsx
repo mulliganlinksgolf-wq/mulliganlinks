@@ -89,14 +89,14 @@ export function TerminationLetterPDF({ course, noticeDateStr, lastDayStr, refund
         </Text>
 
         <Text style={S.closingPara}>
-          We appreciate the partnership and the opportunity to work together. If you have questions about this notice or the offboarding process, please contact Neil Barris at nbarris11@gmail.com.
+          We appreciate the partnership and the opportunity to work together. If you have questions about this notice or the offboarding process, please contact Neil Barris at neil@teeahead.com.
         </Text>
 
         <Text style={S.sigClosing}>Sincerely,</Text>
         <View style={S.sigLine} />
         <Text style={S.sigName}>Neil Barris</Text>
         <Text style={S.sigTitle}>Co-Founder, TeeAhead, LLC</Text>
-        <Text style={S.sigTitle}>nbarris11@gmail.com · teeahead.com</Text>
+        <Text style={S.sigTitle}>neil@teeahead.com · teeahead.com</Text>
 
         <View style={S.footer}>
           <Text style={S.footerText}>TeeAhead, LLC · teeahead.com</Text>

@@ -17,7 +17,7 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+  const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()

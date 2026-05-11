@@ -6,7 +6,7 @@ import SocialManager from '@/components/admin/SocialManager'
 
 export const metadata = { title: 'Social' }
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
 export default async function SocialPage() {
   const supabase = await createClient()

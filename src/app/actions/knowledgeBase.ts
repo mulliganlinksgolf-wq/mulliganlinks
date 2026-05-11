@@ -9,7 +9,7 @@ export type KbSearchResult = Pick<KbArticle, 'id' | 'title' | 'slug' | 'category
   kb_categories: { title: string; slug: string } | null
 }
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
 async function assertAdmin() {
   const supabase = await createClient()

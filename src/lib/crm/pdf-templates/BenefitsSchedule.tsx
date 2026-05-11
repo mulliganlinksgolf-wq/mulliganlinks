@@ -116,7 +116,7 @@ export function BenefitsSchedulePDF({ course, eagleRate, aceRate, priorityHours,
         <View style={S.section}>
           <Text style={S.sectionTitle}>TeeAhead Contact</Text>
           <View style={S.contactRow}><Text style={S.contactLabel}>Name:</Text><Text style={S.contactValue}>Neil Barris, Co-Founder</Text></View>
-          <View style={S.contactRow}><Text style={S.contactLabel}>Email:</Text><Text style={S.contactValue}>nbarris11@gmail.com</Text></View>
+          <View style={S.contactRow}><Text style={S.contactLabel}>Email:</Text><Text style={S.contactValue}>neil@teeahead.com</Text></View>
           <View style={S.contactRow}><Text style={S.contactLabel}>Website:</Text><Text style={S.contactValue}>teeahead.com</Text></View>
         </View>
 

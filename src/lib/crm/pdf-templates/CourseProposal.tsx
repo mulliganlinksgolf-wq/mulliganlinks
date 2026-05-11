@@ -168,7 +168,7 @@ export function CourseProposalPDF({ course }: Props) {
         {/* CTA */}
         <View style={S.ctaBox}>
           <Text style={S.ctaText}>Ready to join the TeeAhead network?</Text>
-          <Text style={S.ctaDetail}>Reply to this proposal or schedule a 20-minute demo · teeahead.com · nbarris11@gmail.com</Text>
+          <Text style={S.ctaDetail}>Reply to this proposal or schedule a 20-minute demo · teeahead.com · neil@teeahead.com</Text>
         </View>
 
         <View style={S.footerDivider}>

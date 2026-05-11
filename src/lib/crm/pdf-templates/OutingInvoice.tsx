@@ -74,7 +74,7 @@ export function OutingInvoicePDF({ outing, invoiceNumber, dueDate, depositPaid, 
             <Text style={S.infoName}>TeeAhead, LLC</Text>
             <Text style={S.infoDetail}>Metro Detroit, Michigan</Text>
             <Text style={S.infoDetail}>teeahead.com</Text>
-            <Text style={S.infoDetail}>nbarris11@gmail.com</Text>
+            <Text style={S.infoDetail}>neil@teeahead.com</Text>
           </View>
           <View style={S.infoBlock}>
             <Text style={S.infoTitle}>BILL TO</Text>
@@ -118,7 +118,7 @@ export function OutingInvoicePDF({ outing, invoiceNumber, dueDate, depositPaid, 
         <View style={S.section}>
           <Text style={S.sectionTitle}>Payment</Text>
           <Text style={S.payText}>
-            To submit payment, contact Neil Barris at nbarris11@gmail.com or reply to this invoice. We accept check, ACH, Venmo, and Zelle. Please reference invoice number {invoiceNumber} with your payment.
+            To submit payment, contact Neil Barris at neil@teeahead.com or reply to this invoice. We accept check, ACH, Venmo, and Zelle. Please reference invoice number {invoiceNumber} with your payment.
           </Text>
         </View>
 

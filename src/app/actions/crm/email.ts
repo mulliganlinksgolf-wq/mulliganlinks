@@ -6,10 +6,10 @@ import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { CrmRecordType } from '@/lib/crm/types'
 
-const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
 const SENDER_MAP: Record<string, string> = {
-  'nbarris11@gmail.com': 'Neil Barris <neil@teeahead.com>',
+  'neil@teeahead.com': 'Neil Barris <neil@teeahead.com>',
   'beslock@yahoo.com':   'Billy Eslock <billy@teeahead.com>',
 }
 const DEFAULT_SENDER = 'TeeAhead <hello@teeahead.com>'
