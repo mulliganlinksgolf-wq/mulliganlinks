@@ -9,11 +9,12 @@ interface Props {
   recordId: string
   toEmail: string | null
   sentBy: string
+  variables?: Record<string, string>
   onClose: () => void
   onSent: () => void
 }
 
-export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, onClose, onSent }: Props) {
+export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, variables = {}, onClose, onSent }: Props) {
   const [templates, setTemplates] = useState<CrmEmailTemplate[]>([])
   const [to, setTo] = useState(toEmail ?? '')
   const [subject, setSubject] = useState('')
@@ -26,9 +27,13 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, onCl
     getEmailTemplatesByType(recordType).then(setTemplates)
   }, [recordType])
 
+  function substituteVars(text: string): string {
+    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => variables[key] ?? variables[key.toLowerCase()] ?? `{{${key}}}`)
+  }
+
   function applyTemplate(template: CrmEmailTemplate) {
-    setSubject(template.subject)
-    setBodyHtml(template.body_html)
+    setSubject(substituteVars(template.subject))
+    setBodyHtml(substituteVars(template.body_html))
   }
 
   async function handleSend(e: React.FormEvent) {

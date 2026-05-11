@@ -57,7 +57,7 @@ export function MemberDetailClient({ member }: Props) {
       )}
 
       {showEmailModal && (
-        <EmailComposerModal recordType="member" recordId={member.id} toEmail={member.email} sentBy="neil" onClose={() => setShowEmailModal(false)} onSent={() => router.refresh()} />
+        <EmailComposerModal recordType="member" recordId={member.id} toEmail={member.email} sentBy="neil" variables={{ name: member.name ?? '' }} onClose={() => setShowEmailModal(false)} onSent={() => router.refresh()} />
       )}
 
       {showDocModal && (

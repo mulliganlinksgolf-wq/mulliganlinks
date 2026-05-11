@@ -104,6 +104,7 @@ export function CourseDetailClient({ course }: Props) {
           recordId={course.id}
           toEmail={course.contact_email}
           sentBy={course.assigned_to ?? 'neil'}
+          variables={{ name: course.contact_name ?? '', course_name: course.name ?? '' }}
           onClose={() => setShowEmailModal(false)}
           onSent={() => router.refresh()}
         />

@@ -79,6 +79,7 @@ export function OutingDetailClient({ outing }: Props) {
           recordId={outing.id}
           toEmail={outing.contact_email}
           sentBy={outing.assigned_to ?? 'neil'}
+          variables={{ name: outing.contact_name ?? '', course_name: outing.preferred_course ?? '' }}
           onClose={() => setShowEmailModal(false)}
           onSent={() => router.refresh()}
         />
