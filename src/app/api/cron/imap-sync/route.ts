@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { ImapFlow } from 'imapflow'
 import { createAdminClient } from '@/lib/supabase/admin'
 
+export const runtime = 'nodejs'
 export const maxDuration = 60
 
 // Mailboxes to sync — add more entries to expand coverage
