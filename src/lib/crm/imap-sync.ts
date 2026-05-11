@@ -62,6 +62,13 @@ export interface SyncResult {
   logged: number
   skipped: number
   errors: string[]
+  diagnostics?: {
+    folders?: string[]
+    sentFolder?: string
+    lastUid?: number
+    maxUid?: number
+    messagesSeen?: number
+  }
 }
 
 export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<SyncResult> {
@@ -92,15 +99,18 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
   let skipped = 0
   const errors: string[] = []
   let maxUid = lastUid
+  let messagesSeen = 0
+  let folderList: string[] = []
+  let sentFolder: string | null = null
 
   try {
     await client.connect()
-    const sentFolder = await findSentFolder(client)
+    folderList = (await client.list()).map(m => `${m.path}${m.specialUse ? ' ' + m.specialUse : ''}`)
+    sentFolder = await findSentFolder(client)
     if (!sentFolder) {
-      const folders = (await client.list()).map(m => m.path).join(', ')
-      errors.push(`No Sent folder found. Available: ${folders}`)
+      errors.push(`No Sent folder found. Available: ${folderList.join(', ')}`)
       await client.logout()
-      return { logged, skipped, errors }
+      return { logged, skipped, errors, diagnostics: { folders: folderList, lastUid, maxUid, messagesSeen } }
     }
     console.log(`[imap-sync] ${config.mailbox} using Sent folder: ${sentFolder}`)
     const lock = await client.getMailboxLock(sentFolder)
@@ -108,6 +118,7 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
     try {
       const searchRange = lastUid > 0 ? `${lastUid + 1}:*` : '1:*'
       for await (const msg of client.fetch({ uid: searchRange }, { envelope: true, uid: true })) {
+        messagesSeen++
         const uid = msg.uid
         if (uid <= lastUid) continue
         if (uid > maxUid) maxUid = uid
@@ -168,7 +179,18 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
     })
   }
 
-  return { logged, skipped, errors }
+  return {
+    logged,
+    skipped,
+    errors,
+    diagnostics: {
+      folders: folderList,
+      sentFolder: sentFolder ?? undefined,
+      lastUid,
+      maxUid,
+      messagesSeen,
+    },
+  }
 }
 
 export async function syncAllMailboxes(): Promise<Record<string, SyncResult>> {
