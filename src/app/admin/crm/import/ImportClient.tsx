@@ -42,10 +42,10 @@ export function ImportClient() {
         const auto: Partial<Record<CrmFieldKey, string>> = {}
         for (const col of cols) {
           const lower = col.toLowerCase().replace(/\s+/g, '_')
-          if (lower.includes('course') || lower === 'name') auto.name = col
-          else if (lower.includes('contact_name') || lower === 'contact') auto.contact_name = col
-          else if (lower.includes('email')) auto.contact_email = col
+          if (lower.includes('email')) auto.contact_email = col
           else if (lower.includes('phone')) auto.contact_phone = col
+          else if (lower.includes('contact_name') || lower === 'contact') auto.contact_name = col
+          else if (lower.includes('course') || lower === 'name') auto.name = col
           else if (lower.includes('stage')) auto.stage = col
           else if (lower.includes('assign')) auto.assigned_to = col
           else if (lower.includes('note')) auto.notes = col
