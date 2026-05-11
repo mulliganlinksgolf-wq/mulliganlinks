@@ -50,6 +50,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
 
         <SidebarSection label="CRM" />
         <SidebarItem href="/admin/crm" icon="🏢" label="CRM Dashboard" active={pathname === '/admin/crm'} />
+        <SidebarItem href="/admin/crm/tasks" icon="✅" label="Tasks" active={pathname.startsWith('/admin/crm/tasks')} />
         <SidebarItem href="/admin/crm/courses" icon="⛳" label="Courses" active={pathname.startsWith('/admin/crm/courses')} />
         <SidebarItem href="/admin/crm/outings" icon="🏌️" label="Outings" active={pathname.startsWith('/admin/crm/outings')} />
         <SidebarItem href="/admin/crm/members" icon="👤" label="Members" active={pathname.startsWith('/admin/crm/members')} />

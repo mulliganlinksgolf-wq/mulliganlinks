@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { updateCourseStage } from '@/app/actions/crm/courses'
 import type { CrmCourse, CrmCourseStage } from '@/lib/crm/types'
+import { LEAD_SOURCE_LABELS } from '@/lib/crm/types'
 
 const STAGES: CrmCourseStage[] = ['lead', 'contacted', 'demo', 'negotiating', 'partner', 'churned']
 
@@ -64,6 +65,7 @@ export function CourseTable({ initialCourses, onExportCsv }: Props) {
               <SortHeader label="Course" k="name" />
               <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2">Contact</th>
               <SortHeader label="Stage" k="stage" />
+              <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2">Source</th>
               <SortHeader label="Value" k="estimated_value" />
               <SortHeader label="Last Activity" k="last_activity_at" />
             </tr>
@@ -91,6 +93,9 @@ export function CourseTable({ initialCourses, onExportCsv }: Props) {
                     >
                       {STAGES.map((s) => <option key={s} value={s}>{s}</option>)}
                     </select>
+                  </td>
+                  <td className="px-3 py-2 text-xs text-slate-500">
+                    {course.lead_source ? LEAD_SOURCE_LABELS[course.lead_source] : '—'}
                   </td>
                   <td className="px-3 py-2 text-slate-600">
                     {course.estimated_value != null ? `$${course.estimated_value.toLocaleString()}` : '—'}

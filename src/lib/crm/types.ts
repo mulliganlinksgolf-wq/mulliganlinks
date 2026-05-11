@@ -19,6 +19,19 @@ export type CrmDocType = 'contract' | 'proposal' | 'other'
 
 export type CrmAssignee = 'neil' | 'billy'
 
+export type CrmLeadSource =
+  | 'cold_email' | 'referral' | 'inbound' | 'event' | 'partner' | 'list' | 'other'
+
+export const LEAD_SOURCE_LABELS: Record<CrmLeadSource, string> = {
+  cold_email: 'Cold Email',
+  referral: 'Referral',
+  inbound: 'Inbound',
+  event: 'Event',
+  partner: 'Partner',
+  list: 'List/Import',
+  other: 'Other',
+}
+
 export interface CrmCourse {
   id: string
   name: string
@@ -33,6 +46,8 @@ export interface CrmCourse {
   assigned_to: CrmAssignee | null
   notes: string | null
   estimated_value: number | null
+  lead_source: CrmLeadSource | null
+  lost_reason: string | null
   last_activity_at: string
   created_at: string
   updated_at: string
@@ -50,6 +65,8 @@ export interface CrmOuting {
   status: CrmOutingStatus
   assigned_to: CrmAssignee | null
   notes: string | null
+  lead_source: CrmLeadSource | null
+  lost_reason: string | null
   last_activity_at: string
   created_at: string
   updated_at: string
@@ -111,6 +128,32 @@ export interface CrmDashboardStats {
   activeOutings: number
   payingMembers: number
   pipelineValue: number
+}
+
+export interface CrmTask {
+  id: string
+  title: string
+  notes: string | null
+  record_type: CrmRecordType | null
+  record_id: string | null
+  assigned_to: CrmAssignee
+  due_date: string | null
+  completed_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface CrmCourseContact {
+  id: string
+  course_id: string
+  name: string
+  role: string | null
+  email: string | null
+  phone: string | null
+  is_primary: boolean
+  notes: string | null
+  created_at: string
+  updated_at: string
 }
 
 export interface StaleLeadSummary {

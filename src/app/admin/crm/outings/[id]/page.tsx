@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { RecordHeader } from '@/components/crm/RecordHeader'
 import { ActivityLog } from '@/components/crm/ActivityLog'
 import { DocumentList } from '@/components/crm/DocumentList'
+import { RecordTasksSection } from '@/components/crm/RecordTasksSection'
 import { OutingDetailClient } from './OutingDetailClient'
 import { getActivityLog } from '@/app/actions/crm/activity'
 
@@ -19,10 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function OutingDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = createAdminClient()
-  const [{ data: outing }, activities] = await Promise.all([
+  const [{ data: outing }, activities, tasksRes] = await Promise.all([
     supabase.from('crm_outings').select('*').eq('id', id).single(),
     getActivityLog('outing', id),
+    supabase.from('crm_tasks').select('*').eq('record_type', 'outing').eq('record_id', id).order('completed_at', { ascending: true, nullsFirst: true }).order('due_date', { ascending: true, nullsFirst: false }),
   ])
+  const tasks = tasksRes.data ?? []
   if (!outing) notFound()
 
   const statusColors: Record<string, 'green' | 'amber' | 'slate' | 'red' | 'blue'> = {
@@ -40,8 +43,14 @@ export default async function OutingDetailPage({ params }: { params: Promise<{ i
         badge={{ label: outing.status, color: statusColors[outing.status] ?? 'slate' }}
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <OutingDetailClient outing={outing} />
+          <RecordTasksSection
+            recordType="outing"
+            recordId={id}
+            tasks={tasks}
+            defaultAssignee={outing.assigned_to ?? 'neil'}
+          />
         </div>
         <div className="space-y-4">
           <div className="bg-white rounded-xl border border-slate-200 p-5">

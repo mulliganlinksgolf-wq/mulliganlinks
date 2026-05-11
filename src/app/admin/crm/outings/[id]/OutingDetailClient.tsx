@@ -7,7 +7,8 @@ import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
 import { GenerateDocModal } from '@/components/crm/GenerateDocModal'
 import { updateOuting, deleteOuting } from '@/app/actions/crm/outings'
 import { useRouter } from 'next/navigation'
-import type { CrmOuting } from '@/lib/crm/types'
+import type { CrmOuting, CrmLeadSource } from '@/lib/crm/types'
+import { LEAD_SOURCE_LABELS } from '@/lib/crm/types'
 
 interface Props { outing: CrmOuting }
 
@@ -47,6 +48,24 @@ export function OutingDetailClient({ outing }: Props) {
           <InlineEditField label="# Golfers" value={outing.num_golfers?.toString() ?? null} onSave={(v) => save('num_golfers', v)} type="number" />
           <InlineEditField label="Preferred Course" value={outing.preferred_course} onSave={(v) => save('preferred_course', v)} />
           <InlineEditField label="Budget Estimate ($)" value={outing.budget_estimate?.toString() ?? null} onSave={(v) => save('budget_estimate', v)} type="number" />
+          <div>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Lead Source</label>
+            <select
+              value={outing.lead_source ?? ''}
+              onChange={(e) => save('lead_source', e.target.value)}
+              className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded focus:outline-none focus:border-emerald-600"
+            >
+              <option value="">—</option>
+              {(Object.keys(LEAD_SOURCE_LABELS) as CrmLeadSource[]).map(k => (
+                <option key={k} value={k}>{LEAD_SOURCE_LABELS[k]}</option>
+              ))}
+            </select>
+          </div>
+          {outing.status === 'cancelled' && (
+            <div className="col-span-2">
+              <InlineEditField label="Lost Reason" value={outing.lost_reason} onSave={(v) => save('lost_reason', v)} type="textarea" placeholder="Why was this outing cancelled?" />
+            </div>
+          )}
           <div className="col-span-2">
             <InlineEditField label="Notes" value={outing.notes} onSave={(v) => save('notes', v)} type="textarea" />
           </div>

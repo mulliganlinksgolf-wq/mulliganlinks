@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { RecordHeader } from '@/components/crm/RecordHeader'
 import { ActivityLog } from '@/components/crm/ActivityLog'
 import { DocumentList } from '@/components/crm/DocumentList'
+import { RecordTasksSection } from '@/components/crm/RecordTasksSection'
 import { MemberDetailClient } from './MemberDetailClient'
 import { getActivityLog } from '@/app/actions/crm/activity'
 
@@ -19,10 +20,12 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function MemberDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = createAdminClient()
-  const [{ data: member }, activities] = await Promise.all([
+  const [{ data: member }, activities, tasksRes] = await Promise.all([
     supabase.from('crm_members').select('*').eq('id', id).single(),
     getActivityLog('member', id),
+    supabase.from('crm_tasks').select('*').eq('record_type', 'member').eq('record_id', id).order('completed_at', { ascending: true, nullsFirst: true }).order('due_date', { ascending: true, nullsFirst: false }),
   ])
+  const tasks = tasksRes.data ?? []
   if (!member) notFound()
 
   const tierColors: Record<string, 'green' | 'amber' | 'slate' | 'red' | 'blue'> = {
@@ -39,8 +42,13 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ i
         badge={{ label: member.membership_tier, color: tierColors[member.membership_tier] ?? 'slate' }}
       />
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-6">
           <MemberDetailClient member={member} />
+          <RecordTasksSection
+            recordType="member"
+            recordId={id}
+            tasks={tasks}
+          />
         </div>
         <div className="space-y-6">
           <div className="bg-white rounded-xl border border-slate-200 p-5">

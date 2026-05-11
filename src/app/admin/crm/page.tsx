@@ -4,6 +4,7 @@ import { getCrmDashboardStats, getRecentActivity, getStaleLeads } from '@/lib/cr
 import { KPITiles } from '@/components/crm/KPITiles'
 import { ActivityFeed } from '@/components/crm/ActivityFeed'
 import { StaleLeadAlert } from '@/components/crm/StaleLeadAlert'
+import { TodaysTasksWidget } from '@/components/crm/TodaysTasksWidget'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
@@ -44,6 +45,8 @@ export default async function CrmDashboardPage() {
       </div>
 
       <KPITiles stats={stats} />
+
+      <TodaysTasksWidget />
 
       <StaleLeadAlert
         staleCourses={staleLeads.staleCourses}

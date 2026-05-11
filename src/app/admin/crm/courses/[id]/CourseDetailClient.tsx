@@ -7,7 +7,8 @@ import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
 import { GenerateDocModal } from '@/components/crm/GenerateDocModal'
 import { updateCourse, deleteCourse } from '@/app/actions/crm/courses'
 import { useRouter } from 'next/navigation'
-import type { CrmCourse } from '@/lib/crm/types'
+import type { CrmCourse, CrmLeadSource } from '@/lib/crm/types'
+import { LEAD_SOURCE_LABELS } from '@/lib/crm/types'
 
 interface Props {
   course: CrmCourse
@@ -72,6 +73,24 @@ export function CourseDetailClient({ course }: Props) {
           <InlineEditField label="State" value={course.state} onSave={(v) => save('state', v)} />
           <InlineEditField label="Address" value={course.address} onSave={(v) => save('address', v)} />
           <InlineEditField label="ZIP" value={course.zip} onSave={(v) => save('zip', v)} />
+          <div>
+            <label className="block text-xs font-medium text-slate-500 uppercase tracking-wide mb-1">Lead Source</label>
+            <select
+              value={course.lead_source ?? ''}
+              onChange={(e) => save('lead_source', e.target.value)}
+              className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded focus:outline-none focus:border-emerald-600"
+            >
+              <option value="">—</option>
+              {(Object.keys(LEAD_SOURCE_LABELS) as CrmLeadSource[]).map(k => (
+                <option key={k} value={k}>{LEAD_SOURCE_LABELS[k]}</option>
+              ))}
+            </select>
+          </div>
+          {course.stage === 'churned' && (
+            <div className="col-span-2">
+              <InlineEditField label="Lost Reason" value={course.lost_reason} onSave={(v) => save('lost_reason', v)} type="textarea" placeholder="Why did this deal not close?" />
+            </div>
+          )}
           <div className="col-span-2">
             <InlineEditField label="Notes" value={course.notes} onSave={(v) => save('notes', v)} type="textarea" />
           </div>
