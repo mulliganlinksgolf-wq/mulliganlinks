@@ -46,3 +46,4 @@ supabase/.temp
 
 # brainstorming sessions
 .superpowers/
+.env*.local

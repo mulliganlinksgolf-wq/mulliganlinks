@@ -1,4 +1,5 @@
 import { createAdminClient } from '@/lib/supabase/admin'
+import { SyncButton } from './SyncButton'
 
 export const metadata = { title: 'Email Performance' }
 export const dynamic = 'force-dynamic'
@@ -63,9 +64,12 @@ export default async function EmailPerformancePage() {
 
   return (
     <div className="max-w-4xl space-y-10">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Email Performance</h1>
-        <p className="text-[#6B7770] text-sm mt-1">Open tracking for CRM emails sent via TeeAhead.</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">Email Performance</h1>
+          <p className="text-[#6B7770] text-sm mt-1">Open tracking for CRM emails sent via TeeAhead.</p>
+        </div>
+        <SyncButton />
       </div>
 
       {/* Overview cards */}

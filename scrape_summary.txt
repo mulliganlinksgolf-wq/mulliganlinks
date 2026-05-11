@@ -1,0 +1,24 @@
+Michigan Golf Course Scrape Summary
+===================================
+Total courses: 610
+With contact info: 5
+Errors: 0
+
+By Booking Software:
+  Manual / Phone Only: 295
+  Unknown Online Booking: 124
+  Tee It Up: 69
+  foreUP: 52
+  Club Caddie: 27
+  Lightspeed/Chronogolf: 24
+  GolfNow: 5
+  TeeSnap: 5
+  Quick18: 4
+  EZLinks: 3
+  TeeTimes.com: 1
+  Golf18 Network: 1
+
+By Priority Tier:
+  HIGH: 191
+  MEDIUM: 83
+  LOW: 336
