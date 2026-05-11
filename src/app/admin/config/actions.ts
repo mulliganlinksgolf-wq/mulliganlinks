@@ -35,3 +35,14 @@ export async function saveConfigValue(formData: FormData) {
   revalidatePath('/admin')
   redirect('/admin/config?saved=1')
 }
+
+export async function saveAdminSignature(formData: FormData) {
+  const signature = (formData.get('signature') as string | null) ?? ''
+  const { admin, user } = await assertAdmin()
+  await admin
+    .from('profiles')
+    .update({ signature: signature.trim() || null })
+    .eq('id', user.id)
+  revalidatePath('/admin/config')
+  redirect('/admin/config?saved=1')
+}
