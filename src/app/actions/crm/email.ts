@@ -8,14 +8,38 @@ import type { CrmRecordType } from '@/lib/crm/types'
 
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'nbarris11@gmail.com', 'beslock@yahoo.com']
 
+const SENDER_MAP: Record<string, string> = {
+  'nbarris11@gmail.com': 'Neil Barris <neil@teeahead.com>',
+  'beslock@yahoo.com':   'Billy Eslock <billy@teeahead.com>',
+}
+const DEFAULT_SENDER = 'TeeAhead <hello@teeahead.com>'
+
+function resolveSender(userEmail: string | undefined): string {
+  return (userEmail && SENDER_MAP[userEmail]) ?? DEFAULT_SENDER
+}
+
+function buildHtmlWithSignature(bodyHtml: string, signature: string | null): string {
+  if (!signature) return bodyHtml
+  const escaped = signature
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br />')
+  return `${bodyHtml}<br /><br />--<br />${escaped}`
+}
+
 async function assertAdmin() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('Not authenticated')
   const admin = createAdminClient()
-  const { data: profile } = await admin.from('profiles').select('is_admin').eq('id', user.id).single()
+  const { data: profile } = await admin
+    .from('profiles')
+    .select('is_admin, signature')
+    .eq('id', user.id)
+    .single()
   if (!ADMIN_EMAILS.includes(user.email ?? '') && !profile?.is_admin) throw new Error('Not authorized')
-  return { admin, user }
+  return { admin, user, signature: profile?.signature ?? null }
 }
 
 interface SendEmailParams {
@@ -36,13 +60,16 @@ export async function sendCrmEmail(
   }
 
   try {
-    const { admin } = await assertAdmin()
+    const { admin, user, signature } = await assertAdmin()
 
-    const { error: sendError } = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead <hello@teeahead.com>',
+    const fromAddress = resolveSender(user.email ?? undefined)
+    const finalHtml = buildHtmlWithSignature(params.bodyHtml, signature)
+
+    const { data: sendData, error: sendError } = await resend.emails.send({
+      from: fromAddress,
       to: params.to,
       subject: params.subject,
-      html: params.bodyHtml,
+      html: finalHtml,
     })
 
     if (sendError) return { error: (sendError as { message?: string }).message ?? 'Send failed' }
@@ -53,6 +80,9 @@ export async function sendCrmEmail(
       type: 'email',
       body: `To: ${params.to}\nSubject: ${params.subject}`,
       created_by: params.sentBy,
+      resend_email_id: sendData?.id ?? null,
+      from_email: fromAddress,
+      open_count: 0,
     })
 
     if (params.recordType !== 'member') {
