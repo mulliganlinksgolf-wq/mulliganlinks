@@ -25,12 +25,22 @@ export function ActivityLog({ activities }: Props) {
         <li key={a.id} className="flex gap-3">
           <span className="text-lg mt-0.5">{icons[a.type]}</span>
           <div className="flex-1">
-            <div className="flex items-center gap-2 text-xs text-slate-500">
+            <div className="flex items-center flex-wrap gap-2 text-xs text-slate-500">
               <span className="font-semibold text-slate-700 capitalize">{a.type.replace('_', ' ')}</span>
               <span>·</span>
               <span>{a.created_by}</span>
               <span>·</span>
               <span>{formatDate(a.created_at)}</span>
+              {a.type === 'email' && a.opened_at && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-medium border border-emerald-200">
+                  ✓ Opened{a.open_count > 1 ? ` ×${a.open_count}` : ''}
+                </span>
+              )}
+              {a.type === 'email' && !a.opened_at && (
+                <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-50 text-slate-400 font-medium border border-slate-200">
+                  Not opened
+                </span>
+              )}
             </div>
             {a.body && <p className="text-sm text-slate-700 mt-1 whitespace-pre-wrap">{a.body}</p>}
           </div>
