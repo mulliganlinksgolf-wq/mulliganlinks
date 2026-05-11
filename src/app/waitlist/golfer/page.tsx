@@ -193,7 +193,7 @@ export default async function GolferWaitlistPage({
             {[
               { label: 'Booking fees', golfpass: '$2.49–$3.49/round', eagle: 'Zero, always' },
               { label: 'Credits', golfpass: 'Expire monthly', eagle: 'Never expire' },
-              { label: 'Works at', golfpass: 'National chains', eagle: 'Your home course' },
+              { label: 'Works at', golfpass: 'National chains', eagle: 'Any TeeAhead partner' },
             ].map(({ label, golfpass, eagle }, i) => (
               <div key={label} className={`grid grid-cols-3 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}`}>
                 <div className="px-4 py-3 font-medium text-[#1A1A1A]">{label}</div>

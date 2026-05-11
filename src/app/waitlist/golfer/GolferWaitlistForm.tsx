@@ -106,10 +106,11 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="last_name" className="text-[#F4F1EA]">Last name</Label>
+        <Label htmlFor="last_name" className="text-[#F4F1EA]">Last name *</Label>
         <Input
           id="last_name"
           name="last_name"
+          required
           disabled={isPending}
           placeholder="Nicklaus"
           className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
