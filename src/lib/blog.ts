@@ -4,6 +4,11 @@ import matter from 'gray-matter'
 
 export type Category = 'courses' | 'golfers' | 'case-studies'
 
+export interface Faq {
+  q: string
+  a: string
+}
+
 export interface PostMeta {
   slug: string
   title: string
@@ -12,6 +17,7 @@ export interface PostMeta {
   publishedAt: string
   updatedAt: string
   category: Category
+  faqs?: Faq[]
 }
 
 export interface Post extends PostMeta {
@@ -41,6 +47,7 @@ export function getAllPosts(): (PostMeta & { readingTime: number })[] {
         publishedAt: data.publishedAt as string,
         updatedAt: data.updatedAt as string,
         category: data.category as Category,
+        faqs: data.faqs as Faq[] | undefined,
         readingTime: calcReadingTime(content),
       }
     })
@@ -62,6 +69,7 @@ export function getPostBySlug(slug: string): Post | null {
         publishedAt: data.publishedAt as string,
         updatedAt: data.updatedAt as string,
         category: data.category as Category,
+        faqs: data.faqs as Faq[] | undefined,
         content,
         readingTime: calcReadingTime(content),
       }

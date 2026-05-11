@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 function PostSchema({ post }: { post: NonNullable<ReturnType<typeof getPostBySlug>> }) {
   const author = AUTHORS[post.author]
-  const schemas = [
+  const schemas: object[] = [
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
@@ -65,6 +65,17 @@ function PostSchema({ post }: { post: NonNullable<ReturnType<typeof getPostBySlu
       ],
     },
   ]
+  if (post.faqs && post.faqs.length > 0) {
+    schemas.push({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: post.faqs.map(faq => ({
+        '@type': 'Question',
+        name: faq.q,
+        acceptedAnswer: { '@type': 'Answer', text: faq.a },
+      })),
+    })
+  }
   return (
     <>
       {schemas.map((s, i) => (
