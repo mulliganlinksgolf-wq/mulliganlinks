@@ -175,6 +175,28 @@ export default function GolfCourseBookingSoftwarePage() {
           </div>
         </section>
 
+        {/* From our blog */}
+        <section className="px-6 py-16 bg-[#FAF7F2]">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <h2 className="text-xl font-bold text-[#1A1A1A]">From our blog</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { href: '/blog/how-golf-course-booking-software-works', label: 'How Golf Course Booking Software Works', desc: 'Tee sheet, payments, check-in, loyalty — the full stack explained.' },
+                { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained', desc: 'What barter tee times actually cost your course per year.' },
+              ].map(({ href, label, desc }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="block bg-white rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
+                >
+                  <p className="font-semibold text-[#0F3D2E]">{label} →</p>
+                  <p className="text-sm text-[#6B7770]">{desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Related links */}
         <section className="px-6 py-16 bg-white">
           <div className="max-w-4xl mx-auto space-y-6">

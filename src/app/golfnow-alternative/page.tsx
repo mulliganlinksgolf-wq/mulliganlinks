@@ -353,6 +353,29 @@ export default async function GolfNowAlternativePage({
           </div>
         </section>
 
+        {/* Related blog posts */}
+        <section className="px-6 py-16 bg-white">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <h2 className="text-xl font-bold text-[#1A1A1A]">Go deeper</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained', desc: 'The full math on what barter tee times cost your course per year.' },
+                { href: '/blog/golfnow-contract-what-to-know', label: 'GolfNow Contract: What to Know', desc: 'Auto-renewal windows, notice requirements, and exit clauses explained.' },
+                { href: '/blog/michigan-courses-leaving-golfnow', label: 'Michigan Courses Leaving GolfNow', desc: 'How 100+ courses left in Q1 2025 and what happened to their revenue.' },
+              ].map(({ href, label, desc }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="block bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
+                >
+                  <p className="font-semibold text-[#0F3D2E]">{label} →</p>
+                  <p className="text-sm text-[#6B7770]">{desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* ── Footer ────────────────────────────────────────────── */}

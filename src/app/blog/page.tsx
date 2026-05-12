@@ -5,8 +5,8 @@ import { CategoryFilter } from '@/components/blog/CategoryFilter'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export const metadata: Metadata = {
-  title: 'Golf Industry Resources',
-  description: 'Guides for golf course operators and Metro Detroit golfers — tee sheet software comparisons, GolfNow alternatives, and local golf resources.',
+  title: 'Golf Course Software Tips & Tee Time Guides',
+  description: 'Tee sheet software comparisons, GolfNow alternative guides, and Metro Detroit golf resources — for course operators and local golfers.',
   alternates: { canonical: 'https://www.teeahead.com/blog' },
 }
 
@@ -31,9 +31,9 @@ export default function BlogIndexPage() {
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-16">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-black text-[#0F3D2E] mb-3">Golf Industry Resources</h1>
+          <h1 className="text-4xl font-black text-[#0F3D2E] mb-3">Golf Course Software Tips &amp; Tee Time Guides</h1>
           <p className="text-gray-500 max-w-xl mx-auto">
-            Guides for course operators and golfers in Metro Detroit — software comparisons, GolfNow alternatives, and local golf.
+            Tee sheet software comparisons, GolfNow alternatives, and Metro Detroit golf resources — for course operators and local golfers.
           </p>
         </div>
 

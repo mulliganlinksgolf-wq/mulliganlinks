@@ -104,9 +104,9 @@ export default async function HomePage({
 
             {/* Headline */}
             <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 62px)' }}>
-              Golf, returned to the people who{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
-              play it.
+              Tee Sheet Software for Courses.{' '}
+              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>A Loyalty Membership</em>{' '}
+              for Golfers.
             </h1>
 
             {/* Subhead */}

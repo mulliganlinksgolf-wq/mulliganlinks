@@ -23,6 +23,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/barter`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/damage`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/case-studies/windsor-parke`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${base}/software-cost`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/features`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.85 },
     { url: `${base}/about`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/contact`, lastModified: new Date('2026-05-11'), changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/terms`, lastModified: new Date('2026-05-11'), changeFrequency: 'yearly', priority: 0.3 },

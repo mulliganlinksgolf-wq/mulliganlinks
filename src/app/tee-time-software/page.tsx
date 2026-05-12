@@ -373,6 +373,29 @@ export default function TeeTimeSoftwarePage() {
           </div>
         </section>
 
+        {/* Related blog posts */}
+        <section className="px-6 py-16 bg-white">
+          <div className="max-w-4xl mx-auto space-y-6">
+            <h2 className="text-xl font-bold text-[#1A1A1A]">Go deeper</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { href: '/blog/tee-sheet-software-cost', label: 'Tee Sheet Software Cost in 2026', desc: 'GolfNow, foreUP, Lightspeed, Club Prophet — what each really costs.' },
+                { href: '/blog/how-golf-course-booking-software-works', label: 'How Golf Course Booking Software Works', desc: 'Tee sheet, payments, check-in, loyalty — the full stack explained.' },
+                { href: '/blog/how-to-switch-tee-sheet-software', label: 'How to Switch Tee Sheet Software', desc: 'Migrate your data and communicate to golfers without losing bookings.' },
+              ].map(({ href, label, desc }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  className="block bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
+                >
+                  <p className="font-semibold text-[#0F3D2E]">{label} →</p>
+                  <p className="text-sm text-[#6B7770]">{desc}</p>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* ── Footer ────────────────────────────────────────────── */}
