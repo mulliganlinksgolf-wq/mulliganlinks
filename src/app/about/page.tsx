@@ -3,7 +3,7 @@ import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 
 export const metadata = {
-  title: 'About TeeAhead',
+  title: 'About',
   description: 'TeeAhead is a Metro Detroit golf platform built by Neil Barris and Billy Beslock. We give courses free tee sheet software and golfers a loyalty membership that beats GolfPass+ on every metric.',
   alternates: { canonical: '/about' },
   openGraph: {

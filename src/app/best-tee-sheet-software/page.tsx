@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export const metadata: Metadata = {
-  title: 'Best Tee Sheet Software for Golf Courses in 2026 | TeeAhead',
+  title: 'Best Tee Sheet Software for Golf Courses in 2026',
   description:
     'An honest comparison of the best tee sheet software for golf courses in 2026 — TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. Pricing, features, and who each platform is best for.',
   alternates: {

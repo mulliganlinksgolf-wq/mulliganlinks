@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 
 export const metadata: Metadata = {
-  title: 'Free Golf Course Booking Software — No Commissions, No Barter | TeeAhead',
+  title: 'Free Golf Course Booking Software — No Commissions, No Barter',
   description:
     'TeeAhead is free golf course booking software for independent and semi-private courses. No commissions per booking, no barter tee times, no long-term contracts. Built-in loyalty and Stripe payments.',
   alternates: {
