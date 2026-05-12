@@ -9,7 +9,7 @@ export function FoundingPartnerProgress({ claimed, total }: Props) {
   if (claimed >= total) {
     return (
       <p className="text-xs text-[#F4F1EA]/60 text-center">
-        Founding Partner spots are full — join the standard waitlist
+        Founding Partner spots are full. Join the standard waitlist.
       </p>
     )
   }
@@ -17,7 +17,7 @@ export function FoundingPartnerProgress({ claimed, total }: Props) {
   if (claimed === 0) {
     return (
       <p className="text-xs text-[#F4F1EA]/50 text-center">
-        0 of {total} Founding Partner spots claimed — be first
+        0 of {total} Founding Partner spots claimed. Be first.
       </p>
     )
   }

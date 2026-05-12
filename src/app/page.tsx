@@ -179,14 +179,14 @@ export default async function HomePage({
               $94,500
             </p>
             <p className="text-xl font-medium text-[#1A1A1A] max-w-md mx-auto leading-snug">
-              in barter tee times — revenue taken directly out of your pocket
+              in barter tee times. Revenue taken directly out of your pocket.
             </p>
             <p className="text-base text-[#6B7770] max-w-xl mx-auto leading-relaxed">
               Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
               slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
             </p>
             <p className="text-base text-[#6B7770]">
-              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses — free for your first year. Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$349/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
+              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses (free for your first year). Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$349/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
             </p>
 
             {/* Barter callout — visually distinct, not just a text link */}
@@ -238,7 +238,7 @@ export default async function HomePage({
                 {
                   step: '02',
                   title: 'Connect your bank via Stripe',
-                  body: '5 minutes. Payments route directly to you — TeeAhead never touches your revenue.',
+                  body: '5 minutes. Payments route directly to you. TeeAhead never touches your revenue.',
                 },
                 {
                   step: '03',
@@ -258,7 +258,7 @@ export default async function HomePage({
                 href="/waitlist/course"
                 className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-8 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
               >
-                {spotsRemaining > 0 ? `Claim a Founding Spot — ${spotsRemaining} of 10 left` : 'Join the Course Waitlist'}
+                {spotsRemaining > 0 ? `Claim a Founding Spot (${spotsRemaining} of 10 left)` : 'Join the Course Waitlist'}
               </Link>
             </div>
           </div>
@@ -293,7 +293,7 @@ export default async function HomePage({
             <div className="text-center mb-14 space-y-3">
               <h2 className="font-display font-extrabold text-[#F4F1EA] leading-tight tracking-[-0.02em]"
                   style={{ fontSize: 'clamp(28px, 4vw, 42px)' }}>
-                The better way to play — and to run a course.
+                The better way to play and run a course.
               </h2>
               <p className="text-[#F4F1EA]/60 text-base leading-relaxed max-w-md mx-auto">
                 Free for courses. Fair for golfers. Built in Metro Detroit for the people who show up every week.{' '}
@@ -314,10 +314,10 @@ export default async function HomePage({
                   {[
                     'Book tee times at your home course with zero fees',
                     'Earn Fairway Points on every round',
-                    'Eagle membership: $89/yr — beats GolfPass+ by $30',
+                    'Eagle membership: $89/yr (beats GolfPass+ by $30)',
                     'Priority booking, guest passes, birthday credit',
-                    'Find a playing partner — browse member availability by date',
-                    'Tee time exchange — list a time you can\'t make, earn credit',
+                    'Find a playing partner: browse member availability by date',
+                    'Tee time exchange: list a time you can\'t make, earn credit',
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
@@ -343,8 +343,8 @@ export default async function HomePage({
                 </h3>
                 <ul className="space-y-2.5">
                   {[
-                    'Free for Founding Partners — first year on us',
-                    '📋 Your Data, Always — every golfer is added to your database, not ours. Export anytime.',
+                    'Free for Founding Partners, first year on us',
+                    '📋 Your Data, Always: every golfer is added to your database, not ours. Export anytime.',
                     'No barter tee times, ever',
                     'No commissions on bookings',
                     'Full tee sheet control stays with you',
@@ -407,7 +407,7 @@ export default async function HomePage({
                       </li>
                     ))}
                     <li className="flex items-start gap-2 text-[#9DAA9F]">
-                      <span className="font-bold mt-0.5 flex-shrink-0">—</span>Standard booking fee per round (waived on Eagle &amp; Ace)
+                      <span className="font-bold mt-0.5 flex-shrink-0 text-[#9DAA9F]">✗</span>Standard booking fee per round (waived on Eagle &amp; Ace)
                     </li>
                   </ul>
                   <Link
@@ -444,7 +444,7 @@ export default async function HomePage({
                       'Priority booking: 48hr early access',
                       '1 guest pass per year',
                       '$10 birthday credit',
-                      'Partner Finder — match with other members, rate rounds, view profiles',
+                      'Partner Finder: match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
@@ -482,7 +482,7 @@ export default async function HomePage({
                       'Priority booking: 72hr early access',
                       '2 guest passes per year',
                       '$20 birthday credit',
-                      'Partner Finder — match with other members, rate rounds, view profiles',
+                      'Partner Finder: match with other members, rate rounds, view profiles',
                     ].map((f) => (
                       <li key={f} className="flex items-start gap-2">
                         <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
@@ -505,7 +505,7 @@ export default async function HomePage({
             </p>
 
             <p className="mt-8 text-center text-sm text-[#6B7770] max-w-xl mx-auto leading-relaxed">
-              Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days — once they&apos;ve
+              Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days, once they&apos;ve
               earned enough Fairway Points to see the math. Start free. Upgrade when it makes sense.
             </p>
           </div>
