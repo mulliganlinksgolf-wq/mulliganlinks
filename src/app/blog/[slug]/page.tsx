@@ -35,7 +35,6 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       title: post.title,
       description: post.description,
       url: `https://www.teeahead.com/blog/${post.slug}`,
-      images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     },
   }
 }
