@@ -333,6 +333,29 @@ export default function WindsorParkeCaseStudy() {
         </div>
       </section>
 
+      {/* ── Related reading ──────────────────────────────────── */}
+      <section className="px-6 py-16 bg-white">
+        <div className="max-w-3xl mx-auto space-y-6">
+          <h2 className="font-display font-black text-[#0F3D2E] text-xl tracking-[-0.01em]">Related reading</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained', desc: 'The full math on what barter tee times cost courses per year.' },
+              { href: '/blog/michigan-courses-leaving-golfnow', label: 'Michigan Courses Leaving GolfNow', desc: 'How 100+ courses left in Q1 2025 and what happened next.' },
+              { href: '/blog/metro-detroit-courses-on-golfnow', label: 'Metro Detroit Courses on GolfNow', desc: 'What operators in Oakland, Macomb, and Wayne County are saying.' },
+            ].map(({ href, label, desc }) => (
+              <Link
+                key={href}
+                href={href}
+                className="block bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
+              >
+                <p className="font-semibold text-[#0F3D2E] text-sm">{label} →</p>
+                <p className="text-xs text-[#6B7770] leading-relaxed">{desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-10 mt-auto">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">

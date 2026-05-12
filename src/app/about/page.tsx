@@ -158,6 +158,37 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* ── What We've Built ─────────────────────────────────────── */}
+      <section className="px-6 py-16 bg-white">
+        <div className="max-w-3xl mx-auto space-y-8">
+          <h2 className="font-display font-black text-[#0F3D2E] text-2xl tracking-[-0.01em]">What we&apos;ve built</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <Link
+              href="/case-studies/windsor-parke"
+              className="block bg-[#FAF7F2] rounded-2xl p-6 border border-black/8 space-y-3 hover:border-[#0F3D2E]/20 transition-colors"
+            >
+              <p className="text-xs font-semibold text-[#E0A800] uppercase tracking-wider">Case Study</p>
+              <p className="font-bold text-[#0F3D2E]">Windsor Parke Golf Club: 382% Revenue Growth →</p>
+              <p className="text-sm text-[#4A5550] leading-relaxed">How one Metro Detroit course grew online revenue from $81K to $393K after leaving GolfNow.</p>
+            </Link>
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#6B7770] uppercase tracking-wider">From our blog</p>
+              <div className="space-y-2">
+                {[
+                  { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained' },
+                  { href: '/blog/tee-sheet-software-cost', label: 'How Much Does Tee Sheet Software Cost?' },
+                  { href: '/blog/how-golf-course-booking-software-works', label: 'How Golf Course Booking Software Works' },
+                ].map(({ href, label }) => (
+                  <Link key={href} href={href} className="block text-sm text-[#0F3D2E] font-medium hover:underline">
+                    {label} →
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Contact CTA ─────────────────────────────────────────── */}
       <section className="px-6 py-16 bg-white">
         <div className="max-w-xl mx-auto text-center space-y-6">

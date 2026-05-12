@@ -357,7 +357,15 @@ export default async function GolfNowAlternativePage({
         <section className="px-6 py-16 bg-white">
           <div className="max-w-4xl mx-auto space-y-6">
             <h2 className="text-xl font-bold text-[#1A1A1A]">Go deeper</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link
+                href="/case-studies/windsor-parke"
+                className="block bg-[#0F3D2E] rounded-xl p-6 space-y-2 hover:bg-[#0a2e22] transition-all"
+              >
+                <p className="text-xs font-bold text-[#E0A800] uppercase tracking-wider">Case Study</p>
+                <p className="font-semibold text-[#F4F1EA]">Windsor Parke: 382% Revenue Growth →</p>
+                <p className="text-sm text-[#F4F1EA]/60">From $81K to $393K after leaving GolfNow. Real numbers, real course.</p>
+              </Link>
               {[
                 { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained', desc: 'The full math on what barter tee times cost your course per year.' },
                 { href: '/blog/golfnow-contract-what-to-know', label: 'GolfNow Contract: What to Know', desc: 'Auto-renewal windows, notice requirements, and exit clauses explained.' },
