@@ -151,6 +151,8 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
             created_by: config.sentBy,
             from_email: config.mailbox,
             imap_message_id: messageId ? `${messageId}-${toEmail}` : null,
+            message_id: messageId ?? null,
+            in_reply_to: envelope.inReplyTo ?? null,
             created_at: sentDate.toISOString(),
           })
 

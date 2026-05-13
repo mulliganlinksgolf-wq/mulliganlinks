@@ -138,12 +138,14 @@ export async function sendCrmEmail(
 }
 
 // Look up the most recent outbound email to `toEmail` for this record so the
-// composer can offer a "Reply to last email" flow with proper threading.
+// composer can offer a "Reply to last email" flow and show the preview.
+// Returns null only when there's no prior email at all. `message_id` may be
+// null for older emails that predate threading support.
 export async function getLastEmailToContact(args: {
   recordType: CrmRecordType
   recordId: string
   toEmail: string
-}): Promise<{ message_id: string; subject: string; body: string | null; created_at: string } | null> {
+}): Promise<{ message_id: string | null; subject: string; body: string | null; created_at: string } | null> {
   const admin = createAdminClient()
   const { data } = await admin
     .from('crm_activity_log')
@@ -151,13 +153,11 @@ export async function getLastEmailToContact(args: {
     .eq('record_type', args.recordType)
     .eq('record_id', args.recordId)
     .eq('type', 'email')
-    .not('message_id', 'is', null)
     .ilike('body', `%To: ${args.toEmail}%`)
     .order('created_at', { ascending: false })
     .limit(1)
     .maybeSingle()
-  if (!data?.message_id) return null
-  // Body is stored as "To: x@y.com\nSubject: ..."; extract subject
+  if (!data) return null
   const subjectMatch = data.body?.match(/Subject:\s*(.+)/i)
   const subject = subjectMatch?.[1]?.trim() ?? ''
   return { message_id: data.message_id, subject, body: data.body, created_at: data.created_at }

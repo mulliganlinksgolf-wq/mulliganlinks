@@ -6,7 +6,7 @@ import { htmlToPlainText, plainTextToHtml } from '@/lib/crm/email-format'
 import type { CrmRecordType, CrmEmailTemplate } from '@/lib/crm/types'
 
 interface PreviousEmail {
-  message_id: string
+  message_id: string | null
   subject: string
   body: string | null
   created_at: string
@@ -34,6 +34,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [showPreview, setShowPreview] = useState(false)
   const [previousEmail, setPreviousEmail] = useState<PreviousEmail | null>(null)
   const [replyMode, setReplyMode] = useState(false)
+  const [showPrevExpanded, setShowPrevExpanded] = useState(false)
 
   useEffect(() => {
     getEmailTemplatesByType(recordType).then(setTemplates)
@@ -44,8 +45,8 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
     if (!toEmail) { setPreviousEmail(null); return }
     getLastEmailToContact({ recordType, recordId, toEmail }).then((prev) => {
       setPreviousEmail(prev)
-      // Auto-enable reply mode when there's a thread to continue
-      if (prev) setReplyMode(true)
+      // Auto-enable reply mode only when we can actually thread (message_id present)
+      if (prev?.message_id) setReplyMode(true)
     })
   }, [recordType, recordId, toEmail])
 
@@ -118,23 +119,53 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
         <form onSubmit={handleSend} className="p-6 space-y-4">
           {previousEmail && (
-            <div className="flex items-start gap-3 p-3 rounded-lg border border-emerald-200 bg-emerald-50">
-              <input
-                id="reply-mode"
-                type="checkbox"
-                checked={replyMode}
-                onChange={(e) => setReplyMode(e.target.checked)}
-                className="mt-0.5 w-4 h-4"
-              />
-              <label htmlFor="reply-mode" className="text-xs text-emerald-900 flex-1 cursor-pointer">
-                <span className="font-medium">Reply to last email</span>
-                <span className="text-emerald-700 ml-1">
-                  ({new Date(previousEmail.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/Detroit' })}: "{previousEmail.subject}")
-                </span>
-                <div className="text-emerald-700 mt-0.5">
-                  Threads with the recipient's email client so they see the conversation history.
+            <div className={`rounded-lg border ${previousEmail.message_id ? 'border-emerald-200 bg-emerald-50' : 'border-amber-200 bg-amber-50'}`}>
+              <div className="flex items-start gap-3 p-3">
+                {previousEmail.message_id ? (
+                  <input
+                    id="reply-mode"
+                    type="checkbox"
+                    checked={replyMode}
+                    onChange={(e) => setReplyMode(e.target.checked)}
+                    className="mt-0.5 w-4 h-4"
+                  />
+                ) : (
+                  <span className="mt-0.5 text-amber-600 text-sm">ℹ</span>
+                )}
+                <div className="flex-1 min-w-0">
+                  <label
+                    htmlFor={previousEmail.message_id ? 'reply-mode' : undefined}
+                    className={`text-xs flex-1 ${previousEmail.message_id ? 'text-emerald-900 cursor-pointer' : 'text-amber-900'}`}
+                  >
+                    <div className="font-medium">
+                      {previousEmail.message_id ? 'Reply to last email' : 'Previous email to this contact'}
+                    </div>
+                    <div className={`mt-0.5 ${previousEmail.message_id ? 'text-emerald-700' : 'text-amber-700'}`}>
+                      {new Date(previousEmail.created_at).toLocaleString('en-US', {
+                        month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+                        timeZone: 'America/Detroit',
+                      })} · "{previousEmail.subject}"
+                    </div>
+                    <div className={`mt-1 ${previousEmail.message_id ? 'text-emerald-700' : 'text-amber-700'}`}>
+                      {previousEmail.message_id
+                        ? 'Threads with the recipient\'s email client so they see the conversation history.'
+                        : 'This email was logged before threading was supported, so the new email will start a fresh thread.'}
+                    </div>
+                  </label>
                 </div>
-              </label>
+                <button
+                  type="button"
+                  onClick={() => setShowPrevExpanded((s) => !s)}
+                  className={`text-xs underline shrink-0 ${previousEmail.message_id ? 'text-emerald-700 hover:text-emerald-900' : 'text-amber-700 hover:text-amber-900'}`}
+                >
+                  {showPrevExpanded ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {showPrevExpanded && previousEmail.body && (
+                <div className={`px-3 pb-3 text-xs whitespace-pre-wrap font-mono ${previousEmail.message_id ? 'text-emerald-900' : 'text-amber-900'}`}>
+                  {previousEmail.body}
+                </div>
+              )}
             </div>
           )}
           {templates.length > 0 && (
