@@ -120,7 +120,7 @@ export default async function AdminWaitlistPage({
                         <td className="px-4 py-3 text-[#6B7770]">{g.interested_tier ?? '—'}</td>
                         <td className="px-4 py-3 text-[#6B7770]">{g.referral_source ?? '—'}</td>
                         <td className="px-4 py-3 text-[#6B7770] text-xs whitespace-nowrap">
-                          {new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          {new Date(g.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' })}
                         </td>
                       </tr>
                     ))}
@@ -131,7 +131,7 @@ export default async function AdminWaitlistPage({
                         <td className="px-4 py-3 text-[#6B7770]">{w.email}</td>
                         <td colSpan={6} />
                         <td className="px-4 py-3 text-[#6B7770] text-xs whitespace-nowrap">
-                          {new Date(w.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                          {new Date(w.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' })}
                         </td>
                       </tr>
                     ))}
@@ -214,7 +214,7 @@ export default async function AdminWaitlistPage({
                         <StatusBadge status={c.status} />
                       </td>
                       <td className="px-4 py-3 text-[#6B7770] text-xs whitespace-nowrap">
-                        {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {new Date(c.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' })}
                       </td>
                       <td className="px-4 py-3">
                         {c.status === 'pending' && (
