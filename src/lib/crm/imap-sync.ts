@@ -203,6 +203,7 @@ export async function appendToSentFolder(args: {
   subject: string
   html: string
   messageId?: string
+  inReplyTo?: string | null
 }): Promise<string | null> {
   const config = MAILBOXES.find(m => m.mailbox === args.fromEmail)
   if (!config) return `No IMAP config for sender ${args.fromEmail}`
@@ -227,18 +228,25 @@ export async function appendToSentFolder(args: {
 
     const messageId = args.messageId ?? `<${crypto.randomUUID()}@teeahead.com>`
     const date = new Date().toUTCString()
-    const rfc822 = [
+    const headerLines = [
       `Message-ID: ${messageId}`,
       `Date: ${date}`,
       `From: ${args.fromHeader}`,
       `To: ${args.to}`,
       `Subject: ${args.subject}`,
+    ]
+    if (args.inReplyTo) {
+      headerLines.push(`In-Reply-To: ${args.inReplyTo}`)
+      headerLines.push(`References: ${args.inReplyTo}`)
+    }
+    headerLines.push(
       `MIME-Version: 1.0`,
       `Content-Type: text/html; charset=utf-8`,
       `Content-Transfer-Encoding: 8bit`,
       ``,
       args.html,
-    ].join('\r\n')
+    )
+    const rfc822 = headerLines.join('\r\n')
 
     await client.append(sentFolder, Buffer.from(rfc822, 'utf-8'), ['\\Seen'])
     await client.logout()

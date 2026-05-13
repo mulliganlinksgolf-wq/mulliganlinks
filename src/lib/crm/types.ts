@@ -100,6 +100,8 @@ export interface CrmActivityLog {
   opened_at: string | null
   open_count: number
   from_email: string | null
+  message_id: string | null
+  in_reply_to: string | null
 }
 
 export interface CrmEmailTemplate {

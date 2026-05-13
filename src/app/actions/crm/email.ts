@@ -50,6 +50,7 @@ interface SendEmailParams {
   subject: string
   bodyHtml: string
   sentBy: string
+  inReplyTo?: string | null  // Message-ID of the email this is a reply to
 }
 
 export async function sendCrmEmail(
@@ -66,11 +67,21 @@ export async function sendCrmEmail(
     const fromAddress = resolveSender(user.email ?? undefined)
     const finalHtml = buildHtmlWithSignature(params.bodyHtml, signature)
 
+    // Generate our own Message-ID so threading is deterministic, even if the
+    // SMTP relay rewrites the default. Format: <uuid@teeahead.com>
+    const messageId = `<${crypto.randomUUID()}@teeahead.com>`
+    const headers: Record<string, string> = { 'Message-ID': messageId }
+    if (params.inReplyTo) {
+      headers['In-Reply-To'] = params.inReplyTo
+      headers['References'] = params.inReplyTo
+    }
+
     const { data: sendData, error: sendError } = await resend.emails.send({
       from: fromAddress,
       to: params.to,
       subject: params.subject,
       html: finalHtml,
+      headers,
     })
 
     if (sendError) return { error: (sendError as { message?: string }).message ?? 'Send failed' }
@@ -87,7 +98,8 @@ export async function sendCrmEmail(
         to: params.to,
         subject: params.subject,
         html: finalHtml,
-        messageId: sendData?.id ? `<${sendData.id}@teeahead.com>` : undefined,
+        messageId,
+        inReplyTo: params.inReplyTo ?? null,
       })
       if (imapErr) console.error('[crm-email] IMAP append failed:', imapErr)
     } catch (err) {
@@ -103,6 +115,8 @@ export async function sendCrmEmail(
       resend_email_id: sendData?.id ?? null,
       from_email: fromAddress,
       open_count: 0,
+      message_id: messageId,
+      in_reply_to: params.inReplyTo ?? null,
     })
 
     if (params.recordType !== 'member') {
@@ -121,6 +135,32 @@ export async function sendCrmEmail(
   } catch (e) {
     return { error: e instanceof Error ? e.message : 'Unknown error' }
   }
+}
+
+// Look up the most recent outbound email to `toEmail` for this record so the
+// composer can offer a "Reply to last email" flow with proper threading.
+export async function getLastEmailToContact(args: {
+  recordType: CrmRecordType
+  recordId: string
+  toEmail: string
+}): Promise<{ message_id: string; subject: string; body: string | null; created_at: string } | null> {
+  const admin = createAdminClient()
+  const { data } = await admin
+    .from('crm_activity_log')
+    .select('message_id, body, created_at')
+    .eq('record_type', args.recordType)
+    .eq('record_id', args.recordId)
+    .eq('type', 'email')
+    .not('message_id', 'is', null)
+    .ilike('body', `%To: ${args.toEmail}%`)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  if (!data?.message_id) return null
+  // Body is stored as "To: x@y.com\nSubject: ..."; extract subject
+  const subjectMatch = data.body?.match(/Subject:\s*(.+)/i)
+  const subject = subjectMatch?.[1]?.trim() ?? ''
+  return { message_id: data.message_id, subject, body: data.body, created_at: data.created_at }
 }
 
 export async function getEmailTemplatesByType(recordType: CrmRecordType) {
