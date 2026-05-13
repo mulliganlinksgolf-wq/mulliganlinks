@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
   const admin = createAdminClient()
   const { data: activity, error: lookupError } = await admin
     .from('crm_activity_log')
-    .select('id, opened_at, open_count')
+    .select('id, opened_at, open_count, created_at')
     .eq('resend_email_id', emailId)
     .single()
 
@@ -61,6 +61,20 @@ export async function POST(req: NextRequest) {
   }
 
   if (activity) {
+    // Filter out the sender's own self-opens. When you send a test and immediately
+    // open your own sent message to verify it landed, the tracking pixel fires from
+    // your IP — that's not real engagement. Anything within 30 seconds of send is
+    // almost certainly the sender checking their own work.
+    const sentAt = new Date(activity.created_at).getTime()
+    const now = Date.now()
+    const secondsSinceSend = (now - sentAt) / 1000
+    const SELF_OPEN_WINDOW_SECONDS = 30
+
+    if (secondsSinceSend < SELF_OPEN_WINDOW_SECONDS) {
+      console.log(`[resend-webhook] skipping self-open (${secondsSinceSend.toFixed(1)}s after send) for activity ${activity.id}`)
+      return NextResponse.json({ received: true, skipped: 'self_open' })
+    }
+
     console.log('[resend-webhook] updating activity:', activity.id)
     const { error: updateError } = await admin
       .from('crm_activity_log')
