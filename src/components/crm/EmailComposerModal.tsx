@@ -231,6 +231,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
               value={to}
               onChange={(e) => setTo(e.target.value)}
               required
+              autoComplete="off"
               className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-300"
             />
           </div>
