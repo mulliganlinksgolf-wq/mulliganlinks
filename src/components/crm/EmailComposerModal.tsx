@@ -50,9 +50,11 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
     })
   }, [recordType, recordId, toEmail])
 
-  // Auto-prefix subject with "Re: " when reply mode is on
+  // When reply mode flips on, force the subject to match the thread.
+  // (Email clients use Message-ID for threading, but a matching subject is still
+  // what humans see in the inbox preview — and it's standard email etiquette.)
   useEffect(() => {
-    if (replyMode && previousEmail && !subject) {
+    if (replyMode && previousEmail) {
       const prevSubject = previousEmail.subject
       const reSubject = prevSubject.match(/^re:\s*/i) ? prevSubject : `Re: ${prevSubject}`
       setSubject(reSubject)
@@ -65,7 +67,10 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   }
 
   function applyTemplate(template: CrmEmailTemplate) {
-    setSubject(substituteVars(template.subject))
+    // In reply mode, preserve the thread subject — the template only fills the body.
+    if (!(replyMode && previousEmail)) {
+      setSubject(substituteVars(template.subject))
+    }
     setBodyText(htmlToPlainText(substituteVars(template.body_html)))
     setAppliedTemplateId(template.id)
     setShowPreview(false)
