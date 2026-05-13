@@ -3,6 +3,7 @@
 import { getResend } from '@/lib/resend'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
+import { appendToSentFolder } from '@/lib/crm/imap-sync'
 import { revalidatePath } from 'next/cache'
 import type { CrmRecordType } from '@/lib/crm/types'
 
@@ -73,6 +74,25 @@ export async function sendCrmEmail(
     })
 
     if (sendError) return { error: (sendError as { message?: string }).message ?? 'Send failed' }
+
+    // Mirror the sent email into the sender's IMAP Sent folder (best-effort).
+    // The match between fromAddress (e.g. "Neil Barris <neil@teeahead.com>")
+    // and the IMAP mailbox key is by the bare email inside the angle brackets.
+    const bareEmailMatch = fromAddress.match(/<([^>]+)>/)
+    const fromEmailOnly = (bareEmailMatch?.[1] ?? fromAddress).toLowerCase()
+    try {
+      const imapErr = await appendToSentFolder({
+        fromHeader: fromAddress,
+        fromEmail: fromEmailOnly,
+        to: params.to,
+        subject: params.subject,
+        html: finalHtml,
+        messageId: sendData?.id ? `<${sendData.id}@teeahead.com>` : undefined,
+      })
+      if (imapErr) console.error('[crm-email] IMAP append failed:', imapErr)
+    } catch (err) {
+      console.error('[crm-email] IMAP append exception:', err)
+    }
 
     await admin.from('crm_activity_log').insert({
       record_type: params.recordType,

@@ -8,6 +8,7 @@ const icons: Record<CrmActivityType, string> = {
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat('en-US', {
     month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+    timeZone: 'America/Detroit',
   }).format(new Date(iso))
 }
 

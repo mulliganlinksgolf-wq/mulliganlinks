@@ -193,6 +193,62 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
   }
 }
 
+// Build an RFC 822 compliant message and append it to the sender's Sent folder.
+// Returns null on success, or an error string. Best-effort: failures are logged
+// but never block the actual email send.
+export async function appendToSentFolder(args: {
+  fromHeader: string  // "Neil Barris <neil@teeahead.com>"
+  fromEmail: string   // "neil@teeahead.com"
+  to: string
+  subject: string
+  html: string
+  messageId?: string
+}): Promise<string | null> {
+  const config = MAILBOXES.find(m => m.mailbox === args.fromEmail)
+  if (!config) return `No IMAP config for sender ${args.fromEmail}`
+  const password = process.env[config.passwordEnv]
+  if (!password) return `${config.passwordEnv} not set`
+
+  const client = new ImapFlow({
+    host: IMAP_HOST,
+    port: IMAP_PORT,
+    secure: true,
+    auth: { user: config.user, pass: password },
+    logger: false,
+  })
+
+  try {
+    await client.connect()
+    const sentFolder = await findSentFolder(client)
+    if (!sentFolder) {
+      await client.logout()
+      return 'No Sent folder found'
+    }
+
+    const messageId = args.messageId ?? `<${crypto.randomUUID()}@teeahead.com>`
+    const date = new Date().toUTCString()
+    const rfc822 = [
+      `Message-ID: ${messageId}`,
+      `Date: ${date}`,
+      `From: ${args.fromHeader}`,
+      `To: ${args.to}`,
+      `Subject: ${args.subject}`,
+      `MIME-Version: 1.0`,
+      `Content-Type: text/html; charset=utf-8`,
+      `Content-Transfer-Encoding: 8bit`,
+      ``,
+      args.html,
+    ].join('\r\n')
+
+    await client.append(sentFolder, Buffer.from(rfc822, 'utf-8'), ['\\Seen'])
+    await client.logout()
+    return null
+  } catch (err) {
+    try { await client.logout() } catch {}
+    return (err as Error).message
+  }
+}
+
 export async function syncAllMailboxes(): Promise<Record<string, SyncResult>> {
   const results: Record<string, SyncResult> = {}
   for (const config of MAILBOXES) {
