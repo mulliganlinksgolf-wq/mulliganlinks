@@ -52,6 +52,15 @@ export async function getTodaysQueue(): Promise<CrmCourse[]> {
   return selected
 }
 
+export async function resetTodaysQueue(): Promise<void> {
+  const admin = createAdminClient()
+  const today = new Date().toISOString().split('T')[0]
+  await admin
+    .from('crm_courses')
+    .update({ outreach_queued_date: null })
+    .eq('outreach_queued_date', today)
+}
+
 function parseNote(notes: string | null | undefined, key: string): string | null {
   if (!notes) return null
   const m = notes.match(new RegExp(key + ': ([^|]+)'))

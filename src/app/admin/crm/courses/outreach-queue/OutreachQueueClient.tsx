@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
 import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
+import { resetTodaysQueue } from '@/app/actions/crm/outreach-queue'
 import type { CrmCourse } from '@/lib/crm/types'
 
 function parseNote(notes: string | null | undefined, key: string): string | null {
@@ -22,9 +23,18 @@ export function OutreachQueueClient({ courses }: Props) {
   const [done, setDone] = useState<Set<string>>(new Set())
   const [activityTarget, setActivityTarget] = useState<CrmCourse | null>(null)
   const [emailTarget, setEmailTarget] = useState<CrmCourse | null>(null)
+  const [resetting, setResetting] = useState(false)
 
   function markDone(id: string) {
     setDone(prev => new Set([...prev, id]))
+  }
+
+  async function handleReset() {
+    setResetting(true)
+    await resetTodaysQueue()
+    router.refresh()
+    setDone(new Set())
+    setResetting(false)
   }
 
   const remaining = courses.filter(c => !done.has(c.id))
@@ -32,6 +42,16 @@ export function OutreachQueueClient({ courses }: Props) {
 
   return (
     <>
+      <div className="flex justify-end">
+        <button
+          onClick={handleReset}
+          disabled={resetting}
+          className="text-xs text-slate-400 hover:text-slate-600 underline disabled:opacity-50"
+        >
+          {resetting ? 'Refreshing…' : 'Get new queue'}
+        </button>
+      </div>
+
       {remaining.length === 0 && courses.length > 0 && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
           <p className="text-emerald-700 font-semibold text-lg">All done for today!</p>
