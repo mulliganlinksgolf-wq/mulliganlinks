@@ -68,6 +68,7 @@ export function CourseDetailClient({ course }: Props) {
           <InlineEditField label="Contact Name" value={course.contact_name} onSave={(v) => save('contact_name', v)} />
           <InlineEditField label="Contact Email" value={course.contact_email} onSave={(v) => save('contact_email', v)} type="email" />
           <InlineEditField label="Contact Phone" value={course.contact_phone} onSave={(v) => save('contact_phone', v)} type="tel" />
+          <InlineEditField label="Current Software" value={course.current_software} onSave={(v) => save('current_software', v)} placeholder="e.g. foreUP, Club Caddie, GolfNow…" />
           <InlineEditField label="Estimated Value" value={course.estimated_value?.toString() ?? null} onSave={(v) => save('estimated_value', v)} type="number" />
           <InlineEditField label="City" value={course.city} onSave={(v) => save('city', v)} />
           <InlineEditField label="State" value={course.state} onSave={(v) => save('state', v)} />

@@ -68,6 +68,7 @@ export async function updateCourse(
     assigned_to: string | null
     notes: string | null
     estimated_value: number | null
+    current_software: string | null
   }>
 ): Promise<{ error?: string; success?: boolean }> {
   try {

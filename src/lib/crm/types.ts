@@ -48,6 +48,7 @@ export interface CrmCourse {
   estimated_value: number | null
   lead_source: CrmLeadSource | null
   lost_reason: string | null
+  current_software: string | null
   last_activity_at: string
   created_at: string
   updated_at: string
