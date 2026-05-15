@@ -111,6 +111,7 @@ export async function sendCrmEmail(
       record_id: params.recordId,
       type: 'email',
       body: `To: ${params.to}\nSubject: ${params.subject}`,
+      email_html: finalHtml,
       created_by: params.sentBy,
       resend_email_id: sendData?.id ?? null,
       from_email: fromAddress,

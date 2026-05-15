@@ -43,7 +43,7 @@ export async function getRecentActivity(limit = 20): Promise<CrmActivityLog[]> {
   const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('crm_activity_log')
-    .select('id, record_type, record_id, type, body, created_by, created_at, resend_email_id, opened_at, open_count, from_email, message_id, in_reply_to')
+    .select('id, record_type, record_id, type, body, created_by, created_at, resend_email_id, opened_at, open_count, from_email, message_id, in_reply_to, email_html')
     .order('created_at', { ascending: false })
     .limit(limit)
   if (error) throw new Error(error.message)

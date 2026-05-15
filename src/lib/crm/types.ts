@@ -102,6 +102,7 @@ export interface CrmActivityLog {
   from_email: string | null
   message_id: string | null
   in_reply_to: string | null
+  email_html: string | null
 }
 
 export interface CrmEmailTemplate {
