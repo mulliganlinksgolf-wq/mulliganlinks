@@ -33,6 +33,12 @@ export default async function CoursesPage({
         <div className="flex items-center gap-3">
           <CoursesViewToggle currentView={view} />
           <Link
+            href="/admin/crm/courses/outreach-queue"
+            className="px-3 py-1.5 border border-emerald-600 text-emerald-700 text-sm font-medium rounded-lg hover:bg-emerald-50"
+          >
+            Today's Queue
+          </Link>
+          <Link
             href="/admin/crm/courses/new"
             className="px-3 py-1.5 bg-emerald-700 text-white text-sm font-medium rounded-lg hover:bg-emerald-800"
           >
