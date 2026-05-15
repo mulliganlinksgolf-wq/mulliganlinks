@@ -5,6 +5,12 @@ function daysSince(iso: string): number {
   return Math.floor((Date.now() - new Date(iso).getTime()) / 86400000)
 }
 
+function parseNote(notes: string | null | undefined, key: string): string | null {
+  if (!notes) return null
+  const m = notes.match(new RegExp(key + ': ([^|]+)'))
+  return m ? m[1].trim() : null
+}
+
 interface Props {
   course: CrmCourse
   isDragging?: boolean
@@ -12,6 +18,8 @@ interface Props {
 
 export function CourseKanbanCard({ course, isDragging }: Props) {
   const stale = daysSince(course.last_activity_at) >= 7
+  const software = parseNote(course.notes, 'Software')
+
   return (
     <div
       className={`bg-white rounded-lg border p-3 shadow-sm cursor-grab select-none
@@ -28,6 +36,11 @@ export function CourseKanbanCard({ course, isDragging }: Props) {
       </Link>
       {course.contact_name && (
         <p className="text-xs text-slate-500">{course.contact_name}</p>
+      )}
+      {software && (
+        <span className="inline-block mt-1 text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">
+          {software}
+        </span>
       )}
       <div className="flex items-center justify-between mt-2">
         {course.estimated_value != null && (
