@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { LogActivityModal } from '@/components/crm/LogActivityModal'
 import { EmailComposerModal } from '@/components/crm/EmailComposerModal'
 import { resetTodaysQueue } from '@/app/actions/crm/outreach-queue'
+import { updateCourseStage } from '@/app/actions/crm/courses'
 import type { CrmCourse } from '@/lib/crm/types'
 
 function parseNote(notes: string | null | undefined, key: string): string | null {
@@ -95,7 +96,8 @@ export function OutreachQueueClient({ courses }: Props) {
           recordId={activityTarget.id}
           assignee={activityTarget.assigned_to ?? 'neil'}
           onClose={() => setActivityTarget(null)}
-          onLogged={() => {
+          onLogged={async () => {
+            await updateCourseStage(activityTarget.id, 'contacted')
             markDone(activityTarget.id)
             setActivityTarget(null)
             router.refresh()
@@ -111,7 +113,8 @@ export function OutreachQueueClient({ courses }: Props) {
           sentBy={emailTarget.assigned_to ?? 'neil'}
           variables={{ name: emailTarget.contact_name ?? '', course_name: emailTarget.name ?? '' }}
           onClose={() => setEmailTarget(null)}
-          onSent={() => {
+          onSent={async () => {
+            await updateCourseStage(emailTarget.id, 'contacted')
             markDone(emailTarget.id)
             setEmailTarget(null)
             router.refresh()
