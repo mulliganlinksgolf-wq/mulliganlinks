@@ -33,6 +33,11 @@ export async function POST(req: NextRequest) {
       })
       if (!res.ok) {
         if (res.status === 404) { notFound++; continue }
+        if (errors === 0) {
+          const body = await res.text()
+          console.error('[backfill] Resend error', res.status, body)
+          return NextResponse.json({ firstError: { status: res.status, body } })
+        }
         errors++; continue
       }
       const data = await res.json()
