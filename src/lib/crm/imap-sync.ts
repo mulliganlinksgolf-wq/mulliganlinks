@@ -141,6 +141,22 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
             continue
           }
 
+          // If sendCrmEmail already logged this outbound (same message_id on the
+          // same record), don't double-log it. We set Message-ID explicitly on
+          // outbound mail, then append a copy to the Sent folder via IMAP — so
+          // this sync would otherwise insert a second row for our own send.
+          if (messageId) {
+            const { data: existing } = await admin
+              .from('crm_activity_log')
+              .select('id')
+              .eq('record_type', contact.record_type)
+              .eq('record_id', contact.record_id)
+              .eq('message_id', messageId)
+              .limit(1)
+              .maybeSingle()
+            if (existing) { skipped++; continue }
+          }
+
           const body = `Subject: ${subject}\nTo: ${toEmail}\nSent: ${sentDate.toISOString()}\n\n(Logged via IMAP sync — sent from ${config.mailbox})`
 
           const { error } = await admin.from('crm_activity_log').insert({
