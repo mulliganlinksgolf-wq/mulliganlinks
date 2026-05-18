@@ -11,11 +11,17 @@ export const dynamic = 'force-dynamic'
 
 async function getCourses() {
   const supabase = createAdminClient()
-  const { data } = await supabase
-    .from('crm_courses')
-    .select('*')
-    .order('last_activity_at', { ascending: false })
-  return data ?? []
+  const [{ data: courses }, { data: emailRows }] = await Promise.all([
+    supabase.from('crm_courses').select('*').order('last_activity_at', { ascending: false }),
+    supabase.from('crm_activity_log').select('record_id').eq('record_type', 'course').eq('type', 'email'),
+  ])
+
+  const emailCounts: Record<string, number> = {}
+  for (const row of emailRows ?? []) {
+    emailCounts[row.record_id] = (emailCounts[row.record_id] ?? 0) + 1
+  }
+
+  return (courses ?? []).map(c => ({ ...c, email_count: emailCounts[c.id] ?? 0 }))
 }
 
 export default async function CoursesPage({

@@ -48,14 +48,21 @@ export function CourseKanbanCard({ course, isDragging }: Props) {
             ${course.estimated_value.toLocaleString()}/yr
           </span>
         )}
-        {stale && (
-          <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full ml-auto">
-            {daysSince(course.last_activity_at)}d stale
-          </span>
-        )}
-        {!stale && course.assigned_to && (
-          <span className="text-xs text-slate-400 ml-auto capitalize">{course.assigned_to}</span>
-        )}
+        <div className="flex items-center gap-1.5 ml-auto">
+          {(course.email_count ?? 0) > 0 && (
+            <span className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded-full">
+              ✉ {course.email_count}
+            </span>
+          )}
+          {stale && (
+            <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full">
+              {daysSince(course.last_activity_at)}d stale
+            </span>
+          )}
+          {!stale && course.assigned_to && (
+            <span className="text-xs text-slate-400 capitalize">{course.assigned_to}</span>
+          )}
+        </div>
       </div>
     </div>
   )
