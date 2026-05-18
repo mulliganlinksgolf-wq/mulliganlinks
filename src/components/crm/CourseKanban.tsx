@@ -63,8 +63,10 @@ export function CourseKanban({ initialCourses }: Props) {
     if (filterTier) list = list.filter(c => parseNote(c.notes, 'Outreach Tier')?.includes(filterTier))
     if (filterMetro) list = list.filter(c => parseNote(c.notes, 'Metro Detroit') === filterMetro)
     if (filterHotDeals) list = list.filter(c => parseNote(c.notes, 'Does Hot Deals') === filterHotDeals)
+    if (filterEmail === 'yes') list = list.filter(c => !!c.contact_email)
+    if (filterEmail === 'no') list = list.filter(c => !c.contact_email)
     return list
-  }, [courses, search, filterTier, filterMetro, filterHotDeals])
+  }, [courses, search, filterTier, filterMetro, filterHotDeals, filterEmail])
 
   function groupByStage(): Record<CrmCourseStage, CrmCourse[]> {
     const grouped = {} as Record<CrmCourseStage, CrmCourse[]>
@@ -91,6 +93,7 @@ export function CourseKanban({ initialCourses }: Props) {
     params.delete('tier')
     params.delete('metro')
     params.delete('hot')
+    params.delete('email')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     setPages(EMPTY_PAGES)
   }
@@ -105,7 +108,8 @@ export function CourseKanban({ initialCourses }: Props) {
     setPages(EMPTY_PAGES)
   }
 
-  const hasActiveFilters = search || filterTier || filterMetro || filterHotDeals
+  const filterEmail = searchParams.get('email') ?? ''
+  const hasActiveFilters = search || filterTier || filterMetro || filterHotDeals || filterEmail
   const grouped = groupByStage()
 
   return (
@@ -165,6 +169,16 @@ export function CourseKanban({ initialCourses }: Props) {
           <option value="">Hot Deals</option>
           <option value="YES">Active</option>
           <option value="NO">No</option>
+        </select>
+
+        <select
+          value={filterEmail}
+          onChange={e => handleFilter('email', e.target.value)}
+          className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
+        >
+          <option value="">Has Email?</option>
+          <option value="yes">Has Email</option>
+          <option value="no">No Email</option>
         </select>
 
         {hasActiveFilters && (
