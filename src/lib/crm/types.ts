@@ -53,6 +53,7 @@ export interface CrmCourse {
   created_at: string
   updated_at: string
   email_count?: number
+  last_email_at?: string | null
 }
 
 export interface CrmOuting {

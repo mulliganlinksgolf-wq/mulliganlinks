@@ -13,15 +13,27 @@ async function getCourses() {
   const supabase = createAdminClient()
   const [{ data: courses }, { data: emailRows }] = await Promise.all([
     supabase.from('crm_courses').select('*').order('last_activity_at', { ascending: false }),
-    supabase.from('crm_activity_log').select('record_id').eq('record_type', 'course').eq('type', 'email'),
+    supabase
+      .from('crm_activity_log')
+      .select('record_id, created_at')
+      .eq('record_type', 'course')
+      .eq('type', 'email')
+      .order('created_at', { ascending: false }),
   ])
 
   const emailCounts: Record<string, number> = {}
+  const lastEmailAt: Record<string, string> = {}
   for (const row of emailRows ?? []) {
     emailCounts[row.record_id] = (emailCounts[row.record_id] ?? 0) + 1
+    // Rows arrive newest-first, so the first one we see per record_id wins.
+    if (!lastEmailAt[row.record_id]) lastEmailAt[row.record_id] = row.created_at
   }
 
-  return (courses ?? []).map(c => ({ ...c, email_count: emailCounts[c.id] ?? 0 }))
+  return (courses ?? []).map(c => ({
+    ...c,
+    email_count: emailCounts[c.id] ?? 0,
+    last_email_at: lastEmailAt[c.id] ?? null,
+  }))
 }
 
 export default async function CoursesPage({
