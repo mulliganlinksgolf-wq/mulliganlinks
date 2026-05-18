@@ -18,7 +18,7 @@ interface Props {
 
 export function CourseKanbanCard({ course, isDragging }: Props) {
   const stale = daysSince(course.last_activity_at) >= 7
-  const software = parseNote(course.notes, 'Software')
+  const software = course.current_software ?? parseNote(course.notes, 'Software')
   const daysSinceEmail = course.last_email_at != null ? daysSince(course.last_email_at) : null
   // Color the badge by recency: fresh (≤3d) = emerald, mid (4-7d) = slate, stale (8+) = amber.
   const emailBadgeColor =
