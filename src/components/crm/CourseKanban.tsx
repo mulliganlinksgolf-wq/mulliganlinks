@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import { DragDropContext, Droppable, Draggable, DropResult } from '@hello-pangea/dnd'
 import { CourseKanbanCard } from './CourseKanbanCard'
 import { updateCourseStage } from '@/app/actions/crm/courses'
@@ -31,12 +32,26 @@ interface Props {
 }
 
 export function CourseKanban({ initialCourses }: Props) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
   const [courses, setCourses] = useState(initialCourses)
-  const [search, setSearch] = useState('')
-  const [filterTier, setFilterTier] = useState('')
-  const [filterMetro, setFilterMetro] = useState('')
-  const [filterHotDeals, setFilterHotDeals] = useState('')
   const [pages, setPages] = useState<Record<CrmCourseStage, number>>(EMPTY_PAGES)
+
+  // Read filters from URL so they survive navigation
+  const search = searchParams.get('q') ?? ''
+  const filterTier = searchParams.get('tier') ?? ''
+  const filterMetro = searchParams.get('metro') ?? ''
+  const filterHotDeals = searchParams.get('hot') ?? ''
+
+  const setParams = useCallback((updates: Record<string, string>) => {
+    const params = new URLSearchParams(searchParams.toString())
+    Object.entries(updates).forEach(([k, v]) => {
+      if (v) params.set(k, v)
+      else params.delete(k)
+    })
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [searchParams, router, pathname])
 
   const filtered = useMemo(() => {
     let list = courses
@@ -71,20 +86,22 @@ export function CourseKanban({ initialCourses }: Props) {
   }
 
   function resetFilters() {
-    setSearch('')
-    setFilterTier('')
-    setFilterMetro('')
-    setFilterHotDeals('')
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('q')
+    params.delete('tier')
+    params.delete('metro')
+    params.delete('hot')
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     setPages(EMPTY_PAGES)
   }
 
   function handleSearch(value: string) {
-    setSearch(value)
+    setParams({ q: value })
     setPages(EMPTY_PAGES)
   }
 
-  function handleFilter(setter: (v: string) => void, value: string) {
-    setter(value)
+  function handleFilter(key: string, value: string) {
+    setParams({ [key]: value })
     setPages(EMPTY_PAGES)
   }
 
@@ -121,7 +138,7 @@ export function CourseKanban({ initialCourses }: Props) {
 
         <select
           value={filterTier}
-          onChange={e => handleFilter(setFilterTier, e.target.value)}
+          onChange={e => handleFilter('tier', e.target.value)}
           className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
         >
           <option value="">All Tiers</option>
@@ -132,7 +149,7 @@ export function CourseKanban({ initialCourses }: Props) {
 
         <select
           value={filterMetro}
-          onChange={e => handleFilter(setFilterMetro, e.target.value)}
+          onChange={e => handleFilter('metro', e.target.value)}
           className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
         >
           <option value="">Metro Detroit</option>
@@ -142,7 +159,7 @@ export function CourseKanban({ initialCourses }: Props) {
 
         <select
           value={filterHotDeals}
-          onChange={e => handleFilter(setFilterHotDeals, e.target.value)}
+          onChange={e => handleFilter('hot', e.target.value)}
           className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
         >
           <option value="">Hot Deals</option>

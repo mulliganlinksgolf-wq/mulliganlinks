@@ -1,5 +1,6 @@
 export const metadata = { title: 'CRM Courses' }
 
+import { Suspense } from 'react'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { CourseKanban } from '@/components/crm/CourseKanban'
 import { CoursesTableWrapper } from './CoursesTableWrapper'
@@ -48,7 +49,9 @@ export default async function CoursesPage({
       </div>
 
       {view === 'kanban' ? (
-        <CourseKanban initialCourses={courses} />
+        <Suspense>
+          <CourseKanban initialCourses={courses} />
+        </Suspense>
       ) : (
         <CoursesTableWrapper courses={courses} />
       )}
