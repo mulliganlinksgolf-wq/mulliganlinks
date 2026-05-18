@@ -43,6 +43,7 @@ export function CourseKanban({ initialCourses }: Props) {
   const filterTier = searchParams.get('tier') ?? ''
   const filterMetro = searchParams.get('metro') ?? ''
   const filterHotDeals = searchParams.get('hot') ?? ''
+  const filterEmail = searchParams.get('email') ?? ''
 
   const setParams = useCallback((updates: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -108,7 +109,6 @@ export function CourseKanban({ initialCourses }: Props) {
     setPages(EMPTY_PAGES)
   }
 
-  const filterEmail = searchParams.get('email') ?? ''
   const hasActiveFilters = search || filterTier || filterMetro || filterHotDeals || filterEmail
   const grouped = groupByStage()
 

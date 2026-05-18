@@ -26,6 +26,8 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [templates, setTemplates] = useState<CrmEmailTemplate[]>([])
   const [appliedTemplateId, setAppliedTemplateId] = useState<string | null>(null)
   const [filter, setFilter] = useState('')
+  const [filterSoftware, setFilterSoftware] = useState('')
+  const [filterStage, setFilterStage] = useState('')
   const [to, setTo] = useState(toEmail ?? '')
   const [subject, setSubject] = useState('')
   const [bodyText, setBodyText] = useState('')
@@ -82,12 +84,27 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
     setAppliedTemplateId(null)
   }
 
-  const filtered = filter.trim()
-    ? templates.filter(t =>
-        t.name.toLowerCase().includes(filter.toLowerCase()) ||
-        t.subject.toLowerCase().includes(filter.toLowerCase())
-      )
-    : templates
+  // Derive software tags from template names (e.g. "GolfNow: Cold Open" → "GolfNow")
+  const softwareOptions = Array.from(new Set(
+    templates.map(t => t.name.includes(':') ? t.name.split(':')[0].trim() : 'General')
+  )).sort()
+
+  // Derive stage tags
+  const stageKeywords = ['Cold Open', 'Follow-Up', 'Break-Up', 'Demo', 'Founding Partner', 'Re-Engage']
+  const stageOptions = stageKeywords.filter(s =>
+    templates.some(t => t.name.toLowerCase().includes(s.toLowerCase()))
+  )
+
+  const filtered = templates.filter(t => {
+    const q = filter.trim().toLowerCase()
+    if (q && !t.name.toLowerCase().includes(q) && !t.subject.toLowerCase().includes(q)) return false
+    if (filterSoftware) {
+      const sw = t.name.includes(':') ? t.name.split(':')[0].trim() : 'General'
+      if (sw !== filterSoftware) return false
+    }
+    if (filterStage && !t.name.toLowerCase().includes(filterStage.toLowerCase())) return false
+    return true
+  })
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()
@@ -188,6 +205,40 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
                     Clear
                   </button>
                 )}
+              </div>
+              {/* Software chips */}
+              <div className="flex flex-wrap gap-1 mb-2">
+                {softwareOptions.map(sw => (
+                  <button
+                    key={sw}
+                    type="button"
+                    onClick={() => setFilterSoftware(filterSoftware === sw ? '' : sw)}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-medium border transition-colors ${
+                      filterSoftware === sw
+                        ? 'bg-emerald-600 text-white border-emerald-600'
+                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                    }`}
+                  >
+                    {sw}
+                  </button>
+                ))}
+              </div>
+              {/* Stage chips */}
+              <div className="flex flex-wrap gap-1 mb-2">
+                {stageOptions.map(st => (
+                  <button
+                    key={st}
+                    type="button"
+                    onClick={() => setFilterStage(filterStage === st ? '' : st)}
+                    className={`px-2 py-0.5 rounded-full text-[10px] font-medium border transition-colors ${
+                      filterStage === st
+                        ? 'bg-slate-700 text-white border-slate-700'
+                        : 'bg-white text-slate-500 border-slate-200 hover:border-slate-400'
+                    }`}
+                  >
+                    {st}
+                  </button>
+                ))}
               </div>
               <input
                 type="text"
