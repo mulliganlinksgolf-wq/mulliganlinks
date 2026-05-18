@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { sendCrmEmail, getEmailTemplatesByType, getLastEmailToContact } from '@/app/actions/crm/email'
 import { htmlToPlainText, plainTextToHtml } from '@/lib/crm/email-format'
 import type { CrmRecordType, CrmEmailTemplate } from '@/lib/crm/types'
@@ -32,6 +32,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [subject, setSubject] = useState('')
   const [bodyText, setBodyText] = useState('')
   const [sending, setSending] = useState(false)
+  const submittingRef = useRef(false)
   const [error, setError] = useState<string | null>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [previousEmail, setPreviousEmail] = useState<PreviousEmail | null>(null)
@@ -108,21 +109,27 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
   async function handleSend(e: React.FormEvent) {
     e.preventDefault()
+    if (submittingRef.current) return
     if (!to) { setError('Recipient email is required'); return }
     if (!bodyText.trim()) { setError('Email body is required'); return }
+    submittingRef.current = true
     setSending(true)
     setError(null)
-    const bodyHtml = plainTextToHtml(bodyText)
-    const result = await sendCrmEmail({
-      recordType, recordId, to, subject, bodyHtml, sentBy,
-      inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
-    })
-    setSending(false)
-    if (result.error) {
-      setError(result.error)
-    } else {
-      onSent()
-      onClose()
+    try {
+      const bodyHtml = plainTextToHtml(bodyText)
+      const result = await sendCrmEmail({
+        recordType, recordId, to, subject, bodyHtml, sentBy,
+        inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
+      })
+      if (result.error) {
+        setError(result.error)
+      } else {
+        onSent()
+        onClose()
+      }
+    } finally {
+      submittingRef.current = false
+      setSending(false)
     }
   }
 
