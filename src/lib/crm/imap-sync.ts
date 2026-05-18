@@ -153,8 +153,7 @@ export async function syncMailbox(config: (typeof MAILBOXES)[number]): Promise<S
               .eq('record_id', contact.record_id)
               .eq('message_id', messageId)
               .limit(1)
-              .maybeSingle()
-            if (existing) { skipped++; continue }
+            if (existing && existing.length > 0) { skipped++; continue }
           }
 
           const body = `Subject: ${subject}\nTo: ${toEmail}\nSent: ${sentDate.toISOString()}\n\n(Logged via IMAP sync — sent from ${config.mailbox})`
