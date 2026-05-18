@@ -44,6 +44,7 @@ export function CourseKanban({ initialCourses }: Props) {
   const filterMetro = searchParams.get('metro') ?? ''
   const filterHotDeals = searchParams.get('hot') ?? ''
   const filterEmail = searchParams.get('email') ?? ''
+  const filterReached = searchParams.get('reached') ?? ''
 
   const setParams = useCallback((updates: Record<string, string>) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -66,8 +67,22 @@ export function CourseKanban({ initialCourses }: Props) {
     if (filterHotDeals) list = list.filter(c => parseNote(c.notes, 'Does Hot Deals') === filterHotDeals)
     if (filterEmail === 'yes') list = list.filter(c => !!c.contact_email)
     if (filterEmail === 'no') list = list.filter(c => !c.contact_email)
+    if (filterReached) {
+      const now = Date.now()
+      const days = (iso: string) => Math.floor((now - new Date(iso).getTime()) / 86400000)
+      list = list.filter(c => {
+        if (filterReached === 'never') return !c.last_email_at
+        if (!c.last_email_at) return false
+        const d = days(c.last_email_at)
+        if (filterReached === '0-3') return d <= 3
+        if (filterReached === '4-7') return d >= 4 && d <= 7
+        if (filterReached === '8-14') return d >= 8 && d <= 14
+        if (filterReached === '15+') return d >= 15
+        return true
+      })
+    }
     return list
-  }, [courses, search, filterTier, filterMetro, filterHotDeals, filterEmail])
+  }, [courses, search, filterTier, filterMetro, filterHotDeals, filterEmail, filterReached])
 
   function groupByStage(): Record<CrmCourseStage, CrmCourse[]> {
     const grouped = {} as Record<CrmCourseStage, CrmCourse[]>
@@ -95,6 +110,7 @@ export function CourseKanban({ initialCourses }: Props) {
     params.delete('metro')
     params.delete('hot')
     params.delete('email')
+    params.delete('reached')
     router.replace(`${pathname}?${params.toString()}`, { scroll: false })
     setPages(EMPTY_PAGES)
   }
@@ -109,7 +125,7 @@ export function CourseKanban({ initialCourses }: Props) {
     setPages(EMPTY_PAGES)
   }
 
-  const hasActiveFilters = search || filterTier || filterMetro || filterHotDeals || filterEmail
+  const hasActiveFilters = search || filterTier || filterMetro || filterHotDeals || filterEmail || filterReached
   const grouped = groupByStage()
 
   return (
@@ -179,6 +195,19 @@ export function CourseKanban({ initialCourses }: Props) {
           <option value="">Has Email?</option>
           <option value="yes">Has Email</option>
           <option value="no">No Email</option>
+        </select>
+
+        <select
+          value={filterReached}
+          onChange={e => handleFilter('reached', e.target.value)}
+          className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
+        >
+          <option value="">Last Reach Out</option>
+          <option value="never">Never emailed</option>
+          <option value="0-3">≤ 3 days ago</option>
+          <option value="4-7">4–7 days ago</option>
+          <option value="8-14">8–14 days ago</option>
+          <option value="15+">15+ days ago</option>
         </select>
 
         {hasActiveFilters && (
