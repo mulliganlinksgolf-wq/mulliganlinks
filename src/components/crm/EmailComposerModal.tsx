@@ -66,7 +66,12 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   }, [replyMode, previousEmail])
 
   function substituteVars(text: string): string {
-    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => variables[key] ?? variables[key.toLowerCase()] ?? `{{${key}}}`)
+    // Auto-derive first_name from name so templates can use {{first_name}}
+    const enriched: Record<string, string> = { ...variables }
+    if (enriched.name && !enriched.first_name) {
+      enriched.first_name = enriched.name.split(' ')[0]
+    }
+    return text.replace(/\{\{(\w+)\}\}/g, (_, key) => enriched[key] ?? enriched[key.toLowerCase()] ?? `{{${key}}}`)
   }
 
   function applyTemplate(template: CrmEmailTemplate) {
