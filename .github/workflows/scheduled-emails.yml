@@ -1,0 +1,20 @@
+name: Send Scheduled Emails
+
+# Runs every 5 minutes to send any due scheduled CRM emails.
+# Hits our /api/cron/send-scheduled-emails endpoint with the CRON_SECRET.
+# (Vercel Hobby caps crons at once-per-day, so we use GitHub Actions for finer polling.)
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call cron endpoint
+        run: |
+          curl -sL -X POST "https://www.teeahead.com/api/cron/send-scheduled-emails" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            --fail-with-body
