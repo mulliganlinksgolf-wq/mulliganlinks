@@ -116,6 +116,9 @@ export interface CrmEmailTemplate {
   record_type: CrmRecordType
   created_at: string
   updated_at: string
+  version?: number
+  status?: 'active' | 'draft' | 'archived'
+  superseded_by?: string | null
 }
 
 export interface CrmDocument {
