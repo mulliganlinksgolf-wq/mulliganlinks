@@ -66,10 +66,13 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   }, [replyMode, previousEmail])
 
   function substituteVars(text: string): string {
-    // Auto-derive first_name from name so templates can use {{first_name}}
+    // Auto-derive first_name from name and sender_name from sentBy
     const enriched: Record<string, string> = { ...variables }
     if (enriched.name && !enriched.first_name) {
       enriched.first_name = enriched.name.split(' ')[0]
+    }
+    if (!enriched.sender_name) {
+      enriched.sender_name = sentBy.charAt(0).toUpperCase() + sentBy.slice(1)
     }
     return text.replace(/\{\{(\w+)\}\}/g, (_, key) => enriched[key] ?? enriched[key.toLowerCase()] ?? `{{${key}}}`)
   }
