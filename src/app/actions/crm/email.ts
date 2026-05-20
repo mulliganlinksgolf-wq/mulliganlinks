@@ -170,6 +170,7 @@ export async function getEmailTemplatesByType(recordType: CrmRecordType) {
     .from('crm_email_templates')
     .select('*')
     .eq('record_type', recordType)
+    .eq('status', 'active')   // only surface active rows; drafts/archived are invisible in the composer
     .order('name', { ascending: true })
   return data ?? []
 }
