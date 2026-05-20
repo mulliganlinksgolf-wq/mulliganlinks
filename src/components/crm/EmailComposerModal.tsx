@@ -395,7 +395,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
                 type="datetime-local"
                 value={scheduledFor}
                 onChange={(e) => setScheduledFor(e.target.value)}
-                min={new Date(Date.now() + 60000).toISOString().slice(0, 16)}
+                min={(() => { const d = new Date(Date.now() + 60000); const pad = (n: number) => String(n).padStart(2,'0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}` })()}
                 className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             )}
