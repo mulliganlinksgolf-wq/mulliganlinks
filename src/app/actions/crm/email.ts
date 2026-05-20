@@ -174,3 +174,113 @@ export async function getEmailTemplatesByType(recordType: CrmRecordType) {
     .order('name', { ascending: true })
   return data ?? []
 }
+
+interface ScheduleEmailParams {
+  recordType: CrmRecordType
+  recordId: string
+  to: string
+  subject: string
+  bodyHtml: string
+  sentBy: string
+  scheduledFor: string  // ISO string (UTC)
+  inReplyTo?: string | null
+}
+
+export async function scheduleCrmEmail(
+  params: ScheduleEmailParams
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const { admin, user } = await assertAdmin()
+    const fromAddress = resolveSender(user.email ?? undefined)
+    const signature = (await admin
+      .from('profiles')
+      .select('signature')
+      .eq('id', user.id)
+      .single()).data?.signature ?? null
+    const finalHtml = buildHtmlWithSignature(params.bodyHtml, signature)
+    const messageId = `<${crypto.randomUUID()}@teeahead.com>`
+
+    const { error } = await admin.from('crm_scheduled_emails').insert({
+      record_type: params.recordType,
+      record_id: params.recordId,
+      to_email: params.to,
+      subject: params.subject,
+      body_html: finalHtml,
+      scheduled_for: params.scheduledFor,
+      status: 'pending',
+      created_by: params.sentBy,
+      from_email: fromAddress,
+      in_reply_to: params.inReplyTo ?? null,
+      message_id: messageId,
+    })
+
+    if (error) return { error: error.message }
+
+    if (params.recordType !== 'member') {
+      const table = params.recordType === 'course' ? 'crm_courses' : 'crm_outings'
+      await admin.from(table).update({ last_activity_at: new Date().toISOString() }).eq('id', params.recordId)
+    }
+
+    const path =
+      params.recordType === 'course' ? `/admin/crm/courses/${params.recordId}`
+      : params.recordType === 'outing' ? `/admin/crm/outings/${params.recordId}`
+      : `/admin/crm/members/${params.recordId}`
+    revalidatePath(path)
+    revalidatePath('/admin/crm')
+
+    return { success: true }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Unknown error' }
+  }
+}
+
+export async function cancelScheduledEmail(
+  id: string,
+  recordType: CrmRecordType,
+  recordId: string
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const { admin } = await assertAdmin()
+    const { error } = await admin
+      .from('crm_scheduled_emails')
+      .update({ status: 'cancelled' })
+      .eq('id', id)
+      .eq('status', 'pending')
+
+    if (error) return { error: error.message }
+
+    const path =
+      recordType === 'course' ? `/admin/crm/courses/${recordId}`
+      : recordType === 'outing' ? `/admin/crm/outings/${recordId}`
+      : `/admin/crm/members/${recordId}`
+    revalidatePath(path)
+
+    return { success: true }
+  } catch (e) {
+    return { error: e instanceof Error ? e.message : 'Unknown error' }
+  }
+}
+
+export interface ScheduledEmail {
+  id: string
+  to_email: string
+  subject: string
+  scheduled_for: string
+  status: string
+  created_by: string
+}
+
+export async function getScheduledEmails(
+  recordType: CrmRecordType,
+  recordId: string
+): Promise<ScheduledEmail[]> {
+  const admin = createAdminClient()
+  const { data } = await admin
+    .from('crm_scheduled_emails')
+    .select('id, to_email, subject, scheduled_for, status, created_by')
+    .eq('record_type', recordType)
+    .eq('record_id', recordId)
+    .eq('status', 'pending')
+    .order('scheduled_for', { ascending: true })
+  return data ?? []
+}
