@@ -11,7 +11,7 @@ const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslo
 
 const SENDER_MAP: Record<string, string> = {
   'neil@teeahead.com': 'Neil Barris <neil@teeahead.com>',
-  'beslock@yahoo.com':   'Billy Eslock <billy@teeahead.com>',
+  'beslock@yahoo.com':   'Billy Beslock <billy@teeahead.com>',
 }
 const DEFAULT_SENDER = 'TeeAhead <hello@teeahead.com>'
 
