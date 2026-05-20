@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { sendCrmEmail, getEmailTemplatesByType, getLastEmailToContact } from '@/app/actions/crm/email'
+import { sendCrmEmail, getEmailTemplatesByType, getLastEmailToContact, scheduleCrmEmail } from '@/app/actions/crm/email'
 import { htmlToPlainText, plainTextToHtml } from '@/lib/crm/email-format'
 import type { CrmRecordType, CrmEmailTemplate } from '@/lib/crm/types'
 
@@ -38,6 +38,8 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [previousEmail, setPreviousEmail] = useState<PreviousEmail | null>(null)
   const [replyMode, setReplyMode] = useState(false)
   const [showPrevExpanded, setShowPrevExpanded] = useState(false)
+  const [scheduleMode, setScheduleMode] = useState(false)
+  const [scheduledFor, setScheduledFor] = useState('')
 
   useEffect(() => {
     getEmailTemplatesByType(recordType).then(setTemplates)
@@ -120,20 +122,36 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
     if (submittingRef.current) return
     if (!to) { setError('Recipient email is required'); return }
     if (!bodyText.trim()) { setError('Email body is required'); return }
+    if (scheduleMode && !scheduledFor) { setError('Please pick a date and time'); return }
     submittingRef.current = true
     setSending(true)
     setError(null)
     try {
       const bodyHtml = plainTextToHtml(bodyText)
-      const result = await sendCrmEmail({
-        recordType, recordId, to, subject, bodyHtml, sentBy,
-        inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
-      })
-      if (result.error) {
-        setError(result.error)
+      if (scheduleMode) {
+        const detroitDate = new Date(scheduledFor)
+        const result = await scheduleCrmEmail({
+          recordType, recordId, to, subject, bodyHtml, sentBy,
+          scheduledFor: detroitDate.toISOString(),
+          inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
+        })
+        if (result.error) {
+          setError(result.error)
+        } else {
+          onSent()
+          onClose()
+        }
       } else {
-        onSent()
-        onClose()
+        const result = await sendCrmEmail({
+          recordType, recordId, to, subject, bodyHtml, sentBy,
+          inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
+        })
+        if (result.error) {
+          setError(result.error)
+        } else {
+          onSent()
+          onClose()
+        }
       }
     } finally {
       submittingRef.current = false
@@ -343,6 +361,31 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
             )}
           </div>
 
+          {/* Schedule toggle */}
+          <div className="flex items-center gap-3 pt-1">
+            <label className="flex items-center gap-2 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={scheduleMode}
+                onChange={(e) => {
+                  setScheduleMode(e.target.checked)
+                  if (!e.target.checked) setScheduledFor('')
+                }}
+                className="w-4 h-4 rounded"
+              />
+              <span className="text-sm text-slate-600">Schedule for later</span>
+            </label>
+            {scheduleMode && (
+              <input
+                type="datetime-local"
+                value={scheduledFor}
+                onChange={(e) => setScheduledFor(e.target.value)}
+                min={new Date(Date.now() + 60000).toISOString().slice(0, 16)}
+                className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-300"
+              />
+            )}
+          </div>
+
           {error && <p className="text-sm text-red-500">{error}</p>}
 
           <div className="flex gap-2 justify-end pt-2">
@@ -354,7 +397,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
               disabled={sending}
               className="text-sm px-4 py-2 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 disabled:opacity-50"
             >
-              {sending ? 'Sending…' : 'Send Email'}
+              {sending ? 'Sending…' : scheduleMode ? 'Schedule Email' : 'Send Email'}
             </button>
           </div>
         </form>
