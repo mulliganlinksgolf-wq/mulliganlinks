@@ -3,7 +3,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { sendCrmEmail, getEmailTemplatesByType, getLastEmailToContact, scheduleCrmEmail } from '@/app/actions/crm/email'
 import { htmlToPlainText, plainTextToHtml } from '@/lib/crm/email-format'
+import { createClient } from '@/lib/supabase/client'
 import type { CrmRecordType, CrmEmailTemplate } from '@/lib/crm/types'
+
+const EMAIL_TO_NAME: Record<string, string> = {
+  'neil@teeahead.com': 'Neil',
+  'beslock@yahoo.com': 'Billy',
+}
 
 interface PreviousEmail {
   message_id: string | null
@@ -40,6 +46,14 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [showPrevExpanded, setShowPrevExpanded] = useState(false)
   const [scheduleMode, setScheduleMode] = useState(false)
   const [scheduledFor, setScheduledFor] = useState('')
+  const [loggedInSenderName, setLoggedInSenderName] = useState<string | null>(null)
+
+  useEffect(() => {
+    createClient().auth.getUser().then(({ data }) => {
+      const email = data.user?.email ?? ''
+      setLoggedInSenderName(EMAIL_TO_NAME[email] ?? null)
+    })
+  }, [])
 
   useEffect(() => {
     getEmailTemplatesByType(recordType).then(setTemplates)
@@ -74,7 +88,8 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
       enriched.first_name = enriched.name.split(' ')[0]
     }
     if (!enriched.sender_name) {
-      enriched.sender_name = sentBy.charAt(0).toUpperCase() + sentBy.slice(1)
+      // Use the logged-in user's name — falls back to sentBy if auth hasn't resolved yet
+      enriched.sender_name = loggedInSenderName ?? (sentBy.charAt(0).toUpperCase() + sentBy.slice(1))
     }
     return text.replace(/\{\{(\w+)\}\}/g, (_, key) => enriched[key] ?? enriched[key.toLowerCase()] ?? `{{${key}}}`)
   }
