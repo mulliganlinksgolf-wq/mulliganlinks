@@ -82,6 +82,14 @@ export default async function GolfNowAlternativePage({
                 ⛳ I&apos;m a Golfer — Join the Waitlist
               </Link>
             </div>
+            <a
+              href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-[#F4F1EA]/60 hover:text-[#F4F1EA]/90 underline underline-offset-2 transition-colors"
+            >
+              Course operator? Book a 30-min demo instead →
+            </a>
           </div>
         </section>
 

@@ -51,12 +51,14 @@ export default function GolfCourseBookingSoftwarePage() {
               >
                 Claim a Founding Partner Spot — First Year Free
               </Link>
-              <Link
-                href="/tee-time-software"
+              <a
+                href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg bg-white/10 px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-white/20 transition-colors"
               >
-                See all features →
-              </Link>
+                Book a 30-min Demo →
+              </a>
             </div>
           </div>
         </section>

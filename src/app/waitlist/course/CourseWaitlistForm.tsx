@@ -55,12 +55,20 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
         <p className="text-4xl">✅</p>
         <div className="space-y-2">
           <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
-          <p className="text-sm text-[#F4F1EA]/70">Neil or Billy will email you at <span className="font-semibold text-[#F4F1EA]">{submitted}</span> within 48 hours.</p>
+          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll follow up at <span className="font-semibold text-[#F4F1EA]">{submitted}</span> — but if you&apos;d rather talk this week, grab a time now.</p>
         </div>
-        <p className="text-sm text-[#F4F1EA]/60">In the meantime — use the barter calculator to see exactly what GolfNow cost you last year.</p>
+        <a
+          href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+        >
+          Book a 30-min Demo with Neil →
+        </a>
+        <p className="text-xs text-[#F4F1EA]/50">Or use the barter calculator to see exactly what GolfNow cost you last year.</p>
         <a
           href="/barter"
-          className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+          className="text-sm text-[#E0A800]/80 hover:text-[#E0A800] underline underline-offset-2 transition-colors"
         >
           Run the Barter Calculator →
         </a>
