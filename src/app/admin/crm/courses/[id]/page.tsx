@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 import { RecordHeader } from '@/components/crm/RecordHeader'
 import { ActivityLog } from '@/components/crm/ActivityLog'
+import { ScheduledEmailsList } from '@/components/crm/ScheduledEmailsList'
 import { DocumentList } from '@/components/crm/DocumentList'
 import { CourseContactsSection } from '@/components/crm/CourseContactsSection'
 import { RecordTasksSection } from '@/components/crm/RecordTasksSection'
@@ -77,6 +78,10 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ i
         </div>
 
         <div className="space-y-4">
+          <div className="bg-white rounded-xl border border-slate-200 p-5">
+            <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Scheduled Emails</h3>
+            <ScheduledEmailsList recordType="course" recordId={id} />
+          </div>
           <div className="bg-white rounded-xl border border-slate-200 p-5">
             <h3 className="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wide">Activity Log</h3>
             <ActivityLog activities={activities} />
