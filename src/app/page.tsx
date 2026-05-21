@@ -320,27 +320,6 @@ export default async function HomePage({
         </FadeIn>
       </section>
 
-      {/* ── Proof Strip ───────────────────────────────────────── */}
-      <section className="bg-[#FAF7F2] px-6 py-10 border-t border-black/5">
-        <FadeIn>
-          <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-16 text-center">
-            {[
-              { num: '100+', label: 'courses left GolfNow in Q1 2025 alone' },
-              { num: '382%', label: 'revenue increase at Windsor Parke after leaving' },
-              { num: '$0', label: 'what TeeAhead charges Founding Partner courses' },
-              { num: '100%', label: 'of your golfer data owned by you, not TeeAhead' },
-            ].map(({ num, label }) => (
-              <div key={num} className="space-y-1">
-                <p className="font-display font-extrabold text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
-                  {num}
-                </p>
-                <p className="text-xs text-[#6B7770] max-w-[160px] leading-snug">{label}</p>
-              </div>
-            ))}
-          </div>
-        </FadeIn>
-      </section>
-
       {/* ── Pricing ───────────────────────────────────────────── */}
       <section id="pricing" className="px-6 py-20 bg-[#FAF7F2]">
         <FadeIn>
@@ -437,19 +416,22 @@ export default async function HomePage({
               <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
               play it.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href="/waitlist/golfer"
-                className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
-              >
-                Join the Golfer Waitlist
-              </Link>
+            <div className="flex flex-col items-center justify-center gap-5">
               <Link
                 href="/waitlist/course"
-                className="inline-flex items-center justify-center rounded-lg border border-[#F4F1EA]/30 px-7 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:border-[#F4F1EA]/60 transition-colors"
+                className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-7 py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
               >
-                Claim a Founding Course Spot →
+                Claim a founding spot →
               </Link>
+              <p className="text-sm text-[#F4F1EA]/55">
+                Golfer instead?{' '}
+                <Link
+                  href="/waitlist/golfer"
+                  className="text-[#E0A800] underline underline-offset-4 font-semibold hover:text-[#E0A800]/80"
+                >
+                  Join the loyalty waitlist →
+                </Link>
+              </p>
             </div>
           </div>
         </FadeIn>
