@@ -19,7 +19,7 @@ export function CourseWaitlistSection({ spotsRemaining }: CourseWaitlistSectionP
       </section>
 
       {/* Waitlist Form */}
-      <section className="px-6 py-16 bg-[#FAF7F2]">
+      <section id="apply" className="px-6 py-16 bg-[#FAF7F2]">
         <div className="max-w-xl mx-auto">
           <div className="bg-[#0F3D2E] rounded-2xl p-8 sm:p-10">
             <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">

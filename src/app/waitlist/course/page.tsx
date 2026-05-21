@@ -46,36 +46,71 @@ export default async function CourseWaitlistPage() {
         </div>
       </header>
 
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative px-6 py-28 overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(8,36,25,0.88) 0%, rgba(15,61,46,0.82) 50%, rgba(8,36,25,0.92) 100%)' }} />
-        {/* Vignette */}
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
-
+      {/* ── Hero — split: pitch left, form right ─────────────────── */}
+      <section className="bg-[#082419] px-6 sm:px-10 lg:px-16 py-16 sm:py-20 text-[#F4F1EA]">
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-14 items-center">
 
-            {/* Eyebrow badge */}
-            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{c['waitlist_course.hero_badge'] ?? 'Metro Detroit Launch'}</span>
+            {/* Left: pitch */}
+            <div>
+              <p className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold mb-4">
+                {c['waitlist_course.hero_badge'] ?? 'Founding Partner application · Metro Detroit'}
+              </p>
+
+              <h1
+                className="font-display leading-[0.96] tracking-[-0.025em]"
+                style={{ fontSize: 'clamp(48px, 7vw, 88px)', fontWeight: 400 }}
+              >
+                Ten courses.<br />
+                <em className="italic text-[#E0A800]">First year free.</em><br />
+                Live in 48 hours.
+              </h1>
+
+              <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#F4F1EA]/78 max-w-xl">
+                {c['waitlist_course.hero_subhead'] ?? 'Independent Metro Detroit courses only. No barter, no commissions, no data extraction — and we never market to your golfers. After year one, $349/mo flat. Cancel anytime.'}
+              </p>
+
+              {/* Spots counter — calm, not pulsing */}
+              <div className="mt-8 flex items-center gap-4 rounded-lg border border-[#E0A800]/40 bg-[#E0A800]/10 px-4 py-3.5 max-w-md">
+                <span className="font-display text-4xl leading-none text-[#E0A800]" style={{ fontWeight: 400 }}>
+                  {spotsRemaining}
+                </span>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-[#F4F1EA]">of 10 spots remain</p>
+                  <div className="mt-1.5 h-1 rounded-full bg-[#F4F1EA]/10 overflow-hidden">
+                    <div
+                      className="h-full bg-[#E0A800]"
+                      style={{ width: `${((10 - spotsRemaining) / 10) * 100}%` }}
+                    />
+                  </div>
+                </div>
+                <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[#E0A800]">
+                  {10 - spotsRemaining} claimed
+                </span>
+              </div>
             </div>
 
-            {/* Headline */}
-            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(36px, 5.5vw, 54px)' }}>
-              {c['waitlist_course.hero_headline'] ?? 'Stop giving GolfNow your tee times.'}
-            </h1>
-
-            {/* Subhead */}
-            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              {c['waitlist_course.hero_subhead'] ?? 'TeeAhead gives courses a complete booking and loyalty platform — free for your first year. No barter. No commissions. No data extraction.'}
-            </p>
+            {/* Right: CTA card (form lives below in CourseWaitlistSection) */}
+            <div className="lg:sticky lg:top-24">
+              <div className="bg-[#F4F1EA] rounded-2xl p-6 sm:p-7 text-[#1A1A1A] shadow-[0_30px_60px_rgba(0,0,0,0.3)]">
+                <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold">
+                  Step 1 of 1
+                </p>
+                <h2 className="mt-1.5 font-display text-3xl text-[#0F3D2E] tracking-[-0.01em]" style={{ fontWeight: 400 }}>
+                  Claim your spot
+                </h2>
+                <p className="mt-3 text-sm text-[#6B7770] leading-relaxed">
+                  Independent Metro Detroit course? Tell us about yourself and we&apos;ll reply within 24 hours.
+                </p>
+                <Link
+                  href="#apply"
+                  className="mt-5 block text-center rounded-lg bg-[#0F3D2E] px-5 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
+                >
+                  Start the application →
+                </Link>
+                <p className="mt-3 text-xs text-[#6B7770] text-center">We reply within 24 hours.</p>
+              </div>
+            </div>
 
           </div>
         </FadeIn>
@@ -92,8 +127,8 @@ export default async function CourseWaitlistPage() {
           ].map(({ value, label }) => (
             <div key={label}>
               <p
-                className="font-display font-extrabold text-[#0F3D2E] leading-none mb-1"
-                style={{ fontSize: '32px' }}
+                className="font-display text-[#0F3D2E] leading-none mb-1 tracking-[-0.02em]"
+                style={{ fontSize: '40px', fontWeight: 400 }}
               >
                 {value}
               </p>
@@ -104,59 +139,42 @@ export default async function CourseWaitlistPage() {
       </section>
 
       {/* ── Tab strip ────────────────────────────────────────── */}
-      <div className="bg-white border-b border-black/8 sticky top-[73px] z-40">
+      <div className="bg-white border-b border-[#0F3D2E]/10 sticky top-[73px] z-40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-center gap-2 py-3">
             <Link
               href="/waitlist/golfer"
-              className="px-7 py-3 rounded-xl text-base font-semibold text-[#6B7770] border border-[#0F3D2E]/20 hover:border-[#0F3D2E]/50 hover:text-[#1A1A1A] hover:bg-[#0F3D2E]/5 transition-colors"
+              className="px-6 py-2.5 rounded-lg text-sm font-semibold text-[#6B7770] border border-[#0F3D2E]/15 hover:border-[#0F3D2E]/40 hover:text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
             >
-              ⛳ I&apos;m a Golfer — Free to Join
+              For golfers
             </Link>
-            <span aria-current="page" className="px-7 py-3 rounded-xl bg-[#0F3D2E] text-base font-semibold text-[#F4F1EA]">
-              🏌️ I Manage a Course — Founding Partner
+            <span aria-current="page" className="px-6 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
+              For courses
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Benefit cards ────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-2xl font-display font-black text-[#F4F1EA] mb-10 tracking-[-0.01em]">
-            Why TeeAhead?
-          </h2>
+      {/* ── Benefits — numbered, no emoji ────────────────────── */}
+      <section className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-16 border-t-4 border-[#E0A800]">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-baseline gap-3 mb-10">
+            <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+              What you get
+            </span>
+            <span className="flex-1 h-px bg-[#0F3D2E]/10" />
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              {
-                icon: '💸',
-                title: 'Kill the Barter',
-                description: 'Stop handing GolfNow free tee times worth $80K–$150K a year. Keep every dollar your golfers spend.',
-              },
-              {
-                icon: '📋',
-                title: 'Own Your Golfer Data',
-                description: 'Every booking, every profile, every email address belongs to your course. Full CSV export anytime. We never market to your golfers.',
-              },
-              {
-                icon: '⚡',
-                title: 'Live within 48 hours',
-                description: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right.",
-              },
-              {
-                icon: '💰',
-                title: 'Earn while you sleep',
-                description: 'Refer a golfer who sets your course as their home course and earn 10% of their membership back every month — automatically. Drop your QR code at the pro shop, send one email to your list. We handle the payouts.',
-              },
-            ].map(({ icon, title, description }) => (
-              <div
-                key={title}
-                className="rounded-xl p-6 space-y-3"
-                style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}
-              >
-                <p className="text-3xl">{icon}</p>
-                <p className="font-semibold text-[#F4F1EA]">{title}</p>
-                <p className="text-sm text-[#F4F1EA]/70 leading-relaxed">{description}</p>
+              { n: '01', t: 'Kill the barter', d: 'Stop handing GolfNow $80K–$150K a year in free tee times. Keep every dollar your golfers spend.' },
+              { n: '02', t: 'Own your golfer data', d: 'Every profile, every email belongs to your course. Full CSV export anytime. We never market to your golfers.' },
+              { n: '03', t: 'Live in 48 hours', d: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right." },
+              { n: '04', t: 'Earn while you sleep', d: 'Refer a golfer who picks your course as their home course and earn 10% of their membership monthly — automatic payouts.' },
+            ].map(({ n, t, d }) => (
+              <div key={n} className="border-t border-[#0F3D2E] pt-4">
+                <p className="font-mono text-xs text-[#E0A800] font-bold tracking-[0.1em] mb-2.5">{n}</p>
+                <p className="font-display text-xl text-[#0F3D2E] tracking-[-0.01em] mb-1.5" style={{ fontWeight: 400 }}>{t}</p>
+                <p className="text-sm text-[#1A1A1A]/75 leading-relaxed">{d}</p>
               </div>
             ))}
           </div>
@@ -166,7 +184,7 @@ export default async function CourseWaitlistPage() {
       {/* ── Pricing strip ────────────────────────────────────── */}
       <section className="bg-[#FAF7F2] px-6 py-16">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-2xl font-display font-black text-[#0F3D2E] mb-10 tracking-[-0.01em]">
+          <h2 className="text-center text-3xl font-display text-[#0F3D2E] mb-10 tracking-[-0.015em]" style={{ fontWeight: 400 }}>
             Simple, transparent pricing.
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
@@ -191,7 +209,7 @@ export default async function CourseWaitlistPage() {
             ].map(({ title, price, description, note, multiYearNote }) => (
               <div key={title} className="bg-white rounded-xl p-6 border border-black/8 shadow-sm space-y-2">
                 <p className="text-xs font-bold tracking-[0.1em] uppercase text-[#6B7770]">{title}</p>
-                <p className="text-3xl font-black text-[#0F3D2E] leading-none">
+                <p className="font-display text-4xl text-[#0F3D2E] leading-none tracking-[-0.02em]" style={{ fontWeight: 400 }}>
                   {price}
                   {note && <span className="text-sm font-semibold text-[#9DAA9F] ml-1">{note}</span>}
                 </p>
@@ -222,17 +240,17 @@ export default async function CourseWaitlistPage() {
         <div className="max-w-xl mx-auto">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div className="space-y-0.5">
-              <p className="text-xl font-black text-[#0F3D2E]">100+</p>
+              <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em]" style={{ fontWeight: 400 }}>100+</p>
               <p className="text-xs text-[#6B7770] leading-snug">courses left GolfNow<br/>in Q1 2025 alone</p>
             </div>
             <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
             <div className="space-y-0.5">
-              <p className="text-xl font-black text-[#0F3D2E]">$94,500</p>
+              <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em]" style={{ fontWeight: 400 }}>$94,500</p>
               <p className="text-xs text-[#6B7770] leading-snug">avg annual barter cost<br/>per course</p>
             </div>
             <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
             <div className="space-y-0.5">
-              <p className="text-xl font-black text-[#0F3D2E]">382%</p>
+              <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em]" style={{ fontWeight: 400 }}>382%</p>
               <p className="text-xs text-[#6B7770] leading-snug">revenue increase at Windsor Parke<br/>after leaving GolfNow</p>
             </div>
           </div>
