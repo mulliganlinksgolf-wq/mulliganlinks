@@ -10,12 +10,6 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'links.teeahead.com' }],
-        destination: 'https://www.teeahead.com/:path*',
-        permanent: true,
-      },
-      {
         source: '/cost',
         destination: '/software-cost',
         permanent: true,
