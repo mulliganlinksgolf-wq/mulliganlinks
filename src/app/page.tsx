@@ -88,7 +88,7 @@ export default async function HomePage({
         {/* subtle topographic background */}
         <svg
           aria-hidden
-          className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none"
+          className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none z-0"
           viewBox="0 0 1280 760"
           preserveAspectRatio="xMidYMid slice"
         >
@@ -107,10 +107,10 @@ export default async function HomePage({
         </svg>
 
         <FadeIn>
-          <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
+          <div className="relative z-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-14 items-center">
 
             {/* Left: stat + pitch */}
-            <div>
+            <div className="min-w-0">
               <div className="flex items-center gap-3 mb-5">
                 <span className="size-1.5 rounded-full bg-[#E0A800] animate-pulse" />
                 <span className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
@@ -166,19 +166,16 @@ export default async function HomePage({
               </p>
             </div>
 
-            {/* Right: real course dashboard screenshot */}
-            <div className="relative hidden lg:flex items-center justify-center">
+            {/* Right: product shot — flat, prominent, no tilt */}
+            <div className="relative hidden lg:flex items-center justify-center min-w-0">
               <Image
                 src="/screenshots/dashboard.png"
-                width={640}
-                height={430}
                 alt="TeeAhead course dashboard"
+                width={924}
+                height={540}
                 priority
-                className="rounded-2xl border border-black/10 w-full max-w-[640px] h-auto"
-                style={{
-                  boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
-                  transform: 'rotate(-3deg)',
-                }}
+                className="w-full max-w-[640px] h-auto rounded-xl border border-white/10"
+                style={{ boxShadow: '0 30px 80px rgba(0,0,0,0.5), 0 8px 24px rgba(0,0,0,0.3)' }}
               />
             </div>
 
