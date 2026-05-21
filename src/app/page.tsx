@@ -213,36 +213,44 @@ export default async function HomePage({
         </FadeIn>
       </section>
 
-      {/* ── Stat Moment ──────────────────────────────────────── */}
-      <section className="bg-white px-6 py-20 text-center border-t-4 border-[#E0A800]">
+      {/* ── Proof & narrative ─────────────────────────────────── */}
+      <section className="bg-[#FAF7F2] px-6 py-20 border-t-4 border-[#E0A800]">
         <FadeIn>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">
-              What GolfNow costs the average course, per year
-            </p>
-            <p className="font-display font-black text-[#0F3D2E] leading-none tracking-[-0.03em]"
-               style={{ fontSize: 'clamp(72px, 12vw, 96px)' }}>
-              $94,500
-            </p>
-            <p className="text-xl font-medium text-[#1A1A1A] max-w-md mx-auto leading-snug">
-              in barter tee times. Revenue taken directly out of your pocket.
-            </p>
-            <p className="text-base text-[#6B7770] max-w-xl mx-auto leading-relaxed">
-              Brown Golf documented 39.6% of all rounds over three years went to zero-revenue barter
-              slots. Windsor Parke Golf Club saw a 382% increase in online revenue after leaving GolfNow.
-            </p>
-            <p className="text-base text-[#6B7770]">
-              TeeAhead charges <strong className="text-[#0F3D2E] font-bold">$0</strong> for the first 10 Founding Partner courses (free for your first year). Course #11 onward pays a flat <strong className="text-[#0F3D2E] font-bold">$349/month</strong>. No barter. No commissions. No data extraction. Cancel anytime.
-            </p>
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-center gap-3 mb-10">
+              <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+                The damage report
+              </span>
+              <span className="flex-1 h-px bg-[#0F3D2E]/10" />
+              <span className="font-mono text-xs tracking-[0.12em] uppercase text-[#9DAA9F]">
+                Why now
+              </span>
+            </div>
 
-            {/* Barter callout — visually distinct, not just a text link */}
-            <div className="inline-flex items-center gap-3 bg-[#0F3D2E] rounded-full px-6 py-3 mt-2">
-              <span className="text-sm font-semibold text-[#F4F1EA]">Want your exact number?</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">
+              {[
+                { k: '39.6%', v: 'of Brown Golf rounds went to zero-revenue barter slots over three years.' },
+                { k: '382%', v: 'online revenue increase at Windsor Parke after leaving GolfNow.' },
+                { k: '100+', v: 'independent courses left GolfNow in Q1 2025 alone.' },
+              ].map(({ k, v }) => (
+                <div key={k} className="border-t border-[#0F3D2E]/10 pt-5">
+                  <p className="font-display text-[#0F3D2E] leading-none tracking-[-0.03em]" style={{ fontSize: 'clamp(48px, 6vw, 72px)', fontWeight: 400 }}>
+                    {k}
+                  </p>
+                  <p className="mt-3 text-sm text-[#1A1A1A]/78 leading-relaxed">{v}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between border-t border-[#0F3D2E]/10 pt-8">
+              <p className="text-sm text-[#6B7770] max-w-xl leading-relaxed">
+                TeeAhead charges <strong className="text-[#0F3D2E]">$0</strong> for the first ten Founding Partner courses (free first year). <strong className="text-[#0F3D2E]">$349/mo</strong> flat after that. No barter. No commissions. No data extraction.
+              </p>
               <Link
                 href="/damage"
-                className="text-sm font-bold text-[#E0A800] hover:text-[#E0A800]/80 transition-colors"
+                className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-5 py-3 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors whitespace-nowrap"
               >
-                Get your damage report →
+                Get my damage report →
               </Link>
             </div>
 
@@ -254,7 +262,7 @@ export default async function HomePage({
                 National Golf Course Owners Association (NGCOA), Q1 2025.
                 TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
             */}
-            <p className="text-xs text-[#9DAA9F] max-w-2xl mx-auto leading-relaxed">
+            <p className="mt-8 text-xs text-[#9DAA9F] leading-relaxed max-w-3xl">
               Based on NGCOA member survey data and Golf Inc. industry analysis (2024) using 2 barter tee times/day at average rack rates.
               Windsor Parke figure: Golf Inc. / industry reporting, Windsor Parke case study.
               Course exodus: National Golf Course Owners Association (NGCOA), Q1 2025.
