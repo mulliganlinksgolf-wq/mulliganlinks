@@ -37,94 +37,112 @@ export default async function PointsPage() {
 
   const balance = (transactions ?? []).reduce((s, t) => s + (t.amount as number), 0)
 
-  return (
-    <div>
-      <div className="mb-6">
-        <p className="text-[9px] uppercase tracking-[0.2em] text-[#aaa] font-sans mb-1">Fairway Points</p>
-        <h1 className="text-2xl font-bold font-serif text-white italic">Your points.</h1>
-        <p className="text-[11px] font-sans mt-1 text-[#8FA889]">Earn on every round. Redeem toward future tee times.</p>
-      </div>
-      <div className="rounded-xl overflow-hidden" style={{ background: '#1B4332' }}>
-        {/* Inline stats */}
-        <div className="px-5 py-5">
-          <div className="flex items-end gap-6 flex-wrap">
-            <div>
-              <p className="text-4xl font-bold font-serif text-white leading-none">
-                {balance.toLocaleString()}
-              </p>
-              <p className="text-[10px] font-sans mt-1" style={{ color: '#8FA889' }}>
-                pts · ${(balance / 100).toFixed(2)} value
-              </p>
-            </div>
-            {creditBalanceCents > 0 && (
-              <div>
-                <p className="text-2xl font-bold font-serif leading-none" style={{ color: '#E0A800' }}>
-                  ${(creditBalanceCents / 100).toFixed(0)}
-                </p>
-                <p className="text-[10px] font-sans mt-1" style={{ color: '#8FA889' }}>
-                  credit ready
-                </p>
-              </div>
-            )}
-            <div>
-              <p className="text-2xl font-bold font-serif text-white leading-none">{earnRate}</p>
-              <p className="text-[10px] font-sans mt-1" style={{ color: '#8FA889' }}>
-                earn rate
-              </p>
-            </div>
-            {isPaid && (
-              <div>
-                <p className="text-2xl font-bold font-serif text-white leading-none">{compRoundsRemaining}</p>
-                <p className="text-[10px] font-sans mt-1" style={{ color: '#8FA889' }}>
-                  comp round{compRoundsRemaining !== 1 ? 's' : ''} left
-                  {compResetDisplay && ` · resets ${compResetDisplay}`}
-                </p>
-              </div>
-            )}
-          </div>
-          <p className="text-[10px] font-sans mt-3" style={{ color: '#555' }}>
-            100 pts = $1 toward future rounds.
-          </p>
-        </div>
+  const ytdStart = new Date(new Date().getFullYear(), 0, 1)
+  const ytdEarned = (transactions ?? [])
+    .filter(t => (t.amount as number) > 0 && new Date(t.created_at as string) >= ytdStart)
+    .reduce((s, t) => s + (t.amount as number), 0)
+  const redeemedCents = Math.abs(
+    (transactions ?? [])
+      .filter(t => (t.amount as number) < 0)
+      .reduce((s, t) => s + (t.amount as number), 0)
+  )
 
-        {/* Transaction history */}
-        <div style={{ background: '#163d2a' }}>
-          <div className="px-4 py-1.5" style={{ background: '#0f2d1d' }}>
-            <span className="text-[8px] uppercase tracking-widest font-sans" style={{ color: '#555' }}>
-              History
-            </span>
-          </div>
+  const formatDate = (s: string) =>
+    new Date(s).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+
+  type Txn = (typeof transactions extends (infer R)[] | null ? R : never)
+  const txnKind = (t: Txn): 'earn' | 'bonus' | 'redeem' => {
+    const amt = t.amount as number
+    if (amt < 0) return 'redeem'
+    const r = ((t.reason as string) ?? '').toLowerCase()
+    if (r.includes('bonus') || r.includes('signup') || r.includes('tier')) return 'bonus'
+    return 'earn'
+  }
+
+  return (
+    <div className="-mx-8 -my-8 md:-ml-56 md:-mr-8 md:-my-8 min-h-[calc(100vh-72px)] md:min-h-screen flex flex-col bg-[#FAF7F2]">
+      {/* Dark hero block */}
+      <header className="bg-[#082419] text-[#F4F1EA] px-5 sm:px-8 md:pl-64 pt-6 pb-7">
+        <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">
+          Fairway points · balance
+        </p>
+        <p
+          className="font-display leading-[0.9] tracking-[-0.025em] mt-2"
+          style={{ fontSize: 'clamp(56px, 14vw, 96px)', fontWeight: 400 }}
+        >
+          {balance.toLocaleString()}
+        </p>
+        <p className="font-mono text-[11px] tracking-[0.1em] uppercase text-[#F4F1EA]/55 mt-2">
+          ${(balance / 100).toFixed(2)} value · 100 pts = $1
+        </p>
+
+        <div className="mt-5 grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <SummaryTile label="This year" value={`+${ytdEarned.toLocaleString()}`} accent="gold" />
+          <SummaryTile label="Redeemed" value={`$${(redeemedCents / 100).toFixed(0)}`} />
+          <SummaryTile label="Earn rate" value={earnRate} />
+          {isPaid ? (
+            <SummaryTile
+              label={`Comp rounds${compResetDisplay ? ` · reset ${compResetDisplay}` : ''}`}
+              value={`${compRoundsRemaining}`}
+            />
+          ) : creditBalanceCents > 0 ? (
+            <SummaryTile label="Credit ready" value={`$${(creditBalanceCents / 100).toFixed(0)}`} accent="gold" />
+          ) : null}
+        </div>
+      </header>
+
+      {/* Activity */}
+      <section className="px-5 sm:px-8 md:pl-64 pt-5 pb-8 flex-1">
+        <div className="max-w-2xl">
+          <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-3">
+            Activity
+          </p>
           {!transactions || transactions.length === 0 ? (
-            <div className="py-10 text-center" style={{ color: '#888' }}>
-              No transactions yet. Book a tee time to start earning.
+            <div className="bg-white rounded-[10px] border border-[#0F3D2E]/10 p-10 text-center">
+              <p className="font-display text-2xl text-[#0F3D2E] mb-2" style={{ fontWeight: 400 }}>Every round earns. Every point spends.</p>
+              <p className="text-sm text-[#6B7770]">Book a tee time and your first ~45 points land here.</p>
             </div>
           ) : (
-            transactions.map(t => (
-              <div
-                key={t.id}
-                className="flex items-center justify-between px-4 py-3 border-b border-[#1d4c36] last:border-0"
-              >
-                <div>
-                  <p className="text-[11px] font-sans" style={{ color: '#ddd' }}>
-                    {t.reason as string}
-                  </p>
-                  <p className="text-[9px] font-sans mt-0.5" style={{ color: '#555' }}>
-                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                    {(t.courses as any)?.name} · {new Date(t.created_at as string).toLocaleDateString()}
-                  </p>
-                </div>
-                <span
-                  className="text-sm font-semibold font-sans"
-                  style={{ color: (t.amount as number) > 0 ? '#8FA889' : '#ef4444' }}
-                >
-                  {(t.amount as number) > 0 ? '+' : ''}
-                  {(t.amount as number).toLocaleString()}
-                </span>
-              </div>
-            ))
+            <ul className="bg-white rounded-[10px] border border-[#0F3D2E]/10 overflow-hidden">
+              {transactions.map(t => {
+                const kind = txnKind(t)
+                const colorClass =
+                  kind === 'redeem' ? 'text-[#C24A3B]' :
+                  kind === 'bonus' ? 'text-[#E0A800]' :
+                  'text-[#0F3D2E]'
+                const amt = t.amount as number
+                return (
+                  <li key={t.id} className="flex justify-between items-center px-5 py-3.5 border-b border-[#0F3D2E]/10 last:border-b-0">
+                    <div className="min-w-0 mr-3">
+                      <p className="text-[13.5px] font-medium text-[#1A1A1A] truncate">{t.reason as string}</p>
+                      <p className="text-[11px] text-[#6B7770] mt-0.5 truncate">
+                        {((t.courses as { name?: string } | null)?.name) ?? '—'} · {formatDate(t.created_at as string)}
+                      </p>
+                    </div>
+                    <span className={`font-mono text-[13px] font-bold tracking-[0.02em] ${colorClass} flex-shrink-0`}>
+                      {amt > 0 ? '+' : ''}{amt.toLocaleString()}
+                    </span>
+                  </li>
+                )
+              })}
+            </ul>
           )}
         </div>
-      </div>
+      </section>
+    </div>
+  )
+}
+
+function SummaryTile({ label, value, accent }: { label: string; value: string; accent?: 'gold' }) {
+  return (
+    <div className="rounded-lg bg-white/[0.06] border border-white/10 px-3 py-2.5">
+      <p
+        className={`font-display leading-none tracking-[-0.02em] ${accent === 'gold' ? 'text-[#E0A800]' : 'text-[#F4F1EA]'}`}
+        style={{ fontSize: 22, fontWeight: 400 }}
+      >
+        {value}
+      </p>
+      <p className="font-mono text-[10px] tracking-[0.1em] uppercase text-[#F4F1EA]/55 mt-1.5 truncate">{label}</p>
     </div>
   )
 }
