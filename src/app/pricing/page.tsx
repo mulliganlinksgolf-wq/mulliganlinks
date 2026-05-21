@@ -46,11 +46,11 @@ function PricingNav() {
         <Link href="/">
           <TeeAheadLogo className="h-10 sm:h-12 w-auto" />
         </Link>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-3 sm:gap-5">
           <Link href="/features" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Features</Link>
-          <Link href="/pricing" className="text-sm text-[#0F3D2E] font-semibold">Pricing</Link>
-          <Link href="/about" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E] hidden sm:inline">About</Link>
-          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90">
+          <Link href="/pricing" className="hidden sm:inline text-sm text-[#0F3D2E] font-semibold">Pricing</Link>
+          <Link href="/about" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">About</Link>
+          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-3.5 sm:px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 whitespace-nowrap">
             Claim a spot →
           </Link>
         </div>

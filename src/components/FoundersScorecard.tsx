@@ -97,10 +97,6 @@ const HOLES: Hole[] = [
 export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: number }) {
   return (
     <div className="max-w-3xl mx-auto">
-      <p className="text-center text-xs font-bold tracking-[0.14em] uppercase text-[#F4F1EA]/35 mb-10">
-        Why we&apos;re building TeeAhead
-      </p>
-
       <div className="bg-[#FDFAF4] rounded-sm overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.18)]">
         {/* Header */}
         <div className="bg-[#0F3D2E] px-6 py-5">
@@ -151,15 +147,16 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
         </div>
 
         {/* Column headers */}
-        <div className="grid grid-cols-[70px_200px_1fr] bg-[#0F3D2E]">
-          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
+        <div className="grid grid-cols-[44px_100px_1fr] sm:grid-cols-[70px_200px_1fr] bg-[#0F3D2E]">
+          <div className="px-3 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
             Hole
           </div>
-          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
+          <div className="px-3 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
             Par
           </div>
-          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
-            Notes from the Round
+          <div className="px-3 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
+            <span className="hidden sm:inline">Notes from the Round</span>
+            <span className="sm:hidden">Notes</span>
           </div>
         </div>
 
@@ -167,26 +164,27 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
         {HOLES.map((h) => (
           <div
             key={h.n}
-            className={`grid grid-cols-[70px_200px_1fr] border-b border-[#0F3D2E]/10 last:border-b-0 ${
-              h.hero ? 'bg-[#F4F1EA] py-6' : 'bg-white py-4'
+            className={`grid grid-cols-[44px_100px_1fr] sm:grid-cols-[70px_200px_1fr] border-b border-[#0F3D2E]/10 last:border-b-0 ${
+              h.hero ? 'bg-[#F4F1EA] py-5 sm:py-6' : 'bg-white py-4'
             }`}
           >
             <div
-              className={`px-4 sm:px-5 font-display tracking-[-0.02em] leading-none ${
+              className={`px-3 sm:px-5 font-display tracking-[-0.02em] leading-none ${
                 h.accent || 'text-[#0F3D2E]'
               }`}
-              style={{ fontSize: h.hero ? 44 : 30, fontWeight: 400 }}
+              style={{ fontWeight: 400 }}
             >
-              {h.n}
+              <span className="sm:hidden" style={{ fontSize: h.hero ? 32 : 24 }}>{h.n}</span>
+              <span className="hidden sm:inline" style={{ fontSize: h.hero ? 44 : 30 }}>{h.n}</span>
             </div>
-            <div className="px-4 sm:px-5">
+            <div className="px-3 sm:px-5">
               <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-1">Par</div>
-              <div className={`font-semibold text-[#1A1A1A] leading-tight ${h.hero ? 'text-[17px]' : 'text-sm'}`}>
+              <div className={`font-semibold text-[#1A1A1A] leading-tight ${h.hero ? 'text-[15px] sm:text-[17px]' : 'text-[13px] sm:text-sm'}`}>
                 {h.par}
               </div>
             </div>
-            <div className={`px-4 sm:px-5 leading-relaxed text-[#1A1A1A] ${
-              h.hero ? 'text-base' : 'text-sm opacity-85'
+            <div className={`px-3 sm:px-5 leading-relaxed text-[#1A1A1A] ${
+              h.hero ? 'text-[15px] sm:text-base' : 'text-[13px] sm:text-sm opacity-85'
             }`}>
               {h.notes}
             </div>
@@ -196,11 +194,11 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
         {/* Footer — signatures + CTAs */}
         <div className="border-t border-[#0F3D2E]/10 px-4 sm:px-8 py-5 grid sm:grid-cols-2 gap-6 items-center">
           {/* Left: signatures */}
-          <div className="flex gap-8">
+          <div className="flex gap-5 sm:gap-8 flex-wrap">
             <div>
               <div
-                className="text-[#0F3D2E] italic leading-none"
-                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 26, transform: 'rotate(-2deg)', transformOrigin: 'left' }}
+                className="text-[#0F3D2E] italic leading-none whitespace-nowrap"
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22, transform: 'rotate(-2deg)', transformOrigin: 'left' }}
               >
                 Neil Barris
               </div>
@@ -208,8 +206,8 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
             </div>
             <div>
               <div
-                className="text-[#0F3D2E] italic leading-none"
-                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 26, transform: 'rotate(-3deg)', transformOrigin: 'left' }}
+                className="text-[#0F3D2E] italic leading-none whitespace-nowrap"
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22, transform: 'rotate(-3deg)', transformOrigin: 'left' }}
               >
                 Billy Beslock
               </div>

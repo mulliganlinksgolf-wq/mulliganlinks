@@ -280,7 +280,7 @@ export default async function HomePage({
             </h2>
 
             {/* Timeline */}
-            <div className="relative pt-16 sm:pt-20 pb-8">
+            <div className="relative sm:pt-20 pb-8">
 
               {/* Connecting line — hidden on mobile (stacks vertically) */}
               <div className="hidden sm:block absolute top-[140px] left-[8%] right-[18%] h-px bg-[#E0A800]/85" />

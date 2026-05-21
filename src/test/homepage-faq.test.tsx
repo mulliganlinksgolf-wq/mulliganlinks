@@ -16,15 +16,14 @@ describe('HomepageFaq', () => {
     ).toBeInTheDocument()
   })
 
-  it('migration question mentions EZLinks and the billy email', () => {
+  it('migration question mentions EZLinks and there is a mailto:billy link', () => {
     render(<HomepageFaq />)
     expect(
       screen.getByText(/What if my course already uses EZLinks/i)
     ).toBeInTheDocument()
-    // billy@teeahead.com appears in both the migration answer and the footer link
-    const billyLinks = screen.getAllByRole('link', { name: /billy@teeahead\.com/i })
-    expect(billyLinks.length).toBeGreaterThanOrEqual(1)
-    expect(billyLinks[0]).toHaveAttribute('href', 'mailto:billy@teeahead.com')
+    // Footer link to billy reachable from this section
+    const billyLink = screen.getByRole('link', { name: /Email Billy/i })
+    expect(billyLink).toHaveAttribute('href', 'mailto:billy@teeahead.com')
   })
 
   it('splits FAQs into operator + golfer columns', () => {

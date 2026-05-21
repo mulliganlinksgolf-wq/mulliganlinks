@@ -40,10 +40,10 @@ export function HomepageFaq() {
 
           <div className="mt-8 pt-5 border-t border-[#0F3D2E]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <p className="text-[13px] text-[#6B7770]">Still wondering?</p>
-            <div className="flex gap-3 text-[13px]">
-              <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px]">Text Neil directly →</a>
+            <div className="flex flex-wrap gap-x-3 gap-y-2 text-[13px]">
+              <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px] whitespace-nowrap">Text Neil directly →</a>
               <span className="text-[#0F3D2E]/20">·</span>
-              <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px]">Email billy@teeahead.com →</a>
+              <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px] whitespace-nowrap">Email Billy →</a>
             </div>
           </div>
 

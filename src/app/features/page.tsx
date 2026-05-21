@@ -32,11 +32,11 @@ function FeaturesNav() {
         <Link href="/">
           <TeeAheadLogo className="h-10 sm:h-12 w-auto" />
         </Link>
-        <div className="flex items-center gap-5">
-          <Link href="/features" className="text-sm text-[#0F3D2E] font-semibold">Features</Link>
+        <div className="flex items-center gap-3 sm:gap-5">
+          <Link href="/features" className="hidden sm:inline text-sm text-[#0F3D2E] font-semibold">Features</Link>
           <Link href="/pricing" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Pricing</Link>
-          <Link href="/about" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E] hidden sm:inline">About</Link>
-          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90">
+          <Link href="/about" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">About</Link>
+          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-3.5 sm:px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 whitespace-nowrap">
             Claim a spot →
           </Link>
         </div>
@@ -369,14 +369,14 @@ function GolferChapter() {
 /* Right-aligned callout (sits in the left column, line points right toward the phone) */
 function CalloutRight({ num, eyebrow, headline, children }: { num: string; eyebrow: string; headline: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="relative text-right">
+    <div className="relative lg:text-right">
       <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-1.5">
         {num} · {eyebrow}
       </p>
-      <p className="font-display text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
+      <p className="font-display text-[22px] sm:text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
         {headline}
       </p>
-      <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed ml-auto max-w-[280px]">
+      <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed lg:ml-auto max-w-[280px]">
         {children}
       </p>
       <span className="hidden lg:block absolute right-[-40px] top-6 w-[38px] h-px bg-[#E0A800]" aria-hidden />
@@ -392,7 +392,7 @@ function CalloutLeft({ num, eyebrow, headline, children }: { num: string; eyebro
       <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-1.5">
         {num} · {eyebrow}
       </p>
-      <p className="font-display text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
+      <p className="font-display text-[22px] sm:text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
         {headline}
       </p>
       <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed max-w-[280px]">
