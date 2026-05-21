@@ -376,7 +376,7 @@ export default async function HomePage({
                     'Loyalty that lives at courses you actually play',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
-                      <span className="text-[#8FA889] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      <span className="font-mono text-[11px] text-[#8FA889] pt-1 flex-shrink-0">—</span>
                       {f}
                     </li>
                   ))}
@@ -399,14 +399,14 @@ export default async function HomePage({
                 <ul className="space-y-2.5">
                   {[
                     'Free for Founding Partners, first year on us',
-                    '📋 Your Data, Always: every golfer is added to your database, not ours. Export anytime.',
+                    'Your Data, Always: every golfer is added to your database, not ours. Export anytime.',
                     'No barter tee times, ever',
                     'No commissions on bookings',
                     'Full tee sheet control stays with you',
                     'Only ask: tell your golfers about TeeAhead at booking',
                   ].map((f) => (
                     <li key={f} className="flex items-start gap-2.5 text-sm text-[#F4F1EA]/75 leading-snug">
-                      <span className="text-[#E0A800] font-bold mt-0.5 flex-shrink-0">✓</span>
+                      <span className="font-mono text-[11px] text-[#E0A800] pt-1 flex-shrink-0">—</span>
                       {f}
                     </li>
                   ))}
@@ -525,7 +525,7 @@ export default async function HomePage({
                 href="/waitlist/golfer"
                 className="inline-flex items-center justify-center rounded-lg bg-[#F4F1EA] px-7 py-3.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
               >
-                ⛳ Join the Golfer Waitlist
+                Join the Golfer Waitlist
               </Link>
               <Link
                 href="/waitlist/course"
