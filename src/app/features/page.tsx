@@ -163,14 +163,12 @@ function CourseChapter() {
               title="Tee sheet"
               desc="Every slot earns. No barter, ever."
               imageSrc="/screenshots/tee-sheet.png"
-              badge="REAL-TIME · LIVE"
             />
             <SecondaryFeatureCard
               num="03"
               title="Members table"
               desc="Your data, exported anytime."
               imageSrc="/screenshots/members.png"
-              badge="FULL EXPORT · CSV"
             />
             <SecondaryFeatureCard num="04" title="Direct payouts" desc="Stripe Connect. Greens fees land in your bank." graphic="payouts" />
           </div>
