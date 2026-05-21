@@ -13,6 +13,7 @@ import { FoundingPartnerProgress } from '@/components/FoundingPartnerProgress'
 import { HomepageFaq } from '@/components/HomepageFaq'
 import { HomepageFaqSchema } from '@/components/HomepageFaqSchema'
 import { ImpersonateRedirect } from '@/components/ImpersonateRedirect'
+import { PricingCard } from '@/components/PricingCard'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
@@ -436,121 +437,61 @@ export default async function HomePage({
               <p className="text-[#6B7770] text-lg">Start free. Upgrade when it makes sense.</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-start">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 items-stretch">
 
               {/* Fairway — Free */}
-              <div className="bg-white rounded-2xl overflow-hidden border border-black/8">
-                <div className="p-7 border-b border-black/5">
-                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Fairway</p>
-                  <p className="text-sm text-[#9DAA9F] mt-0.5">The foundation</p>
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$0</span>
-                    <span className="text-[#6B7770] text-sm">/ forever</span>
-                  </div>
-                </div>
-                <div className="p-7 space-y-5">
-                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                    {[
-                      'Book tee times at partner courses',
-                      '1× Fairway Points per dollar spent (100 pts = $1 toward future tee times or membership renewal)',
-                      'Free cancellation (1hr policy)',
-                      'In-round service requests (tap for help mid-round)',
-                    ].map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <span className="text-[#8FA889] font-bold mt-0.5">✓</span>{f}
-                      </li>
-                    ))}
-                    <li className="flex items-start gap-2 text-[#9DAA9F]">
-                      <span className="font-bold mt-0.5 flex-shrink-0 text-[#9DAA9F]">✗</span>Standard booking fee per round (waived on Eagle &amp; Ace)
-                    </li>
-                  </ul>
-                  <Link
-                    href="/waitlist/golfer"
-                    className="block text-center rounded-lg border-2 border-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
-                  >
-                    Join the Waitlist
-                  </Link>
-                </div>
-              </div>
+              <PricingCard
+                name="Fairway"
+                sub="Free, forever"
+                price="$0"
+                features={[
+                  'Book tee times at partner courses',
+                  '1× Fairway Points per dollar',
+                  'Free cancellation (1hr policy)',
+                  'In-round service requests',
+                ]}
+                cta="Join the waitlist"
+              />
 
-              {/* Eagle — Most Popular (lifted) */}
-              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#E0A800] shadow-[0_8px_32px_rgba(224,168,0,0.18)] relative -translate-y-2">
-                <div className="bg-[#E0A800] py-2 text-center">
-                  <span className="text-xs font-black text-[#1A1A1A] uppercase tracking-[0.06em]">Most Popular</span>
-                </div>
-                <div className="p-7 border-b border-black/5">
-                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Eagle</p>
-                  <p className="text-sm text-[#9DAA9F] mt-0.5">Serious golfers</p>
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$89</span>
-                    <span className="text-[#6B7770] text-sm">/ yr</span>
-                  </div>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$7.42/mo</p>
-                </div>
-                <div className="p-7 space-y-5">
-                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                    {[
-                      '250 bonus Fairway Points on signup',
-                      '1 complimentary round/yr (course-provided, subject to availability)',
-                      'Always-on booking fee waiver',
-                      'Free cancellation unlimited (1hr)',
-                      '1.5× Fairway Points per dollar spent',
-                      'Priority booking: 48hr early access',
-                      '1 guest pass per year',
-                      '$10 birthday credit',
-                      'Partner Finder: match with other members, rate rounds, view profiles',
-                    ].map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <span className="text-[#E0A800] font-bold mt-0.5">✓</span>{f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/waitlist/golfer"
-                    className="block text-center rounded-lg bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-                  >
-                    Join the Waitlist
-                  </Link>
-                </div>
-              </div>
+              {/* Eagle — hero */}
+              <PricingCard
+                hero
+                name="Eagle"
+                sub="For regulars"
+                price="$89"
+                unit="/yr"
+                subnote="~$7.42/mo"
+                badge="Most picked"
+                features={[
+                  '250 bonus Fairway Points on signup',
+                  '1 complimentary round per year',
+                  'No booking fees, always',
+                  '1.5× Fairway Points per dollar',
+                  '48-hour priority booking',
+                  '1 guest pass · $10 birthday credit',
+                  'Partner Finder access',
+                ]}
+                cta="Join the waitlist"
+              />
 
               {/* Ace */}
-              <div className="bg-white rounded-2xl overflow-hidden border-2 border-[#1B4332]">
-                <div className="p-7 border-b border-black/5">
-                  <p className="font-display font-bold text-xl text-[#1A1A1A]">Ace</p>
-                  <p className="text-sm text-[#9DAA9F] mt-0.5">All-in members</p>
-                  <div className="mt-4 flex items-baseline gap-1">
-                    <span className="font-display font-black text-4xl text-[#1A1A1A]">$159</span>
-                    <span className="text-[#6B7770] text-sm">/ yr</span>
-                  </div>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">~$13.25/mo</p>
-                </div>
-                <div className="p-7 space-y-5">
-                  <ul className="space-y-2 text-sm text-[#1A1A1A]">
-                    {[
-                      '500 bonus Fairway Points on signup',
-                      '2 complimentary rounds/yr (course-provided, subject to availability)',
-                      'Always-on booking fee waiver',
-                      'Free cancellation unlimited (1hr)',
-                      '2× Fairway Points per dollar spent',
-                      'Priority booking: 72hr early access',
-                      '2 guest passes per year',
-                      '$20 birthday credit',
-                      'Partner Finder: match with other members, rate rounds, view profiles',
-                    ].map((f) => (
-                      <li key={f} className="flex items-start gap-2">
-                        <span className="text-[#1B4332] font-bold mt-0.5">✓</span>{f}
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/waitlist/golfer"
-                    className="block text-center rounded-lg border-2 border-[#1B4332] px-4 py-2.5 text-sm font-semibold text-[#1B4332] hover:bg-[#1B4332]/5 transition-colors"
-                  >
-                    Join the Waitlist
-                  </Link>
-                </div>
-              </div>
+              <PricingCard
+                name="Ace"
+                sub="For the all-in"
+                price="$159"
+                unit="/yr"
+                subnote="~$13.25/mo"
+                features={[
+                  '500 bonus Fairway Points on signup',
+                  '2 complimentary rounds per year',
+                  'No booking fees, always',
+                  '2× Fairway Points per dollar',
+                  '72-hour priority booking',
+                  '2 guest passes · $20 birthday credit',
+                  'Partner Finder access',
+                ]}
+                cta="Join the waitlist"
+              />
 
             </div>
 
@@ -674,3 +615,4 @@ export default async function HomePage({
     </div>
   )
 }
+
