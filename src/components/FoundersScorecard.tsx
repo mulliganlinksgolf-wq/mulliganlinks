@@ -198,7 +198,7 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
             <div>
               <div
                 className="text-[#0F3D2E] italic leading-none whitespace-nowrap"
-                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22, transform: 'rotate(-2deg)', transformOrigin: 'left' }}
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22 }}
               >
                 Neil Barris
               </div>
@@ -207,7 +207,7 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
             <div>
               <div
                 className="text-[#0F3D2E] italic leading-none whitespace-nowrap"
-                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22, transform: 'rotate(-3deg)', transformOrigin: 'left' }}
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 22 }}
               >
                 Billy Beslock
               </div>
