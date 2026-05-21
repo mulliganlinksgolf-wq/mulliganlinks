@@ -367,43 +367,149 @@ function GolferSecondaryCard({ num, title, desc, badge, phone }: { num: string; 
 }
 
 const FEATURE_CATS = [
-  { c: 'Bookings & Tee Sheet', items: ['Real-time booking', 'Day-grid view', 'QR check-in', 'Buffer + cart logic', 'Walk-in entry', 'Multi-cart booking'] },
-  { c: 'Members & Loyalty', items: ['Fairway Points (no expiry)', '1.5× / 2× tier multipliers', 'Birthday credit', 'Guest passes', 'Bonus signup points', 'Tier upgrades'] },
-  { c: 'Payments', items: ['Stripe Connect direct payout', 'No commissions', 'Zero booking fees on Eagle+', 'Subscription billing', 'P&L reports', 'GL export'] },
-  { c: 'Operator Tools', items: ['Revenue + utilization', 'Top-member list', 'Winback nudges', 'CSV export', 'Bulk SMS waitlist', 'Custom rack rates'] },
-  { c: 'Player Experience', items: ['Find a partner', 'Tee time exchange', 'Mid-round service requests', 'Live wait times', '14-day partner visibility', 'Round ratings'] },
-  { c: 'Leagues & Outings', items: ['9 + 18-hole leagues', 'Live standings', 'Outing manager', 'League payments', 'Handicap tracking', 'Group bookings'] },
+  {
+    n: '01', c: 'Bookings & Tee Sheet', stat: '<1s', statLabel: 'avg slot load',
+    items: ['Real-time booking', 'Day-grid view', 'QR check-in', 'Buffer + cart logic', 'Walk-in entry', 'Multi-cart booking'],
+    mark: 'grid',
+  },
+  {
+    n: '02', c: 'Members & Loyalty', stat: '∞', statLabel: 'point expiration',
+    items: ['Fairway Points (no expiry)', '1.5× / 2× tier multipliers', 'Birthday credit', 'Guest passes', 'Bonus signup points', 'Tier upgrades'],
+    mark: 'dot',
+  },
+  {
+    n: '03', c: 'Payments', stat: '0%', statLabel: 'commission, ever',
+    items: ['Stripe Connect direct payout', 'No commissions', 'Zero booking fees on Eagle+', 'Subscription billing', 'P&L reports', 'GL export'],
+    mark: 'ring',
+  },
+  {
+    n: '04', c: 'Operator Tools', stat: '1 click', statLabel: 'CSV export',
+    items: ['Revenue + utilization', 'Top-member list', 'Winback nudges', 'CSV export', 'Bulk SMS waitlist', 'Custom rack rates'],
+    mark: 'square',
+  },
+  {
+    n: '05', c: 'Player Experience', stat: '14 days', statLabel: 'partner visibility',
+    items: ['Find a partner', 'Tee time exchange', 'Mid-round service requests', 'Live wait times', '14-day partner visibility', 'Round ratings'],
+    mark: 'flag',
+  },
+  {
+    n: '06', c: 'Leagues & Outings', stat: 'Live', statLabel: 'standings update',
+    items: ['9 + 18-hole leagues', 'Live standings', 'Outing manager', 'League payments', 'Handicap tracking', 'Group bookings'],
+    mark: 'tri',
+  },
 ]
+
+function FeaturesAllGridMark({ kind, dark }: { kind: string; dark: boolean }) {
+  const stroke = dark ? '#E0A800' : '#0F3D2E'
+  const fill = dark ? '#E0A800' : '#0F3D2E'
+  const op = dark ? 0.9 : 0.85
+  return (
+    <svg width="44" height="44" viewBox="0 0 44 44" fill="none" style={{ opacity: op }}>
+      {kind === 'grid' && Array.from({ length: 9 }).map((_, i) => (
+        <rect key={i} x={6 + (i % 3) * 12} y={6 + Math.floor(i / 3) * 12} width="8" height="8" fill={i % 2 ? fill : 'none'} stroke={stroke} strokeWidth="1" />
+      ))}
+      {kind === 'dot' && <>
+        <circle cx="22" cy="22" r="18" fill="none" stroke={stroke} strokeWidth="1" strokeDasharray="2 3" />
+        <circle cx="22" cy="22" r="10" fill="none" stroke={stroke} strokeWidth="1" />
+        <circle cx="22" cy="22" r="3" fill={fill} />
+      </>}
+      {kind === 'ring' && <>
+        <circle cx="22" cy="22" r="18" fill="none" stroke={stroke} strokeWidth="1.5" />
+        <circle cx="22" cy="22" r="6" fill={fill} />
+      </>}
+      {kind === 'square' && <>
+        <rect x="4" y="4" width="36" height="36" fill="none" stroke={stroke} strokeWidth="1" />
+        <rect x="14" y="14" width="16" height="16" fill={fill} />
+      </>}
+      {kind === 'flag' && <>
+        <line x1="14" y1="6" x2="14" y2="38" stroke={stroke} strokeWidth="1.5" />
+        <path d="M 14 8 L 32 14 L 14 20 Z" fill={fill} />
+      </>}
+      {kind === 'tri' && <>
+        <path d="M 22 6 L 38 36 L 6 36 Z" fill="none" stroke={stroke} strokeWidth="1.5" />
+        <path d="M 22 18 L 30 32 L 14 32 Z" fill={fill} />
+      </>}
+    </svg>
+  )
+}
 
 function AllFeaturesGrid() {
   return (
     <section className="bg-[#F4F1EA] px-6 sm:px-10 lg:px-16 py-20">
       <FadeIn>
-        <div className="max-w-6xl mx-auto space-y-10">
+        <div className="max-w-6xl mx-auto space-y-12">
+
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
               The full surface · 36 features
             </span>
             <span className="flex-1 h-px bg-[#0F3D2E]/10" />
           </div>
-          <h2 className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-none max-w-3xl" style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 400 }}>
+
+          <h2 className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-[0.96] max-w-3xl"
+              style={{ fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 400 }}>
             Everything else, in <em className="italic text-[#E0A800]">one place.</em>
           </h2>
+
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURE_CATS.map(({ c, items }) => (
-              <div key={c} className="bg-white border border-[#0F3D2E]/10 rounded-xl p-5">
-                <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#E0A800] font-bold mb-3">{c}</p>
-                <ul className="flex flex-col gap-2">
-                  {items.map(i => (
-                    <li key={i} className="grid grid-cols-[14px_1fr] gap-2 text-[13px] text-[#1A1A1A]/85 items-baseline">
-                      <span className="font-mono text-[11px] text-[#0F3D2E]">—</span>
-                      <span>{i}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
+            {FEATURE_CATS.map((cat, i) => {
+              // Checkerboard: cards at index 0, 3, 5 → dark; 1, 2, 4 → light
+              const dark = [0, 3, 5].includes(i)
+              return (
+                <div
+                  key={cat.n}
+                  className={`relative rounded-2xl p-7 ${
+                    dark
+                      ? 'bg-[#082419] text-[#F4F1EA] shadow-[0_18px_40px_rgba(8,36,25,0.18)]'
+                      : 'bg-white text-[#1A1A1A] border border-[#0F3D2E]/10'
+                  }`}
+                >
+                  {/* Top row: big number + geometric mark */}
+                  <div className="flex items-start justify-between mb-3">
+                    <span
+                      className={`font-display tracking-[-0.02em] leading-none ${dark ? 'text-[#E0A800]' : 'text-[#0F3D2E]'}`}
+                      style={{ fontSize: 48, fontWeight: 400 }}
+                    >
+                      {cat.n}
+                    </span>
+                    <FeaturesAllGridMark kind={cat.mark} dark={dark} />
+                  </div>
+
+                  {/* Category name */}
+                  <h3 className={`font-display text-[22px] tracking-[-0.01em] leading-tight mb-5 ${dark ? 'text-[#F4F1EA]' : 'text-[#0F3D2E]'}`}
+                      style={{ fontWeight: 400 }}>
+                    {cat.c}
+                  </h3>
+
+                  {/* Features — 2 columns */}
+                  <ul className="grid grid-cols-2 gap-x-3 gap-y-2 mb-6">
+                    {cat.items.map(item => (
+                      <li key={item} className="grid grid-cols-[10px_1fr] gap-1.5 text-[12.5px] leading-snug items-baseline">
+                        <span className={`font-mono text-[10px] ${dark ? 'text-[#E0A800]' : 'text-[#0F3D2E]'}`}>—</span>
+                        <span className={dark ? 'text-[#F4F1EA]/85' : 'text-[#1A1A1A]/80'}>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {/* Footer stat */}
+                  <div className={`pt-4 border-t flex items-baseline justify-between ${dark ? 'border-[#F4F1EA]/15' : 'border-[#0F3D2E]/10'}`}>
+                    <span className={`font-display text-[28px] tracking-[-0.015em] leading-none ${dark ? 'text-[#E0A800]' : 'text-[#0F3D2E]'}`}
+                          style={{ fontWeight: 400 }}>
+                      {cat.stat}
+                    </span>
+                    <span className={`font-mono text-[10px] tracking-[0.1em] uppercase ${dark ? 'text-[#F4F1EA]/55' : 'text-[#6B7770]'}`}>
+                      {cat.statLabel}
+                    </span>
+                  </div>
+                </div>
+              )
+            })}
           </div>
+
+          <p className="max-w-3xl text-[14px] text-[#6B7770] leading-relaxed">
+            Everything above is included for Founding Partner courses for their first year — and for every TeeAhead golfer on every tier.
+          </p>
+
         </div>
       </FadeIn>
     </section>
