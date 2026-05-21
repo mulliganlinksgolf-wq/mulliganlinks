@@ -186,7 +186,7 @@ function CourseChapter() {
   )
 }
 
-type FeatureGraphicKind = 'payouts' | 'qr' | 'leagues' | 'exchange' | 'partner' | 'service'
+type FeatureGraphicKind = 'payouts' | 'qr' | 'leagues'
 
 function FeatureGraphic({ kind, dark = true }: { kind: FeatureGraphicKind; dark?: boolean }) {
   const bg = dark ? 'bg-white/[0.04]' : 'bg-[#0F3D2E]/[0.04]'
@@ -228,59 +228,25 @@ function FeatureGraphic({ kind, dark = true }: { kind: FeatureGraphicKind; dark?
     )
   }
 
-  if (kind === 'leagues') {
-    return (
-      <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
-        <div className="text-center">
-          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>9</div>
-          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
-        </div>
-        <div className={`font-display text-[24px] ${dark ? 'text-[#F4F1EA]/40' : 'text-[#0F3D2E]/40'}`}>/</div>
-        <div className="text-center">
-          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>18</div>
-          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
-        </div>
-        <div className="ml-3 flex flex-col gap-[3px]">
-          <div className="h-[3px] w-12 bg-[#E0A800] rounded-full" />
-          <div className="h-[3px] w-10 bg-[#E0A800]/60 rounded-full" />
-          <div className="h-[3px] w-8 bg-[#E0A800]/40 rounded-full" />
-          <div className="h-[3px] w-6 bg-[#E0A800]/25 rounded-full" />
-          <div className={`font-mono text-[8px] tracking-[0.14em] uppercase mt-1 ${subText}`}>live standings</div>
-        </div>
-      </div>
-    )
-  }
-
-  if (kind === 'exchange') {
-    // Light theme — for golfer cards on cream background
-    return (
-      <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-1">
-        <span className="font-display text-[#0F3D2E] text-[60px] leading-none tracking-[-0.03em]" style={{ fontWeight: 400 }}>$0</span>
-        <span className="font-mono text-[9.5px] tracking-[0.16em] uppercase text-[#6B7770]">lost when plans change</span>
-      </div>
-    )
-  }
-
-  if (kind === 'partner') {
-    // Stack of three offset avatar shapes
-    return (
-      <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-2">
-        <div className="relative w-[80px] h-[44px]">
-          <span className="absolute left-0 top-0 size-10 rounded-xl bg-[#0F3D2E]" />
-          <span className="absolute left-5 top-1 size-10 rounded-xl bg-[#8FA889]" />
-          <span className="absolute left-10 top-2 size-10 rounded-xl bg-[#E0A800]" />
-        </div>
-        <span className="font-display text-[#0F3D2E] text-[20px] tracking-[-0.01em]" style={{ fontWeight: 400 }}>14 days out</span>
-        <span className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-[#6B7770]">match availability</span>
-      </div>
-    )
-  }
-
-  // service
+  // leagues
   return (
-    <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-1">
-      <span className="font-display text-[#0F3D2E] text-[56px] leading-none tracking-[-0.03em]" style={{ fontWeight: 400 }}>&lt;1s</span>
-      <span className="font-mono text-[9.5px] tracking-[0.16em] uppercase text-[#6B7770]">tap to pro shop</span>
+    <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
+      <div className="text-center">
+        <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>9</div>
+        <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+      </div>
+      <div className={`font-display text-[24px] ${dark ? 'text-[#F4F1EA]/40' : 'text-[#0F3D2E]/40'}`}>/</div>
+      <div className="text-center">
+        <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>18</div>
+        <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+      </div>
+      <div className="ml-3 flex flex-col gap-[3px]">
+        <div className="h-[3px] w-12 bg-[#E0A800] rounded-full" />
+        <div className="h-[3px] w-10 bg-[#E0A800]/60 rounded-full" />
+        <div className="h-[3px] w-8 bg-[#E0A800]/40 rounded-full" />
+        <div className="h-[3px] w-6 bg-[#E0A800]/25 rounded-full" />
+        <div className={`font-mono text-[8px] tracking-[0.14em] uppercase mt-1 ${subText}`}>live standings</div>
+      </div>
     </div>
   )
 }
@@ -318,7 +284,9 @@ function GolferChapter() {
   return (
     <section id="for-golfers" className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-20 sm:py-24">
       <FadeIn>
-        <div className="max-w-6xl mx-auto space-y-12">
+        <div className="max-w-6xl mx-auto space-y-10">
+
+          {/* Section header */}
           <div className="flex items-baseline gap-3">
             <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
               Chapter 02 · For golfers
@@ -328,81 +296,110 @@ function GolferChapter() {
           </div>
 
           <h2
-            className="font-display text-[#0F3D2E] leading-[0.96] tracking-[-0.025em] max-w-3xl"
+            className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-[0.96] max-w-3xl"
             style={{ fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 400 }}
           >
             A membership that <em className="italic text-[#E0A800]">pays for itself.</em>
           </h2>
 
-          {/* Featured: Fairway Points */}
-          <div className="grid lg:grid-cols-[1fr_320px] gap-10 items-center">
-            <div>
-              <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold mb-3">07 · Fairway Points</p>
-              <h3 className="font-display text-4xl text-[#0F3D2E] leading-tight tracking-[-0.015em]" style={{ fontWeight: 400 }}>
-                Loyalty that lives at the courses you{' '}
-                <em className="italic text-[#E0A800]">actually play.</em>
-              </h3>
-              <p className="mt-4 text-[15px] leading-relaxed text-[#1A1A1A]/78 max-w-lg">
-                Earn at every TeeAhead course. Redeem at any. No expiration, no monthly reset, no &ldquo;use it in 30 days or lose it.&rdquo;
-              </p>
-              <div className="mt-5 grid grid-cols-3 gap-4 max-w-md">
-                {[
-                  { k: '1×', v: 'Fairway' },
-                  { k: '1.5×', v: 'Eagle ($89)' },
-                  { k: '2×', v: 'Ace ($159)' },
-                ].map(({ k, v }) => (
-                  <div key={k} className="border-t border-[#0F3D2E] pt-2">
-                    <p className="font-display text-[32px] text-[#0F3D2E] leading-none tracking-[-0.015em]" style={{ fontWeight: 400 }}>{k}</p>
-                    <p className="text-[11px] text-[#6B7770] mt-1 font-mono tracking-[0.04em]">{v}</p>
-                  </div>
-                ))}
+          {/* Diagram: 4 callouts framing a centered phone */}
+          <div className="relative grid lg:grid-cols-[1fr_320px_1fr] items-center gap-12 lg:gap-0 min-h-[560px]">
+
+            {/* Left column — Fairway Points + Tee time exchange */}
+            <div className="flex flex-col gap-14 lg:pr-10">
+              <CalloutRight num="07" eyebrow="Fairway Points" headline={<>Loyalty that <em className="italic text-[#E0A800]">actually compounds</em></>}>
+                Earn at every course. Eagle 1.5×, Ace 2×. No expiration. Redeem at any partner.
+              </CalloutRight>
+              <CalloutRight num="09" eyebrow="Tee time exchange" headline={<>List a round, <em className="italic text-[#E0A800]">earn the credit back</em></>}>
+                Can&apos;t make it? Trade your tee time on the member exchange. No Venmo, no group texts.
+              </CalloutRight>
+            </div>
+
+            {/* Center — phone */}
+            <div className="relative flex justify-center items-center">
+              <svg viewBox="0 0 500 500" className="absolute inset-0 m-auto w-full max-w-[500px] opacity-[0.08]" aria-hidden>
+                <circle cx="250" cy="250" r="240" fill="none" stroke="#0F3D2E" strokeWidth="1" strokeDasharray="2 6" />
+                <circle cx="250" cy="250" r="200" fill="none" stroke="#0F3D2E" strokeWidth="1" />
+              </svg>
+              <div className="relative z-10 rounded-[28px] p-1.5 bg-[#1A1A1A] shadow-[0_40px_80px_rgba(8,36,25,0.25)]">
+                <div className="w-[240px] h-[494px] rounded-[22px] overflow-hidden bg-[#082419]">
+                  <Image
+                    src="/screenshots/member-home.png"
+                    alt="TeeAhead member home"
+                    width={240}
+                    height={494}
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
               </div>
             </div>
-            <Image
-              src="/screenshots/member-points.png"
-              width={210}
-              height={420}
-              alt="Fairway Points member view"
-              className="justify-self-center rounded-[28px] border-[5px] border-[#1A1A1A] shadow-[0_20px_40px_rgba(0,0,0,0.25)] object-cover"
-            />
+
+            {/* Right column — Book at zero fees + Find a partner */}
+            <div className="flex flex-col gap-14 lg:pl-10">
+              <CalloutLeft num="08" eyebrow="Book at zero fees" headline={<>Eagle and Ace pay <em className="italic text-[#E0A800]">$0 in fees</em></>}>
+                Every round, every course. No &ldquo;$2.49 service fee&rdquo; surprises at checkout.
+              </CalloutLeft>
+              <CalloutLeft num="10" eyebrow="Find a partner" headline={<>Browse the next <em className="italic text-[#E0A800]">14 days</em></>}>
+                See who else is playing this weekend. Match by course, tee time, handicap. Eagle + Ace only.
+              </CalloutLeft>
+            </div>
+
           </div>
 
-          {/* 4 secondary cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <GolferSecondaryCard num="08" title="Book at zero fees" desc="Eagle and Ace pay $0 in booking fees, always." phone />
-            <GolferSecondaryCard num="09" title="Tee time exchange" desc="Can't make it? List it. Earn credit when claimed." graphic="exchange" />
-            <GolferSecondaryCard num="10" title="Find a partner" desc="Browse availability by date. Eagle + Ace only." graphic="partner" />
-            <GolferSecondaryCard num="11" title="In-round service" desc="Beverage, cart, pace — one tap to the pro shop." graphic="service" />
+          {/* In-round service — wide footer strip */}
+          <div className="bg-[#0F3D2E]/[0.06] rounded-2xl px-7 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="flex items-center gap-5">
+              <span className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-none" style={{ fontSize: 44, fontWeight: 400 }}>&lt;1s</span>
+              <div>
+                <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold">11 · In-round service</p>
+                <p className="font-display text-[22px] text-[#0F3D2E] mt-0.5" style={{ fontWeight: 400 }}>One tap from the 6th tee to the pro shop.</p>
+              </div>
+            </div>
+            <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed max-w-sm">
+              Beverage, cart, pace-of-play — your staff sees it instantly. No waving down the cart lady.
+            </p>
           </div>
+
         </div>
       </FadeIn>
     </section>
   )
 }
 
-function GolferSecondaryCard({ num, title, desc, phone, graphic }: { num: string; title: string; desc: string; phone?: boolean; graphic?: FeatureGraphicKind }) {
+/* Right-aligned callout (sits in the left column, line points right toward the phone) */
+function CalloutRight({ num, eyebrow, headline, children }: { num: string; eyebrow: string; headline: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div className="bg-white border border-[#0F3D2E]/10 rounded-xl p-4 flex flex-col gap-3">
-      {phone ? (
-        <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md overflow-hidden">
-          <Image
-            src="/screenshots/member-book.png"
-            width={78}
-            height={132}
-            alt={title}
-            className="rounded-[14px] border-[3px] border-[#1A1A1A] shadow-[0_8px_18px_rgba(0,0,0,0.18)] object-cover"
-          />
-        </div>
-      ) : graphic ? (
-        <FeatureGraphic kind={graphic} dark={false} />
-      ) : (
-        <div className="h-36 bg-[#0F3D2E]/[0.06] rounded-md" />
-      )}
-      <div>
-        <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#E0A800] font-bold">{num}</p>
-        <p className="font-display text-xl text-[#0F3D2E] mt-1" style={{ fontWeight: 400 }}>{title}</p>
-        <p className="text-[12.5px] text-[#1A1A1A]/70 mt-1 leading-relaxed">{desc}</p>
-      </div>
+    <div className="relative text-right">
+      <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-1.5">
+        {num} · {eyebrow}
+      </p>
+      <p className="font-display text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
+        {headline}
+      </p>
+      <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed ml-auto max-w-[280px]">
+        {children}
+      </p>
+      <span className="hidden lg:block absolute right-[-40px] top-6 w-[38px] h-px bg-[#E0A800]" aria-hidden />
+      <span className="hidden lg:block absolute right-[-42px] top-[22px] w-[5px] h-[5px] rounded-full bg-[#E0A800]" aria-hidden />
+    </div>
+  )
+}
+
+/* Left-aligned callout (sits in the right column, line points left toward the phone) */
+function CalloutLeft({ num, eyebrow, headline, children }: { num: string; eyebrow: string; headline: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="relative">
+      <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-1.5">
+        {num} · {eyebrow}
+      </p>
+      <p className="font-display text-[26px] text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-1.5" style={{ fontWeight: 400 }}>
+        {headline}
+      </p>
+      <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed max-w-[280px]">
+        {children}
+      </p>
+      <span className="hidden lg:block absolute left-[-40px] top-6 w-[38px] h-px bg-[#E0A800]" aria-hidden />
+      <span className="hidden lg:block absolute left-[-42px] top-[22px] w-[5px] h-[5px] rounded-full bg-[#E0A800]" aria-hidden />
     </div>
   )
 }
