@@ -74,6 +74,24 @@ export default async function CourseDashboardPage({
   const hour = new Date().getHours()
   const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening'
 
+  // Day-zero: GM has no tee times configured yet → show 3-step onboarding instead of stat grid
+  const isDayZero = totalSlots === 0 && (todayBookings?.length ?? 0) === 0 && (weekBookings?.length ?? 0) === 0
+
+  if (isDayZero) {
+    return (
+      <>
+        <CoursePageHeader
+          title={`${greeting}.`}
+          subtitle={`Welcome to ${course.name}'s TeeAhead dashboard. Let's get you live.`}
+        />
+        <div className="flex-1 p-7 flex flex-col gap-6 overflow-y-auto">
+          <DayZeroOnboarding slug={slug} />
+          <ReferralWidget courseId={course.id} slug={slug} referralCode={course.referral_code} />
+        </div>
+      </>
+    )
+  }
+
   return (
     <>
       <CoursePageHeader
@@ -131,6 +149,82 @@ export default async function CourseDashboardPage({
         </div>
       </div>
     </>
+  )
+}
+
+function DayZeroOnboarding({ slug }: { slug: string }) {
+  const steps = [
+    {
+      n: '01',
+      title: 'Set your first tee times',
+      desc: 'Open the tee sheet and create your booking window — 6:20 AM start, 10-minute intervals, your usual rack rates.',
+      status: 'current' as const,
+      cta: { label: 'Open tee sheet →', href: `/course/${slug}/tee-times/create` },
+    },
+    {
+      n: '02',
+      title: 'Drop a QR code at the pro shop',
+      desc: 'One sticker = every walk-in golfer earns Fairway Points instantly. Print from the Install page.',
+      status: 'next' as const,
+      cta: { label: 'Print QR pack →', href: `/course/${slug}/install` },
+    },
+    {
+      n: '03',
+      title: 'Email your regulars',
+      desc: 'A 3-sentence email to your existing list. We have a template — most courses see 60% sign up the first week.',
+      status: 'next' as const,
+      cta: { label: 'Open the template →', href: `/course/${slug}/help` },
+    },
+  ]
+
+  return (
+    <div className="bg-white rounded-xl border border-[#0F3D2E]/10 overflow-hidden">
+      <div className="bg-[#082419] px-6 py-5 text-[#F4F1EA]">
+        <p className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+          You&apos;re 48 hours from live
+        </p>
+        <h2
+          className="font-display mt-2 leading-[1.05] tracking-[-0.02em]"
+          style={{ fontSize: 'clamp(28px, 3.6vw, 38px)', fontWeight: 400 }}
+        >
+          Three steps to your first <em className="italic text-[#E0A800]">booked round.</em>
+        </h2>
+      </div>
+
+      <div className="divide-y divide-[#0F3D2E]/10">
+        {steps.map((s, i) => (
+          <div key={s.n} className="grid grid-cols-[60px_1fr_auto] gap-4 px-6 py-5 items-center">
+            <p className={`font-mono text-[11px] tracking-[0.14em] font-bold ${i === 0 ? 'text-[#E0A800]' : 'text-[#6B7770]'}`}>{s.n}</p>
+            <div className="min-w-0">
+              <p className="font-display text-xl text-[#0F3D2E] tracking-[-0.01em]" style={{ fontWeight: 400 }}>{s.title}</p>
+              <p className="text-[12.5px] text-[#6B7770] mt-1 leading-relaxed">{s.desc}</p>
+            </div>
+            {i === 0 ? (
+              <Link
+                href={s.cta.href}
+                className="px-4 py-2.5 rounded-md bg-[#E0A800] text-[#082419] text-[13px] font-bold hover:bg-[#E0A800]/90 whitespace-nowrap"
+              >
+                {s.cta.label}
+              </Link>
+            ) : (
+              <Link
+                href={s.cta.href}
+                className="px-4 py-2.5 rounded-md border border-[#0F3D2E]/15 text-[#0F3D2E] text-[13px] font-semibold hover:bg-[#0F3D2E]/5 whitespace-nowrap"
+              >
+                {s.cta.label}
+              </Link>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="px-6 py-4 bg-[#FAF7F2] border-t border-[#0F3D2E]/10 flex items-center justify-between gap-3">
+        <p className="text-[12.5px] text-[#6B7770]">
+          Stuck? <a href="mailto:hello@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-2">Email Neil directly →</a>
+        </p>
+        <span className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-[#6B7770]">Avg time to live: 38 hrs</span>
+      </div>
+    </div>
   )
 }
 
