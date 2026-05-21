@@ -314,7 +314,7 @@ function GolferChapter() {
 
           {/* 4 secondary cards */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <GolferSecondaryCard num="08" title="Book at zero fees" desc="Eagle and Ace pay $0 in booking fees, always." badge="$0 FEES · ALWAYS" />
+            <GolferSecondaryCard num="08" title="Book at zero fees" desc="Eagle and Ace pay $0 in booking fees, always." badge="$0 FEES · ALWAYS" phone />
             <GolferSecondaryCard num="09" title="Tee time exchange" desc="Can't make it? List it. Earn credit when claimed." badge="$0 LOST" />
             <GolferSecondaryCard num="10" title="Find a partner" desc="Browse availability by date. Eagle + Ace only." badge="14 DAYS OUT" />
             <GolferSecondaryCard num="11" title="In-round service" desc="Beverage, cart, pace — one tap to the pro shop." badge="<1S TO RESPOND" />
@@ -325,12 +325,38 @@ function GolferChapter() {
   )
 }
 
-function GolferSecondaryCard({ num, title, desc, badge }: { num: string; title: string; desc: string; badge: string }) {
+function GolferSecondaryCard({ num, title, desc, badge, phone }: { num: string; title: string; desc: string; badge: string; phone?: boolean }) {
   return (
     <div className="bg-white border border-[#0F3D2E]/10 rounded-xl p-4 flex flex-col gap-3">
-      <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md font-mono text-[10.5px] text-[#0F3D2E] font-semibold tracking-[0.12em] uppercase text-center px-3">
-        {badge}
-      </div>
+      {phone ? (
+        // TODO Claude Code: replace placeholder with /screenshots/book.png when the real member-book screenshot lands
+        <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md overflow-hidden">
+          <div className="w-[78px] h-[132px] bg-[#082419] rounded-[14px] border-[3px] border-[#1A1A1A] shadow-[0_8px_18px_rgba(0,0,0,0.18)] flex flex-col">
+            <div className="px-2 pt-2 text-[#F4F1EA]">
+              <p className="font-mono text-[6px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">Sat 9:40</p>
+              <p className="font-display text-[14px] leading-none mt-0.5 tracking-[-0.02em]" style={{ fontWeight: 400 }}>$42</p>
+              <p className="font-mono text-[6px] tracking-[0.06em] text-[#E0A800] mt-1">NO FEES · EAGLE</p>
+            </div>
+            <div className="mx-1.5 mt-1 space-y-0.5">
+              {['10:00', '10:10', '10:20'].map((t, i) => (
+                <div key={t} className={`flex justify-between items-center text-[5.5px] py-0.5 border-b border-white/10 px-1 rounded-sm ${i === 0 ? 'bg-white/10 text-[#F4F1EA]' : 'text-[#F4F1EA]/55'}`}>
+                  <span>{t}</span>
+                  <span className="font-mono">{['$42', '$48', '$54'][i]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md">
+          <span
+            className="font-display text-[#0F3D2E] text-[24px] tracking-[-0.01em] text-center px-3"
+            style={{ fontWeight: 400 }}
+          >
+            {badge}
+          </span>
+        </div>
+      )}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#E0A800] font-bold">{num}</p>
         <p className="font-display text-xl text-[#0F3D2E] mt-1" style={{ fontWeight: 400 }}>{title}</p>
