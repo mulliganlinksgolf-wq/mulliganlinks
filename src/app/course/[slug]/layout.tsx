@@ -1,9 +1,9 @@
 import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { MANAGER_ROLES } from '@/lib/courseRole'
 import { ServiceInboxWidget } from '@/components/ServiceInbox/ServiceInboxWidget'
+import { CourseSidebar } from '@/components/course/CourseSidebar'
 
 export default async function CourseAdminLayout({
   children,
@@ -31,7 +31,7 @@ export default async function CourseAdminLayout({
     { data: courseAdmin },
     { data: courseUser },
   ] = await Promise.all([
-    admin.from('profiles').select('is_admin').eq('id', user.id).single(),
+    admin.from('profiles').select('is_admin, full_name').eq('id', user.id).single(),
     admin.from('course_admins').select('role').eq('user_id', user.id).eq('course_id', course.id).single(),
     admin.from('crm_course_users').select('role').eq('user_id', user.id).eq('course_id', course.id).single(),
   ])
@@ -42,52 +42,26 @@ export default async function CourseAdminLayout({
   const role = isGlobalAdmin ? 'owner' : (courseAdmin?.role ?? courseUser?.role ?? 'staff')
   const isManager = isGlobalAdmin || MANAGER_ROLES.includes(role)
 
-  const allNavItems = [
-    { href: `/course/${slug}`,            label: 'Tee Sheet',  managerOnly: false },
-    { href: `/course/${slug}/check-in`,   label: 'Check-in',   managerOnly: false },
-    { href: `/course/${slug}/bookings`,   label: 'Bookings',   managerOnly: false },
-    { href: `/course/${slug}/members`,    label: 'Members',    managerOnly: false },
-    { href: `/course/${slug}/payments`,   label: 'Payments',   managerOnly: true },
-    { href: `/course/${slug}/dashboard`,  label: 'Dashboard',  managerOnly: true },
-    { href: `/course/${slug}/reports`,    label: 'Reports',    managerOnly: true },
-    { href: `/course/${slug}/leagues`,    label: 'Leagues',    managerOnly: true },
-    { href: `/course/${slug}/trading`,   label: 'Trading',    managerOnly: true },
-    { href: `/course/${slug}/billing`,    label: 'Billing',    managerOnly: true },
-    { href: `/course/${slug}/settings`,   label: 'Settings',   managerOnly: true },
-    { href: `/course/${slug}/install`,    label: 'Install',    managerOnly: true },
-    { href: `/course/${slug}/help`,       label: 'Knowledge Base', managerOnly: false },
-  ]
-
-  const navItems = allNavItems.filter(item => !item.managerOnly || isManager)
+  const fullName = (profile as { full_name?: string } | null)?.full_name
+    ?? user.email?.split('@')[0]
+    ?? 'You'
+  const userInitials = fullName.split(' ').filter(Boolean).map(p => p[0]).slice(0, 2).join('').toUpperCase() || 'U'
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-[#1B4332] text-[#FAF7F2] px-6 py-3">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href="/app" className="text-[#FAF7F2]/60 hover:text-[#FAF7F2] text-sm">← teeahead</Link>
-            <span className="text-[#FAF7F2]/40">|</span>
-            <span className="font-semibold">{course.name}</span>
-          </div>
-          <span className="text-xs text-[#FAF7F2]/60 uppercase tracking-wider">{role}</span>
-        </div>
-      </header>
-      <nav className="bg-white border-b border-gray-200 px-6">
-        <div className="max-w-7xl mx-auto flex gap-0">
-          {navItems.map(item => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="px-4 py-3 text-sm font-medium text-[#6B7770] hover:text-[#1A1A1A] border-b-2 border-transparent hover:border-[#1B4332] transition-colors"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
-      <main className="max-w-7xl mx-auto px-6 py-6">
+    <div className="min-h-screen flex bg-[#FAF7F2] font-sans">
+      <CourseSidebar
+        slug={slug}
+        courseName={course.name}
+        role={role}
+        isManager={isManager}
+        userInitials={userInitials}
+        userName={fullName}
+      />
+
+      <div className="flex-1 flex flex-col min-w-0">
         {children}
-      </main>
+      </div>
+
       <ServiceInboxWidget
         courseId={course.id}
         serviceRequestsEnabled={course.service_requests_enabled ?? true}
