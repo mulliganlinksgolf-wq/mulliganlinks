@@ -62,21 +62,21 @@ export default async function HomePage({
           <div className="flex items-center gap-2 sm:gap-3">
             <Link
               href="/features"
-              className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#F4F1EA]/30 px-5 py-2.5 text-sm font-semibold text-[#F4F1EA]/80 transition-colors hover:border-[#F4F1EA]/60 hover:text-[#F4F1EA]"
+              className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-semibold text-[#F4F1EA]/80 transition-colors hover:text-[#F4F1EA]"
             >
               Features
             </Link>
             <Link
-              href="/waitlist/course"
-              className="hidden min-[400px]:inline-flex items-center justify-center whitespace-nowrap rounded-lg border border-[#E0A800] px-3 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-[#E0A800] transition-colors hover:bg-[#E0A800]/10"
+              href="/pricing"
+              className="hidden sm:inline-flex items-center justify-center whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-semibold text-[#F4F1EA]/80 transition-colors hover:text-[#F4F1EA]"
             >
-              I Run a Course
+              Pricing
             </Link>
             <Link
-              href="/waitlist/golfer"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-[#E0A800] px-3 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-[#0a0a0a] transition-colors hover:bg-[#E0A800]/90"
+              href="/waitlist/course"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-lg bg-[#E0A800] px-4 py-2.5 sm:px-5 text-sm font-bold text-[#082419] transition-colors hover:bg-[#E0A800]/90"
             >
-              I&apos;m a Golfer →
+              Claim a spot →
             </Link>
           </div>
         </div>
