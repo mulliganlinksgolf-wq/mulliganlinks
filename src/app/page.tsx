@@ -81,88 +81,134 @@ export default async function HomePage({
         </div>
       </header>
 
-      {/* ── Hero ──────────────────────────────────────────────── */}
-      <section className="relative px-6 py-28 overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(8,36,25,0.88) 0%, rgba(15,61,46,0.82) 50%, rgba(8,36,25,0.92) 100%)' }} />
-        {/* Vignette */}
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
+      {/* ── Hero — stat-led, course-first ──────────────────────── */}
+      <section className="relative px-6 sm:px-10 py-20 sm:py-28 overflow-hidden bg-[#082419]">
+        {/* subtle topographic background */}
+        <svg
+          aria-hidden
+          className="absolute inset-0 w-full h-full opacity-[0.06] pointer-events-none"
+          viewBox="0 0 1280 760"
+          preserveAspectRatio="xMidYMid slice"
+        >
+          {Array.from({ length: 14 }).map((_, i) => (
+            <ellipse
+              key={i}
+              cx="960"
+              cy="520"
+              rx={120 + i * 60}
+              ry={50 + i * 24}
+              fill="none"
+              stroke="#E0A800"
+              strokeWidth="0.8"
+            />
+          ))}
+        </svg>
 
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+          <div className="relative z-10 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-center">
 
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{badge}</span>
-            </div>
+            {/* Left: stat + pitch */}
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="size-1.5 rounded-full bg-[#E0A800] animate-pulse" />
+                <span className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+                  {badge} · {spotsRemaining}/{totalSpots} founding spots open
+                </span>
+              </div>
 
-            {/* Headline */}
-            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 62px)' }}>
-              Tee Sheet Software for Courses.{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>A Loyalty Membership</em>{' '}
-              for Golfers.
-            </h1>
+              <p className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-[#E0A800]/80 mb-3">
+                What barter costs the average course
+              </p>
 
-            {/* Subhead */}
-            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              {subhead}
-            </p>
+              <h1
+                className="font-display text-[#F4F1EA] leading-[0.88] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(96px, 16vw, 220px)', fontWeight: 400 }}
+              >
+                $94,500<span className="text-[#E0A800]">.</span>
+              </h1>
 
-            {/* Audience cards — course first, equal weight */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[620px] mx-auto pt-2">
+              <p className="mt-6 text-[#F4F1EA]/78 leading-relaxed max-w-xl text-base sm:text-lg">
+                Every year, in tee times you hand to GolfNow. TeeAhead is the local-first
+                replacement —{' '}
+                <em className="italic text-[#E0A800] not-italic sm:italic">free</em> for the
+                first ten Metro Detroit courses, $349/mo flat after that. No barter, no
+                commissions, no catch.
+              </p>
 
-              {/* Course card */}
-              <div className="flex flex-col rounded-xl p-6 text-left gap-4 transition-transform hover:-translate-y-0.5 duration-150"
-                   style={{ background: 'rgba(224,168,0,0.12)', border: '1.5px solid rgba(224,168,0,0.50)', backdropFilter: 'blur(8px)' }}>
-                <div className="text-2xl">🏌️</div>
-                <div>
-                  <p className="font-bold text-[#E0A800] text-base mb-1">I Run a Course</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Free for your first year for Founding Partners. No barter. No data extraction. No commissions.</p>
-                  <p className="text-xs text-[#E0A800]/80 leading-relaxed mt-2">+ Earn 10% rev share on every golfer you refer.</p>
-                </div>
-                <FoundingPartnerProgress claimed={spotsClaimed} total={totalSpots} />
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/waitlist/course"
-                  className="mt-auto block text-center rounded-lg bg-[#E0A800] px-4 py-2.5 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                  className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
                 >
-                  {spotsRemaining > 0 ? 'Claim a Founding Spot' : 'Join the Course Waitlist'}
+                  {spotsRemaining > 0
+                    ? `Claim a founding spot (${spotsRemaining} left)`
+                    : 'Join the course waitlist'}
+                </Link>
+                <Link
+                  href="/damage"
+                  className="inline-flex items-center justify-center rounded-lg border border-[#F4F1EA]/30 px-6 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:border-[#F4F1EA]/60 transition-colors"
+                >
+                  Run my damage report →
                 </Link>
               </div>
 
-              {/* Golfer card */}
-              <div className="flex flex-col rounded-xl p-6 text-left gap-4 transition-transform hover:-translate-y-0.5 duration-150"
-                   style={{ background: 'rgba(244,241,234,0.10)', border: '1.5px solid rgba(244,241,234,0.50)', backdropFilter: 'blur(8px)' }}>
-                <div className="text-2xl">⛳</div>
-                <div>
-                  <p className="font-bold text-[#F4F1EA] text-base mb-1">I&apos;m a Golfer</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">Zero fees. Real loyalty at the courses you already play. Beat GolfPass+ for $30 less.</p>
-                  <Link href="/pricing" className="text-xs text-[#F4F1EA]/60 leading-relaxed mt-2 inline-block hover:text-[#F4F1EA] transition-colors">See what&apos;s included →</Link>
-                </div>
-                <p className="text-xs text-[#F4F1EA]/40 text-center">Free · No credit card</p>
+              {/* Secondary audience — quiet link, not a CTA */}
+              <p className="mt-8 text-sm text-[#F4F1EA]/55">
+                Golfer instead?{' '}
                 <Link
                   href="/waitlist/golfer"
-                  className="mt-auto block text-center rounded-lg bg-[#F4F1EA] px-4 py-2.5 text-sm font-semibold text-[#0F3D2E] hover:bg-white transition-colors"
+                  className="text-[#E0A800] underline underline-offset-4 font-semibold hover:text-[#E0A800]/80"
                 >
-                  Join the Waitlist
+                  Join the loyalty waitlist →
                 </Link>
-              </div>
-
+              </p>
             </div>
 
-            {/* Live golfer counter */}
-            {(golferCount ?? 0) > 0 && (
-              <p className="text-sm text-[#F4F1EA]/60">
-                <span className="font-semibold text-[#F4F1EA]/80">{golferCount?.toLocaleString()}</span> golfers in Metro Detroit on the waitlist. Be next.
-              </p>
-            )}
+            {/* Right: tee-sheet product preview */}
+            <div className="relative hidden lg:flex items-center justify-center">
+              <div
+                className="w-[320px] h-[460px] bg-[#F4F1EA] rounded-2xl overflow-hidden border border-black/10"
+                style={{
+                  boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
+                  transform: 'rotate(-3deg)',
+                }}
+              >
+                <div className="bg-[#0F3D2E] px-5 py-3.5 text-[#F4F1EA] font-mono text-[11px] tracking-[0.12em]">
+                  TEE SHEET · SAT MAY 24
+                </div>
+                <div className="p-3.5 flex flex-col gap-1.5">
+                  {['6:20','6:30','6:40','6:50','7:00','7:10','7:20','7:30','7:40','7:50','8:00','8:10'].map((t, i) => (
+                    <div
+                      key={t}
+                      className={`flex items-center justify-between px-2.5 py-2 rounded ${i % 3 === 1 ? 'bg-[#0F3D2E]/[0.06]' : ''}`}
+                    >
+                      <span className="font-mono text-[11px] text-[#0F3D2E] font-semibold">{t}</span>
+                      <div className="flex gap-1">
+                        {[0,1,2,3].map((s) => {
+                          const fill =
+                            i % 4 === 0 && s < 2 ? '#0F3D2E' :
+                            i % 4 === 1 ? 'rgba(15,61,46,0.15)' :
+                            i % 4 === 2 && s === 0 ? '#E0A800' :
+                            'rgba(15,61,46,0.08)';
+                          return <div key={s} className="size-[22px] rounded" style={{ background: fill }} />;
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-            <p className="text-sm text-[#F4F1EA]/50">{tagline}</p>
+          </div>
+
+          {/* Proof rail */}
+          <div className="relative z-10 mt-16 pt-6 max-w-6xl mx-auto border-t border-[#F4F1EA]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 font-mono text-[11px] tracking-[0.1em] uppercase text-[#F4F1EA]/45">
+            <span>Source: NGCOA & Golf Inc. industry analysis, 2024</span>
+            {(golferCount ?? 0) > 0 && (
+              <span>
+                <strong className="text-[#F4F1EA]/80">{golferCount?.toLocaleString()}</strong> golfers waitlisted
+              </span>
+            )}
           </div>
         </FadeIn>
       </section>
