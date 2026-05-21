@@ -97,44 +97,95 @@ export default async function GolferWaitlistPage({
         </div>
       </header>
 
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="relative px-6 py-28 overflow-hidden">
-        {/* Background image */}
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1587174486073-ae5e5cff23aa?auto=format&fit=crop&w=1920&q=80')" }}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(160deg, rgba(8,36,25,0.88) 0%, rgba(15,61,46,0.82) 50%, rgba(8,36,25,0.92) 100%)' }} />
-        {/* Vignette */}
-        <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.45) 100%)' }} />
-
+      {/* ── Hero — editorial, cream, with member card ────────────── */}
+      <section className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-16 sm:py-20">
         <FadeIn>
-          <div className="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
 
-            {/* Eyebrow badge */}
-            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 backdrop-blur-sm border border-[#E0A800]/40 rounded-full px-4 py-1.5">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">{c['waitlist.hero_badge'] ?? 'Metro Detroit Launch'}</span>
+            <div>
+              <div className="flex items-center gap-3 mb-5">
+                <span className="w-7 h-px bg-[#E0A800]" />
+                <span className="font-mono text-xs tracking-[0.16em] uppercase text-[#6B7770]">
+                  {c['waitlist.hero_badge'] ?? 'For Metro Detroit golfers · Waitlist open'}
+                </span>
+              </div>
+
+              <h1
+                className="font-display text-[#0F3D2E] leading-[0.96] tracking-[-0.025em]"
+                style={{ fontSize: 'clamp(48px, 7vw, 84px)', fontWeight: 400 }}
+              >
+                Loyalty that lives at the courses you{' '}
+                <em className="italic text-[#E0A800]">actually play.</em>
+              </h1>
+
+              <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#1A1A1A]/78 max-w-xl">
+                TeeAhead is the local-first alternative to GolfPass+. Zero booking fees on Eagle. Points that never expire. Eagle membership is{' '}
+                <strong className="text-[#0F3D2E]">$89/yr</strong> — $30 less than GolfPass+ with more credits and more flexibility.
+              </p>
+
+              <div className="mt-7 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="#pricing"
+                  className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-6 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
+                >
+                  Join the waitlist →
+                </Link>
+                <Link
+                  href="#compare"
+                  className="inline-flex items-center justify-center rounded-lg border border-[#0F3D2E] px-6 py-3.5 text-sm font-semibold text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
+                >
+                  Compare to GolfPass+
+                </Link>
+              </div>
+
+              {(golferCount ?? 0) > 0 && (
+                <div className="mt-6 flex items-center gap-3 text-sm text-[#6B7770]">
+                  <div className="flex">
+                    {['#E0A800','#0F3D2E','#8FA889','#6B7770'].map((bg, i) => (
+                      <span
+                        key={i}
+                        className="size-6 rounded-full border-2 border-[#FAF7F2]"
+                        style={{ background: bg, marginLeft: i ? -8 : 0 }}
+                      />
+                    ))}
+                  </div>
+                  <span>
+                    <strong className="text-[#0F3D2E]">{golferCount?.toLocaleString()}+</strong> golfers already on the waitlist
+                  </span>
+                </div>
+              )}
             </div>
 
-            {/* Headline */}
-            <h1 className="font-display font-black text-[#F4F1EA] leading-[1.08] tracking-[-0.02em]" style={{ fontSize: 'clamp(40px, 6vw, 58px)' }}>
-              {c['waitlist.hero_headline'] ?? 'Golf at your home course, done right.'}
-            </h1>
-
-            {/* Subhead */}
-            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-xl mx-auto">
-              {c['waitlist.hero_subhead'] ?? 'TeeAhead is the local alternative to GolfPass+. Zero booking fees. Real loyalty at the courses you actually play. Eagle membership is $89/yr — $30 less than GolfPass+ with more credits and no expiration.'}
-            </p>
-
-            {/* Live count badge */}
-            {(golferCount ?? 0) > 0 && (
-              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
-                <span className="size-2 rounded-full bg-green-400 animate-pulse" />
-                <span className="text-sm text-[#F4F1EA]/80">{golferCount?.toLocaleString()}+ golfers already on the waitlist</span>
+            {/* Member card preview */}
+            <div className="hidden lg:flex lg:justify-self-end w-full max-w-sm">
+              <div className="bg-[#082419] rounded-2xl p-7 text-[#F4F1EA] shadow-[0_30px_60px_rgba(8,36,25,0.3)] w-full">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800]">Eagle Member · 2026</p>
+                    <p className="font-display text-2xl mt-1" style={{ fontWeight: 400 }}>Riley Mahoney</p>
+                  </div>
+                  <div className="size-10 rounded-full border-[1.5px] border-[#E0A800] flex items-center justify-center text-[#E0A800] font-display text-base">T</div>
+                </div>
+                <div className="h-px bg-[#F4F1EA]/15 mb-4" />
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { k: '2,140', v: 'Fairway pts' },
+                    { k: '18', v: 'Rounds 2026' },
+                    { k: '4', v: 'Home courses' },
+                  ].map(({ k, v }) => (
+                    <div key={v}>
+                      <p className="font-display text-2xl text-[#E0A800] leading-none" style={{ fontWeight: 400 }}>{k}</p>
+                      <p className="text-[11px] text-[#F4F1EA]/65 mt-1">{v}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-5 rounded-lg p-3.5" style={{ background: 'rgba(244,241,234,0.08)' }}>
+                  <p className="text-[11px] text-[#F4F1EA]/60 mb-1">Next round</p>
+                  <p className="text-sm font-semibold">Plum Hollow · Sat 9:40 AM</p>
+                  <p className="mt-1.5 font-mono text-[10px] tracking-[0.05em] text-[#E0A800]">+45 PTS ON CHECK-IN</p>
+                </div>
               </div>
-            )}
+            </div>
 
           </div>
         </FadeIn>
@@ -151,8 +202,8 @@ export default async function GolferWaitlistPage({
           ].map(({ value, label }) => (
             <div key={label}>
               <p
-                className="font-display font-extrabold text-[#0F3D2E] leading-none mb-1"
-                style={{ fontSize: '32px' }}
+                className="font-display text-[#0F3D2E] leading-none mb-1 tracking-[-0.02em]"
+                style={{ fontSize: '40px', fontWeight: 400 }}
               >
                 {value}
               </p>
@@ -163,24 +214,24 @@ export default async function GolferWaitlistPage({
       </section>
 
       {/* ── Tab strip ────────────────────────────────────────── */}
-      <div className="bg-white border-b border-black/8 sticky top-[73px] z-40">
+      <div className="bg-white border-b border-[#0F3D2E]/10 sticky top-[73px] z-40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-center gap-2 py-3">
-            <span className="px-7 py-3 rounded-xl bg-[#0F3D2E] text-base font-semibold text-[#F4F1EA]">
-              ⛳ I&apos;m a Golfer — Free to Join
+            <span aria-current="page" className="px-6 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
+              For golfers
             </span>
             <Link
               href="/waitlist/course"
-              className="px-7 py-3 rounded-xl text-base font-semibold text-[#6B7770] border border-[#0F3D2E]/20 hover:border-[#0F3D2E]/50 hover:text-[#1A1A1A] hover:bg-[#0F3D2E]/5 transition-colors"
+              className="px-6 py-2.5 rounded-lg text-sm font-semibold text-[#6B7770] border border-[#0F3D2E]/15 hover:border-[#0F3D2E]/40 hover:text-[#0F3D2E] hover:bg-[#0F3D2E]/5 transition-colors"
             >
-              🏌️ I Manage a Course — Founding Partner
+              For courses
             </Link>
           </div>
         </div>
       </div>
 
       {/* ── Quick comparison ──────────────────────────────── */}
-      <section className="bg-white px-6 py-12 border-t border-black/6">
+      <section id="compare" className="bg-white px-6 py-12 border-t border-black/6">
         <div className="max-w-xl mx-auto">
           <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F] text-center mb-6">How Eagle stacks up</p>
           <div className="rounded-xl overflow-hidden border border-black/8">
