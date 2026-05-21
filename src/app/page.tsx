@@ -107,7 +107,7 @@ export default async function HomePage({
         </svg>
 
         <FadeIn>
-          <div className="relative z-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-14 items-center">
+          <div className="relative z-20 max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
 
             {/* Left: stat + pitch */}
             <div className="min-w-0">
@@ -124,7 +124,7 @@ export default async function HomePage({
 
               <h1
                 className="font-display text-[#F4F1EA] leading-[0.88] tracking-[-0.04em]"
-                style={{ fontSize: 'clamp(96px, 16vw, 220px)', fontWeight: 400 }}
+                style={{ fontSize: 'clamp(80px, 13vw, 180px)', fontWeight: 400 }}
               >
                 $94,500<span className="text-[#E0A800]">.</span>
               </h1>
