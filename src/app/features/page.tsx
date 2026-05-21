@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
@@ -83,50 +84,24 @@ function FeaturesHero() {
             </div>
           </div>
 
-          {/* Product peek — placeholder collage until real screenshots drop in /public/screenshots/ */}
+          {/* Product peek — real screenshots from /public/screenshots/ */}
           <div className="hidden lg:block relative h-[460px]">
-            {/* TODO Claude Code: replace with <Image src="/screenshots/dashboard.png" /> when ready */}
-            <div className="absolute top-0 right-0 w-[400px] h-[260px] bg-white rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-black/8 overflow-hidden rotate-[2deg]">
-              <div className="bg-[#082419] px-5 py-3 text-[#F4F1EA] font-mono text-[10px] tracking-[0.14em]">COURSE · DASHBOARD</div>
-              <div className="p-4 space-y-2.5">
-                <div className="grid grid-cols-2 gap-2.5">
-                  {[
-                    { l: "Today's revenue", v: '$1,840' },
-                    { l: 'This week', v: '$12.4K' },
-                  ].map(({ l, v }) => (
-                    <div key={l} className="bg-[#FAF7F2] rounded p-2.5">
-                      <p className="font-mono text-[8px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold">{l}</p>
-                      <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em] mt-0.5" style={{ fontWeight: 400 }}>{v}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="h-[110px] bg-[#FAF7F2] rounded flex items-end gap-[2px] p-2">
-                  {[42,48,52,45,51,58,63,60,64,70,68,72,78,74,81,88,85,90,86,93].map((h, i) => (
-                    <div key={i} className="flex-1 bg-[#0F3D2E]/40 rounded-t" style={{ height: `${h}%` }} />
-                  ))}
-                </div>
-              </div>
-            </div>
-            {/* TODO Claude Code: replace with <Image src="/screenshots/member-home.png" /> when ready */}
-            <div className="absolute bottom-0 left-0 w-[200px] h-[400px] bg-[#082419] rounded-[26px] shadow-[0_20px_40px_rgba(0,0,0,0.25)] border-[5px] border-[#1A1A1A] rotate-[-3deg] overflow-hidden">
-              <div className="px-4 pt-5 pb-3 text-[#F4F1EA]">
-                <p className="font-mono text-[8px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">Fairway points</p>
-                <p className="font-display text-5xl leading-[0.9] mt-1 tracking-[-0.025em]" style={{ fontWeight: 400 }}>2,140</p>
-                <p className="font-mono text-[9px] text-[#E0A800] mt-1.5">+45 LAST ROUND</p>
-              </div>
-              <div className="mx-3 mt-3 rounded-lg bg-white/[0.06] p-3">
-                <p className="text-[10px] text-[#F4F1EA]/55">Next round</p>
-                <p className="text-[11px] font-semibold text-[#F4F1EA] mt-1 leading-tight">Plum Hollow<br/>Sat 9:40 AM</p>
-              </div>
-              <div className="mx-3 mt-3 space-y-1.5">
-                {['Detroit GC', 'Rouge Park', 'Maple Lane'].map((c, i) => (
-                  <div key={c} className="flex justify-between items-center text-[10px] text-[#F4F1EA]/85 border-b border-white/10 py-1.5">
-                    <span className="truncate">{c}</span>
-                    <span className="font-mono text-[#E0A800]">+{[35, 28, 42][i]}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Image
+              src="/screenshots/dashboard.png"
+              width={400}
+              height={234}
+              alt="TeeAhead course dashboard"
+              priority
+              className="absolute top-0 right-0 w-[400px] h-auto rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-black/8 rotate-[2deg]"
+            />
+            <Image
+              src="/screenshots/member-home.png"
+              width={200}
+              height={400}
+              alt="TeeAhead member home"
+              priority
+              className="absolute bottom-0 left-0 w-[200px] h-[400px] object-cover rounded-[26px] shadow-[0_20px_40px_rgba(0,0,0,0.25)] border-[5px] border-[#1A1A1A] rotate-[-3deg]"
+            />
           </div>
         </div>
       </FadeIn>
@@ -172,39 +147,31 @@ function CourseChapter() {
                 ))}
               </div>
             </div>
-            {/* TODO Claude Code: replace placeholder with /screenshots/dashboard.png */}
-            <div className="aspect-[3/2] bg-white rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-white/10 overflow-hidden">
-              <div className="bg-[#0F3D2E] px-5 py-3 text-[#F4F1EA] font-mono text-[10px] tracking-[0.14em] flex justify-between">
-                <span>GOOD MORNING, NEIL.</span>
-                <span className="text-[#E0A800]">LIVE · SAT</span>
-              </div>
-              <div className="p-5 grid grid-cols-4 gap-3">
-                {[
-                  { l: 'Revenue', v: '$1,840' },
-                  { l: 'Week', v: '$12.4K' },
-                  { l: 'Util', v: '88%' },
-                  { l: 'Members', v: '142' },
-                ].map(({ l, v }) => (
-                  <div key={l}>
-                    <p className="font-mono text-[8.5px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold">{l}</p>
-                    <p className="font-display text-2xl text-[#0F3D2E] mt-0.5 tracking-[-0.02em]" style={{ fontWeight: 400 }}>{v}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="px-5">
-                <div className="h-[100px] bg-[#FAF7F2] rounded flex items-end gap-[2px] p-1.5">
-                  {[42,48,52,45,51,58,63,60,64,70,68,72,78,74,81,88,85,90,86,93,96,92,100,105,102,109,113,110,118,124].map((h, i) => (
-                    <div key={i} className="flex-1 bg-[#0F3D2E]/40 rounded-t" style={{ height: `${h * 0.7}%` }} />
-                  ))}
-                </div>
-              </div>
-            </div>
+            <Image
+              src="/screenshots/dashboard.png"
+              width={924}
+              height={540}
+              alt="Course dashboard — revenue, utilization, top members"
+              className="rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-white/10 w-full h-auto"
+            />
           </div>
 
           {/* 3 secondary cards */}
           <div className="grid sm:grid-cols-3 gap-4">
-            <SecondaryFeatureCard num="02" title="Tee sheet" desc="Every slot earns. No barter, ever." />
-            <SecondaryFeatureCard num="03" title="Members table" desc="Your data, exported anytime." />
+            <SecondaryFeatureCard
+              num="02"
+              title="Tee sheet"
+              desc="Every slot earns. No barter, ever."
+              imageSrc="/screenshots/tee-sheet.png"
+              badge="REAL-TIME · LIVE"
+            />
+            <SecondaryFeatureCard
+              num="03"
+              title="Members table"
+              desc="Your data, exported anytime."
+              imageSrc="/screenshots/members.png"
+              badge="FULL EXPORT · CSV"
+            />
             <SecondaryFeatureCard num="04" title="Direct payouts" desc="Stripe Connect. Greens fees land in your bank." badge="STRIPE · DIRECT · YOUR BANK" />
           </div>
 
@@ -219,14 +186,26 @@ function CourseChapter() {
   )
 }
 
-function SecondaryFeatureCard({ num, title, desc, badge }: {
-  num: string; title: string; desc: string; badge?: string;
+function SecondaryFeatureCard({ num, title, desc, badge, imageSrc }: {
+  num: string; title: string; desc: string; badge?: string; imageSrc?: string;
 }) {
   return (
     <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
-      {badge ? (
-        <div className="h-32 flex items-center justify-center bg-white/[0.04] rounded-md font-mono text-[10px] tracking-[0.14em] text-[#E0A800] text-center px-3">
-          {badge}
+      {imageSrc ? (
+        <div className="h-32 rounded-md overflow-hidden bg-white/[0.04]">
+          <Image
+            src={imageSrc}
+            alt={title}
+            width={924}
+            height={540}
+            className="w-full h-full object-cover object-left-top"
+          />
+        </div>
+      ) : badge ? (
+        <div className="h-32 flex items-center justify-center bg-[#F4F1EA]/[0.06] border border-[#F4F1EA]/10 rounded-md px-3">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold text-center">
+            {badge}
+          </span>
         </div>
       ) : (
         <div className="h-32 bg-white/10 rounded-md" />
@@ -284,32 +263,13 @@ function GolferChapter() {
                 ))}
               </div>
             </div>
-            {/* TODO Claude Code: phone-frame mock with /screenshots/points.png */}
-            <div className="justify-self-center w-[210px] h-[420px] bg-[#082419] rounded-[28px] border-[5px] border-[#1A1A1A] shadow-[0_20px_40px_rgba(0,0,0,0.25)] overflow-hidden">
-              <div className="px-5 pt-6 pb-5 text-[#F4F1EA]">
-                <p className="font-mono text-[8.5px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">Fairway points</p>
-                <p className="font-display text-[56px] leading-[0.88] tracking-[-0.025em] mt-1.5" style={{ fontWeight: 400 }}>2,140</p>
-                <p className="font-mono text-[9px] tracking-[0.05em] text-[#E0A800] mt-2">+45 LAST ROUND</p>
-                <div className="mt-3 h-1 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-[#E0A800] w-[68%]" />
-                </div>
-              </div>
-              <div className="mx-4 space-y-2">
-                {[
-                  { c: 'Plum Hollow', d: 'Sat May 17', p: '+45' },
-                  { c: 'Detroit GC', d: 'May 10', p: '+38' },
-                  { c: 'Rouge Park', d: 'May 3', p: '+32' },
-                ].map(({ c, d, p }) => (
-                  <div key={c} className="flex justify-between items-center text-[10px] border-b border-white/10 py-1.5">
-                    <div>
-                      <p className="text-[#F4F1EA]">{c}</p>
-                      <p className="text-[#F4F1EA]/55 text-[8.5px] mt-0.5">{d}</p>
-                    </div>
-                    <span className="font-mono text-[#E0A800] font-semibold">{p}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <Image
+              src="/screenshots/member-points.png"
+              width={210}
+              height={420}
+              alt="Fairway Points member view"
+              className="justify-self-center rounded-[28px] border-[5px] border-[#1A1A1A] shadow-[0_20px_40px_rgba(0,0,0,0.25)] object-cover"
+            />
           </div>
 
           {/* 4 secondary cards */}
@@ -329,23 +289,14 @@ function GolferSecondaryCard({ num, title, desc, badge, phone }: { num: string; 
   return (
     <div className="bg-white border border-[#0F3D2E]/10 rounded-xl p-4 flex flex-col gap-3">
       {phone ? (
-        // TODO Claude Code: replace placeholder with /screenshots/book.png when the real member-book screenshot lands
         <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md overflow-hidden">
-          <div className="w-[78px] h-[132px] bg-[#082419] rounded-[14px] border-[3px] border-[#1A1A1A] shadow-[0_8px_18px_rgba(0,0,0,0.18)] flex flex-col">
-            <div className="px-2 pt-2 text-[#F4F1EA]">
-              <p className="font-mono text-[6px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">Sat 9:40</p>
-              <p className="font-display text-[14px] leading-none mt-0.5 tracking-[-0.02em]" style={{ fontWeight: 400 }}>$42</p>
-              <p className="font-mono text-[6px] tracking-[0.06em] text-[#E0A800] mt-1">NO FEES · EAGLE</p>
-            </div>
-            <div className="mx-1.5 mt-1 space-y-0.5">
-              {['10:00', '10:10', '10:20'].map((t, i) => (
-                <div key={t} className={`flex justify-between items-center text-[5.5px] py-0.5 border-b border-white/10 px-1 rounded-sm ${i === 0 ? 'bg-white/10 text-[#F4F1EA]' : 'text-[#F4F1EA]/55'}`}>
-                  <span>{t}</span>
-                  <span className="font-mono">{['$42', '$48', '$54'][i]}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <Image
+            src="/screenshots/member-book.png"
+            width={78}
+            height={132}
+            alt={title}
+            className="rounded-[14px] border-[3px] border-[#1A1A1A] shadow-[0_8px_18px_rgba(0,0,0,0.18)] object-cover"
+          />
         </div>
       ) : (
         <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md">

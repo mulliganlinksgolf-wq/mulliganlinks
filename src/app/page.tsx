@@ -14,6 +14,7 @@ import { HomepageFaq } from '@/components/HomepageFaq'
 import { HomepageFaqSchema } from '@/components/HomepageFaqSchema'
 import { ImpersonateRedirect } from '@/components/ImpersonateRedirect'
 import { PricingCard } from '@/components/PricingCard'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
@@ -165,39 +166,20 @@ export default async function HomePage({
               </p>
             </div>
 
-            {/* Right: tee-sheet product preview */}
+            {/* Right: real course dashboard screenshot */}
             <div className="relative hidden lg:flex items-center justify-center">
-              <div
-                className="w-[320px] h-[460px] bg-[#F4F1EA] rounded-2xl overflow-hidden border border-black/10"
+              <Image
+                src="/screenshots/dashboard.png"
+                width={640}
+                height={430}
+                alt="TeeAhead course dashboard"
+                priority
+                className="rounded-2xl border border-black/10 w-full max-w-[640px] h-auto"
                 style={{
                   boxShadow: '0 30px 80px rgba(0,0,0,0.4)',
                   transform: 'rotate(-3deg)',
                 }}
-              >
-                <div className="bg-[#0F3D2E] px-5 py-3.5 text-[#F4F1EA] font-mono text-[11px] tracking-[0.12em]">
-                  TEE SHEET · SAT MAY 24
-                </div>
-                <div className="p-3.5 flex flex-col gap-1.5">
-                  {['6:20','6:30','6:40','6:50','7:00','7:10','7:20','7:30','7:40','7:50','8:00','8:10'].map((t, i) => (
-                    <div
-                      key={t}
-                      className={`flex items-center justify-between px-2.5 py-2 rounded ${i % 3 === 1 ? 'bg-[#0F3D2E]/[0.06]' : ''}`}
-                    >
-                      <span className="font-mono text-[11px] text-[#0F3D2E] font-semibold">{t}</span>
-                      <div className="flex gap-1">
-                        {[0,1,2,3].map((s) => {
-                          const fill =
-                            i % 4 === 0 && s < 2 ? '#0F3D2E' :
-                            i % 4 === 1 ? 'rgba(15,61,46,0.15)' :
-                            i % 4 === 2 && s === 0 ? '#E0A800' :
-                            'rgba(15,61,46,0.08)';
-                          return <div key={s} className="size-[22px] rounded" style={{ background: fill }} />;
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              />
             </div>
 
           </div>
