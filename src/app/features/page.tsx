@@ -172,13 +172,13 @@ function CourseChapter() {
               imageSrc="/screenshots/members.png"
               badge="FULL EXPORT · CSV"
             />
-            <SecondaryFeatureCard num="04" title="Direct payouts" desc="Stripe Connect. Greens fees land in your bank." badge="STRIPE · DIRECT · YOUR BANK" />
+            <SecondaryFeatureCard num="04" title="Direct payouts" desc="Stripe Connect. Greens fees land in your bank." graphic="payouts" />
           </div>
 
           {/* 2 more secondary cards */}
           <div className="grid sm:grid-cols-2 gap-4">
-            <SecondaryFeatureCard num="05" title="QR check-in" desc="One scan. No clipboards, no double-booking, no front-desk lines." badge="ONE SCAN · NO LINES" />
-            <SecondaryFeatureCard num="06" title="Leagues & outings" desc="9 + 18-hole league manager, live standings, group payments, handicap tracking." badge="9 · 18 HOLES · LIVE" />
+            <SecondaryFeatureCard num="05" title="QR check-in" desc="One scan. No clipboards, no double-booking." graphic="qr" />
+            <SecondaryFeatureCard num="06" title="Leagues & outings" desc="9 + 18-hole league manager, live standings." graphic="leagues" />
           </div>
         </div>
       </FadeIn>
@@ -186,8 +186,107 @@ function CourseChapter() {
   )
 }
 
-function SecondaryFeatureCard({ num, title, desc, badge, imageSrc }: {
-  num: string; title: string; desc: string; badge?: string; imageSrc?: string;
+type FeatureGraphicKind = 'payouts' | 'qr' | 'leagues' | 'exchange' | 'partner' | 'service'
+
+function FeatureGraphic({ kind, dark = true }: { kind: FeatureGraphicKind; dark?: boolean }) {
+  const bg = dark ? 'bg-white/[0.04]' : 'bg-[#0F3D2E]/[0.04]'
+  const goldText = '#E0A800'
+  const subText = dark ? 'text-[#F4F1EA]/60' : 'text-[#6B7770]'
+  const subTextStrong = dark ? 'text-[#F4F1EA]' : 'text-[#0F3D2E]'
+
+  if (kind === 'payouts') {
+    return (
+      <div className={`h-32 rounded-md ${bg} flex flex-col items-center justify-center gap-1`}>
+        <span className="font-display text-[64px] leading-none tracking-[-0.03em]" style={{ fontWeight: 400, color: goldText }}>0%</span>
+        <span className={`font-mono text-[10px] tracking-[0.18em] uppercase ${subText}`}>commission · ever</span>
+      </div>
+    )
+  }
+
+  if (kind === 'qr') {
+    const pattern = [
+      [1,1,1,0,1,0,1,1,1],
+      [1,0,1,1,0,1,1,0,1],
+      [1,1,1,0,1,1,0,1,1],
+      [0,1,0,1,1,0,1,1,0],
+      [1,0,1,1,0,1,0,1,1],
+      [1,1,0,0,1,1,1,0,1],
+      [1,0,1,1,0,0,1,1,1],
+    ]
+    return (
+      <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
+        <div className="grid grid-cols-9 gap-[2px]">
+          {pattern.flat().map((v, i) => (
+            <span key={i} className={`w-2 h-2 rounded-[1px] ${v ? 'bg-[#E0A800]' : 'bg-transparent'}`} />
+          ))}
+        </div>
+        <div>
+          <div className={`font-display text-[24px] leading-none tracking-[-0.01em] ${subTextStrong}`} style={{ fontWeight: 400 }}>One scan.</div>
+          <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800] mt-1">no lines</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === 'leagues') {
+    return (
+      <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
+        <div className="text-center">
+          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>9</div>
+          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+        </div>
+        <div className={`font-display text-[24px] ${dark ? 'text-[#F4F1EA]/40' : 'text-[#0F3D2E]/40'}`}>/</div>
+        <div className="text-center">
+          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>18</div>
+          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+        </div>
+        <div className="ml-3 flex flex-col gap-[3px]">
+          <div className="h-[3px] w-12 bg-[#E0A800] rounded-full" />
+          <div className="h-[3px] w-10 bg-[#E0A800]/60 rounded-full" />
+          <div className="h-[3px] w-8 bg-[#E0A800]/40 rounded-full" />
+          <div className="h-[3px] w-6 bg-[#E0A800]/25 rounded-full" />
+          <div className={`font-mono text-[8px] tracking-[0.14em] uppercase mt-1 ${subText}`}>live standings</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === 'exchange') {
+    // Light theme — for golfer cards on cream background
+    return (
+      <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-1">
+        <span className="font-display text-[#0F3D2E] text-[60px] leading-none tracking-[-0.03em]" style={{ fontWeight: 400 }}>$0</span>
+        <span className="font-mono text-[9.5px] tracking-[0.16em] uppercase text-[#6B7770]">lost when plans change</span>
+      </div>
+    )
+  }
+
+  if (kind === 'partner') {
+    // Stack of three offset avatar shapes
+    return (
+      <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-2">
+        <div className="relative w-[80px] h-[44px]">
+          <span className="absolute left-0 top-0 size-10 rounded-xl bg-[#0F3D2E]" />
+          <span className="absolute left-5 top-1 size-10 rounded-xl bg-[#8FA889]" />
+          <span className="absolute left-10 top-2 size-10 rounded-xl bg-[#E0A800]" />
+        </div>
+        <span className="font-display text-[#0F3D2E] text-[20px] tracking-[-0.01em]" style={{ fontWeight: 400 }}>14 days out</span>
+        <span className="font-mono text-[9.5px] tracking-[0.14em] uppercase text-[#6B7770]">match availability</span>
+      </div>
+    )
+  }
+
+  // service
+  return (
+    <div className="h-36 rounded-md bg-[#0F3D2E]/[0.06] flex flex-col items-center justify-center gap-1">
+      <span className="font-display text-[#0F3D2E] text-[56px] leading-none tracking-[-0.03em]" style={{ fontWeight: 400 }}>&lt;1s</span>
+      <span className="font-mono text-[9.5px] tracking-[0.16em] uppercase text-[#6B7770]">tap to pro shop</span>
+    </div>
+  )
+}
+
+function SecondaryFeatureCard({ num, title, desc, imageSrc, graphic }: {
+  num: string; title: string; desc: string; imageSrc?: string; graphic?: FeatureGraphicKind;
 }) {
   return (
     <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col gap-3">
@@ -201,15 +300,8 @@ function SecondaryFeatureCard({ num, title, desc, badge, imageSrc }: {
             className="w-full h-full object-cover object-left-top"
           />
         </div>
-      ) : badge ? (
-        <div className="h-32 flex items-center justify-center bg-[#F4F1EA]/[0.06] border border-[#F4F1EA]/10 rounded-md px-3">
-          <span
-            className="font-display text-[#E0A800] text-[24px] tracking-[-0.01em] text-center leading-tight"
-            style={{ fontWeight: 400 }}
-          >
-            {badge}
-          </span>
-        </div>
+      ) : graphic ? (
+        <FeatureGraphic kind={graphic} dark />
       ) : (
         <div className="h-32 bg-white/10 rounded-md" />
       )}
@@ -277,10 +369,10 @@ function GolferChapter() {
 
           {/* 4 secondary cards */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <GolferSecondaryCard num="08" title="Book at zero fees" desc="Eagle and Ace pay $0 in booking fees, always." badge="$0 FEES · ALWAYS" phone />
-            <GolferSecondaryCard num="09" title="Tee time exchange" desc="Can't make it? List it. Earn credit when claimed." badge="$0 LOST" />
-            <GolferSecondaryCard num="10" title="Find a partner" desc="Browse availability by date. Eagle + Ace only." badge="14 DAYS OUT" />
-            <GolferSecondaryCard num="11" title="In-round service" desc="Beverage, cart, pace — one tap to the pro shop." badge="<1S TO RESPOND" />
+            <GolferSecondaryCard num="08" title="Book at zero fees" desc="Eagle and Ace pay $0 in booking fees, always." phone />
+            <GolferSecondaryCard num="09" title="Tee time exchange" desc="Can't make it? List it. Earn credit when claimed." graphic="exchange" />
+            <GolferSecondaryCard num="10" title="Find a partner" desc="Browse availability by date. Eagle + Ace only." graphic="partner" />
+            <GolferSecondaryCard num="11" title="In-round service" desc="Beverage, cart, pace — one tap to the pro shop." graphic="service" />
           </div>
         </div>
       </FadeIn>
@@ -288,7 +380,7 @@ function GolferChapter() {
   )
 }
 
-function GolferSecondaryCard({ num, title, desc, badge, phone }: { num: string; title: string; desc: string; badge: string; phone?: boolean }) {
+function GolferSecondaryCard({ num, title, desc, phone, graphic }: { num: string; title: string; desc: string; phone?: boolean; graphic?: FeatureGraphicKind }) {
   return (
     <div className="bg-white border border-[#0F3D2E]/10 rounded-xl p-4 flex flex-col gap-3">
       {phone ? (
@@ -301,15 +393,10 @@ function GolferSecondaryCard({ num, title, desc, badge, phone }: { num: string; 
             className="rounded-[14px] border-[3px] border-[#1A1A1A] shadow-[0_8px_18px_rgba(0,0,0,0.18)] object-cover"
           />
         </div>
+      ) : graphic ? (
+        <FeatureGraphic kind={graphic} dark={false} />
       ) : (
-        <div className="h-36 flex items-center justify-center bg-[#0F3D2E]/[0.06] rounded-md">
-          <span
-            className="font-display text-[#0F3D2E] text-[24px] tracking-[-0.01em] text-center px-3"
-            style={{ fontWeight: 400 }}
-          >
-            {badge}
-          </span>
-        </div>
+        <div className="h-36 bg-[#0F3D2E]/[0.06] rounded-md" />
       )}
       <div>
         <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#E0A800] font-bold">{num}</p>
