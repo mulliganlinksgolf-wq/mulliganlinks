@@ -255,49 +255,104 @@ export default async function HomePage({
         </FadeIn>
       </section>
 
-      {/* ── How It Works for Courses ─────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-20" id="how-it-works-courses">
+      {/* ── How It Works — horizontal timeline ──────────────────── */}
+      <section className="bg-[#082419] text-[#F4F1EA] px-6 sm:px-10 lg:px-16 py-20 sm:py-24" id="how-it-works-courses">
         <FadeIn>
-          <div className="max-w-3xl mx-auto space-y-10">
-            <div className="text-center space-y-2">
-              <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800]">For Golf Course GMs</p>
-              <h2 className="font-display font-black text-[#F4F1EA] tracking-[-0.02em] leading-tight" style={{ fontSize: 'clamp(28px, 5vw, 40px)' }}>
-                Live in 48 hours. Zero tech headaches.
-              </h2>
+          <div className="max-w-6xl mx-auto">
+
+            {/* Section header */}
+            <div className="flex items-baseline gap-3 mb-5">
+              <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+                For golf course operators
+              </span>
+              <span className="flex-1 h-px bg-[#F4F1EA]/15" />
+              <span className="font-mono text-[10.5px] tracking-[0.1em] text-[#F4F1EA]/50 uppercase hidden sm:inline">
+                From signing to live: 48 hours
+              </span>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[
-                {
-                  step: '01',
-                  title: 'Sign the Founding Partner agreement',
-                  body: '10 minutes. One page. No lawyers required.',
-                },
-                {
-                  step: '02',
-                  title: 'Connect your bank via Stripe',
-                  body: '5 minutes. Payments route directly to you. TeeAhead never touches your revenue.',
-                },
-                {
-                  step: '03',
-                  title: 'Go live within 48 hours',
-                  body: 'We handle the tech. Your golfers can book immediately.',
-                },
-              ].map(({ step, title, body }) => (
-                <div key={step} className="rounded-xl p-6 space-y-3" style={{ background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.12)' }}>
-                  <p className="font-display font-black text-[#E0A800] text-3xl leading-none">{step}</p>
-                  <p className="font-semibold text-[#F4F1EA] text-sm leading-snug">{title}</p>
-                  <p className="text-xs text-[#F4F1EA]/60 leading-relaxed">{body}</p>
+
+            <h2
+              className="font-display leading-[0.96] tracking-[-0.025em] max-w-3xl mb-16"
+              style={{ fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 400 }}
+            >
+              Live in 48 hours.{' '}
+              <em className="italic text-[#E0A800]">Zero tech headaches.</em>
+            </h2>
+
+            {/* Timeline */}
+            <div className="relative pt-16 sm:pt-20 pb-8">
+
+              {/* Connecting line — hidden on mobile (stacks vertically) */}
+              <div className="hidden sm:block absolute top-[140px] left-[8%] right-[18%] h-px bg-[#E0A800]/85" />
+
+              {/* GO LIVE endpoint — desktop only */}
+              <div className="hidden sm:flex absolute top-[124px] right-0 items-center gap-2">
+                <span
+                  className="size-2.5 rounded-full bg-[#E0A800]"
+                  style={{ boxShadow: '0 0 0 4px rgba(224,168,0,0.2)' }}
+                />
+                <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#E0A800] font-bold">
+                  Go live
+                </span>
+              </div>
+
+              {/* Steps */}
+              <div className="grid sm:grid-cols-3 gap-12 sm:gap-10 sm:pr-[100px]">
+                {[
+                  { n: '01', t: '00:10', title: 'Sign the Founding Partner agreement', desc: 'One page. No lawyers required.' },
+                  { n: '02', t: '00:15', title: 'Connect your bank via Stripe',        desc: 'Payments route directly to you. We never touch your revenue.' },
+                  { n: '03', t: '48:00', title: 'Go live',                              desc: 'We handle the tech. Your golfers can book immediately.' },
+                ].map(({ n, t, title, desc }) => (
+                  <div key={n} className="relative">
+
+                    {/* Step number — above the line */}
+                    <div className="hidden sm:block absolute -top-16 inset-x-0 text-center">
+                      <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#F4F1EA]/50 font-semibold mb-1.5">Step</div>
+                      <div className="font-display text-[44px] text-[#E0A800] leading-[0.9] tracking-[-0.02em]" style={{ fontWeight: 400 }}>{n}</div>
+                    </div>
+
+                    {/* Tick mark on the line */}
+                    <span className="hidden sm:block absolute -top-[5px] left-1/2 -translate-x-1/2 size-3 rounded-full bg-[#082419] border-2 border-[#E0A800] box-border" />
+
+                    {/* Timestamp pill straddling the line */}
+                    <div className="hidden sm:block absolute -top-2 inset-x-0 text-center">
+                      <span className="inline-block px-2.5 py-0.5 bg-[#082419] font-mono text-[11px] tracking-[0.12em] text-[#E0A800] font-bold">{t}</span>
+                    </div>
+
+                    {/* Mobile: show step number inline */}
+                    <div className="sm:hidden flex items-baseline gap-3 mb-2">
+                      <span className="font-display text-3xl text-[#E0A800]" style={{ fontWeight: 400 }}>{n}</span>
+                      <span className="font-mono text-xs text-[#E0A800] tracking-[0.12em]">{t}</span>
+                    </div>
+
+                    {/* Content */}
+                    <div className="sm:pt-10 sm:text-center max-w-[280px] sm:mx-auto">
+                      <div className="font-display text-[22px] text-[#F4F1EA] tracking-[-0.01em] leading-[1.2] mb-2" style={{ fontWeight: 400 }}>{title}</div>
+                      <div className="text-[13px] text-[#F4F1EA]/65 leading-relaxed">{desc}</div>
+                    </div>
+
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Footer CTA */}
+            <div className="mt-12 pt-7 border-t border-[#F4F1EA]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+              <div className="flex items-center gap-3.5">
+                <span className="font-display text-[#E0A800] tracking-[-0.02em] leading-[0.9]" style={{ fontSize: 36, fontWeight: 400 }}>{spotsRemaining}</span>
+                <div>
+                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#F4F1EA]/50">Founding spots remain</div>
+                  <div className="text-[13px] text-[#F4F1EA]/75 mt-0.5">Free for your first year. $349/mo flat after.</div>
                 </div>
-              ))}
-            </div>
-            <div className="text-center">
+              </div>
               <Link
                 href="/waitlist/course"
-                className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-8 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+                className="px-6 py-3.5 bg-[#E0A800] text-[#082419] rounded-md text-sm font-bold hover:bg-[#E0A800]/90"
               >
-                {spotsRemaining > 0 ? `Claim a Founding Spot (${spotsRemaining} of 10 left)` : 'Join the Course Waitlist'}
+                {spotsRemaining > 0 ? 'Claim a founding spot →' : 'Join the course waitlist'}
               </Link>
             </div>
+
           </div>
         </FadeIn>
       </section>

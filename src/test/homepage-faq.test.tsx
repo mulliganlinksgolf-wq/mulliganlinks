@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { describe, it, expect, vi } from 'vitest'
 import { HomepageFaq } from '@/components/HomepageFaq'
 
@@ -9,21 +9,27 @@ vi.mock('next/link', () => ({
 }))
 
 describe('HomepageFaq', () => {
-  it('Q1 mentions founding partners', () => {
+  it('renders the founding-partner pricing question', () => {
     render(<HomepageFaq />)
     expect(
       screen.getByText(/Is TeeAhead really free for courses for founding partners\?/i)
     ).toBeInTheDocument()
   })
 
-  it('Q3 answer includes billy@teeahead.com', () => {
+  it('migration question mentions EZLinks and the billy email', () => {
     render(<HomepageFaq />)
-    // Open Q3
-    const q3Button = screen.getByRole('button', {
-      name: /What if my course already uses EZLinks/i,
-    })
-    fireEvent.click(q3Button)
-    const billyLinks = screen.getAllByRole('link', { name: 'billy@teeahead.com' })
+    expect(
+      screen.getByText(/What if my course already uses EZLinks/i)
+    ).toBeInTheDocument()
+    // billy@teeahead.com appears in both the migration answer and the footer link
+    const billyLinks = screen.getAllByRole('link', { name: /billy@teeahead\.com/i })
+    expect(billyLinks.length).toBeGreaterThanOrEqual(1)
     expect(billyLinks[0]).toHaveAttribute('href', 'mailto:billy@teeahead.com')
+  })
+
+  it('splits FAQs into operator + golfer columns', () => {
+    render(<HomepageFaq />)
+    expect(screen.getByText(/For course operators/i)).toBeInTheDocument()
+    expect(screen.getByText(/For golfers/i)).toBeInTheDocument()
   })
 })

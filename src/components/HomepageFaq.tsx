@@ -1,117 +1,82 @@
-'use client'
+import { FadeIn } from '@/components/FadeIn'
 
-import { useState } from 'react'
-import Link from 'next/link'
+const COURSE_FAQS = [
+  { q: 'Is TeeAhead really free for courses for founding partners?', a: 'Yes. The first ten Metro Detroit courses pay $0 for their first year. After that, $349/mo flat. No commissions, no barter, ever.' },
+  { q: 'What if my course already uses EZLinks, foreUP, or another system?', a: 'We can run alongside or replace. We handle the migration in under 48 hours. Reach out to billy@teeahead.com for a straight answer on your specific setup.' },
+  { q: 'Do you actually pay rev share?', a: 'Yes. Stripe Connect auto-pays 10% of every membership you refer, monthly, for 12 months.' },
+  { q: 'Can I export everything?', a: 'Always. Full CSV export from the Members page. Your data is yours.' },
+]
 
-const FAQS = [
-  {
-    q: 'Is TeeAhead really free for courses for founding partners?',
-    a: (
-      <>
-        Yes — completely free for the first 10 Founding Partner courses for your full first year. No barter tee times, no commissions, no hidden fees. After year one, it&apos;s a flat $349/month. No long-term contract. Cancel anytime.
-      </>
-    ),
-  },
-  {
-    q: 'When does TeeAhead launch?',
-    a: (
-      <>
-        We&apos;re onboarding Founding Partner courses now and targeting a full golfer-facing launch in Summer 2026. Founding Partners go live within 48 hours of signing — your golfers can start booking before the public launch.
-      </>
-    ),
-  },
-  {
-    q: 'What if my course already uses EZLinks, foreUP, or another system?',
-    a: (
-      <>
-        TeeAhead is designed to work alongside or replace your current booking system. We handle the setup and can walk you through the transition. Email Neil or Billy directly at{' '}
-        <a href="mailto:neil@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
-          neil@teeahead.com
-        </a>{' '}
-        or{' '}
-        <a href="mailto:billy@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
-          billy@teeahead.com
-        </a>{' '}
-        — they&apos;ll give you a straight answer about your specific setup.
-      </>
-    ),
-  },
-  {
-    q: 'Will my golfers actually use this?',
-    a: (
-      <>
-        That depends on you telling them about it — which is the only thing we ask. Golfers pay zero booking fees on TeeAhead vs. fees they pay elsewhere. That&apos;s a strong reason to switch. We&apos;ll give you the materials to communicate it.
-      </>
-    ),
-  },
-  {
-    q: "Who's behind TeeAhead?",
-    a: (
-      <>
-        Neil Barris and Billy Beslock, both based in Metro Detroit. Neil built{' '}
-        <Link href="http://Outing.golf" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
-          Outing.golf
-        </Link>{' '}
-        inside the golf industry. Billy&apos;s the golfer who got tired of paying fees and watching loyalty points expire. We&apos;re reachable directly —{' '}
-        <a href="mailto:neil@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
-          neil@teeahead.com
-        </a>{' '}
-        and{' '}
-        <a href="mailto:billy@teeahead.com" className="underline text-[#0F3D2E] hover:text-[#0F3D2E]/80">
-          billy@teeahead.com
-        </a>
-        . Not a support ticket system.
-      </>
-    ),
-  },
+const GOLFER_FAQS = [
+  { q: 'When does TeeAhead launch?', a: 'Metro Detroit, summer 2026. Waitlist members get first access plus 250 bonus Fairway Points on signup.' },
+  { q: 'Will my home course actually be on TeeAhead?', a: "We're targeting all independent Metro Detroit courses. If yours isn't on the list yet, refer them — you'll earn priority access." },
+  { q: 'Why pay $89 for Eagle when GolfPass+ is $119?', a: 'Eagle has zero booking fees (GolfPass+ charges $2.49–$3.49/round), points that never expire, partner-finder access, and works at local courses — not national chains.' },
+  { q: "Who's behind TeeAhead?", a: "Two Metro Detroit golfers: Neil (operator-side at Outing.golf) and Billy (lifelong member). See the founders' scorecard above." },
 ]
 
 export function HomepageFaq() {
-  const [openIdx, setOpenIdx] = useState<number | null>(null)
-
   return (
-    <section className="bg-[#FAF7F2] px-6 py-20 border-t border-black/5">
-      <div className="max-w-3xl mx-auto space-y-10">
-        <div className="text-center space-y-3">
-          <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#9DAA9F]">FAQ</p>
-          <h2
-            className="font-display font-extrabold text-[#1A1A1A] tracking-[-0.02em]"
-            style={{ fontSize: 'clamp(28px, 4vw, 40px)' }}
-          >
-            Common questions
-          </h2>
-        </div>
+    <section className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-20">
+      <FadeIn>
+        <div className="max-w-6xl mx-auto">
 
-        <div className="divide-y divide-black/8">
-          {FAQS.map(({ q, a }, i) => (
-            <div key={i}>
-              <button
-                type="button"
-                onClick={() => setOpenIdx(openIdx === i ? null : i)}
-                className="w-full flex items-center justify-between gap-4 py-5 text-left"
-                aria-expanded={openIdx === i}
-              >
-                <span className="font-semibold text-[#1A1A1A] text-base leading-snug">{q}</span>
-                <span
-                  className="flex-shrink-0 size-6 rounded-full border border-black/15 flex items-center justify-center text-[#6B7770] transition-transform duration-200"
-                  style={{ transform: openIdx === i ? 'rotate(45deg)' : 'rotate(0deg)' }}
-                  aria-hidden="true"
-                >
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                </span>
-              </button>
-              <div
-                className="overflow-hidden transition-all duration-200"
-                style={{ maxHeight: openIdx === i ? '600px' : '0px' }}
-              >
-                <p className="pb-5 text-sm text-[#6B7770] leading-relaxed">{a}</p>
-              </div>
+          <div className="flex items-baseline gap-3 mb-5">
+            <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">Common questions</span>
+            <span className="flex-1 h-px bg-[#0F3D2E]/10" />
+            <span className="font-mono text-[10.5px] tracking-[0.1em] text-[#6B7770] uppercase">{COURSE_FAQS.length + GOLFER_FAQS.length} answers</span>
+          </div>
+
+          <h2
+            className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-none max-w-3xl mb-10"
+            style={{ fontSize: 'clamp(36px, 5vw, 52px)', fontWeight: 400 }}
+          >
+            Quick answers, <em className="italic text-[#E0A800]">both sides.</em>
+          </h2>
+
+          <div className="grid lg:grid-cols-2 gap-10">
+            <FaqColumn title="For course operators" items={COURSE_FAQS} />
+            <FaqColumn title="For golfers"          items={GOLFER_FAQS} />
+          </div>
+
+          <div className="mt-8 pt-5 border-t border-[#0F3D2E]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <p className="text-[13px] text-[#6B7770]">Still wondering?</p>
+            <div className="flex gap-3 text-[13px]">
+              <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px]">Text Neil directly →</a>
+              <span className="text-[#0F3D2E]/20">·</span>
+              <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] font-semibold underline underline-offset-[3px]">Email billy@teeahead.com →</a>
             </div>
-          ))}
+          </div>
+
         </div>
-      </div>
+      </FadeIn>
     </section>
+  )
+}
+
+function FaqColumn({ title, items }: { title: string; items: { q: string; a: string }[] }) {
+  return (
+    <div>
+      <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-3">{title}</p>
+      <div className="flex flex-col gap-2">
+        {items.map((f, i) => (
+          <details
+            key={f.q}
+            className="group bg-white border border-[#0F3D2E]/10 rounded-lg px-4 py-3"
+            open={i === 0}
+          >
+            <summary className="flex justify-between items-baseline gap-3 cursor-pointer list-none">
+              <span className="text-[14px] font-medium text-[#1A1A1A] leading-[1.35] flex-1">{f.q}</span>
+              <span
+                className="font-mono text-sm text-[#6B7770] transition-transform group-open:rotate-90 inline-block"
+                aria-hidden
+              >
+                +
+              </span>
+            </summary>
+            <p className="mt-2 text-[13px] text-[#6B7770] leading-[1.55]">{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
   )
 }
