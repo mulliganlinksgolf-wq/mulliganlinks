@@ -1,8 +1,31 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 
-const HOLES = [
+type Hole = {
+  n: string
+  par: string
+  notes: ReactNode
+  hero?: boolean
+  accent?: string
+}
+
+const HOLES: Hole[] = [
   {
-    number: 1,
+    n: '0',
+    par: 'The Manifesto',
+    hero: true,
+    notes: (
+      <span
+        className="font-display text-[#0F3D2E] tracking-[-0.015em] leading-[1.05]"
+        style={{ fontSize: 'clamp(22px, 2.5vw, 32px)', fontWeight: 400 }}
+      >
+        Local golf, returned to the people who{' '}
+        <em className="italic text-[#E0A800]">actually</em> play it.
+      </span>
+    ),
+  },
+  {
+    n: '1',
     par: 'The Read',
     notes: (
       <>
@@ -12,7 +35,7 @@ const HOLES = [
     ),
   },
   {
-    number: 2,
+    n: '2',
     par: "Neil's Side",
     notes: (
       <>
@@ -27,7 +50,7 @@ const HOLES = [
     ),
   },
   {
-    number: 3,
+    n: '3',
     par: "Billy's Side",
     notes: (
       <>
@@ -37,17 +60,17 @@ const HOLES = [
     ),
   },
   {
-    number: 4,
+    n: '4',
     par: 'The Why',
+    accent: 'text-[#C0392B]',
     notes: (
       <>
         We&apos;re just like every other golfer that wants something more reasonable and innovative.
       </>
     ),
-    redNumber: true,
   },
   {
-    number: 5,
+    n: '5',
     par: 'The Ask',
     notes: (
       <>
@@ -71,9 +94,9 @@ const HOLES = [
   },
 ]
 
-export function FoundersScorecard() {
+export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: number }) {
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-3xl mx-auto">
       <p className="text-center text-xs font-bold tracking-[0.14em] uppercase text-[#F4F1EA]/35 mb-10">
         Why we&apos;re building TeeAhead
       </p>
@@ -128,76 +151,92 @@ export function FoundersScorecard() {
         </div>
 
         {/* Column headers */}
-        <div className="grid grid-cols-[56px_80px_1fr] bg-[#0F3D2E]">
-          <div className="px-3 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
+        <div className="grid grid-cols-[70px_200px_1fr] bg-[#0F3D2E]">
+          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
             Hole
           </div>
-          <div className="px-3 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase border-l border-[#F4F1EA]/15">
+          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
             Par
           </div>
-          <div className="px-3 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase border-l border-[#F4F1EA]/15">
+          <div className="px-4 sm:px-5 py-2 text-[9px] tracking-[0.14em] text-[#F4F1EA]/70 uppercase">
             Notes from the Round
           </div>
         </div>
 
         {/* Holes */}
-        {HOLES.map((hole, i) => (
+        {HOLES.map((h) => (
           <div
-            key={hole.number}
-            className={`grid grid-cols-[56px_80px_1fr] ${
-              i < HOLES.length - 1 ? 'border-b border-[#D4E4DC]' : 'border-b-2 border-[#0F3D2E]'
+            key={h.n}
+            className={`grid grid-cols-[70px_200px_1fr] border-b border-[#0F3D2E]/10 last:border-b-0 ${
+              h.hero ? 'bg-[#F4F1EA] py-6' : 'bg-white py-4'
             }`}
           >
             <div
-              className={`px-3 py-4 text-[28px] font-bold text-center border-r border-[#D4E4DC] ${
-                hole.redNumber ? 'text-[#C0392B]' : 'text-[#0F3D2E]'
+              className={`px-4 sm:px-5 font-display tracking-[-0.02em] leading-none ${
+                h.accent || 'text-[#0F3D2E]'
               }`}
+              style={{ fontSize: h.hero ? 44 : 30, fontWeight: 400 }}
             >
-              {hole.number}
+              {h.n}
             </div>
-            <div className="px-3 py-4 border-r border-[#D4E4DC]">
-              <div className="text-[9px] tracking-[0.1em] uppercase text-[#6B7770] font-sans mb-1">
-                Par
+            <div className="px-4 sm:px-5">
+              <div className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-1">Par</div>
+              <div className={`font-semibold text-[#1A1A1A] leading-tight ${h.hero ? 'text-[17px]' : 'text-sm'}`}>
+                {h.par}
               </div>
-              <div className="text-[13px] font-bold text-[#1A1A1A]">{hole.par}</div>
             </div>
-            <div className="px-4 py-4 text-[13px] text-[#1A1A1A] leading-relaxed">
-              {hole.notes}
+            <div className={`px-4 sm:px-5 leading-relaxed text-[#1A1A1A] ${
+              h.hero ? 'text-base' : 'text-sm opacity-85'
+            }`}>
+              {h.notes}
             </div>
           </div>
         ))}
 
-        {/* Signatures */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 border-b-2 border-[#0F3D2E]">
-          <div className="px-5 py-5 border-r border-[#D4E4DC]">
-            <div className="text-[22px] font-bold italic text-[#1A1A1A] border-b border-[#1A1A1A] pb-1 mb-1.5 inline-block">
-              Billy Beslock
+        {/* Footer — signatures + CTAs */}
+        <div className="border-t border-[#0F3D2E]/10 px-4 sm:px-8 py-5 grid sm:grid-cols-2 gap-6 items-center">
+          {/* Left: signatures */}
+          <div className="flex gap-8">
+            <div>
+              <div
+                className="text-[#0F3D2E] italic leading-none"
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 26, transform: 'rotate(-2deg)', transformOrigin: 'left' }}
+              >
+                Neil Barris
+              </div>
+              <p className="mt-1 font-mono text-[9px] tracking-[0.14em] uppercase text-[#6B7770]">Co-Founder</p>
             </div>
-            <div className="text-[9px] tracking-[0.12em] uppercase text-[#6B7770] font-sans">
-              Co-Founder
+            <div>
+              <div
+                className="text-[#0F3D2E] italic leading-none"
+                style={{ fontFamily: '"Snell Roundhand", "Lucida Handwriting", cursive', fontSize: 26, transform: 'rotate(-3deg)', transformOrigin: 'left' }}
+              >
+                Billy Beslock
+              </div>
+              <p className="mt-1 font-mono text-[9px] tracking-[0.14em] uppercase text-[#6B7770]">Co-Founder</p>
             </div>
           </div>
-          <div className="px-5 py-5 text-right">
-            <div className="text-[22px] font-bold italic text-[#1A1A1A] border-b border-[#1A1A1A] pb-1 mb-1.5 inline-block">
-              Neil Barris
-            </div>
-            <div className="text-[9px] tracking-[0.12em] uppercase text-[#6B7770] font-sans">
-              Co-Founder
-            </div>
-          </div>
-        </div>
 
-        {/* Footer */}
-        <div className="bg-[#0F3D2E] px-5 py-4 flex justify-between items-center">
-          <span className="text-[10px] tracking-[0.14em] uppercase text-[#F4F1EA]/55">
-            Total · Always One TeeAhead
-          </span>
-          <Link
-            href="/waitlist/golfer"
-            className="bg-[#C9A84C] text-[#0F3D2E] text-[13px] font-bold px-5 py-2.5 rounded-sm hover:bg-[#D4B86A] transition-colors"
-          >
-            Join the Waitlist →
-          </Link>
+          {/* Right: CTAs */}
+          <div className="sm:text-right">
+            <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#6B7770] mb-2">
+              Total · {spotsRemaining} of 10 spots remain
+            </p>
+            <div className="inline-flex flex-wrap gap-2 sm:justify-end">
+              <Link
+                href="/waitlist/course"
+                className="px-5 py-2.5 bg-[#E0A800] text-[#082419] rounded-md text-[12.5px] font-bold hover:bg-[#E0A800]/90"
+              >
+                Claim a founding spot →
+              </Link>
+              <Link
+                href="/waitlist/golfer"
+                className="px-3.5 py-2.5 text-[#0F3D2E] text-[12.5px] font-semibold underline underline-offset-[3px] hover:text-[#0F3D2E]/80"
+              >
+                Join as a golfer
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

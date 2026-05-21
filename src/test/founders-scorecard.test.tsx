@@ -34,9 +34,15 @@ test('renders both founder signatures', () => {
   expect(screen.getByText('Neil Barris')).toBeInTheDocument()
 })
 
-test('renders the waitlist CTA linking to /waitlist/golfer', () => {
+test('renders the founding-spot CTA linking to /waitlist/course', () => {
   render(<FoundersScorecard />)
-  const cta = screen.getByRole('link', { name: /Join the Waitlist/i })
+  const cta = screen.getByRole('link', { name: /Claim a founding spot/i })
+  expect(cta).toHaveAttribute('href', '/waitlist/course')
+})
+
+test('renders the golfer-waitlist CTA linking to /waitlist/golfer', () => {
+  render(<FoundersScorecard />)
+  const cta = screen.getByRole('link', { name: /Join as a golfer/i })
   expect(cta).toHaveAttribute('href', '/waitlist/golfer')
 })
 

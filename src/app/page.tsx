@@ -388,41 +388,10 @@ export default async function HomePage({
       {/* ── FAQ ───────────────────────────────────────────────── */}
       <HomepageFaq />
 
-      {/* ── Manifesto ─────────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-32 text-center border-t border-[#F4F1EA]/8">
+      {/* ── Manifesto + Founders' Scorecard (combined) ───────── */}
+      <section className="bg-[#082419] px-6 py-20 sm:py-24">
         <FadeIn>
-          <div className="max-w-4xl mx-auto space-y-10">
-            <p className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.03em]"
-               style={{ fontSize: 'clamp(36px, 6vw, 72px)' }}>
-              Local golf, returned to the people who{' '}
-              <em style={{ fontStyle: 'italic', color: '#E0A800' }}>actually</em>{' '}
-              play it.
-            </p>
-            <div className="flex flex-col items-center justify-center gap-5">
-              <Link
-                href="/waitlist/course"
-                className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-7 py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
-              >
-                Claim a founding spot →
-              </Link>
-              <p className="text-sm text-[#F4F1EA]/55">
-                Golfer instead?{' '}
-                <Link
-                  href="/waitlist/golfer"
-                  className="text-[#E0A800] underline underline-offset-4 font-semibold hover:text-[#E0A800]/80"
-                >
-                  Join the loyalty waitlist →
-                </Link>
-              </p>
-            </div>
-          </div>
-        </FadeIn>
-      </section>
-
-      {/* ── Founders' Scorecard ──────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-24">
-        <FadeIn>
-          <FoundersScorecard />
+          <FoundersScorecard spotsRemaining={spotsRemaining} />
         </FadeIn>
       </section>
 
