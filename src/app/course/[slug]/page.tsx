@@ -110,7 +110,7 @@ export default async function TeeSheetPage({
               </Link>
             </div>
           ) : (
-            <TeeSheetGrid teeTimes={teeTimes as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
+            <TeeSheetGrid teeTimes={teeTimes as unknown as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
           )}
         </div>
 
