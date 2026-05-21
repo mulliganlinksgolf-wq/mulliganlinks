@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getResend } from '@/lib/resend'
+import { appendToSentFolder } from '@/lib/crm/imap-sync'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60
@@ -51,6 +52,25 @@ export async function POST(req: Request) {
         .eq('id', row.id)
       failed++
       continue
+    }
+
+    // Mirror to the sender's IMAP Sent folder so it shows up in their Mail app.
+    // Best-effort — IMAP errors don't fail the cron run.
+    const bareEmailMatch = row.from_email.match(/<([^>]+)>/)
+    const fromEmailOnly = (bareEmailMatch?.[1] ?? row.from_email).toLowerCase()
+    try {
+      const imapErr = await appendToSentFolder({
+        fromHeader: row.from_email,
+        fromEmail: fromEmailOnly,
+        to: row.to_email,
+        subject: row.subject,
+        html: row.body_html,
+        messageId: row.message_id ?? undefined,
+        inReplyTo: row.in_reply_to ?? null,
+      })
+      if (imapErr) console.error('[scheduled-cron] IMAP append failed:', imapErr)
+    } catch (err) {
+      console.error('[scheduled-cron] IMAP append exception:', err)
     }
 
     // Write activity log entry

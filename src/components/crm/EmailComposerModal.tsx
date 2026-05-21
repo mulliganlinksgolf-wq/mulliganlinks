@@ -11,6 +11,11 @@ const EMAIL_TO_NAME: Record<string, string> = {
   'beslock@yahoo.com': 'Billy',
 }
 
+const EMAIL_TO_SENT_BY: Record<string, string> = {
+  'neil@teeahead.com': 'neil',
+  'beslock@yahoo.com': 'billy',
+}
+
 interface PreviousEmail {
   message_id: string | null
   subject: string
@@ -47,11 +52,13 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [scheduleMode, setScheduleMode] = useState(false)
   const [scheduledFor, setScheduledFor] = useState('')
   const [loggedInSenderName, setLoggedInSenderName] = useState<string | null>(null)
+  const [loggedInSentBy, setLoggedInSentBy] = useState<string | null>(null)
 
   useEffect(() => {
     createClient().auth.getUser().then(({ data }) => {
       const email = data.user?.email ?? ''
       setLoggedInSenderName(EMAIL_TO_NAME[email] ?? null)
+      setLoggedInSentBy(EMAIL_TO_SENT_BY[email] ?? null)
     })
   }, [])
 
@@ -143,10 +150,13 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
     setError(null)
     try {
       const bodyHtml = plainTextToHtml(bodyText)
+      // Use the logged-in user as sentBy so activity log + scheduled email
+      // attribution always reflects who actually sent it, not the course assignee.
+      const effectiveSentBy = loggedInSentBy ?? sentBy
       if (scheduleMode) {
         const detroitDate = new Date(scheduledFor)
         const result = await scheduleCrmEmail({
-          recordType, recordId, to, subject, bodyHtml, sentBy,
+          recordType, recordId, to, subject, bodyHtml, sentBy: effectiveSentBy,
           scheduledFor: detroitDate.toISOString(),
           inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
         })
@@ -158,7 +168,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
         }
       } else {
         const result = await sendCrmEmail({
-          recordType, recordId, to, subject, bodyHtml, sentBy,
+          recordType, recordId, to, subject, bodyHtml, sentBy: effectiveSentBy,
           inReplyTo: replyMode && previousEmail ? previousEmail.message_id : null,
         })
         if (result.error) {
