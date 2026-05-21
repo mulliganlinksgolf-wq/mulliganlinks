@@ -203,7 +203,10 @@ function SecondaryFeatureCard({ num, title, desc, badge, imageSrc }: {
         </div>
       ) : badge ? (
         <div className="h-32 flex items-center justify-center bg-[#F4F1EA]/[0.06] border border-[#F4F1EA]/10 rounded-md px-3">
-          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold text-center">
+          <span
+            className="font-display text-[#E0A800] text-[24px] tracking-[-0.01em] text-center leading-tight"
+            style={{ fontWeight: 400 }}
+          >
             {badge}
           </span>
         </div>
