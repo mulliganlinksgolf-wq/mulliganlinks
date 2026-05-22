@@ -185,8 +185,10 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
                 Claim a founding spot — save ${displayedCost.toLocaleString()}/yr →
               </Link>
 
-              <p className="text-[11px] text-[#F4F1EA]/40 text-center font-mono tracking-[0.06em]">
-                NGCOA &amp; Golf Inc. industry analysis, 2024–2025
+              <p className="text-[11px] text-[#F4F1EA]/40 text-center font-mono tracking-[0.06em] leading-relaxed">
+                Calculation based on GolfNow barter rates and your inputs above.
+                Source · NGCOA member survey data and Golf Inc. industry analysis (2024).
+                Actual barter arrangements vary by course agreement.
               </p>
             </div>
 
@@ -204,9 +206,9 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
             </div>
             <div className="grid sm:grid-cols-3 gap-8">
               {[
-                { num: '382%', label: 'Online revenue increase at Windsor Parke Golf Club after leaving GolfNow', sub: '$81K → $393K', source: 'Golf Inc. / industry reporting' },
-                { num: '39.6%', label: 'Of all rounds at Brown Golf went to zero-revenue barter slots over 3 years', sub: null, source: 'NGCOA member reporting' },
-                { num: '100+', label: 'Golf courses left GolfNow in Q1 2025 alone', sub: null, source: 'NGCOA Q1 2025' },
+                { num: '382%', label: 'Online revenue increase at Windsor Parke Golf Club after leaving GolfNow', sub: '$81K → $393K', source: 'Golf Inc. / industry reporting, Windsor Parke case study' },
+                { num: '39.6%', label: 'Of all rounds at Brown Golf went to zero-revenue barter slots over 3 years', sub: null, source: 'NGCOA member reporting / Golf Inc. analysis' },
+                { num: '100+', label: 'Golf courses left GolfNow in Q1 2025 alone', sub: null, source: 'National Golf Course Owners Association (NGCOA), Q1 2025' },
               ].map(({ num, label, sub, source }) => (
                 <div key={num} className="border-t border-[#0F3D2E] pt-4">
                   <p
