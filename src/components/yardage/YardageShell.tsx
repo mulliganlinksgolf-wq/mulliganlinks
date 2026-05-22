@@ -61,7 +61,7 @@ export function YardageShell({
       </header>
 
       <div className="flex-1 grid lg:grid-cols-[220px_1fr]">
-        <aside className="hidden lg:flex flex-col bg-[#082419] text-[#F4F1EA] sticky top-[76px] self-start max-h-[calc(100vh-76px)] overflow-y-auto">
+        <aside className="hidden lg:flex flex-col bg-[#082419] text-[#F4F1EA] sticky top-[76px] self-start h-[calc(100vh-76px)] overflow-y-auto">
           <div className="grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-2.5 font-mono text-[8.5px] tracking-[0.18em] uppercase font-bold text-[#F4F1EA]/50 border-b border-[#F4F1EA]/10">
             <span>H</span>
             <span>Hole</span>
@@ -75,7 +75,7 @@ export function YardageShell({
               <Link
                 key={h.n}
                 href={h.anchor}
-                className={`grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-3 border-b border-[#F4F1EA]/8 items-baseline ${
+                className={`grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-3 border-b border-[#F4F1EA]/8 items-center flex-1 min-h-[44px] ${
                   on
                     ? 'bg-black/30 border-l-[3px] border-l-[#E0A800] pl-[13px]'
                     : 'border-l-[3px] border-l-transparent hover:bg-black/15'
