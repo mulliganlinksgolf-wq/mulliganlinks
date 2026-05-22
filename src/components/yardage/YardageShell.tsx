@@ -46,10 +46,16 @@ export function YardageShell({
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <header className="bg-[#082419] text-[#F4F1EA] border-b-2 border-[#E0A800] px-6 sm:px-10 lg:px-14 py-4 flex items-center justify-between sticky top-0 z-40">
-        <Link href="/" className="flex items-center gap-3">
-          <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-        </Link>
-        <span className="hidden sm:inline-block font-mono text-[10.5px] tracking-[0.24em] uppercase text-[#F4F1EA]/65 font-semibold">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center gap-3">
+            <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
+          </Link>
+          <nav className="hidden sm:flex items-center gap-5 text-[12.5px] font-semibold text-[#F4F1EA]/75">
+            <Link href="/features" className="hover:text-[#F4F1EA] transition-colors">Features</Link>
+            <Link href="/pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
+          </nav>
+        </div>
+        <span className="hidden lg:inline-block font-mono text-[10.5px] tracking-[0.24em] uppercase text-[#F4F1EA]/65 font-semibold">
           Founders Tee · Card 001
         </span>
         <Link
