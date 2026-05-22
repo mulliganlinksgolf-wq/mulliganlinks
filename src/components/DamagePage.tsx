@@ -6,7 +6,6 @@
 import { useState, useEffect, ReactNode } from 'react'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
-import { FadeIn } from '@/components/FadeIn'
 import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
 import { METRO_DETROIT_COURSES } from '@/lib/metro-detroit-courses'
 
