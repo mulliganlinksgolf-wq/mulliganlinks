@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { TeeTimeSoftwareSchema } from '@/components/TeeTimeSoftwareSchema'
+import { SeoLandingTemplate, type SeoLandingConfig } from '@/components/seo/SeoLandingTemplate'
+import { createClient } from '@/lib/supabase/server'
+import { captureReferralCode } from '@/lib/referrals/capture'
 
 export const metadata: Metadata = {
   title: 'Free Tee Time Software for Golf Courses',
@@ -12,446 +13,116 @@ export const metadata: Metadata = {
   },
 }
 
-const features = [
-  {
-    icon: '📅',
-    title: 'Tee Sheet Management',
-    body: 'Create and manage tee times in real time. Members book directly through TeeAhead — no third-party booking fees, no commission per round.',
-  },
-  {
-    icon: '📲',
-    title: 'QR Check-In',
-    body: 'Staff check members in with a QR scan at the first tee. Every round is logged automatically, feeding your loyalty program and reports.',
-  },
-  {
-    icon: '👥',
-    title: 'Member Management',
-    body: 'See every member at your course — their tier, booking history, points balance, and activity. No spreadsheets.',
-  },
-  {
-    icon: '💳',
-    title: 'Stripe Payments',
-    body: 'Built-in Stripe Connect. Collect greens fees, process refunds, and receive payouts directly. No separate payment vendor.',
-  },
-  {
-    icon: '📊',
-    title: 'Revenue, Rounds & Accounting Reports',
-    body: 'Track revenue, rounds played, member growth, barter value recovered, and waitlist demand. Export-ready reports act as your general ledger for TeeAhead bookings.',
-  },
-  {
-    icon: '🏌️',
-    title: 'Golfer Loyalty Built In',
-    body: 'Every course on TeeAhead gets access to a loyalty network of local golfers. Members earn Fairway Points at your course — driving repeat rounds.',
-  },
-  {
-    icon: '🏆',
-    title: 'League Management',
-    body: 'Run 9-hole and 18-hole stroke play or Stableford leagues. Score entry, net scoring with handicaps, live standings, and session history — all included.',
-  },
-  {
-    icon: '🔄',
-    title: 'Member Tee Time Exchange',
-    body: "Members who can't make a booked tee time can list it on the exchange. Another member claims it — the original booker earns TeeAhead platform credit automatically. No course involvement, no cash, no Stripe.",
-  },
-  {
-    icon: '🔔',
-    title: 'In-Round Service Requests',
-    body: 'Golfers tap "Need something?" mid-round to request a beverage cart, report a cart issue, or flag a pace concern. The pro shop gets a real-time alert and taps "On it" — the golfer is notified instantly.',
-  },
-  {
-    icon: '💰',
-    title: 'Revenue Share Back to Your Course',
-    body: 'TeeAhead shares platform revenue with partner courses based on booking volume. Your course earns a share of the network — not just a software license.',
-  },
-]
+export default async function TeeTimeSoftwarePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ ref?: string }>
+}) {
+  const params = await searchParams
+  await captureReferralCode(params.ref ?? null)
 
-const comparison = [
-  { feature: 'Monthly software cost', teeahead: '$0 (Founding Partners)', foreup: '$400–$800/mo', lightspeed: '$300–$700/mo', golfnow: '$0 + barter' },
-  { feature: 'Barter tee times required', teeahead: 'None, ever', foreup: 'None', lightspeed: 'None', golfnow: '~2/day at rack rate' },
-  { feature: 'Booking commissions', teeahead: 'None', foreup: 'None', lightspeed: 'None', golfnow: 'Yes' },
-  { feature: 'Contract term', teeahead: 'Annual', foreup: 'Varies', lightspeed: 'Month-to-month', golfnow: '1, 2 or 3 year' },
-  { feature: 'Golfer loyalty program', teeahead: 'Built in', foreup: 'Add-on / 3rd party', lightspeed: 'Add-on / 3rd party', golfnow: 'GolfPass+ (separate)' },
-  { feature: 'League management', teeahead: 'Built in (9 & 18 hole)', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
-  { feature: 'Member tee time exchange', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
-  { feature: 'In-round service requests', teeahead: 'Built in', foreup: 'None', lightspeed: 'None', golfnow: 'None' },
-  { feature: 'Revenue share to course', teeahead: 'Yes', foreup: 'No', lightspeed: 'No', golfnow: 'No' },
-  { feature: 'Stripe-native payments', teeahead: 'Yes', foreup: 'No (own processor)', lightspeed: 'Yes', golfnow: 'No' },
-  { feature: 'Revenue & accounting reports', teeahead: 'Yes — revenue, rounds, GL, waitlist', foreup: 'Yes', lightspeed: 'Yes', golfnow: 'Limited' },
-  { feature: 'Customer data ownership', teeahead: 'Stays with your course', foreup: 'Stays with your course', lightspeed: 'Stays with your course', golfnow: 'Retained by GolfNow' },
-  { feature: 'Setup / onboarding fee', teeahead: '$0', foreup: 'Varies', lightspeed: 'Varies', golfnow: '$0' },
-]
+  const supabase = await createClient()
+  const [{ data: contentRows }, { data: counter }] = await Promise.all([
+    supabase.from('content_blocks').select('key, value').ilike('key', 'teetime.%'),
+    supabase.from('founding_partner_counter').select('count, cap').single(),
+  ])
 
-export default function TeeTimeSoftwarePage() {
-  return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <TeeTimeSoftwareSchema />
-      {/* Nav */}
-      <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto" />
-          </Link>
-          <nav className="flex items-center gap-4">
-            <Link
-              href="/waitlist/course"
-              className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-5 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-            >
-              Claim a Founding Spot
-            </Link>
-          </nav>
-        </div>
-      </header>
-
-      <main className="flex-1">
-
-        {/* Hero */}
-        <section className="bg-[#0F3D2E] px-6 py-20 text-center">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-sm font-medium text-[#F4F1EA]">Founding Partner spots open — Metro Detroit</span>
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-[#F4F1EA] leading-tight tracking-tight">
-              Free Tee Time Software for Golf Courses
-            </h1>
-            <p className="text-xl text-[#F4F1EA]/80 leading-relaxed max-w-3xl mx-auto">
-              TeeAhead is tee sheet software that costs your course nothing — no barter tee times, no commissions, no hidden fees. Annual contracts, simple and transparent. Built-in golfer loyalty, real-time booking, QR check-in, and Stripe payments included.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-              <Link
-                href="/waitlist/course"
-                className="inline-flex items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors"
-              >
-                Claim a Founding Partner Spot — First Year Free
-              </Link>
-              <a
-                href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-lg bg-white/10 px-7 py-3 text-base font-semibold text-[#F4F1EA] hover:bg-white/20 transition-colors"
-              >
-                Book a 30-min Demo →
-              </a>
-            </div>
-          </div>
-        </section>
-
-        {/* Problem */}
-        <section className="px-6 py-20 bg-white">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              Most Tee Time Software Either Costs Too Much or Extracts Too Much
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              {[
-                {
-                  label: 'High monthly SaaS fees',
-                  body: 'foreUP, Lightspeed, and similar platforms run $300–$800/month. For a small or mid-size course, that\'s $4,000–$10,000/year in fixed overhead.',
-                },
-                {
-                  label: 'GolfNow\'s barter model',
-                  body: 'GolfNow is "free" — but requires ~2 prime-time tee times per day as barter. At average rack rates, that costs courses $94,500+/year in lost revenue.',
-                },
-                {
-                  label: 'No built-in loyalty',
-                  body: 'Most tee sheet software manages bookings but does nothing to bring golfers back. You need a separate loyalty platform, separate cost, separate login.',
-                },
-              ].map(({ label, body }) => (
-                <div key={label} className="bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-3">
-                  <h3 className="font-bold text-[#1A1A1A]">{label}</h3>
-                  <p className="text-sm text-[#6B7770] leading-relaxed">{body}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-[#6B7770] leading-relaxed text-lg">
-              TeeAhead solves all three. Founding Partner courses pay <strong className="text-[#0F3D2E]">$0</strong> in the first year. After that, $349/month flat — no commissions, no barter, no variable costs. And a golfer loyalty network is built into the platform from day one.
-            </p>
-          </div>
-        </section>
-
-        {/* Features */}
-        <section className="px-6 py-20 bg-[#FAF7F2]">
-          <div className="max-w-4xl mx-auto space-y-10">
-            <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-                Everything Your Course Needs, Nothing You Don't
-              </h2>
-              <p className="text-[#6B7770] text-lg">
-                TeeAhead is tee sheet software built for the way golf courses actually operate — not enterprise bloat.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {features.map(({ icon, title, body }) => (
-                <div key={title} className="bg-white rounded-xl p-6 ring-1 ring-black/5 space-y-3">
-                  <div className="text-3xl">{icon}</div>
-                  <h3 className="font-bold text-[#1A1A1A]">{title}</h3>
-                  <p className="text-sm text-[#6B7770] leading-relaxed">{body}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section className="px-6 py-20 bg-white">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              Simple, Transparent Pricing
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div className="bg-[#0F3D2E] rounded-xl p-8 space-y-4">
-                <div className="inline-block bg-[#E0A800]/20 text-[#E0A800] text-sm font-semibold px-3 py-1 rounded-full">
-                  Founding Partner — First 10 Courses
-                </div>
-                <div className="text-5xl font-bold text-[#F4F1EA]">$0</div>
-                <p className="text-[#F4F1EA]/60 text-sm">First year free</p>
-                <ul className="space-y-2 text-sm text-[#F4F1EA]/80">
-                  {[
-                    'Full platform access — no feature gating',
-                    'No barter tee times',
-                    'No commissions per booking',
-                    'Annual commitment — lock in $349/mo rate after year one',
-                    'Direct onboarding with the TeeAhead team',
-                  ].map(item => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="text-[#E0A800] mt-0.5">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/course"
-                  className="inline-flex items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 px-6 py-3 text-sm font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors w-full text-center"
-                >
-                  Claim a Founding Spot →
-                </Link>
-              </div>
-              <div className="bg-[#FAF7F2] rounded-xl p-8 ring-1 ring-black/10 space-y-4">
-                <div className="inline-block bg-[#1A1A1A]/10 text-[#1A1A1A] text-sm font-semibold px-3 py-1 rounded-full">
-                  Standard — Course #11 and beyond
-                </div>
-                <div className="text-5xl font-bold text-[#1A1A1A]">$349<span className="text-2xl font-normal text-[#6B7770]">/mo</span></div>
-                <p className="text-[#6B7770] text-sm">Annual contract, billed monthly — no variable fees</p>
-                <ul className="space-y-2 text-sm text-[#6B7770]">
-                  {[
-                    'Full platform access',
-                    'No barter, no commissions',
-                    'Annual commitment, billed monthly',
-                    'Stripe Connect payouts',
-                    'Loyalty network access',
-                    '~96% cheaper than GolfNow barter costs',
-                  ].map(item => (
-                    <li key={item} className="flex items-start gap-2">
-                      <span className="text-[#0F3D2E] mt-0.5">✓</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/waitlist/course"
-                  className="inline-flex items-center justify-center rounded-lg border border-black/10 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-black/5 transition-colors w-full text-center"
-                >
-                  Join the Waitlist →
-                </Link>
-              </div>
-            </div>
-            <p className="text-xs text-[#9DAA9F]">
-              * GolfNow barter cost estimate based on ~2 prime-time tee times/day at average rack rates. NGCOA member survey data, 2024–2025.
-            </p>
-          </div>
-        </section>
-
-        {/* Comparison table */}
-        <section className="px-6 py-20 bg-[#FAF7F2]">
-          <div className="max-w-5xl mx-auto space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A1A]">
-              TeeAhead vs. Other Tee Time Software
-            </h2>
-            <p className="text-[#6B7770] text-lg">
-              How TeeAhead stacks up against the platforms golf courses most commonly evaluate.
-            </p>
-            <div className="overflow-x-auto rounded-xl ring-1 ring-black/10">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-[#1B4332] text-[#FAF7F2]">
-                    <th className="text-left px-5 py-4 font-semibold">Feature</th>
-                    <th className="text-center px-4 py-4 font-semibold">TeeAhead</th>
-                    <th className="text-center px-4 py-4 font-semibold text-[#FAF7F2]/60">foreUP</th>
-                    <th className="text-center px-4 py-4 font-semibold text-[#FAF7F2]/60">Lightspeed</th>
-                    <th className="text-center px-4 py-4 font-semibold text-[#FAF7F2]/60">GolfNow</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-black/5">
-                  {comparison.map((row, i) => (
-                    <tr key={row.feature} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAF7F2]'}>
-                      <td className="px-5 py-4 font-medium text-[#1A1A1A]">{row.feature}</td>
-                      <td className="px-4 py-4 text-center font-semibold text-[#1B4332]">{row.teeahead}</td>
-                      <td className="px-4 py-4 text-center text-[#6B7770]">{row.foreup}</td>
-                      <td className="px-4 py-4 text-center text-[#6B7770]">{row.lightspeed}</td>
-                      <td className="px-4 py-4 text-center text-[#6B7770]">{row.golfnow}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <p className="text-xs text-[#9DAA9F]">
-              Competitor pricing and features based on publicly available information as of 2025–2026. Individual contracts may vary.
-            </p>
-          </div>
-        </section>
-
-        {/* Case study callout */}
-        <section className="px-6 py-20 bg-white">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-[#FAF7F2] rounded-2xl p-10 ring-1 ring-black/5 space-y-6">
-              <div className="text-6xl font-bold text-[#0F3D2E]">382%</div>
-              <h3 className="text-2xl font-bold text-[#1A1A1A]">
-                What happens when a course reclaims its tee sheet
-              </h3>
-              <p className="text-[#6B7770] leading-relaxed">
-                Windsor Parke Golf Club grew online revenue from $81,000 to $393,000 — a $312,000 swing — after switching away from GolfNow's barter model and taking direct control of their booking channel. That's not a projection. That's a documented outcome.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link
-                  href="/case-studies/windsor-parke"
-                  className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-6 py-3 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-                >
-                  Read the Windsor Parke case study →
-                </Link>
-                <Link
-                  href="/damage"
-                  className="inline-flex items-center justify-center rounded-lg border border-black/10 px-6 py-3 text-sm font-semibold text-[#1A1A1A] hover:bg-black/5 transition-colors"
-                >
-                  Calculate your GolfNow cost →
-                </Link>
-              </div>
-              <p className="text-xs text-[#9DAA9F]">Source: Golf Inc. / industry reporting, Windsor Parke case study</p>
-            </div>
-          </div>
-        </section>
-
-        {/* Long-tail body copy (SEO) */}
-        <section className="px-6 py-20 bg-[#FAF7F2]">
-          <div className="max-w-4xl mx-auto space-y-8">
-            <h2 className="text-3xl font-bold text-[#1A1A1A]">
-              What to Look for in Tee Time Software for Golf Courses
-            </h2>
-            <div className="prose prose-lg max-w-none text-[#6B7770] space-y-6">
-              <p className="leading-relaxed">
-                When golf course operators evaluate tee time software, the conversation usually starts with price and ends with switching costs. The platforms that have dominated the space — GolfNow, foreUP, Lightspeed Golf — all have trade-offs worth understanding before you sign anything.
-              </p>
-              <p className="leading-relaxed">
-                <strong className="text-[#1A1A1A]">True cost of free software:</strong> GolfNow's tee sheet is marketed as free, but the barter model — surrendering prime-time tee times at rack rate — costs most courses between $60,000 and $150,000 per year in foregone revenue. That's not a fee. It's a revenue drain that doesn't show up in your P&amp;L until someone does the math.
-              </p>
-              <p className="leading-relaxed">
-                <strong className="text-[#1A1A1A]">SaaS fees vs. variable costs:</strong> foreUP and Lightspeed Golf charge monthly SaaS fees with no barter requirement. That's a legitimate trade. At $300–$800/month, a course that would otherwise pay $94,500/year in barter comes out dramatically ahead. The question is whether you're getting software that justifies the fee.
-              </p>
-              <p className="leading-relaxed">
-                <strong className="text-[#1A1A1A]">Loyalty and repeat rounds:</strong> Most tee sheet software handles booking and payment, but none of the incumbent platforms have a golfer loyalty program built into the same ecosystem. Driving repeat rounds from your existing golfer base requires either a separate loyalty vendor or building your own CRM workflow. TeeAhead is the only tee time software that includes a loyalty network at the course level as a core feature — not an add-on.
-              </p>
-              <p className="leading-relaxed">
-                TeeAhead is currently accepting Founding Partner applications from golf courses in Metro Detroit. The first 10 courses get platform access free for the first year. If you run a course in Oakland, Macomb, or Wayne County and want to learn more, reach out directly to{' '}
-                <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline decoration-dotted">neil@teeahead.com</a>.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Final CTA */}
-        <section className="px-6 py-20 bg-[#0F3D2E] text-center">
-          <div className="max-w-2xl mx-auto space-y-6">
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#F4F1EA]">
-              Ready to switch your tee sheet software?
-            </h2>
-            <p className="text-[#F4F1EA]/70 leading-relaxed">
-              Founding Partner spots are limited to the first 10 courses. No barter. No commissions. First year free.
-            </p>
-            <Link
-              href="/waitlist/course"
-              className="inline-flex items-center justify-center rounded-lg border-2 border-[#E0A800] bg-[#E0A800]/10 px-8 py-4 text-base font-semibold text-[#F4F1EA] hover:bg-[#E0A800]/20 transition-colors"
-            >
-              Claim a Founding Partner Spot →
-            </Link>
-          </div>
-        </section>
-
-        {/* Related blog posts */}
-        <section className="px-6 py-16 bg-white">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <h2 className="text-xl font-bold text-[#1A1A1A]">Go deeper</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {[
-                { href: '/blog/tee-sheet-software-cost', label: 'Tee Sheet Software Cost in 2026', desc: 'GolfNow, foreUP, Lightspeed, Club Prophet — what each really costs.' },
-                { href: '/blog/how-golf-course-booking-software-works', label: 'How Golf Course Booking Software Works', desc: 'Tee sheet, payments, check-in, loyalty — the full stack explained.' },
-                { href: '/blog/how-to-switch-tee-sheet-software', label: 'How to Switch Tee Sheet Software', desc: 'Migrate your data and communicate to golfers without losing bookings.' },
-              ].map(({ href, label, desc }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  className="block bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
-                >
-                  <p className="font-semibold text-[#0F3D2E]">{label} →</p>
-                  <p className="text-sm text-[#6B7770]">{desc}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      </main>
-
-      {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
-
-            {/* Column 1 — Brand */}
-            <div className="col-span-2 sm:col-span-1 space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-
-            {/* Column 2 — For Courses */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
-              </nav>
-            </div>
-
-            {/* Column 3 — Compare */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
-                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
-                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
-                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
-              </nav>
-            </div>
-
-            {/* Column 4 — Company */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
   )
+
+  const spotsRemaining = (counter?.cap ?? 10) - (counter?.count ?? 0)
+
+  const config: SeoLandingConfig = {
+    spotsRemaining,
+    eyebrow: c['teetime.hero_badge'] ?? 'Tee time software · Free for Founding Partners',
+    headline: c['teetime.hero_headline'] ? (
+      <>{c['teetime.hero_headline']}</>
+    ) : (
+      <>
+        Tee time software your course pays{' '}
+        <em className="italic text-[#E0A800]">nothing</em> to run.
+      </>
+    ),
+    subhead:
+      c['teetime.hero_subhead'] ??
+      'Real-time booking, QR check-in, Stripe payments, golfer loyalty, league management, and revenue reports — included. No barter, no commissions, no hidden fees.',
+    sections: [
+      {
+        kind: 'narrative',
+        eyebrow: 'The trade most software asks for',
+        headline: (
+          <>
+            Most tee-sheet software either costs too much, or{' '}
+            <em className="italic text-[#E0A800]">extracts too much.</em>
+          </>
+        ),
+        body: (
+          <>
+            <p>
+              {c['teetime.problem_intro'] ??
+                'foreUP and Lightspeed run $300–$800/month in fixed SaaS. For a small or mid-size course, that is $4,000–$10,000/year in overhead.'}
+            </p>
+            <p>
+              GolfNow is &ldquo;free&rdquo; — but the ~2 prime-time tee times per day in barter
+              cost the average course $94,500/year in lost revenue.
+            </p>
+            <p>
+              And none of the incumbents bundle golfer loyalty. Driving repeat rounds means a
+              separate vendor, separate cost, separate login. TeeAhead bundles loyalty into the
+              tee sheet at the platform level — the only one that does.
+            </p>
+          </>
+        ),
+      },
+      {
+        kind: 'stats',
+        eyebrow: 'What changes when you reclaim the tee sheet',
+        stats: [
+          { num: '382%', label: 'Windsor Parke online revenue growth post-GolfNow', sub: '$81K → $393K' },
+          { num: '36.3%', label: 'Missouri Bluffs green-fee revenue lift after switching', sub: 'Golf Inc. case study' },
+          { num: '$94,500', label: 'Average annual barter cost on GolfNow', sub: 'NGCOA 2024–2025' },
+        ],
+      },
+      {
+        kind: 'comparison',
+        eyebrow: 'TeeAhead vs the incumbents',
+        columns: ['foreUP / LS / GolfNow', 'TeeAhead'],
+        rows: [
+          { l: 'Monthly software cost', a: '$300–$800 / $0 + barter', b: '$0 (Founding) / $349 flat' },
+          { l: 'Barter tee times', a: 'None / ~2 per day', b: 'None, ever' },
+          { l: 'Built-in golfer loyalty', a: 'Add-on or 3rd party', b: 'Built in' },
+          { l: 'League management', a: 'None', b: '9 & 18 hole · built in' },
+          { l: 'Member tee time exchange', a: 'None', b: 'Built in' },
+          { l: 'In-round service requests', a: 'None', b: 'Built in' },
+          { l: 'Revenue share to course', a: 'No', b: 'Yes' },
+          { l: 'Customer data ownership', a: 'Mixed', b: 'Stays with course' },
+        ],
+      },
+      {
+        kind: 'faq',
+        eyebrow: 'Common questions',
+        items: [
+          {
+            q: 'What does Founding Partner mean?',
+            a: 'The first 10 courses in Metro Detroit get the full TeeAhead platform free for year one. No feature gating. Annual commitment to lock in $349/mo afterwards. Direct onboarding with the team.',
+          },
+          {
+            q: 'How does TeeAhead make money if courses pay nothing?',
+            a: 'TeeAhead earns from golfer memberships — Fairway, Eagle, and Ace. Courses are never the revenue source. That alignment is the point.',
+          },
+          {
+            q: 'What is the migration path from foreUP or Lightspeed?',
+            a: 'We import your tee sheet, member data, and historical bookings. Stripe Connect handles payments from day one. Golfers get a notification when the new booking flow goes live. Typically 48 hours.',
+          },
+          {
+            q: 'Can I see real numbers from a course that switched?',
+            a: 'Yes — Windsor Parke grew online revenue from $81K to $393K (382%) after leaving GolfNow. Missouri Bluffs grew green-fee revenue 36.3%. Both case studies are linked from the homepage.',
+          },
+        ],
+      },
+    ],
+  }
+
+  return <SeoLandingTemplate config={config} schema={<TeeTimeSoftwareSchema />} />
 }
