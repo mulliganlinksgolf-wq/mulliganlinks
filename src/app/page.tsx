@@ -52,7 +52,7 @@ export default async function HomePage({
         {/* ── Hole 01 — The Damage ──────────────────────────────── */}
         <section
           id="hole-01"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="01" par={5} yds={547} name="The Damage" />
 
@@ -130,7 +130,7 @@ export default async function HomePage({
         {/* ── Hole 02 — The Barter (dark) ───────────────────────── */}
         <section
           id="hole-02"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
         >
           <HoleHeader num="02" par={4} yds={412} name="The Barter" dark />
 
@@ -204,7 +204,7 @@ export default async function HomePage({
         {/* ── Hole 03 — The Product ─────────────────────────────── */}
         <section
           id="hole-03"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="03" par={4} yds={389} name="The Product" />
 
@@ -247,7 +247,7 @@ export default async function HomePage({
         {/* ── Hole 04 — The Membership ──────────────────────────── */}
         <section
           id="hole-04"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="04" par={3} yds={178} name="The Membership" />
 
@@ -312,7 +312,7 @@ export default async function HomePage({
         {/* ── Hole 05 — Live in 48hrs ───────────────────────────── */}
         <section
           id="hole-05"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
         >
           <HoleHeader num="05" par={5} yds={521} name="Live in 48hrs" dark />
 
@@ -406,7 +406,7 @@ export default async function HomePage({
         {/* ── Hole 06 — The Pricing ─────────────────────────────── */}
         <section
           id="hole-06"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="06" par={4} yds={401} name="The Pricing" />
 
@@ -492,7 +492,7 @@ export default async function HomePage({
         {/* ── Hole 07 — The Proof ───────────────────────────────── */}
         <section
           id="hole-07"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="07" par={4} yds={423} name="The Proof" />
 
@@ -559,7 +559,7 @@ export default async function HomePage({
         {/* ── Hole 08 — The Q&A ─────────────────────────────────── */}
         <section
           id="hole-08"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
         >
           <HoleHeader num="08" par={3} yds={165} name="The Q&A" />
           <HomepageFaq />
@@ -569,7 +569,7 @@ export default async function HomePage({
         {/* ── Hole 09 — Sink the Putt ───────────────────────────── */}
         <section
           id="hole-09"
-          className="px-6 sm:px-10 lg:px-14 py-14 sm:py-20 bg-[#082419]"
+          className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 bg-[#082419]"
         >
           <HoleHeader num="09" par={5} yds={558} name="Sink the Putt" dark />
           <FoundersScorecard spotsRemaining={spotsRemaining} />
