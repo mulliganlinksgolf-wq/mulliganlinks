@@ -123,238 +123,190 @@ export default function WindsorParkeCaseStudy() {
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <WindsorParkeSchema />
 
-      {/* ── Header ───────────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
-          </Link>
-          <Link href="/golfnow-alternative" className="text-sm text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors">← Back</Link>
+      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link href="/"><TeeAheadLogo className="h-12 w-auto" /></Link>
+          <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#6B7770]">Case Study · 001</p>
         </div>
       </header>
 
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="bg-[#0F3D2E] px-6 py-20">
-        <FadeIn>
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-4 py-1.5">
-              <span className="text-sm font-semibold text-[#E0A800] tracking-wide uppercase">Case Study</span>
+      <main className="flex-1 px-6 sm:px-10 lg:px-16 py-14 sm:py-20">
+        <div className="max-w-6xl mx-auto">
+
+          {/* Hero */}
+          <FadeIn>
+            <div className="flex items-center gap-3 mb-4">
+              <span className="w-7 h-px bg-[#E0A800]" />
+              <span className="font-mono text-xs tracking-[0.16em] uppercase text-[#6B7770]">Windsor Parke Golf Club · Case Study</span>
             </div>
-            <h1 className="font-display font-black text-[#F4F1EA] leading-tight tracking-[-0.02em] speakable" style={{ fontSize: 'clamp(28px, 4.5vw, 46px)' }}>
-              Windsor Parke Golf Club grew online revenue{' '}
-              <em style={{ color: '#E0A800', fontStyle: 'italic' }}>382%</em>{' '}
-              after leaving GolfNow.
+            <h1
+              className="font-display text-[#0F3D2E] leading-[1] tracking-[-0.025em] max-w-4xl speakable"
+              style={{ fontSize: 'clamp(40px, 6vw, 60px)', fontWeight: 400 }}
+            >
+              They left GolfNow.<br />
+              Online revenue went up <em className="italic text-[#E0A800]">382%.</em>
             </h1>
-            <p className="text-lg text-[#F4F1EA]/72 leading-relaxed max-w-2xl speakable">
-              Online revenue went from <strong className="text-[#F4F1EA]">$81,000 to $393,000</strong> — a $312,000 swing — by eliminating barter tee times, reclaiming direct bookings, and owning their customer relationships again.
-            </p>
-            <p className="text-xs text-[#F4F1EA]/40">Source: Golf Inc. / industry reporting, Windsor Parke case study</p>
-          </div>
-        </FadeIn>
-      </section>
+          </FadeIn>
 
-      {/* ── Stat bar ─────────────────────────────────────────── */}
-      <section className="bg-white border-b border-black/8 px-6 py-10">
-        <div className="max-w-3xl mx-auto grid grid-cols-3 gap-6 text-center">
-          {[
-            { value: '382%', label: 'Revenue increase' },
-            { value: '$312K', label: 'Dollar swing' },
-            { value: '$0', label: 'Barter cost after switch' },
-          ].map(({ value, label }) => (
-            <div key={label}>
-              <p className="font-display font-extrabold text-[#0F3D2E] leading-none mb-1" style={{ fontSize: '36px' }}>{value}</p>
-              <p className="text-xs text-[#6B7770]">{label}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── The problem ──────────────────────────────────────── */}
-      <section className="px-6 py-16 bg-[#FAF7F2]">
-        <div className="max-w-2xl mx-auto space-y-10">
-
-          <div className="space-y-5">
-            <h2 className="font-display font-black text-[#0F3D2E] text-2xl tracking-[-0.01em]">The problem with GolfNow's barter model</h2>
-            <p className="text-[#4A5550] leading-relaxed">
-              GolfNow doesn&apos;t charge golf courses a monthly fee. Instead, they take payment in barter tee times — approximately <strong>2 tee times per day</strong> at discounted &ldquo;Hot Deal&rdquo; rates. On paper, it sounds like a reasonable trade: free software in exchange for filling slow slots.
-            </p>
-            <p className="text-[#4A5550] leading-relaxed">
-              In practice, those barter slots add up fast. At average rack rates across 300 operating days, the typical course surrenders <strong>$94,500 per year</strong> in revenue. High-volume courses lose $150,000 or more.
-            </p>
-            <p className="text-[#4A5550] leading-relaxed">
-              It gets worse. GolfNow&apos;s price parity clauses prevent courses from offering lower prices on their own website than on GolfNow — so courses can&apos;t even incentivize direct bookings. And GolfNow retains the customer data. The golfer who books through GolfNow belongs to GolfNow, not your course.
-            </p>
-          </div>
-
-          {/* Barter math callout */}
-          <div className="bg-[#0F3D2E] rounded-xl p-8 space-y-4">
-            <p className="text-xs font-bold tracking-[0.12em] uppercase text-[#E0A800]">The barter math</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-              {[
-                { calc: '2 tee times/day', label: 'Barter requirement' },
-                { calc: '× 300 days', label: 'Operating season' },
-                { calc: '= ~$94,500/yr', label: 'Average annual loss' },
-              ].map(({ calc, label }) => (
-                <div key={label}>
-                  <p className="font-bold text-[#F4F1EA] text-lg">{calc}</p>
-                  <p className="text-xs text-[#F4F1EA]/60 mt-1">{label}</p>
-                </div>
-              ))}
-            </div>
-            <p className="text-center">
-              <Link href="/barter" className="text-sm text-[#E0A800] font-medium hover:underline">
-                Calculate your course&apos;s barter cost →
-              </Link>
-            </p>
-          </div>
-
-          <div className="space-y-5">
-            <h2 className="font-display font-black text-[#0F3D2E] text-2xl tracking-[-0.01em]">What Windsor Parke did</h2>
-            <p className="text-[#4A5550] leading-relaxed">
-              Windsor Parke Golf Club made the decision to leave GolfNow and rebuild their direct booking channel. No more barter tee times. No more price parity constraints. No more handing customer data to a platform that would then market back to their own golfers.
-            </p>
-            <p className="text-[#4A5550] leading-relaxed">
-              The results, documented in Golf Inc. industry reporting, speak for themselves.
-            </p>
-          </div>
-
-          {/* The result */}
-          <div className="bg-white rounded-xl p-8 border border-black/8 shadow-sm space-y-6">
-            <p className="text-xs font-bold tracking-[0.12em] uppercase text-[#6B7770]">The result</p>
-            <div className="flex items-center gap-6">
+          {/* The swing visualization */}
+          <FadeIn>
+            <div className="mt-10 bg-white border border-[#0F3D2E]/10 rounded-2xl p-7 sm:p-9 grid sm:grid-cols-[1fr_120px_1fr] items-center gap-6">
               <div className="text-center">
-                <p className="font-display font-black text-[#9DAA9F] leading-none" style={{ fontSize: '40px' }}>$81K</p>
-                <p className="text-xs text-[#9DAA9F] mt-1">Online revenue before</p>
+                <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#6B7770] mb-2">Online revenue · before</p>
+                <p className="font-display text-[#6B7770] leading-[0.88] tracking-[-0.03em]" style={{ fontSize: 'clamp(56px, 8vw, 84px)', fontWeight: 400 }}>$81K</p>
+                <p className="mt-2 text-xs text-[#6B7770]">on GolfNow&apos;s barter model</p>
               </div>
-              <div className="flex-1 flex flex-col items-center gap-1">
-                <div className="w-full h-px bg-[#0F3D2E]/20 relative">
-                  <span className="absolute left-1/2 -translate-x-1/2 -top-3 text-xs font-bold text-[#0F3D2E] bg-white px-2">+$312,000</span>
+              <div className="relative h-14 flex flex-col items-center justify-center">
+                <div className="w-full h-px bg-[#E0A800] relative">
+                  <span className="absolute -right-1 -top-[5px] w-0 h-0" style={{ borderLeft: '10px solid #E0A800', borderTop: '6px solid transparent', borderBottom: '6px solid transparent' }} />
                 </div>
-                <p className="text-xs text-[#6B7770]">after leaving GolfNow</p>
+                <span className="absolute -top-2.5 px-2.5 py-1 bg-[#0F3D2E] text-[#E0A800] rounded-full font-mono text-[10px] tracking-[0.12em] font-bold">+$312K</span>
+                <p className="mt-4 font-mono text-[9.5px] tracking-[0.14em] uppercase text-[#6B7770]">after leaving</p>
               </div>
               <div className="text-center">
-                <p className="font-display font-black text-[#0F3D2E] leading-none" style={{ fontSize: '40px' }}>$393K</p>
-                <p className="text-xs text-[#6B7770] mt-1">Online revenue after</p>
+                <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold mb-2">Online revenue · after</p>
+                <p className="font-display text-[#0F3D2E] leading-[0.88] tracking-[-0.03em]" style={{ fontSize: 'clamp(56px, 8vw, 84px)', fontWeight: 400 }}>$393K<span className="text-[#E0A800]">.</span></p>
+                <p className="mt-2 text-xs text-[#6B7770]">direct bookings, full rack rate</p>
               </div>
             </div>
-            <div className="pt-2 border-t border-black/8">
-              <p className="text-2xl font-black text-[#0F3D2E]">382% increase in online revenue.</p>
-              <p className="text-sm text-[#6B7770] mt-1">Source: Golf Inc. / industry reporting, Windsor Parke case study</p>
-            </div>
+            <p className="mt-3 text-[11px] font-mono text-[#9DAA9F] tracking-[0.06em]">Source · Golf Inc. / industry reporting, Windsor Parke case study</p>
+          </FadeIn>
+
+          {/* Narrative + marginalia */}
+          <div className="mt-14 grid lg:grid-cols-[1.6fr_1fr] gap-14 items-start">
+
+            {/* Main column */}
+            <FadeIn>
+              <article className="space-y-10">
+                <section className="space-y-4">
+                  <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold">The problem</p>
+                  <h2 className="font-display text-[#0F3D2E] tracking-[-0.02em] leading-[1.05] speakable" style={{ fontSize: 36, fontWeight: 400 }}>
+                    GolfNow doesn&apos;t charge in dollars. It charges in <em className="italic text-[#E0A800]">tee&nbsp;times.</em>
+                  </h2>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    Approximately <strong>two prime-time tee times per day</strong>, surrendered to &ldquo;Hot Deal&rdquo; discounts. On paper, it sounds like a reasonable trade: free software in exchange for filling slow slots.
+                  </p>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    In practice, those slots add up fast. At average rack rates across 300 operating days, the typical course gives away <strong>$94,500 a year</strong>. High-volume courses lose $150K+.
+                  </p>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    It gets worse. Price-parity clauses prevent courses from offering lower rates on their own site — so courses can&apos;t incentivize direct bookings. And GolfNow keeps the customer data. The golfer belongs to GolfNow, not the course.
+                  </p>
+                </section>
+
+                {/* Pull quote */}
+                <blockquote className="border-l-[3px] border-[#E0A800] bg-white pl-6 pr-6 py-5">
+                  <p className="font-display italic text-[22px] leading-[1.35] text-[#0F3D2E]" style={{ fontWeight: 400 }}>
+                    &ldquo;Windsor Parke isn&apos;t an outlier — Missouri Bluffs saw a 36.3% green fee increase. Brown Golf documented 39.6% of all rounds went to zero-revenue barter.&rdquo;
+                  </p>
+                  <p className="mt-2.5 font-mono text-[10.5px] tracking-[0.12em] uppercase text-[#6B7770]">Source · Golf Inc. industry reporting</p>
+                </blockquote>
+
+                <section className="space-y-4">
+                  <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold">What Windsor Parke did</p>
+                  <h2 className="font-display text-[#0F3D2E] tracking-[-0.02em] leading-[1.05]" style={{ fontSize: 36, fontWeight: 400 }}>
+                    They <em className="italic text-[#E0A800]">left.</em> And rebuilt direct.
+                  </h2>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    No more barter. No more price-parity constraints. No more handing customer data to a platform that would market it back to their own golfers. They reclaimed the booking channel.
+                  </p>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    Their own website became the booking destination. Their marketing went to golfers who actually remembered booking directly. The barter inventory that was going to GolfNow at $35–$45 a round now sells at full rack rate.
+                  </p>
+                  <p className="text-base leading-[1.7] text-[#1A1A1A]/85">
+                    Windsor Parke&apos;s 382% jump reflects the compounding effect of all three: no barter losses, full-rate direct bookings, and owned customer relationships that keep golfers coming back.
+                  </p>
+                </section>
+
+                {/* FAQ */}
+                <section>
+                  <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-4">Common questions</p>
+                  <div className="space-y-2">
+                    {[
+                      { q: 'Is the 382% figure verified?', a: 'The Windsor Parke revenue figures — $81,000 before, $393,000 after — are sourced from Golf Inc. industry reporting and the Windsor Parke case study. TeeAhead is not affiliated with Windsor Parke Golf Club.' },
+                      { q: "What is GolfNow's barter model?", a: "GolfNow's barter model requires partner courses to surrender approximately 2 tee times per day at discounted \"Hot Deal\" rates in exchange for their tee sheet software and marketplace listing. At average rack rates, this costs the typical course $94,500 per year." },
+                      { q: 'How much does my course lose in barter every year?', a: 'It depends on your rack rate and operating days. The TeeAhead Barter Calculator lets you enter your specific numbers to see your estimated annual barter cost.' },
+                      { q: 'Does TeeAhead take barter tee times?', a: 'No. TeeAhead charges a flat monthly fee ($0 for Founding Partner year one, $349/month after). No barter tee times, no commissions, no price parity clauses.' },
+                      { q: 'Who owns the golfer data when a course uses TeeAhead?', a: 'The course owns all of it — every booking, every golfer profile, every email address. Full CSV export anytime. TeeAhead never markets to your golfers.' },
+                    ].map((f, i) => (
+                      <details key={f.q} className="group bg-white border border-[#0F3D2E]/10 rounded-lg px-4 py-3" open={i === 0}>
+                        <summary className="flex justify-between items-baseline gap-3 cursor-pointer list-none">
+                          <span className="text-[14px] font-medium text-[#1A1A1A] leading-[1.35] flex-1">{f.q}</span>
+                          <span className="font-mono text-sm text-[#6B7770] transition-transform group-open:rotate-90" aria-hidden>+</span>
+                        </summary>
+                        <p className="mt-2 text-[13px] text-[#6B7770] leading-[1.55]">{f.a}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              </article>
+            </FadeIn>
+
+            {/* Marginalia sidebar */}
+            <FadeIn>
+              <aside className="space-y-6 lg:pt-[60px]">
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800] font-bold mb-2">The barter math</p>
+                  <div className="bg-[#082419] text-[#F4F1EA] rounded-xl p-5 space-y-2.5">
+                    {[
+                      ['2', 'tee times/day'],
+                      ['×', '300 days/year'],
+                      ['×', '$157 rack rate'],
+                      ['=', '$94,500/yr'],
+                    ].map(([n, l], i) => (
+                      <div key={i} className="grid grid-cols-[36px_1fr] items-baseline gap-3">
+                        <span className={`font-display text-[22px] ${i === 3 ? 'text-[#E0A800]' : 'text-[#F4F1EA]'}`} style={{ fontWeight: 400 }}>{n}</span>
+                        <span className={`text-[13px] ${i === 3 ? 'text-[#E0A800] font-semibold' : 'text-[#F4F1EA]/75'}`}>{l}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <Link href="/damage" className="block mt-3 text-[12px] text-[#0F3D2E] underline underline-offset-[3px]">
+                    Calculate your course&apos;s barter cost →
+                  </Link>
+                </div>
+
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800] font-bold mb-3">Related reading</p>
+                  <div className="flex flex-col gap-2.5">
+                    {[
+                      { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained' },
+                      { href: '/blog/michigan-courses-leaving-golfnow', label: 'Michigan Courses Leaving GolfNow' },
+                      { href: '/blog/metro-detroit-courses-on-golfnow', label: 'Metro Detroit Courses on GolfNow' },
+                    ].map(({ href, label }) => (
+                      <Link key={href} href={href} className="text-[13.5px] text-[#0F3D2E] font-medium leading-[1.4] hover:underline">
+                        {label} <span className="text-[#E0A800]">→</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </aside>
+            </FadeIn>
+
           </div>
 
-          <div className="space-y-5">
-            <h2 className="font-display font-black text-[#0F3D2E] text-2xl tracking-[-0.01em]">Why this happens</h2>
-            <p className="text-[#4A5550] leading-relaxed">
-              When a course is on GolfNow, GolfNow becomes the primary customer-facing brand for that course&apos;s online bookings. Golfers book through GolfNow, not the course website. GolfNow collects the email addresses, the booking history, the payment information.
-            </p>
-            <p className="text-[#4A5550] leading-relaxed">
-              When a course leaves, they reclaim that direct relationship. Their own website becomes the booking destination. Their marketing goes to golfers who actually remember booking directly. The barter inventory that was going to GolfNow at $35–$45 a round now sells at full rack rate.
-            </p>
-            <p className="text-[#4A5550] leading-relaxed">
-              Windsor Parke&apos;s 382% jump reflects the compounding effect of all three: no barter losses, full-rate direct bookings, and owned customer relationships that keep golfers coming back.
-            </p>
-          </div>
-
-          {/* Missouri Bluffs aside */}
-          <div className="bg-[#F0F4F1] rounded-xl p-6 border-l-4 border-[#0F3D2E] space-y-2">
-            <p className="font-semibold text-[#0F3D2E] text-sm">Windsor Parke isn&apos;t an outlier.</p>
-            <p className="text-sm text-[#4A5550] leading-relaxed">
-              Missouri Bluffs Golf Club saw a <strong>36.3% increase</strong> in green fee revenue after moving away from GolfNow&apos;s barter model. Brown Golf documented that <strong>39.6% of all rounds</strong> over three years went to zero-revenue barter slots before they made the switch.
-            </p>
-            <p className="text-xs text-[#9DAA9F]">Source: Golf Inc. industry reporting</p>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ── FAQ ──────────────────────────────────────────────── */}
-      <section className="px-6 py-16 bg-white">
-        <div className="max-w-2xl mx-auto space-y-8">
-          <h2 className="font-display font-black text-[#0F3D2E] text-2xl tracking-[-0.01em]">Common questions</h2>
-          <div className="space-y-6">
-            {[
-              {
-                q: 'Is the 382% figure verified?',
-                a: 'The Windsor Parke revenue figures — $81,000 before, $393,000 after — are sourced from Golf Inc. industry reporting and the Windsor Parke case study. TeeAhead is not affiliated with Windsor Parke Golf Club.',
-              },
-              {
-                q: 'What is GolfNow\'s barter model?',
-                a: 'GolfNow\'s barter model requires partner courses to surrender approximately 2 tee times per day at discounted "Hot Deal" rates in exchange for their tee sheet software and marketplace listing. At average rack rates, this costs the typical course $94,500 per year.',
-              },
-              {
-                q: 'How much does my course lose in barter every year?',
-                a: 'It depends on your rack rate and operating days. The TeeAhead Barter Calculator lets you enter your specific numbers to see your estimated annual barter cost.',
-              },
-              {
-                q: 'Does TeeAhead take barter tee times?',
-                a: 'No. TeeAhead charges a flat monthly fee ($0 for Founding Partner year one, $349/month after). No barter tee times, no commissions, no price parity clauses.',
-              },
-              {
-                q: 'Who owns the golfer data when a course uses TeeAhead?',
-                a: 'The course owns all of it — every booking, every golfer profile, every email address. Full CSV export anytime. TeeAhead never markets to your golfers.',
-              },
-            ].map(({ q, a }) => (
-              <div key={q} className="border-b border-black/8 pb-6 last:border-0 last:pb-0 space-y-2">
-                <p className="font-semibold text-[#0F3D2E]">{q}</p>
-                <p className="text-sm text-[#4A5550] leading-relaxed">{a}</p>
+          {/* CTA */}
+          <FadeIn>
+            <div className="mt-16 bg-[#0F3D2E] rounded-2xl p-8 sm:p-10 text-center">
+              <p className="font-mono text-xs tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-3">Founding Partner Program · Metro Detroit</p>
+              <h2 className="font-display text-[#F4F1EA] tracking-[-0.02em] leading-tight mb-5" style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: 400 }}>
+                Stop paying GolfNow in tee times.
+              </h2>
+              <p className="text-[#F4F1EA]/72 text-base leading-relaxed max-w-md mx-auto mb-6">
+                10 Founding Partner spots. Free for your first year. Zero barter, zero commissions. Live in 48 hours.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Link href="/waitlist/course" className="rounded-md bg-[#E0A800] px-7 py-3.5 text-sm font-bold text-[#082419]">
+                  Claim a founding spot →
+                </Link>
+                <Link href="/damage" className="rounded-md border border-[#F4F1EA]/30 px-7 py-3.5 text-sm font-semibold text-[#F4F1EA]">
+                  Calculate your damage
+                </Link>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="px-6 py-16 bg-[#FAF7F2]">
-        <div className="max-w-xl mx-auto">
-          <div className="bg-[#0F3D2E] rounded-2xl p-8 sm:p-10 text-center space-y-6">
-            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800]">Founding Partner Program — Metro Detroit</p>
-            <h2 className="font-display font-black text-[#F4F1EA] text-2xl leading-snug tracking-[-0.01em]">
-              Stop paying GolfNow in tee times.
-            </h2>
-            <p className="text-[#F4F1EA]/70 text-sm leading-relaxed">
-              10 Founding Partner spots. Free for your first year. Zero barter, zero commissions, zero data extraction. Live within 48 hours.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href="/waitlist/course"
-                className="px-7 py-3 rounded-xl bg-[#E0A800] text-[#0F3D2E] font-bold text-sm hover:bg-[#c89700] transition-colors"
-              >
-                Apply as a Founding Partner
-              </Link>
-              <Link
-                href="/barter"
-                className="px-7 py-3 rounded-xl border border-[#F4F1EA]/20 text-[#F4F1EA]/80 font-semibold text-sm hover:border-[#F4F1EA]/40 hover:text-[#F4F1EA] transition-colors"
-              >
-                Calculate your barter cost
-              </Link>
             </div>
-          </div>
-        </div>
-      </section>
+          </FadeIn>
 
-      {/* ── Related reading ──────────────────────────────────── */}
-      <section className="px-6 py-16 bg-white">
-        <div className="max-w-3xl mx-auto space-y-6">
-          <h2 className="font-display font-black text-[#0F3D2E] text-xl tracking-[-0.01em]">Related reading</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { href: '/blog/golfnow-barter-model-explained', label: 'GolfNow Barter Model Explained', desc: 'The full math on what barter tee times cost courses per year.' },
-              { href: '/blog/michigan-courses-leaving-golfnow', label: 'Michigan Courses Leaving GolfNow', desc: 'How 100+ courses left in Q1 2025 and what happened next.' },
-              { href: '/blog/metro-detroit-courses-on-golfnow', label: 'Metro Detroit Courses on GolfNow', desc: 'What operators in Oakland, Macomb, and Wayne County are saying.' },
-            ].map(({ href, label, desc }) => (
-              <Link
-                key={href}
-                href={href}
-                className="block bg-[#FAF7F2] rounded-xl p-6 ring-1 ring-black/5 space-y-2 hover:ring-[#0F3D2E]/20 transition-all"
-              >
-                <p className="font-semibold text-[#0F3D2E] text-sm">{label} →</p>
-                <p className="text-xs text-[#6B7770] leading-relaxed">{desc}</p>
-              </Link>
-            ))}
-          </div>
         </div>
-      </section>
+      </main>
 
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="bg-[#071f17] border-t border-black/5 px-6 py-10 mt-auto">
