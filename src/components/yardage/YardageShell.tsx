@@ -47,26 +47,26 @@ export function YardageShell({
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <header className="sticky top-0 z-40 h-[60px] bg-[#082419] text-[#F4F1EA] border-b border-[#E0A800]/25 flex items-center justify-between px-6 sm:px-8 lg:px-10">
+      <header className="sticky top-0 z-40 h-[60px] bg-[#082419] text-[#F4F1EA] border-b border-[#E0A800]/25 grid grid-cols-[auto_1fr_auto] items-center gap-8 px-6 sm:px-8 lg:px-10">
 
-        {/* Left — logo + nav */}
-        <div className="flex items-center gap-6 sm:gap-7">
-          <Link href="/" className="flex items-center">
-            <TeeAheadLogo className="h-8 w-auto brightness-0 invert" />
-          </Link>
-          <nav className="hidden md:flex items-center gap-5">
-            <Link href="/features" className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Features</Link>
-            <Link href="/pricing"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Pricing</Link>
-            <Link href="/about"    className="text-[13.5px] text-[#F4F1EA]/60 hover:text-[#F4F1EA] transition-colors">About</Link>
-            <Link href="/contact"  className="text-[13.5px] text-[#F4F1EA]/60 hover:text-[#F4F1EA] transition-colors">Contact</Link>
-          </nav>
-        </div>
+        {/* Left — logo */}
+        <Link href="/" className="flex items-center">
+          <TeeAheadLogo className="h-8 w-auto brightness-0 invert" />
+        </Link>
+
+        {/* Center — nav, evenly spaced */}
+        <nav className="hidden md:flex items-center justify-center gap-8">
+          <Link href="/features" className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Features</Link>
+          <Link href="/pricing"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Pricing</Link>
+          <Link href="/about"    className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">About</Link>
+          <Link href="/contact"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Contact</Link>
+        </nav>
 
         {/* Right — CTA (desktop) + hamburger (mobile) */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 justify-end">
           <Link
             href="/waitlist/course"
-            className="rounded-md bg-[#E0A800] px-4 py-2 text-[13px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
+            className="rounded-md bg-[#E0A800] px-4 py-2 text-[13px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors whitespace-nowrap"
           >
             Claim a spot →
           </Link>
