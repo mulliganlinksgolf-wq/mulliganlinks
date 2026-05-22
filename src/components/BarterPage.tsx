@@ -3,10 +3,9 @@
 // Last legal review: April 2026. Review again before major marketing campaigns.
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, ReactNode } from 'react'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
-import { FadeIn } from '@/components/FadeIn'
 
 interface BarterPageProps {
   spotsRemaining: number
@@ -20,9 +19,9 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
   const [presetKey, setPresetKey] = useState<'municipal' | 'dailyfee' | 'semiprivate' | 'custom'>('dailyfee')
 
   const presets = {
-    municipal:   { label: 'Municipal ($45)',      greenFee: 45,  days: 280 },
-    dailyfee:    { label: 'Daily Fee ($85)',       greenFee: 85,  days: 280 },
-    semiprivate: { label: 'Semi-Private ($120)',   greenFee: 120, days: 260 },
+    municipal:   { label: 'Municipal · $45',      greenFee: 45,  days: 280 },
+    dailyfee:    { label: 'Daily fee · $85',       greenFee: 85,  days: 280 },
+    semiprivate: { label: 'Semi-private · $120',   greenFee: 120, days: 260 },
     custom:      { label: 'My own numbers',        greenFee: greenFee, days: operatingDays },
   } as const
 
@@ -35,7 +34,6 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
   }
 
   const annualBarterCost = greenFee * operatingDays * barterTeeTimes
-
   const [displayedCost, setDisplayedCost] = useState(annualBarterCost)
 
   useEffect(() => {
@@ -46,7 +44,7 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
     const tick = (now: number) => {
       const elapsed = now - startTime
       const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3) // ease-out-cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
       setDisplayedCost(Math.round(start + (end - start) * eased))
       if (progress < 1) requestAnimationFrame(tick)
     }
@@ -55,268 +53,215 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
   }, [annualBarterCost])
 
   const allClaimed = spotsRemaining <= 0
+  const fiveYearCost = annualBarterCost * 5
+  const rounds = Math.round(annualBarterCost / greenFee)
+  const staff = Math.max(1, Math.round(annualBarterCost / 50000))
 
   return (
-    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+    <div className="min-h-screen bg-[#082419] text-[#F4F1EA] flex flex-col">
 
-      {/* ── Header ────────────────────────────────────────────── */}
-      <header className="bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8 px-6 py-4">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto brightness-0 invert" />
+      {/* Nav */}
+      <header className="border-b border-[#F4F1EA]/8 px-6 py-4 flex-shrink-0">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link href="/"><TeeAheadLogo className="h-10 w-auto brightness-0 invert" /></Link>
+          <Link
+            href="/waitlist/course"
+            className="px-4 py-2 rounded-md bg-[#E0A800] text-[#082419] text-sm font-bold hover:bg-[#E0A800]/90"
+          >
+            Claim a spot →
           </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/" className="text-sm text-[#F4F1EA]/65 hover:text-[#F4F1EA] transition-colors hidden sm:block">
-              ← Back to Home
-            </Link>
-            <Link
-              href="/waitlist/course"
-              className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-4 py-2 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
-            >
-              Claim a Founding Spot
-            </Link>
-          </div>
         </div>
       </header>
 
       <main className="flex-1">
 
-        {/* ── Hero ──────────────────────────────────────────────── */}
-        <section className="px-6 py-20 text-center relative overflow-hidden" style={{ background: '#071f17' }}>
-          {/* Gold radial glow */}
-          <div className="absolute inset-0 pointer-events-none"
-               style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(224,168,0,0.08) 0%, transparent 65%)' }} />
-          <FadeIn>
-            <div className="max-w-2xl mx-auto space-y-7 relative z-10">
-              <div className="inline-flex items-center gap-2 bg-[#E0A800]/12 border border-[#E0A800]/30 rounded-full px-4 py-1.5">
-                <span className="text-xs font-bold text-[#E0A800] tracking-[0.08em] uppercase">{content['barter.hero_badge'] ?? 'For Golf Course Operators'}</span>
+        {/* ── Hero IS the calculator ─────────────────────────────── */}
+        <section className="px-6 sm:px-10 lg:px-16 py-14 sm:py-20">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-14 items-center">
+
+            {/* Left: the number */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-7 h-px bg-[#E0A800]" />
+                <span className="font-mono text-xs tracking-[0.16em] uppercase text-[#E0A800] font-semibold">
+                  {content['barter.hero_badge'] ?? 'Barter calculator'}
+                </span>
               </div>
+              <p className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#F4F1EA]/50 mb-2">
+                GolfNow&apos;s barter model cost you
+              </p>
+              <p
+                className="font-display leading-[0.88] tracking-[-0.04em]"
+                style={{ fontSize: 'clamp(80px, 14vw, 168px)', fontWeight: 400 }}
+              >
+                ${displayedCost.toLocaleString()}<span className="text-[#E0A800]">.</span>
+              </p>
+              <p className="mt-4 text-base sm:text-lg text-[#F4F1EA]/78 leading-relaxed max-w-md">
+                <strong className="text-[#F4F1EA]">This year alone.</strong> Adjust the sliders — the number updates as you drag.
+              </p>
 
-              <h1 className="font-display font-black text-[#F4F1EA] leading-[1.1] tracking-[-0.02em]"
-                  style={{ fontSize: 'clamp(36px, 5vw, 52px)' }}>
-                {content['barter.hero_headline'] ?? 'See exactly what GolfNow has cost you. In dollars.'}
-              </h1>
+              {/* Equivalents — editorial, no emoji */}
+              <div className="mt-7 pt-5 border-t border-[#F4F1EA]/10">
+                <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-3">
+                  What that money looks like
+                </p>
+                <ul className="flex flex-col gap-1.5">
+                  {[
+                    { primary: `$${fiveYearCost.toLocaleString()}`, label: 'over five years, compounded' },
+                    { primary: `${rounds.toLocaleString()}`, label: `rounds of revenue per year, at $${greenFee}/round` },
+                    { primary: `${staff}×`, label: `full-time staff at $50K/yr` },
+                  ].map((row) => (
+                    <li key={row.label} className="grid grid-cols-[minmax(96px,auto)_1fr] gap-3.5 items-baseline py-1">
+                      <span
+                        className="font-display text-[#E0A800] text-right tracking-[-0.02em] leading-none"
+                        style={{ fontSize: 26, fontWeight: 400 }}
+                      >
+                        {row.primary}
+                      </span>
+                      <span className="text-[15px] text-[#F4F1EA]">{row.label}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
 
-              <p className="text-base leading-relaxed max-w-md mx-auto" style={{ color: 'rgba(244,241,234,0.60)' }}>
-                {content['barter.hero_subhead'] ?? "Drop in your numbers. We'll calculate the exact revenue GolfNow's barter model has cost your course — this year alone. No login. No email required."}
+            {/* Right: sliders */}
+            <div className="bg-[#F4F1EA]/[0.04] border border-[#F4F1EA]/10 rounded-2xl p-6 sm:p-7 flex flex-col gap-5">
+              <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#F4F1EA]/60 font-semibold">
+                Adjust to match your course
               </p>
 
               {/* Preset chips */}
-              <div className="space-y-3">
-                <p className="text-xs font-semibold tracking-[0.08em] uppercase" style={{ color: 'rgba(244,241,234,0.35)' }}>
-                  Quick-start with a course type
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {(Object.keys(presets) as Array<keyof typeof presets>).map((key) => (
+              <div className="flex flex-wrap gap-1.5">
+                {(Object.keys(presets) as Array<keyof typeof presets>).map((key) => {
+                  const active = presetKey === key
+                  return (
                     <button
                       key={key}
                       onClick={() => handlePreset(key)}
-                      className="rounded-full px-4 py-2 text-sm font-semibold transition-colors"
-                      style={presetKey === key
-                        ? { background: 'rgba(224,168,0,0.15)', border: '1px solid rgba(224,168,0,0.40)', color: '#E0A800' }
-                        : { background: 'rgba(244,241,234,0.07)', border: '1px solid rgba(244,241,234,0.15)', color: 'rgba(244,241,234,0.65)' }
-                      }
+                      className={`rounded-md px-3 py-1.5 text-[12px] font-medium transition-colors ${
+                        active
+                          ? 'bg-[#E0A800]/15 border border-[#E0A800]/40 text-[#E0A800]'
+                          : 'bg-[#F4F1EA]/[0.04] border border-[#F4F1EA]/10 text-[#F4F1EA]/65 hover:text-[#F4F1EA]'
+                      }`}
                     >
                       {presets[key].label}
                     </button>
-                  ))}
-                </div>
+                  )
+                })}
               </div>
 
-              <p className="text-xs" style={{ color: 'rgba(244,241,234,0.30)' }}>
-                Calculator based on NGCOA member survey data and Golf Inc. industry analysis (2024–2025). Actual costs vary by contract terms.
-              </p>
-            </div>
-          </FadeIn>
-        </section>
-
-        {/* ── Calculator ────────────────────────────────────────── */}
-        <section className="px-6 pb-6 bg-[#FAF7F2]">
-          <FadeIn>
-            <div className="max-w-2xl mx-auto bg-white rounded-[20px] p-8 border border-black/7"
-                 style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.07)' }}>
-
-              {/* Card header with running total */}
-              <div className="flex items-start justify-between mb-8 pb-6 border-b border-black/6">
-                <div>
-                  <p className="text-sm font-bold text-[#1A1A1A]">GolfNow Barter Calculator</p>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">Adjust sliders to match your course</p>
-                </div>
-                <div className="text-right">
-                  <p className="font-display font-black text-[#0F3D2E] leading-none" style={{ fontSize: '32px' }}>
-                    ${displayedCost.toLocaleString()}
-                  </p>
-                  <p className="text-xs text-[#9DAA9F] mt-0.5">running total</p>
-                </div>
-              </div>
-
-              {/* Slider 1: Green Fee */}
-              <div className="space-y-3 mb-7">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">Your average green fee at peak</label>
-                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>${greenFee}</span>
-                </div>
+              <Slider label="Average green fee at peak" value={`$${greenFee}`} range="$20 – $200">
                 <input
                   type="range" min={20} max={200} step={5} value={greenFee}
                   onChange={(e) => { setGreenFee(Number(e.target.value)); setPresetKey('custom') }}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
+                  style={{ accentColor: '#E0A800' }}
                 />
-                <p className="text-xs text-[#9DAA9F]">$20–$200 · Use your published weekend or peak-time rate</p>
-              </div>
+              </Slider>
 
-              {/* Slider 2: Operating Days */}
-              <div className="space-y-3 mb-7">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">Days your course is open per year</label>
-                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{operatingDays}</span>
-                </div>
+              <Slider label="Days open per year" value={String(operatingDays)} range="100 – 360">
                 <input
                   type="range" min={100} max={360} step={10} value={operatingDays}
                   onChange={(e) => { setOperatingDays(Number(e.target.value)); setPresetKey('custom') }}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
+                  style={{ accentColor: '#E0A800' }}
                 />
-                <p className="text-xs text-[#9DAA9F]">100–360 days</p>
-              </div>
+              </Slider>
 
-              {/* Slider 3: Barter Tee Times */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-[#1A1A1A]">Barter tee times given to GolfNow per day</label>
-                  <span className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '22px' }}>{barterTeeTimes}</span>
-                </div>
+              <Slider label="Barter tee times per day" value={String(barterTeeTimes)} range="1 – 4 · GolfNow typically takes 2">
                 <input
                   type="range" min={1} max={4} step={1} value={barterTeeTimes}
                   onChange={(e) => setBarterTeeTimes(Number(e.target.value))}
                   className="w-full h-1.5 rounded-full cursor-pointer"
-                  style={{ accentColor: '#0F3D2E', touchAction: 'none' }}
+                  style={{ accentColor: '#E0A800' }}
                 />
-                <p className="text-xs text-[#9DAA9F]">GolfNow typically takes 2 prime-time tee times per day · 1–4</p>
-              </div>
+              </Slider>
 
-            </div>
-          </FadeIn>
-        </section>
+              <Link
+                href="/waitlist/course"
+                className="mt-1 rounded-md bg-[#E0A800] py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90 text-center"
+              >
+                Claim a founding spot — save ${displayedCost.toLocaleString()}/yr →
+              </Link>
 
-        {/* ── Output ─────────────────────────────────────────────── */}
-        <section className="px-6 py-16 bg-[#0F3D2E] text-center">
-          <FadeIn>
-            <div className="max-w-2xl mx-auto space-y-6">
-              <p className="text-sm font-medium text-[#F4F1EA]/60">GolfNow&apos;s barter model cost you</p>
-              <p className="font-display font-black text-[#F4F1EA] leading-none tracking-[-0.03em]"
-                 style={{ fontSize: 'clamp(72px, 12vw, 96px)' }}>
-                ${displayedCost.toLocaleString()}
-              </p>
-              <p className="text-base text-[#F4F1EA]/50">this year alone</p>
-
-              <div className="border-t border-[#F4F1EA]/15 pt-8 space-y-2">
-                <p className="text-sm font-medium text-[#F4F1EA]/65">TeeAhead would have charged you</p>
-                <p className="font-display font-black text-[#E0A800] leading-none" style={{ fontSize: '64px' }}>$0</p>
-              </div>
-
-              {/* Context cards — inside the dark section */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                {[
-                  { label: 'Over 5 years, that\'s', value: `$${(annualBarterCost * 5).toLocaleString()}`, sub: 'in lost revenue' },
-                  { label: 'That equals about', value: `${Math.round(annualBarterCost / greenFee).toLocaleString()} rounds`, sub: 'of revenue per year' },
-                  { label: 'You could hire', value: `${Math.max(1, Math.round(annualBarterCost / 50000))} staff`, sub: 'with that money' },
-                ].map(({ label, value, sub }) => (
-                  <div key={label} className="rounded-xl p-5 text-center"
-                       style={{ background: 'rgba(244,241,234,0.06)', border: '1px solid rgba(244,241,234,0.10)' }}>
-                    <p className="text-xs font-medium text-[#F4F1EA]/45 uppercase tracking-wider mb-2">{label}</p>
-                    <p className="font-display font-bold text-[#F4F1EA] leading-none" style={{ fontSize: '26px' }}>{value}</p>
-                    <p className="text-xs text-[#F4F1EA]/45 mt-1">{sub}</p>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-xs text-[#F4F1EA]/25 leading-relaxed max-w-lg mx-auto pt-2">
-                Calculation based on GolfNow&apos;s standard barter model of 2 prime-time tee times per day
-                at published rack rates. Actual barter arrangements vary by course agreement.
+              <p className="text-[11px] text-[#F4F1EA]/40 text-center font-mono tracking-[0.06em]">
+                NGCOA &amp; Golf Inc. industry analysis, 2024–2025
               </p>
             </div>
-          </FadeIn>
+
+          </div>
         </section>
 
-        {/* ── Proof ──────────────────────────────────────────────── */}
-        <section className="px-6 py-16 bg-white">
-          <FadeIn>
-            <div className="max-w-3xl mx-auto space-y-10">
-              <div className="max-w-xl mx-auto text-center space-y-3">
-                <h2 className="font-display font-bold text-[#1A1A1A] tracking-[-0.02em]" style={{ fontSize: '32px' }}>
-                  {content['barter.stats_headline'] ?? 'This is not a hypothetical.'}
-                </h2>
-                <p className="text-[#6B7770] text-base leading-relaxed">
-                  {content['barter.stats_intro'] ?? "The math above isn't projection — it's documented industry data."}
-                </p>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                {[
-                  { num: '382%', label: 'Online revenue increase at Windsor Parke Golf Club after leaving GolfNow', sub: '$81K → $393K', source: 'Golf Inc. / industry reporting, Windsor Parke case study' },
-                  { num: '39.6%', label: 'Of all rounds at Brown Golf went to zero-revenue barter slots over 3 years', sub: null, source: 'NGCOA member reporting / Golf Inc. analysis' },
-                  { num: '100+', label: 'Golf courses left GolfNow in Q1 2025 alone', sub: null, source: 'National Golf Course Owners Association (NGCOA), Q1 2025' },
-                ].map(({ num, label, sub, source }) => (
-                  <div key={num} className="bg-[#FAF7F2] rounded-xl p-7 space-y-2 ring-1 ring-black/5">
-                    <p className="font-display font-bold text-[#0F3D2E]" style={{ fontSize: '36px' }}>{num}</p>
-                    <p className="text-sm font-medium text-[#1A1A1A] leading-snug">{label}</p>
-                    {sub && <p className="text-xs text-[#6B7770]">{sub}</p>}
-                    <p className="text-xs text-[#9DAA9F]">Source: {source}</p>
-                  </div>
-                ))}
-              </div>
+        {/* ── Proof — cream ─────────────────────────────────────── */}
+        <section className="px-6 sm:px-10 lg:px-16 py-16 bg-[#FAF7F2] text-[#1A1A1A]">
+          <div className="max-w-5xl mx-auto">
+            <div className="flex items-baseline gap-3 mb-10">
+              <span className="font-mono text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
+                {content['barter.stats_eyebrow'] ?? 'Not hypothetical'}
+              </span>
+              <span className="flex-1 h-px bg-[#0F3D2E]/10" />
             </div>
-          </FadeIn>
-        </section>
-
-        {/* ── CTA ────────────────────────────────────────────────── */}
-        <section className="px-6 py-20 bg-[#FAF7F2] text-center">
-          <FadeIn>
-            <div className="max-w-xl mx-auto space-y-6">
-              <h2 className="font-display font-bold text-[#1A1A1A] tracking-[-0.02em] leading-tight" style={{ fontSize: '34px' }}>
-                {content['barter.cta_headline'] ?? 'Ready to stop paying GolfNow to take your tee times?'}
-              </h2>
-              <p className="text-[#6B7770] text-base leading-relaxed">
-                {content['barter.cta_body'] ?? 'TeeAhead is free for Founding Partner courses — your first year on us. No barter. No commissions. The only ask: tell your golfers about TeeAhead at booking.'}
-              </p>
-              <div className="space-y-3">
-                <Link
-                  href="/waitlist/course"
-                  className="inline-flex items-center justify-center w-full sm:w-auto rounded-lg bg-[#0F3D2E] px-8 py-4 text-base font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity"
-                >
-                  {allClaimed ? 'Join the Course Waitlist →' : 'Claim a Founding Partner Spot →'}
-                </Link>
-                {!allClaimed && (
-                  <p className="text-sm font-semibold text-[#E0A800]">
-                    {spotsRemaining} of 10 founding spots remaining
+            <div className="grid sm:grid-cols-3 gap-8">
+              {[
+                { num: '382%', label: 'Online revenue increase at Windsor Parke Golf Club after leaving GolfNow', sub: '$81K → $393K', source: 'Golf Inc. / industry reporting' },
+                { num: '39.6%', label: 'Of all rounds at Brown Golf went to zero-revenue barter slots over 3 years', sub: null, source: 'NGCOA member reporting' },
+                { num: '100+', label: 'Golf courses left GolfNow in Q1 2025 alone', sub: null, source: 'NGCOA Q1 2025' },
+              ].map(({ num, label, sub, source }) => (
+                <div key={num} className="border-t border-[#0F3D2E] pt-4">
+                  <p
+                    className="font-display text-[#0F3D2E] leading-none tracking-[-0.025em]"
+                    style={{ fontSize: 'clamp(48px, 6vw, 64px)', fontWeight: 400 }}
+                  >
+                    {num}
                   </p>
-                )}
-              </div>
-              <p className="text-sm text-[#6B7770]">
-                Questions? Email Neil or Bill directly —{' '}
-                <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
-                  neil@teeahead.com
-                </a>{' '}or{' '}
-                <a href="mailto:billy@teeahead.com" className="text-[#0F3D2E] hover:underline font-medium">
-                  billy@teeahead.com
-                </a>. Not a contact form.
-              </p>
+                  <p className="mt-3 text-sm text-[#1A1A1A]/80 leading-relaxed">{label}</p>
+                  {sub && <p className="mt-1.5 text-xs font-mono text-[#0F3D2E]">{sub}</p>}
+                  <p className="mt-2 text-[11px] text-[#6B7770] font-mono tracking-[0.06em]">Source · {source}</p>
+                </div>
+              ))}
             </div>
-          </FadeIn>
+          </div>
+        </section>
+
+        {/* ── Final CTA ──────────────────────────────────────────── */}
+        <section className="px-6 py-16 bg-[#FAF7F2] text-center border-t border-[#0F3D2E]/10">
+          <div className="max-w-xl mx-auto space-y-5">
+            <h2
+              className="font-display text-[#0F3D2E] tracking-[-0.02em] leading-tight"
+              style={{ fontSize: 'clamp(30px, 4vw, 40px)', fontWeight: 400 }}
+            >
+              {content['barter.cta_headline'] ?? 'Ready to stop paying GolfNow in tee times?'}
+            </h2>
+            <p className="text-base text-[#6B7770] leading-relaxed">
+              {content['barter.cta_body'] ?? '10 Founding Partner spots. Free for your first year. Zero barter, zero commissions. Live in 48 hours.'}
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/waitlist/course"
+                className="rounded-md bg-[#0F3D2E] px-7 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90"
+              >
+                {allClaimed ? 'Join the course waitlist →' : `Claim a founding spot (${spotsRemaining} left)`}
+              </Link>
+            </div>
+            <p className="text-sm text-[#6B7770]">
+              Questions? Email Neil — <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">neil@teeahead.com</a>
+            </p>
+          </div>
         </section>
 
         {/* ── Cross-links ──────────────────────────────────────── */}
-        <section className="px-6 py-8 bg-white border-t border-black/5">
+        <section className="px-6 py-8 bg-white border-t border-[#0F3D2E]/10">
           <div className="max-w-xl mx-auto text-center space-y-2">
             <p className="text-sm text-[#6B7770]">
               Not on GolfNow?{' '}
-              <Link href="/software-cost" className="text-[#0F3D2E] hover:underline font-medium">
+              <Link href="/software-cost" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">
                 See what your software is actually costing you →
               </Link>
             </p>
             <p className="text-sm text-[#6B7770]">
               Want the full historical damage?{' '}
-              <Link href="/damage" className="text-[#0F3D2E] hover:underline font-medium">
+              <Link href="/damage" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">
                 See the GolfNow Damage Report →
               </Link>
             </p>
@@ -329,8 +274,6 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
       <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-
-            {/* Column 1 — Brand */}
             <div className="space-y-3">
               <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
               <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
@@ -338,8 +281,6 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
               </p>
               <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
             </div>
-
-            {/* Column 2 — Product */}
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
@@ -349,8 +290,6 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
                 <Link href="/#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
               </nav>
             </div>
-
-            {/* Column 3 — Company */}
             <div className="space-y-3">
               <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
               <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
@@ -359,7 +298,6 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
                 <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
               </nav>
             </div>
-
           </div>
           <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
             <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
@@ -372,6 +310,19 @@ export function BarterPage({ spotsRemaining, content = {} }: BarterPageProps) {
         </div>
       </footer>
 
+    </div>
+  )
+}
+
+function Slider({ label, value, range, children }: { label: string; value: string; range: string; children: ReactNode }) {
+  return (
+    <div>
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="text-[13px] font-medium text-[#F4F1EA]">{label}</span>
+        <span className="font-display text-[22px] text-[#E0A800]" style={{ fontWeight: 400 }}>{value}</span>
+      </div>
+      {children}
+      <p className="mt-1.5 font-mono text-[10px] tracking-[0.08em] text-[#F4F1EA]/40">{range}</p>
     </div>
   )
 }
