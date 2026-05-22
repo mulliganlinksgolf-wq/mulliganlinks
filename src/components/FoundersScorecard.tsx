@@ -218,7 +218,7 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
           {/* Right: CTAs */}
           <div className="sm:text-right">
             <p className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#6B7770] mb-2">
-              Total · {spotsRemaining} of 10 spots remain
+              Total · Always One TeeAhead
             </p>
             <div className="inline-flex flex-wrap gap-2 sm:justify-end">
               <Link

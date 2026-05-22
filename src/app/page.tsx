@@ -114,7 +114,7 @@ export default async function HomePage({
               <div className="flex items-center gap-3 mb-5">
                 <span className="size-1.5 rounded-full bg-[#E0A800] animate-pulse" />
                 <span className="font-mono text-[11px] sm:text-xs tracking-[0.18em] uppercase text-[#E0A800] font-semibold">
-                  {badge} · {spotsRemaining}/{totalSpots} founding spots open
+                  {badge}
                 </span>
               </div>
 
@@ -142,9 +142,7 @@ export default async function HomePage({
                   href="/waitlist/course"
                   className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
                 >
-                  {spotsRemaining > 0
-                    ? `Claim a founding spot (${spotsRemaining} left)`
-                    : 'Join the course waitlist'}
+                  {spotsRemaining > 0 ? 'Claim a founding spot' : 'Join the course waitlist'}
                 </Link>
                 <Link
                   href="/damage"
@@ -335,18 +333,15 @@ export default async function HomePage({
 
             {/* Footer CTA */}
             <div className="mt-12 pt-7 border-t border-[#F4F1EA]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
-              <div className="flex items-center gap-3.5">
-                <span className="font-display text-[#E0A800] tracking-[-0.02em] leading-[0.9]" style={{ fontSize: 36, fontWeight: 400 }}>{spotsRemaining}</span>
-                <div>
-                  <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#F4F1EA]/50">Founding spots remain</div>
-                  <div className="text-[13px] text-[#F4F1EA]/75 mt-0.5">Free for your first year. $349/mo flat after.</div>
-                </div>
+              <div>
+                <div className="font-mono text-[10px] tracking-[0.16em] uppercase text-[#E0A800] font-semibold">Founding Partner</div>
+                <div className="text-[13px] text-[#F4F1EA]/75 mt-1">Free for your first year. $349/mo flat after.</div>
               </div>
               <Link
                 href="/waitlist/course"
                 className="px-6 py-3.5 bg-[#E0A800] text-[#082419] rounded-md text-sm font-bold hover:bg-[#E0A800]/90"
               >
-                {spotsRemaining > 0 ? 'Claim a founding spot →' : 'Join the course waitlist'}
+                Claim a founding spot →
               </Link>
             </div>
 

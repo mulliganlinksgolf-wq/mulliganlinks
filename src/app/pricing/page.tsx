@@ -145,7 +145,7 @@ function CourseAndGolferPricing({ c, spotsRemaining }: { c: Record<string, strin
               </span>
               <span className="flex-1 h-px bg-[#0F3D2E]/10" />
               <span className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-[#6B7770]">
-                {spotsRemaining} of 10 spots open
+                Founding Partner program
               </span>
             </div>
 
@@ -204,7 +204,7 @@ function FoundingPartnerCard({ spotsRemaining }: { spotsRemaining: number }) {
             href="/waitlist/course"
             className="mt-5 block w-full text-center rounded-md bg-[#E0A800] text-[#082419] px-4 py-3 text-sm font-bold hover:bg-[#E0A800]/90"
           >
-            {spotsRemaining > 0 ? `Claim a founding spot (${spotsRemaining} left)` : 'Join the course waitlist'}
+            {spotsRemaining > 0 ? 'Claim a founding spot →' : 'Join the course waitlist'}
           </Link>
         </div>
         <div>

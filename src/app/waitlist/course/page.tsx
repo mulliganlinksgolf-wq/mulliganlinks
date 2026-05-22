@@ -70,24 +70,6 @@ export default async function CourseWaitlistPage() {
                 {c['waitlist_course.hero_subhead'] ?? 'Independent Metro Detroit courses only. No barter, no commissions, no data extraction — and we never market to your golfers. After year one, $349/mo flat. Cancel anytime.'}
               </p>
 
-              {/* Spots counter — calm, not pulsing */}
-              <div className="mt-8 flex items-center gap-4 rounded-lg border border-[#E0A800]/40 bg-[#E0A800]/10 px-4 py-3.5 max-w-md">
-                <span className="font-display text-4xl leading-none text-[#E0A800]" style={{ fontWeight: 400 }}>
-                  {spotsRemaining}
-                </span>
-                <div className="flex-1">
-                  <p className="text-sm font-semibold text-[#F4F1EA]">of 10 spots remain</p>
-                  <div className="mt-1.5 h-1 rounded-full bg-[#F4F1EA]/10 overflow-hidden">
-                    <div
-                      className="h-full bg-[#E0A800]"
-                      style={{ width: `${((10 - spotsRemaining) / 10) * 100}%` }}
-                    />
-                  </div>
-                </div>
-                <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-[#E0A800]">
-                  {10 - spotsRemaining} claimed
-                </span>
-              </div>
             </div>
 
             {/* Right: CTA card (form lives below in CourseWaitlistSection) */}
@@ -222,16 +204,6 @@ export default async function CourseWaitlistPage() {
               </div>
             ))}
           </div>
-          {spotsRemaining < 10 && (
-            <div className="flex justify-center">
-              <div className="inline-flex items-center gap-2 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-5 py-2.5">
-                <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-                <span className="text-sm font-semibold text-[#8B6F00]">
-                  {spotsRemaining} of 10 Founding Partner spots remaining
-                </span>
-              </div>
-            </div>
-          )}
         </div>
       </section>
 

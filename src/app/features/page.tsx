@@ -561,7 +561,7 @@ function FinalCTA() {
             Ready to drop GolfNow?
           </h2>
           <p className="text-base text-[#6B7770]">
-            7 of 10 Founding Partner spots open. First year is free.
+            Founding Partner program is open. First year is free.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link href="/waitlist/course" className="inline-flex items-center justify-center rounded-md bg-[#0F3D2E] px-7 py-3.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90">
