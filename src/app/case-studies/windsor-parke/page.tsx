@@ -254,7 +254,7 @@ export default function WindsorParkeCaseStudy() {
                       ['×', '$157 rack rate'],
                       ['=', '$94,500/yr'],
                     ].map(([n, l], i) => (
-                      <div key={i} className="grid grid-cols-[36px_1fr] items-baseline gap-3">
+                      <div key={l} className="grid grid-cols-[36px_1fr] items-baseline gap-3">
                         <span className={`font-display text-[22px] ${i === 3 ? 'text-[#E0A800]' : 'text-[#F4F1EA]'}`} style={{ fontWeight: 400 }}>{n}</span>
                         <span className={`text-[13px] ${i === 3 ? 'text-[#E0A800] font-semibold' : 'text-[#F4F1EA]/75'}`}>{l}</span>
                       </div>
