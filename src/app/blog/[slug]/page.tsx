@@ -10,6 +10,8 @@ import { Callout } from '@/components/blog/Callout'
 import { StatBlock } from '@/components/blog/StatBlock'
 import { ComparisonTable, Th, Td } from '@/components/blog/ComparisonTable'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { SiteFooter } from '@/components/SiteFooter'
+import { FadeIn } from '@/components/FadeIn'
 
 const CATEGORY_LABELS: Record<string, string> = {
   courses: 'For Courses',
@@ -98,66 +100,84 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <PostSchema post={post} />
 
-      <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-black/5">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/"><TeeAheadLogo className="h-14 w-auto" /></Link>
-          <nav className="flex items-center gap-3">
-            <Link href="/blog" className="hidden sm:inline-flex text-sm font-semibold text-gray-500 hover:text-[#0F3D2E] transition-colors">
-              ← All Posts
+      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <Link href="/"><TeeAheadLogo className="h-12 w-auto" /></Link>
+          <div className="flex items-center gap-5">
+            <Link
+              href="/blog"
+              className="hidden sm:inline font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#0F3D2E]/70 hover:text-[#0F3D2E] transition-colors"
+            >
+              ← All posts
             </Link>
-            <Link href="/waitlist/golfer" className="inline-flex items-center justify-center rounded-lg bg-[#0F3D2E] px-4 py-2 text-sm font-semibold text-[#F4F1EA] hover:opacity-90 transition-opacity">
-              Join the Waitlist
+            <Link
+              href="/waitlist/course"
+              className="rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
+            >
+              Claim a spot →
             </Link>
-          </nav>
+          </div>
         </div>
       </header>
 
-      <main className="flex-1 max-w-6xl mx-auto w-full px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12">
-          {/* Article */}
-          <article>
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-xs font-bold text-[#E0A800] uppercase tracking-wide">
-                {CATEGORY_LABELS[post.category]}
-              </span>
-              <span className="text-gray-300">·</span>
-              <span className="text-xs text-gray-400">{post.readingTime} min read</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl font-black text-[#0F3D2E] leading-tight mb-5">
-              {post.title}
-            </h1>
-
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-8 h-8 rounded-full bg-[#0F3D2E] flex items-center justify-center text-[#E0A800] text-xs font-bold flex-shrink-0">
-                {initials}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-6 sm:px-10 lg:px-16 py-12 sm:py-16">
+        <FadeIn>
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 lg:gap-16">
+            {/* Article */}
+            <article>
+              {/* Eyebrow */}
+              <div className="flex items-center gap-3 mb-6">
+                <span className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[#E0A800] font-bold">
+                  {CATEGORY_LABELS[post.category]}
+                </span>
+                <span className="text-[#0F3D2E]/30">·</span>
+                <span className="font-mono text-[10.5px] tracking-[0.12em] uppercase text-[#6B7770]">
+                  {post.readingTime} min read
+                </span>
               </div>
-              <div>
-                <span className="text-sm font-semibold text-[#0F3D2E]">{author.name}</span>
-                <span className="text-gray-300 mx-2">·</span>
-                <span className="text-sm text-gray-400">{publishDate}</span>
+
+              {/* Headline */}
+              <h1
+                className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-[1.05]"
+                style={{ fontSize: 'clamp(36px, 5.5vw, 60px)', fontWeight: 400 }}
+              >
+                {post.title}
+              </h1>
+
+              {/* Author marginalia */}
+              <div className="mt-7 flex items-center gap-3">
+                <span
+                  className="size-9 rounded-full bg-[#0F3D2E] text-[#E0A800] flex items-center justify-center font-display text-[13px]"
+                  style={{ fontWeight: 400 }}
+                >
+                  {initials}
+                </span>
+                <div className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-[#6B7770]">
+                  <span className="text-[#0F3D2E] font-semibold">{author.name}</span>
+                  <span className="mx-2 text-[#0F3D2E]/30">·</span>
+                  <span>{publishDate}</span>
+                </div>
               </div>
+
+              <hr className="border-[#0F3D2E]/10 my-10" />
+
+              {/* MDX body */}
+              <div className="prose prose-sm sm:prose-base max-w-none prose-headings:text-[#0F3D2E] prose-headings:font-display prose-headings:font-normal prose-headings:tracking-[-0.015em] prose-a:text-[#0F3D2E] prose-a:underline prose-a:underline-offset-[3px] prose-strong:text-[#0F3D2E] prose-p:leading-[1.75]">
+                <MDXRemote source={post.content} components={MDX_COMPONENTS} />
+              </div>
+
+              <AuthorBio authorKey={post.author} />
+            </article>
+
+            {/* Sidebar */}
+            <div className="lg:sticky lg:top-12 lg:self-start">
+              <PostSidebar category={post.category} related={related} />
             </div>
-
-            <hr className="border-black/10 mb-8" />
-
-            <div className="prose prose-sm sm:prose-base max-w-none prose-headings:text-[#0F3D2E] prose-headings:font-bold prose-a:text-[#0F3D2E] prose-a:underline prose-strong:text-[#0F3D2E]">
-              <MDXRemote source={post.content} components={MDX_COMPONENTS} />
-            </div>
-
-            <AuthorBio authorKey={post.author} />
-          </article>
-
-          {/* Sidebar */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <PostSidebar category={post.category} related={related} />
           </div>
-        </div>
+        </FadeIn>
       </main>
 
-      <footer className="border-t border-black/5 py-8 text-center text-sm text-gray-400">
-        <p>© 2026 TeeAhead, LLC · <Link href="/terms" className="hover:text-gray-600">Terms</Link> · <Link href="/privacy" className="hover:text-gray-600">Privacy</Link></p>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }
