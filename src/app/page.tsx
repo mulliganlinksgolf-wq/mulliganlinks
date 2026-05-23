@@ -325,19 +325,7 @@ export default async function HomePage({
           </h2>
 
           <div className="relative sm:pt-20 pb-4">
-            <div className="hidden sm:block absolute top-[140px] left-[8%] right-[18%] h-px bg-[#E0A800]/85" />
-
-            <div className="hidden sm:flex absolute top-[124px] right-0 items-center gap-2">
-              <span
-                className="size-2.5 rounded-full bg-[#E0A800]"
-                style={{ boxShadow: '0 0 0 4px rgba(224,168,0,0.2)' }}
-              />
-              <span className="font-mono text-[11px] tracking-[0.18em] uppercase text-[#E0A800] font-bold">
-                Go live
-              </span>
-            </div>
-
-            <div className="grid sm:grid-cols-3 gap-12 sm:gap-10 sm:pr-[100px]">
+            <div className="grid sm:grid-cols-3 gap-12 sm:gap-10">
               {[
                 { n: '01', t: '00:10', title: 'Sign the Founding Partner agreement', desc: 'One page. No lawyers required.' },
                 { n: '02', t: '00:15', title: 'Connect your bank via Stripe',        desc: 'Payments route directly to you. We never touch your revenue.' },
@@ -356,10 +344,8 @@ export default async function HomePage({
                     </div>
                   </div>
 
-                  <span className="hidden sm:block absolute -top-[5px] left-1/2 -translate-x-1/2 size-3 rounded-full bg-[#082419] border-2 border-[#E0A800] box-border" />
-
-                  <div className="hidden sm:block absolute -top-2 inset-x-0 text-center">
-                    <span className="inline-block px-2.5 py-0.5 bg-[#082419] font-mono text-[11px] tracking-[0.12em] text-[#E0A800] font-bold">
+                  <div className="hidden sm:block text-center mt-1.5">
+                    <span className="font-mono text-[11px] tracking-[0.12em] text-[#E0A800] font-bold">
                       {t}
                     </span>
                   </div>
