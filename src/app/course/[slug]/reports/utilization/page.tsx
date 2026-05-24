@@ -8,6 +8,7 @@ import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
 import DateRangePicker from '@/components/reports/DateRangePicker'
 import { UtilizationHeatmap } from './UtilizationHeatmap'
+import { HottestLaggardSlots } from './HottestLaggardSlots'
 
 export default async function UtilizationReportPage({
   params,
@@ -61,6 +62,8 @@ export default async function UtilizationReportPage({
         <p className="text-xs text-gray-500 mb-4">Number of bookings by day of week and time of day</p>
         <UtilizationHeatmap cells={data.cells} />
       </div>
+
+      <HottestLaggardSlots cells={data.cells} />
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="font-semibold text-[#1A1A1A] mb-4">Monthly Summary</h2>
