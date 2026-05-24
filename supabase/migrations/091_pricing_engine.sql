@@ -77,6 +77,12 @@ CREATE TABLE public.rate_rules (
   )
 );
 
+COMMENT ON COLUMN public.rate_rules.days_of_week IS
+  '0=Sunday ... 6=Saturday (JavaScript Date.getDay convention). NOTE: course_hours.day_of_week uses a DIFFERENT convention (0=Monday, 6=Sunday). Do not cross-reference without translating.';
+
+COMMENT ON COLUMN public.rate_rules.internal_note IS
+  'Staff-only metadata. RLS does not gate at the column level; application code MUST exclude this column from public read queries.';
+
 CREATE INDEX idx_rate_rules_course_enabled
   ON public.rate_rules (course_id, enabled, priority);
 
@@ -128,7 +134,7 @@ CREATE TABLE public.rate_override_log (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   booking_id UUID NOT NULL REFERENCES public.bookings(id) ON DELETE CASCADE,
   course_id  UUID NOT NULL REFERENCES public.courses(id) ON DELETE CASCADE,
-  tee_time_id UUID NOT NULL REFERENCES public.tee_times(id),
+  tee_time_id UUID NOT NULL REFERENCES public.tee_times(id) ON DELETE RESTRICT,
   computed_rate NUMERIC(10, 2) NOT NULL,
   override_rate NUMERIC(10, 2) NOT NULL,
   override_amount NUMERIC(10, 2) GENERATED ALWAYS AS (override_rate - computed_rate) STORED,
@@ -199,6 +205,21 @@ CREATE POLICY "rate_override_log_manager_select"
         AND ca.role IN ('owner', 'manager')
     )
   );
+
+-- Cache writes are system-level. Service-role bypasses RLS, but we document
+-- the intent explicitly so the contract is loud and reviewable.
+CREATE POLICY "computed_rates_service_role_write"
+  ON public.tee_time_computed_rates
+  FOR ALL
+  TO service_role
+  USING (TRUE)
+  WITH CHECK (TRUE);
+
+CREATE POLICY "rate_override_log_service_role_write"
+  ON public.rate_override_log
+  FOR INSERT
+  TO service_role
+  WITH CHECK (TRUE);
 
 -- ============================================================
 -- 7. updated_at trigger (uses the existing handle_updated_at from migration 022)
