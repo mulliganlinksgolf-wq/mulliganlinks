@@ -154,7 +154,8 @@ export default async function CourseBookingsPage({
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">
                   {new Date(b.tee_times?.scheduled_at).toLocaleString('en-US', {
-                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+                    timeZone: 'America/Detroit',
                   })}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">{b.players}</td>

@@ -414,6 +414,7 @@ export default async function HomePage({
                 price="$0"
                 features={[
                   'Book tee times at partner courses',
+                  'Join partial groups as a solo or twosome',
                   '1× Fairway Points per dollar',
                   'Free cancellation (1hr policy)',
                   'In-round service requests',

@@ -173,10 +173,11 @@ function CourseChapter() {
             <SecondaryFeatureCard num="04" title="Direct payouts" desc="Stripe Connect. Greens fees land in your bank." graphic="payouts" />
           </div>
 
-          {/* 2 more secondary cards */}
-          <div className="grid sm:grid-cols-2 gap-4">
+          {/* 3 more secondary cards */}
+          <div className="grid sm:grid-cols-3 gap-4">
             <SecondaryFeatureCard num="05" title="QR check-in" desc="One scan. No clipboards, no double-booking." graphic="qr" />
             <SecondaryFeatureCard num="06" title="Leagues & outings" desc="9 + 18-hole league manager, live standings." graphic="leagues" />
+            <SecondaryFeatureCard num="07" title="Self-grouped tee times" desc="Solos and twosomes join partial groups. Paired by us, emailed the night before." graphic="self-grouping" />
           </div>
         </div>
       </FadeIn>
@@ -184,7 +185,7 @@ function CourseChapter() {
   )
 }
 
-type FeatureGraphicKind = 'payouts' | 'qr' | 'leagues'
+type FeatureGraphicKind = 'payouts' | 'qr' | 'leagues' | 'self-grouping'
 
 function FeatureGraphic({ kind, dark = true }: { kind: FeatureGraphicKind; dark?: boolean }) {
   const bg = dark ? 'bg-white/[0.04]' : 'bg-[#0F3D2E]/[0.04]'
@@ -226,25 +227,40 @@ function FeatureGraphic({ kind, dark = true }: { kind: FeatureGraphicKind; dark?
     )
   }
 
-  // leagues
+  if (kind === 'leagues') {
+    return (
+      <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
+        <div className="text-center">
+          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>9</div>
+          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+        </div>
+        <div className={`font-display text-[24px] ${dark ? 'text-[#F4F1EA]/40' : 'text-[#0F3D2E]/40'}`}>/</div>
+        <div className="text-center">
+          <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>18</div>
+          <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+        </div>
+        <div className="ml-3 flex flex-col gap-[3px]">
+          <div className="h-[3px] w-12 bg-[#E0A800] rounded-full" />
+          <div className="h-[3px] w-10 bg-[#E0A800]/60 rounded-full" />
+          <div className="h-[3px] w-8 bg-[#E0A800]/40 rounded-full" />
+          <div className="h-[3px] w-6 bg-[#E0A800]/25 rounded-full" />
+          <div className={`font-mono text-[8px] tracking-[0.14em] uppercase mt-1 ${subText}`}>live standings</div>
+        </div>
+      </div>
+    )
+  }
+
+  // self-grouping
   return (
-    <div className={`h-32 rounded-md ${bg} flex items-center justify-center gap-4 px-4`}>
-      <div className="text-center">
-        <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>9</div>
-        <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
+    <div className={`h-32 rounded-md ${bg} flex flex-col items-center justify-center gap-3 px-4`}>
+      <div className="flex items-center gap-2">
+        <span className="w-6 h-6 rounded-full" style={{ background: goldText }} />
+        <span className={`font-mono text-[14px] ${subText}`}>+</span>
+        <span className={`w-6 h-6 rounded-full border ${dark ? 'border-[#E0A800]/70' : 'border-[#0F3D2E]/40'}`} style={{ background: dark ? 'rgba(224,168,0,0.18)' : 'rgba(15,61,46,0.06)' }} />
+        <span className={`w-6 h-6 rounded-full border ${dark ? 'border-[#E0A800]/70' : 'border-[#0F3D2E]/40'}`} style={{ background: dark ? 'rgba(224,168,0,0.18)' : 'rgba(15,61,46,0.06)' }} />
+        <span className={`w-6 h-6 rounded-full border ${dark ? 'border-[#E0A800]/70' : 'border-[#0F3D2E]/40'}`} style={{ background: dark ? 'rgba(224,168,0,0.18)' : 'rgba(15,61,46,0.06)' }} />
       </div>
-      <div className={`font-display text-[24px] ${dark ? 'text-[#F4F1EA]/40' : 'text-[#0F3D2E]/40'}`}>/</div>
-      <div className="text-center">
-        <div className="font-display text-[48px] leading-none tracking-[-0.025em]" style={{ fontWeight: 400, color: goldText }}>18</div>
-        <div className={`font-mono text-[9px] tracking-[0.14em] uppercase mt-1 ${subText}`}>holes</div>
-      </div>
-      <div className="ml-3 flex flex-col gap-[3px]">
-        <div className="h-[3px] w-12 bg-[#E0A800] rounded-full" />
-        <div className="h-[3px] w-10 bg-[#E0A800]/60 rounded-full" />
-        <div className="h-[3px] w-8 bg-[#E0A800]/40 rounded-full" />
-        <div className="h-[3px] w-6 bg-[#E0A800]/25 rounded-full" />
-        <div className={`font-mono text-[8px] tracking-[0.14em] uppercase mt-1 ${subText}`}>live standings</div>
-      </div>
+      <span className={`font-mono text-[10px] tracking-[0.18em] uppercase ${subText}`}>solo · joined · foursome</span>
     </div>
   )
 }
@@ -425,7 +441,7 @@ const FEATURE_CATS = [
   },
   {
     n: '05', c: 'Player Experience', stat: '14 days', statLabel: 'partner visibility',
-    items: ['Find a partner', 'Tee time exchange', 'Mid-round service requests', 'Live wait times', '14-day partner visibility', 'Round ratings'],
+    items: ['Find a partner', 'Tee time exchange', 'Self-grouped tee times', 'Mid-round service requests', '14-day partner visibility', 'Round ratings'],
     mark: 'flag',
   },
   {
