@@ -155,30 +155,21 @@ ALTER TABLE public.us_holidays ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.tee_time_computed_rates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.rate_override_log ENABLE ROW LEVEL SECURITY;
 
--- rate_rules: public can read enabled rules (for booking UI), managers can write
+-- rate_rules: public can read enabled rules (for booking UI),
+-- users with manage_course_settings perm can write
 CREATE POLICY "rate_rules_public_select_enabled"
   ON public.rate_rules
   FOR SELECT
   USING (enabled = TRUE);
 
-CREATE POLICY "rate_rules_manager_all"
+CREATE POLICY "rate_rules_manage_course_settings_all"
   ON public.rate_rules
   FOR ALL
   USING (
-    EXISTS (
-      SELECT 1 FROM public.course_admins ca
-      WHERE ca.course_id = rate_rules.course_id
-        AND ca.user_id = auth.uid()
-        AND ca.role IN ('owner', 'manager')
-    )
+    public.user_has_course_permission(auth.uid(), course_id, 'manage_course_settings')
   )
   WITH CHECK (
-    EXISTS (
-      SELECT 1 FROM public.course_admins ca
-      WHERE ca.course_id = rate_rules.course_id
-        AND ca.user_id = auth.uid()
-        AND ca.role IN ('owner', 'manager')
-    )
+    public.user_has_course_permission(auth.uid(), course_id, 'manage_course_settings')
   );
 
 -- us_holidays: public read
@@ -193,17 +184,12 @@ CREATE POLICY "computed_rates_public_select"
   FOR SELECT
   USING (TRUE);
 
--- rate_override_log: only course managers can read their own log
-CREATE POLICY "rate_override_log_manager_select"
+-- rate_override_log: only users with view_reports perm can read
+CREATE POLICY "rate_override_log_view_reports_select"
   ON public.rate_override_log
   FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.course_admins ca
-      WHERE ca.course_id = rate_override_log.course_id
-        AND ca.user_id = auth.uid()
-        AND ca.role IN ('owner', 'manager')
-    )
+    public.user_has_course_permission(auth.uid(), course_id, 'view_reports')
   );
 
 -- Cache writes are system-level. Service-role bypasses RLS, but we document

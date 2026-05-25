@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { hasPermission } from '@/lib/permissions'
 import { bulkResolveForDay } from '@/lib/pricing/resolver'
 
 export async function GET(
@@ -12,14 +13,9 @@ export async function GET(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'unauthorized' }, { status: 401 })
 
-  // Manager check
-  const { data: admin } = await supabase
-    .from('course_admins')
-    .select('role')
-    .eq('course_id', courseId)
-    .eq('user_id', user.id)
-    .maybeSingle()
-  if (!admin || !['owner', 'manager'].includes(admin.role)) {
+  // Granular permission gate: same gate as the rule editor.
+  const allowed = await hasPermission(user.id, courseId, 'manage_course_settings')
+  if (!allowed) {
     return NextResponse.json({ error: 'forbidden' }, { status: 403 })
   }
 

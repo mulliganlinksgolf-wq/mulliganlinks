@@ -2,7 +2,8 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { requireManager } from '@/lib/courseRole'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { requirePermission } from '@/lib/permissions'
 import { bulkResolveForDay } from '@/lib/pricing/resolver'
 import { revalidatePath } from 'next/cache'
 
@@ -39,9 +40,19 @@ function validateLabel(label: string | null): string | null {
   return null
 }
 
+// Resolve the course id from the slug using the admin client (slug → id is a
+// system-level lookup, not user-gated). Returns null if the course doesn't exist.
+async function resolveCourseId(slug: string): Promise<string | null> {
+  const admin = createAdminClient()
+  const { data } = await admin
+    .from('courses')
+    .select('id')
+    .eq('slug', slug)
+    .maybeSingle()
+  return data?.id ?? null
+}
+
 async function recomputeNext30Days(courseId: string) {
-  // Fire-and-forget background refresh of the cache. We `await` here for
-  // simplicity; if this gets slow, move to a queued job.
   const today = new Date()
   for (let i = 0; i < 30; i++) {
     const d = new Date(today)
@@ -55,14 +66,16 @@ export async function createOrUpdateRuleAction(
   slug: string,
   input: RuleInput,
 ): Promise<{ id?: string; error?: string }> {
-  const ctx = await requireManager(slug)
+  const courseId = await resolveCourseId(slug)
+  if (!courseId) return { error: 'Course not found' }
+  const { userId } = await requirePermission(slug, courseId, 'manage_course_settings')
 
   const labelErr = validateLabel(input.displayLabel)
   if (labelErr) return { error: labelErr }
 
   const supabase = await createClient()
   const row = {
-    course_id: ctx.courseId,
+    course_id: courseId,
     name: input.name,
     category: input.category,
     enabled: input.enabled,
@@ -79,7 +92,7 @@ export async function createOrUpdateRuleAction(
     priority: input.priority,
     display_label: input.displayLabel,
     internal_note: input.internalNote,
-    created_by: ctx.userId,
+    created_by: userId,
   }
 
   let id: string | undefined
@@ -88,7 +101,7 @@ export async function createOrUpdateRuleAction(
       .from('rate_rules')
       .update(row)
       .eq('id', input.id)
-      .eq('course_id', ctx.courseId)
+      .eq('course_id', courseId)
       .select('id')
       .single()
     if (error) return { error: error.message }
@@ -103,8 +116,7 @@ export async function createOrUpdateRuleAction(
     id = data?.id
   }
 
-  // Fire recompute in foreground (do not block too long — V1 acceptable, see plan risks)
-  await recomputeNext30Days(ctx.courseId)
+  await recomputeNext30Days(courseId)
 
   revalidatePath(`/course/${slug}/settings/pricing`)
   return { id }
@@ -114,17 +126,19 @@ export async function deleteRuleAction(
   slug: string,
   ruleId: string,
 ): Promise<{ error?: string }> {
-  const ctx = await requireManager(slug)
-  const supabase = await createClient()
+  const courseId = await resolveCourseId(slug)
+  if (!courseId) return { error: 'Course not found' }
+  await requirePermission(slug, courseId, 'manage_course_settings')
 
+  const supabase = await createClient()
   const { error } = await supabase
     .from('rate_rules')
     .delete()
     .eq('id', ruleId)
-    .eq('course_id', ctx.courseId)
+    .eq('course_id', courseId)
   if (error) return { error: error.message }
 
-  await recomputeNext30Days(ctx.courseId)
+  await recomputeNext30Days(courseId)
   revalidatePath(`/course/${slug}/settings/pricing`)
   return {}
 }
@@ -132,8 +146,10 @@ export async function deleteRuleAction(
 export async function recomputeRatesAction(
   slug: string,
 ): Promise<{ error?: string }> {
-  const ctx = await requireManager(slug)
-  await recomputeNext30Days(ctx.courseId)
+  const courseId = await resolveCourseId(slug)
+  if (!courseId) return { error: 'Course not found' }
+  await requirePermission(slug, courseId, 'manage_course_settings')
+  await recomputeNext30Days(courseId)
   revalidatePath(`/course/${slug}/settings/pricing`)
   return {}
 }
