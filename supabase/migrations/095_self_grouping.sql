@@ -1,5 +1,8 @@
 -- ============================================================
--- Migration 091: Self-grouping for solo golfers
+-- Migration 095: Self-grouping for solo golfers
+-- (renumbered from 091 during rebase against main to avoid
+--  collision with Sprint 3's 091_staff_permissions and to land
+--  after Sprint 1's 094_split_tee_and_sunrise.)
 -- ============================================================
 -- Adds schema support for letting solo golfers share a tee time
 -- with another separately-booked party. Includes:
