@@ -5,8 +5,8 @@ describe('SIDEBAR_NAV_ITEMS', () => {
   it('has 11 items', () => {
     expect(SIDEBAR_NAV_ITEMS).toHaveLength(11)
   })
-  it('first item is Dashboard with href /app and exact true', () => {
-    expect(SIDEBAR_NAV_ITEMS[0]).toEqual({ href: '/app', label: 'Dashboard', icon: '⛳', exact: true })
+  it('first item is Home with href /app and exact true', () => {
+    expect(SIDEBAR_NAV_ITEMS[0]).toEqual({ href: '/app', label: 'Home', icon: '◇', exact: true })
   })
 })
 
