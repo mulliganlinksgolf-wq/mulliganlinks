@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
+import { getEffectivePermissions, type CoursePermission } from '@/lib/permissions'
 
 export const MANAGER_ROLES = ['owner', 'manager']
 
@@ -10,6 +11,7 @@ export interface CourseRoleContext {
   role: string
   isGlobalAdmin: boolean
   isManager: boolean
+  perms: Record<CoursePermission, boolean>
 }
 
 export async function resolveCourseRole(slug: string): Promise<CourseRoleContext> {
@@ -42,7 +44,9 @@ export async function resolveCourseRole(slug: string): Promise<CourseRoleContext
   const role = isGlobalAdmin ? 'owner' : (courseAdmin?.role ?? courseUser?.role ?? 'staff')
   const isManager = isGlobalAdmin || MANAGER_ROLES.includes(role)
 
-  return { userId: user.id, courseId: course.id, role, isGlobalAdmin, isManager }
+  const perms = await getEffectivePermissions(user.id, course.id)
+
+  return { userId: user.id, courseId: course.id, role, isGlobalAdmin, isManager, perms }
 }
 
 export async function requireManager(slug: string): Promise<CourseRoleContext> {

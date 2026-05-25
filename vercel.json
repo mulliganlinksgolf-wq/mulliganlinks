@@ -16,6 +16,14 @@
     {
       "path": "/api/cron/send-scheduled-emails",
       "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/monthly-barter-receipts",
+      "schedule": "0 13 1 * *"
+    },
+    {
+      "path": "/api/cron/refresh-operating-days",
+      "schedule": "0 6 * * *"
     }
   ],
   "redirects": [

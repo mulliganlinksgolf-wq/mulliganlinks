@@ -565,3 +565,60 @@ export async function sendPartnerBookedEmail({
     `,
   })
 }
+
+// Monthly NGCOA-methodology Barter Receipt email.
+// Distinct from sendBarterReceipt() above, which sends the Founding Partner
+// welcome email with cumulative-savings framing. This one is the recurring
+// monthly artifact emailed by the /api/cron/monthly-barter-receipts cron.
+export async function sendMonthlyBarterReceipt({
+  email,
+  courseName,
+  monthLabel,
+  estimatedBarterCost,
+  pdfBuffer,
+  pdfFilename,
+  downloadUrl,
+}: {
+  email: string
+  courseName: string
+  monthLabel: string
+  estimatedBarterCost: number
+  pdfBuffer: Buffer
+  pdfFilename: string
+  downloadUrl?: string
+}) {
+  const client = getResend()
+  if (!client) {
+    console.log('[notify] Resend not configured — skipping monthly barter receipt')
+    return
+  }
+
+  const formattedCost = `$${estimatedBarterCost.toLocaleString('en-US', { maximumFractionDigits: 0 })}`
+  const downloadLine = downloadUrl
+    ? `<p style="margin: 16px 0;"><a href="${downloadUrl}" style="color: #1B4332; font-weight: 600;">Download the PDF</a> &nbsp;<span style="color: #9CA3AF; font-size: 12px;">(link valid 30 days; full archive lives in your reports page)</span></p>`
+    : ''
+
+  await client.emails.send({
+    from: 'TeeAhead <hello@teeahead.com>',
+    to: email,
+    subject: `Your monthly Barter Receipt — ${monthLabel}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 560px; color: #1A1A1A;">
+        <h2 style="color: #1B4332;">Your TeeAhead Barter Receipt — ${monthLabel}</h2>
+        <p>Attached is the monthly Barter Receipt for <strong>${courseName}</strong>.</p>
+        <p>If you'd been on GolfNow this month with the same booking pattern, we estimate you would have
+        surrendered <strong>${formattedCost}</strong> in green fees as barter. Your cost on TeeAhead this
+        month: <strong>$0</strong>.</p>
+        ${downloadLine}
+        <p style="color: #6B7770; font-size: 12px; margin-top: 24px;">
+          Methodology and source citations are on the last page of the PDF. This is an estimate based on the
+          NGCOA/ORCA Operator Barter Cost Study; your actual GolfNow cost depends on the specific terms in
+          your contract.
+        </p>
+        <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
+        <p style="color: #6B7770; font-size: 12px;">TeeAhead · teeahead.com</p>
+      </div>
+    `,
+    attachments: [{ filename: pdfFilename, content: pdfBuffer }],
+  })
+}

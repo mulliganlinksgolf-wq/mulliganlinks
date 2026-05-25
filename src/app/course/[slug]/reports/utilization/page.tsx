@@ -8,6 +8,7 @@ import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
 import DateRangePicker from '@/components/reports/DateRangePicker'
 import { UtilizationHeatmap } from './UtilizationHeatmap'
+import { HottestLaggardSlots } from './HottestLaggardSlots'
 
 export default async function UtilizationReportPage({
   params,
@@ -17,7 +18,7 @@ export default async function UtilizationReportPage({
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
-  await requireManager(slug)
+  const ctx = await requireManager(slug)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/course/${slug}/login`)
@@ -44,7 +45,7 @@ export default async function UtilizationReportPage({
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Tee Sheet Utilization</h1>
-        <CsvExportButton data={csvData} filename={`${slug}-utilization.csv`} disabled={csvData.length === 0} />
+        {ctx.perms.export_data && <CsvExportButton data={csvData} filename={`${slug}-utilization.csv`} disabled={csvData.length === 0} />}
       </div>
 
       <DateRangePicker />
@@ -61,6 +62,8 @@ export default async function UtilizationReportPage({
         <p className="text-xs text-gray-500 mb-4">Number of bookings by day of week and time of day</p>
         <UtilizationHeatmap cells={data.cells} />
       </div>
+
+      <HottestLaggardSlots cells={data.cells} />
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <h2 className="font-semibold text-[#1A1A1A] mb-4">Monthly Summary</h2>
