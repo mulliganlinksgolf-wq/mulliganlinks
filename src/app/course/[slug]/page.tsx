@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { TeeSheetGrid } from '@/components/course/TeeSheetGrid'
 import { CoursePageHeader } from '@/components/course/CoursePageHeader'
+import { SplitTeeToggle } from '@/components/course/SplitTeeToggle'
+import { resolveCourseRole } from '@/lib/courseRole'
 
 export default async function TeeSheetPage({
   params,
@@ -13,6 +15,9 @@ export default async function TeeSheetPage({
 }) {
   const { slug } = await params
   const { date: dateParam } = await searchParams
+
+  const ctx = await resolveCourseRole(slug)
+  const canEditSplitTee = ctx.isManager
 
   const selectedDate = dateParam
     ? new Date(dateParam + 'T00:00:00')
@@ -29,19 +34,31 @@ export default async function TeeSheetPage({
 
   const { data: course } = await supabase
     .from('courses')
-    .select('id, name')
+    .select('id, name, timezone')
     .eq('slug', slug)
     .single()
 
   if (!course) notFound()
 
+  const { data: operatingDay } = await supabase
+    .from('course_operating_days')
+    .select('first_bookable_time, last_bookable_time, is_split_tee_day, is_closed, manually_overridden, override_reason')
+    .eq('course_id', course.id)
+    .eq('operating_date', dateStr)
+    .maybeSingle()
+
+  const firstBookable = operatingDay?.first_bookable_time ?? null
+  const lastBookable = operatingDay?.last_bookable_time ?? null
+  const isSplitTeeDay = operatingDay?.is_split_tee_day ?? false
+  const courseTz = course.timezone ?? 'America/Detroit'
+
   const startOfDay = `${dateStr}T00:00:00+00:00`
   const endOfDay = `${dateStr}T23:59:59+00:00`
 
-  const { data: teeTimes } = await supabase
+  const { data: rawTeeTimes } = await supabase
     .from('tee_times')
     .select(`
-      id, scheduled_at, max_players, available_players, base_price, status, special_price, special_label,
+      id, scheduled_at, max_players, available_players, base_price, status, special_price, special_label, tee_start, holes,
       bookings(id, players, total_paid, status, payment_status, points_awarded, user_id, guest_name, guest_phone, guest_email, payment_method, cart_selected,
         profiles(full_name)
       )
@@ -50,6 +67,23 @@ export default async function TeeSheetPage({
     .gte('scheduled_at', startOfDay)
     .lte('scheduled_at', endOfDay)
     .order('scheduled_at')
+
+  type TeeTimeRow = NonNullable<typeof rawTeeTimes>[number]
+  const inBookableWindow = (t: TeeTimeRow) => {
+    if (!firstBookable || !lastBookable) return true
+    const localTime = new Date(t.scheduled_at).toLocaleTimeString('en-GB', {
+      hour12: false,
+      timeZone: courseTz,
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+    })
+    return localTime >= firstBookable && localTime <= lastBookable
+  }
+
+  const teeTimes = (rawTeeTimes ?? []).filter(inBookableWindow)
+  const frontSlots = teeTimes.filter((t: TeeTimeRow) => t.tee_start === 'front')
+  const backSlots = teeTimes.filter((t: TeeTimeRow) => t.tee_start === 'back')
 
   const formatDateParam = (d: Date) => d.toISOString().split('T')[0]
   const dayTitle = selectedDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
@@ -67,7 +101,13 @@ export default async function TeeSheetPage({
           ? `${utilization}% booked · ${booked} of ${total} slots · ${openSlots} open seats`
           : 'No tee times configured for this day yet'}
         action={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <SplitTeeToggle
+              slug={slug}
+              date={dateStr}
+              initialValue={isSplitTeeDay}
+              canEdit={canEditSplitTee}
+            />
             <Link
               href={`/course/${slug}?date=${formatDateParam(prevDate)}`}
               className="px-3 py-2 text-[13px] border border-[#0F3D2E]/15 rounded-md text-[#0F3D2E] hover:bg-[#0F3D2E]/5"
@@ -109,8 +149,23 @@ export default async function TeeSheetPage({
                 Create tee times →
               </Link>
             </div>
+          ) : isSplitTeeDay ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" data-testid="split-tee-view">
+              <div data-testid="front-nine-column">
+                <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-2">Front 9 · 1st tee</p>
+                <TeeSheetGrid teeTimes={frontSlots as unknown as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
+              </div>
+              <div data-testid="back-nine-column">
+                <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-2">Back 9 · 10th tee</p>
+                {backSlots.length === 0 ? (
+                  <p className="text-xs text-[#6B7770]">No back-9 slots generated yet.</p>
+                ) : (
+                  <TeeSheetGrid teeTimes={backSlots as unknown as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
+                )}
+              </div>
+            </div>
           ) : (
-            <TeeSheetGrid teeTimes={teeTimes as unknown as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
+            <TeeSheetGrid teeTimes={frontSlots as unknown as Parameters<typeof TeeSheetGrid>[0]['teeTimes']} slug={slug} courseId={course.id} courseName={course.name} />
           )}
         </div>
 
