@@ -10,10 +10,14 @@ import { getTeeSheetConfig, getCoursePricing } from '@/lib/db/onboarding'
 
 export default async function BookPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ teeTimeId: string }>
+  searchParams: Promise<{ join?: string }>
 }) {
   const { teeTimeId } = await params
+  const { join } = await searchParams
+  const isJoinMode = join === '1'
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -85,12 +89,23 @@ export default async function BookPage({
         </p>
       </div>
 
+      {isJoinMode && (
+        <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm">
+          <p className="font-medium text-blue-900">You&apos;re joining an existing group.</p>
+          <p className="mt-1 text-blue-800">
+            We&apos;ll email everyone the day before with first names so you know who you&apos;re playing with.
+            Names only — no contact info is shared.
+          </p>
+        </div>
+      )}
+
       {stripeEnabled ? (
         <BookingPaymentForm
           teeTime={teeTime as any}
           tier={tier}
           userId={user.id}
           availablePasses={availablePasses}
+          joinExistingGroup={isJoinMode}
         />
       ) : (
         <BookingForm
@@ -105,6 +120,7 @@ export default async function BookPage({
           pointsThreshold={pointsThreshold}
           cartPolicy={teeSheetConfig?.cart_policy ?? 'optional'}
           cartFeeCents={resolvedCartFeeCents}
+          joinExistingGroup={isJoinMode}
         />
       )}
     </div>

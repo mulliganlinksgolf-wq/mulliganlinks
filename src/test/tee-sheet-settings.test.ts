@@ -79,10 +79,12 @@ describe('updateCourseHours', () => {
   it('calls upsert with correct data when authorized', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ data: null, error: null })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateCourseHours } = await import('@/lib/actions/teeSheetSettings')
@@ -101,10 +103,12 @@ describe('updateCourseHours', () => {
   it('returns error when upsert fails', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ error: { message: 'DB error' } })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateCourseHours } = await import('@/lib/actions/teeSheetSettings')
@@ -138,10 +142,12 @@ describe('updateCoursePricing', () => {
   it('calls upsert with correct data when authorized', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ data: null, error: null })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateCoursePricing } = await import('@/lib/actions/teeSheetSettings')
@@ -165,10 +171,12 @@ describe('updateCoursePricing', () => {
   it('returns error when upsert fails', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ error: { message: 'DB error' } })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateCoursePricing } = await import('@/lib/actions/teeSheetSettings')
@@ -202,10 +210,12 @@ describe('updateTeeSheetConfig', () => {
   it('calls upsert with course_id merged in when authorized', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ data: null, error: null })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateTeeSheetConfig } = await import('@/lib/actions/teeSheetSettings')
@@ -221,10 +231,12 @@ describe('updateTeeSheetConfig', () => {
   it('returns error when upsert fails', async () => {
     mockAuthGetUser.mockResolvedValue({ data: { user: { id: 'u1' } } })
 
-    const staffChain = makeChain({ data: { user_id: 'u1' } })
+    const profilesChain = makeChain({ data: { is_admin: true } })
+    const courseAdminsChain = makeChain({ data: null })
     const upsertChain = makeChain({ error: { message: 'DB error' } })
     mockFrom
-      .mockReturnValueOnce(staffChain)
+      .mockReturnValueOnce(profilesChain)
+      .mockReturnValueOnce(courseAdminsChain)
       .mockReturnValueOnce(upsertChain)
 
     const { updateTeeSheetConfig } = await import('@/lib/actions/teeSheetSettings')

@@ -49,11 +49,13 @@ export async function createPendingBooking({
   players,
   tier,
   guestPassId,
+  joinExistingGroup,
 }: {
   teeTimeId: string
   players: number
   tier: string
   guestPassId?: string
+  joinExistingGroup?: boolean
 }): Promise<{ bookingId?: string; error?: string }> {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -107,6 +109,60 @@ export async function createPendingBooking({
   const appFeeCents = platformFeeCents(tier)
   const totalCents = greenFeeCents + appFeeCents - discountCents
 
+  // Self-grouping: determine booking_group_id + is_self_grouped before insert.
+  // Default (non-join): brand-new group, this booking owns it.
+  let bookingGroupId: string = crypto.randomUUID()
+  let isSelfGrouped = false
+
+  if (joinExistingGroup) {
+    // Verify the course allows self-grouping
+    const { data: course } = await admin
+      .from('courses')
+      .select('allow_self_grouping')
+      .eq('id', teeTime.course_id)
+      .single()
+
+    if (!course?.allow_self_grouping) {
+      return { error: 'Self-grouping disabled for this course' }
+    }
+
+    // Per-day override check
+    const { data: tt } = await admin
+      .from('tee_times')
+      .select('scheduled_at')
+      .eq('id', teeTimeId)
+      .single()
+
+    if (tt) {
+      const dateKey = (tt.scheduled_at as string).slice(0, 10)
+      const { data: override } = await admin
+        .from('course_tee_sheet_overrides')
+        .select('self_grouping_disabled')
+        .eq('course_id', teeTime.course_id)
+        .eq('override_date', dateKey)
+        .maybeSingle()
+
+      if (override?.self_grouping_disabled) {
+        return { error: 'Self-grouping disabled for this date' }
+      }
+    }
+
+    // Find the host group (any existing active booking on this slot)
+    const { data: existing } = await admin
+      .from('bookings')
+      .select('booking_group_id')
+      .eq('tee_time_id', teeTimeId)
+      .not('status', 'in', '(canceled,no_show)')
+      .limit(1)
+
+    if (existing && existing.length > 0 && existing[0].booking_group_id) {
+      bookingGroupId = existing[0].booking_group_id as string
+      isSelfGrouped = true
+    }
+    // If there are no existing bookings, the "join" silently degrades to a normal booking.
+    // (Could happen if the host cancelled between page load and submit.)
+  }
+
   const { data: booking, error } = await admin
     .from('bookings')
     .insert({
@@ -122,11 +178,28 @@ export async function createPendingBooking({
       points_awarded: 0,
       discount_cents: discountCents,
       guest_pass_id: verifiedPassId,
+      booking_group_id: bookingGroupId,
+      is_self_grouped: isSelfGrouped,
     })
     .select('id')
     .single()
 
-  if (error || !booking) return { error: 'Failed to create booking.' }
+  if (error) {
+    if (error.code === '23514' || (error.message ?? '').includes('Tee time capacity exceeded')) {
+      return { error: 'slot_filled' }
+    }
+    return { error: 'Failed to create booking.' }
+  }
+  if (!booking) return { error: 'Failed to create booking.' }
+
+  // Flag host group's sibling bookings as self-grouped now that we've joined them
+  if (joinExistingGroup && isSelfGrouped && booking) {
+    await admin
+      .from('bookings')
+      .update({ is_self_grouped: true })
+      .eq('booking_group_id', bookingGroupId)
+      .neq('id', booking.id)
+  }
 
   // Mark pass redeemed immediately
   if (verifiedPassId) {
@@ -155,6 +228,7 @@ export async function confirmBooking({
   redemptionType,
   cartSelected,
   cartFeeCents,
+  joinExistingGroup,
 }: {
   teeTimeId: string
   userId: string
@@ -171,6 +245,7 @@ export async function confirmBooking({
   redemptionType?: 'points' | 'complimentary'
   cartSelected?: boolean
   cartFeeCents?: number
+  joinExistingGroup?: boolean
 }) {
   const supabase = await createClient()
 
@@ -242,6 +317,52 @@ export async function confirmBooking({
     if (!check.ok) return { error: check.error }
   }
 
+  // Self-grouping: determine booking_group_id + is_self_grouped before insert.
+  // Default (non-join): brand-new group, this booking owns it.
+  let bookingGroupId: string = crypto.randomUUID()
+  let isSelfGrouped = false
+
+  if (joinExistingGroup) {
+    // Verify the course allows self-grouping (admin client — public course flag, no RLS issues)
+    const { data: course } = await guestPassAdmin
+      .from('courses')
+      .select('allow_self_grouping')
+      .eq('id', teeTime.course_id)
+      .single()
+
+    if (!course?.allow_self_grouping) {
+      return { error: 'Self-grouping disabled for this course' }
+    }
+
+    // Per-day override check — already have scheduled_at on teeTime
+    const dateKey = (teeTime.scheduled_at as string).slice(0, 10)
+    const { data: override } = await guestPassAdmin
+      .from('course_tee_sheet_overrides')
+      .select('self_grouping_disabled')
+      .eq('course_id', teeTime.course_id)
+      .eq('override_date', dateKey)
+      .maybeSingle()
+
+    if (override?.self_grouping_disabled) {
+      return { error: 'Self-grouping disabled for this date' }
+    }
+
+    // Find the host group (any existing active booking on this slot) — must use admin
+    // because members lack SELECT policy on other members' bookings.
+    const { data: existing } = await guestPassAdmin
+      .from('bookings')
+      .select('booking_group_id')
+      .eq('tee_time_id', teeTimeId)
+      .not('status', 'in', '(canceled,no_show)')
+      .limit(1)
+
+    if (existing && existing.length > 0 && existing[0].booking_group_id) {
+      bookingGroupId = existing[0].booking_group_id as string
+      isSelfGrouped = true
+    }
+    // If no existing bookings, "join" silently degrades to a normal booking.
+  }
+
   // Create booking
   // TODO: Replace total_paid with Stripe PaymentIntent amount when Stripe is wired
   const { data: booking, error: bookingError } = await supabase
@@ -260,12 +381,29 @@ export async function confirmBooking({
       cart_selected: cartSelected ?? false,
       // cart_fee_cents records the fee at booking time; caller must include it in `total` (Stripe TODO)
       cart_fee_cents: cartFeeCents ?? 0,
+      booking_group_id: bookingGroupId,
+      is_self_grouped: isSelfGrouped,
     })
     .select('id')
     .single()
 
-  if (bookingError || !booking) {
+  if (bookingError) {
+    if (bookingError.code === '23514' || (bookingError.message ?? '').includes('Tee time capacity exceeded')) {
+      return { error: 'slot_filled' }
+    }
     return { error: 'Failed to create booking. Please try again.' }
+  }
+  if (!booking) {
+    return { error: 'Failed to create booking. Please try again.' }
+  }
+
+  // Flag host group's sibling bookings as self-grouped now that we've joined them
+  if (joinExistingGroup && isSelfGrouped) {
+    await guestPassAdmin
+      .from('bookings')
+      .update({ is_self_grouped: true })
+      .eq('booking_group_id', bookingGroupId)
+      .neq('id', booking.id)
   }
 
   // Mark guest pass redeemed

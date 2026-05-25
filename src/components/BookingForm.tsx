@@ -30,6 +30,7 @@ export function BookingForm({
   pointsThreshold = 5000,
   cartPolicy = 'optional',
   cartFeeCents = 0,
+  joinExistingGroup = false,
 }: {
   teeTime: TeeTime
   tier: string
@@ -42,6 +43,7 @@ export function BookingForm({
   pointsThreshold?: number
   cartPolicy?: 'optional' | 'mandatory' | 'walking_only'
   cartFeeCents?: number
+  joinExistingGroup?: boolean
 }) {
   const [players, setPlayers] = useState(1)
   const [usePoints, setUsePoints] = useState(false)
@@ -116,6 +118,7 @@ export function BookingForm({
         // cart fields — action updated in Task 8
         cartSelected: cartSelected,
         cartFeeCents: cartSelected ? cartFeeCents : 0,
+        joinExistingGroup,
       })
       if (result.error) {
         setError(result.error)

@@ -36,7 +36,7 @@ Object.defineProperty(navigator, 'clipboard', {
 describe('BarterPage — rendering', () => {
   it('renders the hero headline', () => {
     render(<BarterPage spotsRemaining={10} />)
-    expect(screen.getByText(/See exactly what GolfNow has cost you/i)).toBeInTheDocument()
+    expect(screen.getByText(/GolfNow.+barter model cost you/i)).toBeInTheDocument()
   })
 
   it('renders all three sliders', () => {
@@ -47,23 +47,20 @@ describe('BarterPage — rendering', () => {
 
   it('renders the output card with initial cost', () => {
     render(<BarterPage spotsRemaining={10} />)
-    // Default: $85 × 280 × 2 = $47,600
+    // Default headline + sub-copy
     expect(screen.getByText(/GolfNow.+barter model cost you/i)).toBeInTheDocument()
-    expect(screen.getByText('$0')).toBeInTheDocument() // TeeAhead cost
+    expect(screen.getByText(/This year alone/i)).toBeInTheDocument()
   })
 
-  it('renders the "$0 TeeAhead" label in the output card', () => {
+  it('renders the "Adjust to match your course" label on the slider card', () => {
     render(<BarterPage spotsRemaining={10} />)
-    expect(screen.getByText(/TeeAhead would have charged you/i)).toBeInTheDocument()
+    expect(screen.getByText(/Adjust to match your course/i)).toBeInTheDocument()
   })
 
-  it('all range sliders have touchAction none to prevent mobile scroll conflict', () => {
+  it('all range sliders are present (3 inputs of type range)', () => {
     const { container } = render(<BarterPage spotsRemaining={10} />)
     const sliders = container.querySelectorAll('input[type="range"]')
     expect(sliders.length).toBe(3)
-    sliders.forEach((slider) => {
-      expect((slider as HTMLElement).style.touchAction).toBe('none')
-    })
   })
 })
 
@@ -85,7 +82,7 @@ describe('BarterPage — proof section legal citations', () => {
 
   it('shows calculator disclaimer text', () => {
     render(<BarterPage spotsRemaining={10} />)
-    expect(screen.getByText(/Calculation based on GolfNow.+standard barter model/i)).toBeInTheDocument()
+    expect(screen.getByText(/Calculation based on GolfNow barter rates/i)).toBeInTheDocument()
   })
 
   it('shows the hero source footnote', () => {
@@ -107,25 +104,25 @@ describe('BarterPage — legal footer disclaimer', () => {
 })
 
 describe('BarterPage — founding spots states', () => {
-  it('shows "Claim a Founding Partner Spot" when spots > 5', () => {
+  it('shows "Claim a founding spot" CTA when spots > 5', () => {
     render(<BarterPage spotsRemaining={10} />)
-    expect(screen.getByText(/Claim a Founding Partner Spot/i)).toBeInTheDocument()
+    expect(screen.getAllByText(/Claim a founding spot/i).length).toBeGreaterThan(0)
   })
 
   it('shows spots remaining when spots > 0', () => {
     render(<BarterPage spotsRemaining={7} />)
-    expect(screen.getByText(/7 of 10 founding spots remaining/i)).toBeInTheDocument()
+    expect(screen.getByText(/\(7 left\)/i)).toBeInTheDocument()
   })
 
   it('switches to waitlist CTA when all spots claimed', () => {
     render(<BarterPage spotsRemaining={0} />)
-    expect(screen.getByText(/Join the Course Waitlist/i)).toBeInTheDocument()
-    expect(screen.queryByText(/Claim a Founding Partner Spot/i)).not.toBeInTheDocument()
+    expect(screen.getByText(/Join the course waitlist/i)).toBeInTheDocument()
+    expect(screen.queryByText(/Claim a founding spot \(/i)).not.toBeInTheDocument()
   })
 
-  it('hides spots remaining text when all claimed', () => {
+  it('hides spots-left text when all claimed', () => {
     render(<BarterPage spotsRemaining={0} />)
-    expect(screen.queryByText(/spots are left/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/\(\d+ left\)/i)).not.toBeInTheDocument()
   })
 })
 

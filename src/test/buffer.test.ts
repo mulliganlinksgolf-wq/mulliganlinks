@@ -1,6 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
+
+// Bypass next/cache's unstable_cache so getChannels doesn't memoize results
+// across tests with different mocked fetch responses.
+vi.mock('next/cache', () => ({
+  unstable_cache: <T extends (...args: unknown[]) => unknown>(fn: T) => fn,
+}))
 
 describe('buffer client', () => {
+  beforeEach(() => {
+    vi.resetModules()
+  })
+
   afterEach(() => {
     vi.restoreAllMocks()
     vi.unstubAllEnvs()
@@ -18,6 +28,7 @@ describe('buffer client', () => {
     vi.stubEnv('BUFFER_API_KEY', 'test-key')
     const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
+      headers: new Headers(),
       json: async () => ({
         data: {
           channels: [
@@ -47,6 +58,7 @@ describe('buffer client', () => {
       ok: false,
       status: 401,
       statusText: 'Unauthorized',
+      headers: new Headers(),
     } as Response)
 
     const { getChannels } = await import('@/lib/buffer')
@@ -57,6 +69,7 @@ describe('buffer client', () => {
     vi.stubEnv('BUFFER_API_KEY', 'test-key')
     vi.spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
+      headers: new Headers(),
       json: async () => ({
         errors: [{ message: 'Invalid organization ID' }],
       }),
@@ -66,14 +79,14 @@ describe('buffer client', () => {
     await expect(getChannels('org1')).rejects.toThrow('Invalid organization ID')
   })
 
-  it('createPost fires one mutation per channelId', async () => {
+  it('createPost fires one mutation per channel', async () => {
     vi.stubEnv('BUFFER_API_KEY', 'test-key')
     const mockFetch = vi.spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
+      headers: new Headers(),
       json: async () => ({
         data: {
           createPost: {
-            __typename: 'PostActionSuccess',
             post: { id: 'p1', dueAt: '2026-05-10T12:00:00Z' },
           },
         },
@@ -83,7 +96,10 @@ describe('buffer client', () => {
     const { createPost } = await import('@/lib/buffer')
     const results = await createPost({
       text: 'Test post',
-      channelIds: ['ch1', 'ch2'],
+      channels: [
+        { id: 'ch1', service: 'twitter' },
+        { id: 'ch2', service: 'facebook' },
+      ],
       mode: 'addToQueue',
     })
 
@@ -92,15 +108,15 @@ describe('buffer client', () => {
     expect(results[0].id).toBe('p1')
   })
 
-  it('createPost throws on MutationError', async () => {
+  it('createPost throws on MutationError message', async () => {
     vi.stubEnv('BUFFER_API_KEY', 'test-key')
     vi.spyOn(global, 'fetch').mockResolvedValue({
       ok: true,
+      headers: new Headers(),
       json: async () => ({
         data: {
           createPost: {
-            __typename: 'MutationError',
-            error: { message: 'Channel not found' },
+            message: 'Channel not found',
           },
         },
       }),
@@ -108,7 +124,11 @@ describe('buffer client', () => {
 
     const { createPost } = await import('@/lib/buffer')
     await expect(
-      createPost({ text: 'Test', channelIds: ['bad'], mode: 'addToQueue' })
+      createPost({
+        text: 'Test',
+        channels: [{ id: 'bad', service: 'twitter' }],
+        mode: 'addToQueue',
+      })
     ).rejects.toThrow('Channel not found')
   })
 })

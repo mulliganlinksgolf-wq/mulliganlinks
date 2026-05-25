@@ -93,3 +93,26 @@ export async function updateTeeSheetConfig(
   if (error) return { error: error.message }
   return {}
 }
+
+export async function updateCourseSelfGrouping(
+  courseId: string,
+  values: { allow_self_grouping: boolean; max_players_per_tee_time: number },
+): Promise<{ error?: string }> {
+  const auth = await assertCourseStaff(courseId)
+  if ('error' in auth) return { error: auth.error }
+
+  // Clamp to DB CHECK constraint range (1-5)
+  const clampedMax = Math.min(5, Math.max(1, Math.round(values.max_players_per_tee_time)))
+
+  const admin = createAdminClient()
+  const { error } = await admin
+    .from('courses')
+    .update({
+      allow_self_grouping: values.allow_self_grouping,
+      max_players_per_tee_time: clampedMax,
+    })
+    .eq('id', courseId)
+
+  if (error) return { error: error.message }
+  return {}
+}
