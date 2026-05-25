@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { TeeTimeSearch } from '@/components/TeeTimeSearch'
+import { getAvailability } from '@/lib/tee-time-availability'
 
 export default async function CourseDetailPage({
   params,
@@ -42,16 +43,63 @@ export default async function CourseDetailPage({
     return d.toISOString().split('T')[0]
   })()
 
-  const { data: teeTimes } = await supabase
-    .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price, special_price, special_label, tee_start, holes')
+  // Fetch availability via the tee_time_occupancy view (Task 2 helper)
+  const availability = await getAvailability({
+    courseId: course.id,
+    date: selectedDate,
+  })
+
+  // Occupancy view doesn't carry price/special/tee_start fields — fetch those from tee_times and merge.
+  const ids = availability.map(a => a.teeTimeId)
+  const { data: teeTimeMeta } = ids.length > 0
+    ? await supabase
+        .from('tee_times')
+        .select('id, base_price, special_price, special_label, max_players, status, tee_start, holes')
+        .in('id', ids)
+    : { data: [] as Array<{ id: string; base_price: number; special_price: number | null; special_label: string | null; max_players: number; status: string; tee_start: string | null; holes: number | null }> }
+
+  const metaMap = new Map(
+    (teeTimeMeta ?? []).map(t => [t.id as string, t])
+  )
+
+  const teeTimes = availability
+    // Hide already-full slots, slots whose underlying tee_time isn't open,
+    // and slots whose tee_start doesn't match the user's front/back choice
+    .filter(a => {
+      if (a.isFull) return false
+      const meta = metaMap.get(a.teeTimeId)
+      if (!meta || meta.status !== 'open') return false
+      if (meta.tee_start !== teeStart) return false
+      return true
+    })
+    .map(a => {
+      const meta = metaMap.get(a.teeTimeId)
+      const maxPlayers = (meta?.max_players ?? 4) as number
+      return {
+        id: a.teeTimeId,
+        scheduled_at: a.scheduledAt,
+        available_players: a.spotsRemaining,
+        base_price: (meta?.base_price ?? 0) as number,
+        special_price: (meta?.special_price ?? null) as number | null,
+        special_label: (meta?.special_label ?? null) as string | null,
+        max_players: maxPlayers,
+        players_booked: maxPlayers - a.spotsRemaining,
+        is_partially_booked: a.isPartiallyBooked,
+        has_self_grouped_bookings: a.hasSelfGroupedBookings,
+      }
+    })
+
+  // Resolve self-grouping availability: course-level flag + per-day override
+  const allowSelfGrouping = (course as { allow_self_grouping?: boolean }).allow_self_grouping ?? true
+
+  const { data: override } = await supabase
+    .from('course_tee_sheet_overrides')
+    .select('self_grouping_disabled')
     .eq('course_id', course.id)
-    .eq('status', 'open')
-    .eq('tee_start', teeStart)
-    .gte('scheduled_at', selectedDate + 'T00:00:00+00:00')
-    .lte('scheduled_at', selectedDate + 'T23:59:59+00:00')
-    .gt('available_players', 0)
-    .order('scheduled_at')
+    .eq('override_date', selectedDate)
+    .maybeSingle()
+
+  const selfGroupingAvailable = allowSelfGrouping && !override?.self_grouping_disabled
 
   return (
     <div className="space-y-4">
@@ -79,11 +127,12 @@ export default async function CourseDetailPage({
       )}
 
       <TeeTimeSearch
-        teeTimes={teeTimes ?? []}
+        teeTimes={teeTimes}
         courseName={course.name}
         courseSlug={slug}
         selectedDate={selectedDate}
         tier={tier}
+        selfGroupingAvailable={selfGroupingAvailable}
       />
     </div>
   )
