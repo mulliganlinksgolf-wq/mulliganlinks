@@ -168,6 +168,7 @@ export async function createWalkInBooking({
   players,
   totalPaid,
   paymentMethod,
+  overrideReason,
 }: {
   teeTimeId: string
   guestName: string
@@ -176,9 +177,50 @@ export async function createWalkInBooking({
   players: number
   totalPaid: number
   paymentMethod: 'cash' | 'card' | 'unpaid'
+  /** Optional reason staff entered when overriding the computed rate. Logged for analytics. */
+  overrideReason?: string
 }): Promise<{ error?: string }> {
   const supabase = await createClient()
-  const { error } = await supabase.rpc('create_walk_in_booking', {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated' }
+
+  // Pre-compute expected per-player rate so we can detect overrides AFTER the RPC succeeds.
+  // The RPC handles auth + locking + booking creation; we layer override logging on top.
+  const { hasPermission } = await import('@/lib/permissions')
+  const { createAdminClient } = await import('@/lib/supabase/admin')
+  const admin = createAdminClient()
+
+  const { data: tt } = await admin
+    .from('tee_times')
+    .select('id, course_id, base_price, special_price')
+    .eq('id', teeTimeId)
+    .maybeSingle()
+  if (!tt) return { error: 'Tee time not found' }
+
+  const { data: computed } = await admin
+    .from('tee_time_computed_rates')
+    .select('computed_rate')
+    .eq('tee_time_id', teeTimeId)
+    .maybeSingle()
+
+  const expectedPerPlayer = tt.special_price != null
+    ? Number(tt.special_price)
+    : computed?.computed_rate != null
+      ? Number(computed.computed_rate)
+      : Number(tt.base_price)
+
+  const actualPerPlayer = players > 0 ? totalPaid / players : 0
+  const isOverride = Math.abs(actualPerPlayer - expectedPerPlayer) > 0.01
+
+  // If staff is overriding the rate, require the granular override_price permission.
+  if (isOverride) {
+    const allowed = await hasPermission(user.id, tt.course_id, 'override_price')
+    if (!allowed) {
+      return { error: 'You need the override_price permission to charge a non-default rate.' }
+    }
+  }
+
+  const { data: bookingId, error: rpcErr } = await supabase.rpc('create_walk_in_booking', {
     p_tee_time_id: teeTimeId,
     p_guest_name: guestName,
     p_guest_phone: guestPhone,
@@ -187,7 +229,21 @@ export async function createWalkInBooking({
     p_total_paid: totalPaid,
     p_payment_method: paymentMethod,
   })
-  if (error) return { error: error.message }
+  if (rpcErr) return { error: rpcErr.message }
+
+  // Log the override only after the RPC succeeded (we have a booking_id).
+  if (isOverride && bookingId) {
+    await admin.from('rate_override_log').insert({
+      booking_id: bookingId,
+      course_id: tt.course_id,
+      tee_time_id: teeTimeId,
+      computed_rate: expectedPerPlayer,
+      override_rate: actualPerPlayer,
+      override_reason: overrideReason ?? null,
+      applied_by: user.id,
+    })
+  }
+
   revalidatePath('/course/[slug]', 'page')
   revalidatePath('/course/[slug]/bookings', 'page')
   return {}
