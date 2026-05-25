@@ -17,7 +17,7 @@ export default async function RoundsReportPage({
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   const { slug } = await params
-  await requireManager(slug)
+  const ctx = await requireManager(slug)
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect(`/course/${slug}/login`)
@@ -56,7 +56,7 @@ export default async function RoundsReportPage({
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-[#1A1A1A]">Rounds &amp; Utilization</h1>
-        <CsvExportButton data={csvData} filename={`${slug}-rounds.csv`} />
+        {ctx.perms.export_data && <CsvExportButton data={csvData} filename={`${slug}-rounds.csv`} />}
       </div>
 
       <DateRangePicker />

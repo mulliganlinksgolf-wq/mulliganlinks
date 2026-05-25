@@ -1,9 +1,11 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { requireManager } from '@/lib/courseRole'
+import { getEffectivePermissions } from '@/lib/permissions'
 import InviteStaffModal from './InviteStaffModal'
 import RemoveStaffButton from './RemoveStaffButton'
 import RoleSelector from './RoleSelector'
 import ResendInviteButton from './ResendInviteButton'
+import PermissionsEditor, { type StaffMemberPerms } from './PermissionsEditor'
 
 export default async function CourseTeamPage({
   params,
@@ -11,7 +13,9 @@ export default async function CourseTeamPage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const { courseId, userId: currentUserId } = await requireManager(slug)
+  const ctx = await requireManager(slug)
+  const { courseId, userId: currentUserId } = ctx
+  const canManagePerms = ctx.perms.manage_staff
 
   const admin = createAdminClient()
 
@@ -30,6 +34,21 @@ export default async function CourseTeamPage({
     : { data: [] }
 
   const profileMap = Object.fromEntries((profileRows ?? []).map(p => [p.id, p]))
+
+  const permMembers: StaffMemberPerms[] = canManagePerms
+    ? await Promise.all(
+        (members ?? []).map(async m => {
+          const p = profileMap[m.user_id] as { full_name?: string; email?: string } | undefined
+          return {
+            userId: m.user_id,
+            name: p?.full_name ?? p?.email ?? '—',
+            email: p?.email ?? '—',
+            role: m.role,
+            perms: await getEffectivePermissions(m.user_id, courseId),
+          }
+        }),
+      )
+    : []
 
   return (
     <div className="space-y-6 max-w-3xl">
@@ -110,6 +129,15 @@ export default async function CourseTeamPage({
           </tbody>
         </table>
       </div>
+
+      {canManagePerms && (
+        <PermissionsEditor
+          courseId={courseId}
+          slug={slug}
+          members={permMembers}
+          currentUserId={currentUserId}
+        />
+      )}
     </div>
   )
 }

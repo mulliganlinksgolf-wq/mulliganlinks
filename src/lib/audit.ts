@@ -18,8 +18,16 @@ export type AuditEventType =
   | 'social_post_scheduled'
   | 'social_post_deleted'
   | 'social_idea_saved'
+  | 'permission_changed'
 
-export type AuditTargetType = 'member' | 'config' | 'content' | 'dispute' | 'communication' | 'social'
+export type AuditTargetType =
+  | 'member'
+  | 'config'
+  | 'content'
+  | 'dispute'
+  | 'communication'
+  | 'social'
+  | 'staff_permission'
 
 interface WriteAuditLogParams {
   eventType: AuditEventType
