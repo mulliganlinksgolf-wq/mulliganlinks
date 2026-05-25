@@ -10,11 +10,11 @@ interface TeeTime {
   base_price: number
   special_price: number | null
   special_label: string | null
-  /** Computed rate from the pricing engine (Sprint 6). NULL when no rules have fired yet
-   *  or the cache hasn't been warmed for this slot. */
-  computed_rate: number | null
+  /** Computed rate from the pricing engine (Sprint 6). Optional + nullable: undefined when
+   *  the caller hasn't joined the cache table, null when the cache hasn't been warmed. */
+  computed_rate?: number | null
   /** Labels of rules that fired, in priority order. First one is the most prominent. */
-  fired_rule_labels: string[] | null
+  fired_rule_labels?: string[] | null
 }
 
 const TZ = 'America/Detroit'
