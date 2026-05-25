@@ -89,7 +89,7 @@ describe('AdminLayout', () => {
   })
 
   it('does NOT redirect when user email is in the hardcoded list', async () => {
-    const user = makeUser('nbarris11@gmail.com')
+    const user = makeUser('neil@teeahead.com')
     mockGetUser.mockResolvedValue({ data: { user } })
 
     // Disputes query: .from('payment_disputes').select('id').eq('status', 'open')
@@ -104,7 +104,7 @@ describe('AdminLayout', () => {
   })
 
   it('renders AdminSidebar with correct userEmail when user is admin', async () => {
-    const user = makeUser('nbarris11@gmail.com')
+    const user = makeUser('neil@teeahead.com')
     mockGetUser.mockResolvedValue({ data: { user } })
 
     mockEq.mockResolvedValue({ data: [], error: null })
@@ -112,11 +112,11 @@ describe('AdminLayout', () => {
     const result = await AdminLayout({ children: <div>test</div> })
     render(result as React.ReactElement)
 
-    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-email', 'nbarris11@gmail.com')
+    expect(screen.getByTestId('sidebar')).toHaveAttribute('data-email', 'neil@teeahead.com')
   })
 
   it('renders AdminSidebar with correct openDisputeCount when user is admin', async () => {
-    const user = makeUser('nbarris11@gmail.com')
+    const user = makeUser('neil@teeahead.com')
     mockGetUser.mockResolvedValue({ data: { user } })
 
     // Three open disputes
