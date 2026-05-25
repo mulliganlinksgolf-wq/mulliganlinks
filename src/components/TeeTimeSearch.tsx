@@ -10,6 +10,9 @@ interface TeeTime {
   base_price: number
   special_price?: number | null
   special_label?: string | null
+  /** Computed rate from the pricing engine (Sprint 6). NULL when no rules have fired yet. */
+  computed_rate?: number | null
+  fired_rule_labels?: string[] | null
 }
 
 const TZ = 'America/Detroit'
@@ -35,9 +38,20 @@ function TeeTimeCard({
   isMovingFast: boolean
   compact?: boolean
 }) {
-  const hasDeal = tt.special_price != null
-  const price = hasDeal ? tt.special_price! : tt.base_price
-  const savings = hasDeal ? tt.base_price - tt.special_price! : 0
+  // Price resolution: special_price (legacy) > computed_rate (pricing engine) > base_price
+  const hasSpecial = tt.special_price != null
+  const usingComputed = !hasSpecial && tt.computed_rate != null
+  const ruleLabel = usingComputed ? tt.fired_rule_labels?.[0] ?? null : null
+
+  const price = hasSpecial
+    ? tt.special_price!
+    : usingComputed
+      ? tt.computed_rate!
+      : tt.base_price
+  const savings = hasSpecial ? tt.base_price - tt.special_price! : 0
+  const showStrikethrough = price < tt.base_price
+  // hasDeal kept as a derived flag for layout decisions below; means "render as a deal-ish card"
+  const hasDeal = hasSpecial
   const spotsLeft = tt.available_players
   const lastSpot = spotsLeft === 1
 
@@ -62,7 +76,12 @@ function TeeTimeCard({
           {tt.special_label}
         </div>
       )}
-      {!hasDeal && isMovingFast && (
+      {!hasDeal && ruleLabel && (
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[0.1em] uppercase font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap bg-[#1B4332] text-[#F4F1EA]">
+          {ruleLabel}
+        </div>
+      )}
+      {!hasDeal && !ruleLabel && isMovingFast && (
         <div className={`absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 font-mono text-[10px] tracking-[0.1em] uppercase font-bold px-2.5 py-0.5 rounded-full whitespace-nowrap
           ${lastSpot
             ? 'bg-[#8FA889] text-[#082419]'
@@ -91,6 +110,8 @@ function TeeTimeCard({
             <p className="font-mono text-[10px] tracking-[0.08em] uppercase text-[#E0A800] font-semibold mt-0.5">Save ${savings.toFixed(2)}</p>
           )}
         </>
+      ) : showStrikethrough ? (
+        <p className="text-xs text-[#F4F1EA]/55 line-through mt-1">${tt.base_price.toFixed(2)}</p>
       ) : null}
       {!isMovingFast && !hasDeal && (
         <p className={`text-[#F4F1EA]/55 ${compact ? 'text-xs mt-1.5' : 'text-xs mt-2'}`}>
@@ -107,9 +128,10 @@ function TeeTimeCard({
 }
 
 function sortWithFeaturedFirst(tts: TeeTime[]): TeeTime[] {
+  // Featured = special_price set OR computed_rate < base_price (price-down rule fired)
   return [...tts].sort((a, b) => {
-    const aFeatured = a.special_price != null ? 1 : 0
-    const bFeatured = b.special_price != null ? 1 : 0
+    const aFeatured = a.special_price != null || (a.computed_rate != null && a.computed_rate < a.base_price) ? 1 : 0
+    const bFeatured = b.special_price != null || (b.computed_rate != null && b.computed_rate < b.base_price) ? 1 : 0
     if (bFeatured !== aFeatured) return bFeatured - aFeatured
     return new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
   })

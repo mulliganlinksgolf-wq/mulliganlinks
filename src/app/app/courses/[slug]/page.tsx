@@ -44,7 +44,10 @@ export default async function CourseDetailPage({
 
   const { data: teeTimes } = await supabase
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price, special_price, special_label, tee_start, holes')
+    .select(`
+      id, scheduled_at, available_players, base_price, special_price, special_label, tee_start, holes,
+      tee_time_computed_rates ( computed_rate, fired_rule_labels )
+    `)
     .eq('course_id', course.id)
     .eq('status', 'open')
     .eq('tee_start', teeStart)
@@ -52,6 +55,23 @@ export default async function CourseDetailPage({
     .lte('scheduled_at', selectedDate + 'T23:59:59+00:00')
     .gt('available_players', 0)
     .order('scheduled_at')
+
+  // Flatten the embedded computed-rate join. The relation is one-to-one (PK = tee_time_id).
+  const flatTeeTimes = (teeTimes ?? []).map((t: any) => {
+    const cr = Array.isArray(t.tee_time_computed_rates)
+      ? t.tee_time_computed_rates[0]
+      : t.tee_time_computed_rates
+    return {
+      id: t.id,
+      scheduled_at: t.scheduled_at,
+      available_players: t.available_players,
+      base_price: t.base_price,
+      special_price: t.special_price,
+      special_label: t.special_label,
+      computed_rate: cr?.computed_rate != null ? Number(cr.computed_rate) : null,
+      fired_rule_labels: cr?.fired_rule_labels ?? null,
+    }
+  })
 
   return (
     <div className="space-y-4">
@@ -79,7 +99,7 @@ export default async function CourseDetailPage({
       )}
 
       <TeeTimeSearch
-        teeTimes={teeTimes ?? []}
+        teeTimes={flatTeeTimes}
         courseName={course.name}
         courseSlug={slug}
         selectedDate={selectedDate}
