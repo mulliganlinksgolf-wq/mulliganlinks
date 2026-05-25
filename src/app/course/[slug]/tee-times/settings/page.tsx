@@ -37,7 +37,7 @@ export default async function TeeSheetSettingsPage({
   const admin = createAdminClient()
   const { data: course, error: courseError } = await admin
     .from('courses')
-    .select('id, name, slug')
+    .select('id, name, slug, allow_self_grouping, max_players_per_tee_time')
     .eq('slug', slug)
     .single()
 
@@ -84,6 +84,8 @@ export default async function TeeSheetSettingsPage({
         initialHours={hours}
         initialPricing={pricing}
         initialConfig={config ?? { ...DEFAULT_CONFIG, course_id: course.id }}
+        initialAllowSelfGrouping={course.allow_self_grouping ?? true}
+        initialMaxPlayersPerTeeTime={course.max_players_per_tee_time ?? 4}
       />
     </div>
   )

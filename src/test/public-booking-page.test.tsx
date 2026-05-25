@@ -10,12 +10,16 @@ function makeTeeTime(overrides: Partial<{
   scheduled_at: string
   available_players: number
   base_price: number
+  special_price: number | null
+  special_label: string | null
 }> = {}) {
   return {
     id: 'tt-1',
     scheduled_at: `${BASE_DATE}T14:00:00+00:00`,
     available_players: 4,
     base_price: 55,
+    special_price: null,
+    special_label: null,
     ...overrides,
   }
 }

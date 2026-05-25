@@ -19,7 +19,7 @@ vi.mock('@/lib/supabase/admin', () => ({
 }))
 vi.mock('@/lib/supabase/server', () => ({
   createClient: async () => ({
-    auth: { getUser: async () => ({ data: { user: { id: 'admin-1', email: 'nbarris11@gmail.com' } } }) },
+    auth: { getUser: async () => ({ data: { user: { id: 'admin-1', email: 'neil@teeahead.com' } } }) },
   }),
 }))
 vi.mock('@/lib/audit', () => ({ writeAuditLog: vi.fn().mockResolvedValue(undefined) }))

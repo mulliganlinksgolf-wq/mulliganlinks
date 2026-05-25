@@ -121,11 +121,13 @@ export function BookingPaymentForm({
   tier,
   userId,
   availablePasses = [],
+  joinExistingGroup = false,
 }: {
   teeTime: TeeTime
   tier: string
   userId: string
   availablePasses?: { id: string; expires_at: string }[]
+  joinExistingGroup?: boolean
 }) {
   const [players, setPlayers] = useState(1)
   const [useGuestPass, setUseGuestPass] = useState(false)
@@ -151,6 +153,7 @@ export function BookingPaymentForm({
         players,
         tier,
         guestPassId: useGuestPass && selectedPass ? selectedPass.id : undefined,
+        joinExistingGroup,
       })
       if (result.error || !result.bookingId) {
         setError(result.error ?? 'Failed to create booking')

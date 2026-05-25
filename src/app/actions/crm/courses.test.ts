@@ -9,7 +9,7 @@ vi.mock('@/lib/supabase/admin', () => ({
 }))
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
 
-const ADMIN_EMAILS = ['nbarris11@gmail.com', 'beslock@yahoo.com']
+const ADMIN_EMAILS = ['neil@teeahead.com', 'beslock@yahoo.com']
 
 function makeSupabaseMock(insertData?: unknown) {
   return {

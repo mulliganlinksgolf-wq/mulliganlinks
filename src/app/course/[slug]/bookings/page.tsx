@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { SelfGroupingOverrideControl } from '@/components/course/SelfGroupingOverrideControl'
 
 export default async function CourseBookingsPage({
   params,
@@ -19,10 +20,21 @@ export default async function CourseBookingsPage({
     .single()
   if (!course) notFound()
 
+  // Per-day self-grouping override for today
+  const today = new Date().toISOString().split('T')[0]
+  const { data: overrideRow } = await supabase
+    .from('course_tee_sheet_overrides')
+    .select('self_grouping_disabled')
+    .eq('course_id', course.id)
+    .eq('override_date', today)
+    .maybeSingle()
+  const isSelfGroupingDisabledToday = overrideRow?.self_grouping_disabled === true
+
   let query = supabase
     .from('bookings')
     .select(`
       id, players, total_paid, status, created_at, points_awarded, guest_name, guest_phone, payment_method,
+      is_self_grouped,
       tee_times!inner(scheduled_at, course_id),
       profiles(full_name, phone)
     `)
@@ -72,6 +84,12 @@ export default async function CourseBookingsPage({
           {bookings?.length ?? 0} bookings · ${totalRevenue.toFixed(2)} revenue
         </div>
       </div>
+
+      <SelfGroupingOverrideControl
+        courseSlug={slug}
+        date={today}
+        isDisabled={isSelfGroupingDisabledToday}
+      />
 
       {/* Filters */}
       <div className="flex gap-2 flex-wrap">
@@ -127,6 +145,11 @@ export default async function CourseBookingsPage({
                   {b.profiles?.full_name ?? b.guest_name ?? '—'}
                   {!b.profiles && b.guest_name && (
                     <span className="ml-1.5 text-xs text-[#6B7770] font-normal">walk-in</span>
+                  )}
+                  {b.is_self_grouped && (
+                    <span className="ml-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-[#8FA889]/20 text-[#1B4332] border border-[#8FA889]/40">
+                      Self-grouped
+                    </span>
                   )}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">

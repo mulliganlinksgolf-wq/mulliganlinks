@@ -81,7 +81,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
   })
 
   it('shows open status and 0/4 players when no bookings exist', () => {
-    render(<TeeSheetGrid teeTimes={[makeTeeTime()]} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={[makeTeeTime()]} slug="demo" courseId="course-1" courseName="Test Course" />)
     expect(screen.getByText('open')).toBeInTheDocument()
     expect(screen.getByText('0/4')).toBeInTheDocument()
   })
@@ -96,7 +96,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     // Golfer name visible in collapsed row
     expect(screen.getByText('Neil Barris')).toBeInTheDocument()
@@ -126,7 +126,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     expect(screen.getByText('full')).toBeInTheDocument()
     expect(screen.getByText('4/4')).toBeInTheDocument()
@@ -149,7 +149,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     expect(screen.getByText('completed')).toBeInTheDocument()
 
@@ -169,7 +169,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     expect(screen.getByText('blocked')).toBeInTheDocument()
 
@@ -191,7 +191,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     // Name appears in collapsed summary column
     expect(screen.getAllByText('Walk-in Guest').length).toBeGreaterThanOrEqual(1)
@@ -211,7 +211,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
     await user.click(screen.getByRole('button', { name: /8:00/i }))
 
     expect(screen.getByRole('button', { name: /mark complete/i })).toBeInTheDocument()
@@ -230,7 +230,7 @@ describe('TeeSheetGrid — booking state reflection', () => {
       }),
     ]
 
-    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" />)
+    render(<TeeSheetGrid teeTimes={teeTimes} slug="demo" courseId="course-1" courseName="Test Course" />)
 
     // First booking name appears in the collapsed summary column
     expect(screen.getAllByText('Alice').length).toBeGreaterThanOrEqual(1)
