@@ -94,7 +94,7 @@ describe('AdminLayout', () => {
 
     // Disputes query: .from('payment_disputes').select('id').eq('status', 'open')
     // For hardcoded admins, no profile check runs; only disputes query runs
-    mockEq.mockResolvedValue({ data: [], error: null })
+    ;(mockEq as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({ data: [], error: null })
 
     const result = await AdminLayout({ children: <div>test</div> })
     render(result as React.ReactElement)
@@ -107,7 +107,7 @@ describe('AdminLayout', () => {
     const user = makeUser('neil@teeahead.com')
     mockGetUser.mockResolvedValue({ data: { user } })
 
-    mockEq.mockResolvedValue({ data: [], error: null })
+    ;(mockEq as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({ data: [], error: null })
 
     const result = await AdminLayout({ children: <div>test</div> })
     render(result as React.ReactElement)
@@ -120,7 +120,7 @@ describe('AdminLayout', () => {
     mockGetUser.mockResolvedValue({ data: { user } })
 
     // Three open disputes
-    mockEq.mockResolvedValue({ data: [{ id: '1' }, { id: '2' }, { id: '3' }], error: null })
+    ;(mockEq as unknown as { mockResolvedValue: (v: unknown) => void }).mockResolvedValue({ data: [{ id: '1' }, { id: '2' }, { id: '3' }], error: null })
 
     const result = await AdminLayout({ children: <div>test</div> })
     render(result as React.ReactElement)

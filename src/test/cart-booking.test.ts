@@ -34,13 +34,13 @@ describe('Cart policy auto-selection', () => {
   })
 
   it('initializes cartSelected=false for optional policy', () => {
-    const cartPolicy = 'optional'
+    const cartPolicy: string = 'optional'
     const cartSelected = cartPolicy === 'mandatory'
     expect(cartSelected).toBe(false)
   })
 
   it('initializes cartSelected=false for walking_only policy', () => {
-    const cartPolicy = 'walking_only'
+    const cartPolicy: string = 'walking_only'
     const cartSelected = cartPolicy === 'mandatory'
     expect(cartSelected).toBe(false)
   })
