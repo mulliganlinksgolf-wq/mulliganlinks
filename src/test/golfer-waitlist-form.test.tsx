@@ -26,9 +26,9 @@ describe('GolferWaitlistForm', () => {
     expect(screen.getByLabelText(/current membership/i)).toBeInTheDocument()
   })
 
-  it('last name field is not marked required', () => {
+  it('last name field is marked required', () => {
     render(<GolferWaitlistForm />)
     const lastNameInput = screen.getByLabelText(/last name/i)
-    expect(lastNameInput).not.toHaveAttribute('required')
+    expect(lastNameInput).toHaveAttribute('required')
   })
 })
