@@ -53,6 +53,18 @@ export default async function CourseSettingsPage({
           Manage →
         </Link>
       </div>
+      <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-[#1A1A1A] text-sm">Operations</p>
+          <p className="text-xs text-[#6B7770] mt-0.5">Location, sunrise/sunset automation, back-nine booking.</p>
+        </div>
+        <Link
+          href={`/course/${slug}/settings/operations`}
+          className="text-sm font-medium text-[#1B4332] hover:underline"
+        >
+          Manage →
+        </Link>
+      </div>
     </div>
   )
 }
