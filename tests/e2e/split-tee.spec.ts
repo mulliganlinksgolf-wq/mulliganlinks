@@ -1,11 +1,9 @@
 // Sprint 1 split-tee + back-9 E2E coverage.
 //
-// Playwright is not yet installed in this repo (no playwright.config.ts, no
-// @playwright/test in package.json). This spec is ready to run as soon as the
-// E2E harness is set up — install @playwright/test, add playwright.config.ts,
-// seed a test course `fox-creek` with a manager user, and add scripts.
-//
-// Until then this file documents the contract that the UI must satisfy.
+// Run with `npm run test:e2e`. Requires TEST_MANAGER_EMAIL, TEST_MANAGER_PASSWORD,
+// TEST_GOLFER_EMAIL, TEST_GOLFER_PASSWORD env vars and a seeded test course
+// (slug `fox-creek` or whatever you point the spec at). One-time browser setup:
+// `npm run test:e2e:install`.
 
 import { test, expect } from '@playwright/test'
 
