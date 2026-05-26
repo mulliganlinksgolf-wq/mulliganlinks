@@ -17,18 +17,40 @@ export async function POST(req: Request) {
 
   const admin = createAdminClient()
 
+  // Recovery: rows stuck in 'sending' for >10 minutes are from a crashed
+  // lambda. Reset them so this run can pick them up again. (Idempotent.)
+  await admin
+    .from('crm_scheduled_emails')
+    .update({ status: 'pending', claimed_at: null })
+    .eq('status', 'sending')
+    .lt('claimed_at', new Date(Date.now() - 10 * 60 * 1000).toISOString())
+
   const { data: due, error: fetchError } = await admin
     .from('crm_scheduled_emails')
-    .select('*')
+    .select('id')
     .eq('status', 'pending')
     .lte('scheduled_for', new Date().toISOString())
 
   if (fetchError) return NextResponse.json({ error: fetchError.message }, { status: 500 })
   if (!due?.length) return NextResponse.json({ sent: 0, message: 'Nothing due' })
 
-  let sent = 0, failed = 0
+  let sent = 0, failed = 0, skipped = 0
 
-  for (const row of due) {
+  for (const { id } of due) {
+    // Atomic claim: only one concurrent invocation can flip pending→sending
+    // for a given row. The loser gets back no row and skips. This is the
+    // race fix — without it, two ticks of the every-minute pg_cron job
+    // would both call Resend for the same row.
+    const { data: row } = await admin
+      .from('crm_scheduled_emails')
+      .update({ status: 'sending', claimed_at: new Date().toISOString() })
+      .eq('id', id)
+      .eq('status', 'pending')
+      .select('*')
+      .maybeSingle()
+
+    if (!row) { skipped++; continue }
+
     const headers: Record<string, string> = {
       'Message-ID': row.message_id ?? `<${crypto.randomUUID()}@teeahead.com>`,
     }
@@ -73,7 +95,6 @@ export async function POST(req: Request) {
       console.error('[scheduled-cron] IMAP append exception:', err)
     }
 
-    // Write activity log entry
     await admin.from('crm_activity_log').insert({
       record_type: row.record_type,
       record_id: row.record_id,
@@ -96,5 +117,5 @@ export async function POST(req: Request) {
     sent++
   }
 
-  return NextResponse.json({ sent, failed, total: due.length })
+  return NextResponse.json({ sent, failed, skipped, total: due.length })
 }
