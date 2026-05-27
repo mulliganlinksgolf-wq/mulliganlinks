@@ -105,7 +105,7 @@ describe('GolferEscapeBanner', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm test src/test/golfer-escape-banner.test.tsx`
+Run: `npm test -- src/test/golfer-escape-banner.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/home/GolferEscapeBanner'`.
 
 - [ ] **Step 3: Implement the component**
@@ -196,7 +196,7 @@ export default function GolferEscapeBanner() {
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm test src/test/golfer-escape-banner.test.tsx`
+Run: `npm test -- src/test/golfer-escape-banner.test.tsx`
 Expected: PASS — all three test cases green.
 
 - [ ] **Step 5: Commit**
@@ -247,12 +247,12 @@ Inside Hole 01's `YardageShell`, just before `</YardageShell>` (or before the `<
 
 - [ ] **Step 5: Run the build to catch type errors**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds. If it fails on an unrelated existing issue, scope the failure to the lines you touched.
 
 - [ ] **Step 6: Run the homepage test to confirm nothing regressed**
 
-Run: `pnpm test src/test/homepage-faq.test.tsx`
+Run: `npm test -- src/test/homepage-faq.test.tsx`
 Expected: PASS.
 
 - [ ] **Step 7: Commit**
@@ -327,7 +327,7 @@ export default async function CoursesPage() {
 
 - [ ] **Step 2: Run the build**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds.
 
 - [ ] **Step 3: Commit**
@@ -346,7 +346,7 @@ git commit -m "feat(courses): public directory stub of active courses"
 
 - [ ] **Step 1: Start the dev server**
 
-Run: `pnpm dev`
+Run: `npm run dev`
 Expected: starts on http://localhost:3000.
 
 - [ ] **Step 2: Manually verify the homepage**
@@ -372,7 +372,7 @@ Press Ctrl-C in the dev server terminal.
 
 - [ ] **Step 5: Run all tests**
 
-Run: `pnpm test && pnpm build`
+Run: `npm test -- && npm run build`
 Expected: both pass.
 
 - [ ] **Step 6: Push the branch to qa**
@@ -436,7 +436,7 @@ describe('formatTeeTimeLabel', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm test src/test/format-tee-time-label.test.ts`
+Run: `npm test -- src/test/format-tee-time-label.test.ts`
 Expected: FAIL with `Cannot find module '@/lib/formatTeeTimeLabel'`.
 
 - [ ] **Step 3: Implement the helper**
@@ -480,7 +480,7 @@ export function formatTeeTimeLabel(scheduledAt: string, timezone: string): strin
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm test src/test/format-tee-time-label.test.ts`
+Run: `npm test -- src/test/format-tee-time-label.test.ts`
 Expected: PASS — all four cases green.
 
 - [ ] **Step 5: Commit**
@@ -723,7 +723,7 @@ describe('PlayTeeTimePreview', () => {
 
 - [ ] **Step 2: Run the test to verify it fails**
 
-Run: `pnpm test src/test/play-tee-time-preview.test.tsx`
+Run: `npm test -- src/test/play-tee-time-preview.test.tsx`
 Expected: FAIL with `Cannot find module '@/components/play/PlayTeeTimePreview'`.
 
 - [ ] **Step 3: Implement the component**
@@ -806,7 +806,7 @@ export default function PlayTeeTimePreview({ courseSlug, timezone, teeTimes }: P
 
 - [ ] **Step 4: Run the test to verify it passes**
 
-Run: `pnpm test src/test/play-tee-time-preview.test.tsx`
+Run: `npm test -- src/test/play-tee-time-preview.test.tsx`
 Expected: PASS — all three cases green.
 
 - [ ] **Step 5: Commit**
@@ -1044,7 +1044,7 @@ export default async function PlayPage({ params }: { params: Promise<{ slug: str
 
 - [ ] **Step 2: Build to catch type errors**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds.
 
 - [ ] **Step 3: Commit**
@@ -1105,7 +1105,7 @@ test.describe('/play/[slug]', () => {
 
 - [ ] **Step 3: Run the e2e test**
 
-Run: `pnpm test:e2e tests/e2e/play-page.spec.ts`
+Run: `npm run test:e2e tests/e2e/play-page.spec.ts`
 Expected: PASS. If it fails because no tee times exist for the course, that's fine — the test asserts the header text, not the tile presence.
 
 - [ ] **Step 4: Commit**
@@ -1124,7 +1124,7 @@ git commit -m "test(play): e2e coverage for /play/[slug] render and 404"
 
 - [ ] **Step 1: Start dev server**
 
-Run: `pnpm dev`
+Run: `npm run dev`
 
 - [ ] **Step 2: Manually verify `/play/[slug]`**
 
@@ -1146,9 +1146,9 @@ Visit `http://localhost:3000/`, click the golfer escape banner, land on `/course
 
 ```bash
 # Ctrl-C in dev terminal
-pnpm test
-pnpm test:e2e
-pnpm build
+npm test --
+npm run test:e2e
+npm run build
 ```
 
 All should pass.
@@ -1231,12 +1231,12 @@ export async function GET(
 
 - [ ] **Step 2: Build to catch type errors**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds.
 
 - [ ] **Step 3: Smoke-test the route**
 
-Start dev (`pnpm dev`), then in a browser hit `http://localhost:3000/api/qr/<active-slug>`. Expected: a green-on-cream QR PNG renders.
+Start dev (`npm run dev`), then in a browser hit `http://localhost:3000/api/qr/<active-slug>`. Expected: a green-on-cream QR PNG renders.
 Hit `http://localhost:3000/api/qr/<active-slug>?size=800`. Expected: a larger PNG.
 Hit `http://localhost:3000/api/qr/nonsense-slug`. Expected: 404.
 Stop the dev server.
@@ -1445,7 +1445,7 @@ export default async function MarketingPage({
 
 - [ ] **Step 2: Build to catch type errors**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds.
 
 - [ ] **Step 3: Commit**
@@ -1507,7 +1507,7 @@ test.describe('/course/[slug]/marketing', () => {
 
 - [ ] **Step 3: Run the e2e test**
 
-Run: `pnpm test:e2e tests/e2e/course-marketing.spec.ts`
+Run: `npm run test:e2e tests/e2e/course-marketing.spec.ts`
 Expected: PASS. If the manager login env vars aren't set, the second test will fail at login — set `TEST_MANAGER_EMAIL` / `TEST_MANAGER_PASSWORD` / `TEST_MANAGER_SLUG` and rerun.
 
 - [ ] **Step 4: Commit**
@@ -1526,7 +1526,7 @@ git commit -m "test(course): e2e for /course/[slug]/marketing auth + kit render"
 
 - [ ] **Step 1: Start dev server, log in as a manager, visit `/course/<slug>/marketing`**
 
-Run: `pnpm dev`. Sign in as a manager and visit `http://localhost:3000/course/<slug>/marketing`.
+Run: `npm run dev`. Sign in as a manager and visit `http://localhost:3000/course/<slug>/marketing`.
 
 - Confirm all five blocks render (URL, QR, IG bio, scorecard, email signature).
 - Click "Copy" on the URL block — confirm "Copied!" pill flashes; paste somewhere and verify the URL.
@@ -1541,9 +1541,9 @@ In a private/incognito window, visit `/course/<slug>/marketing` — confirm you 
 
 ```bash
 # Ctrl-C
-pnpm test
-pnpm test:e2e
-pnpm build
+npm test --
+npm run test:e2e
+npm run build
 ```
 
 - [ ] **Step 4: Push to qa**
@@ -1590,7 +1590,7 @@ The full updated `steps` array should now have four entries: tee times → insta
 
 - [ ] **Step 2: Verify visually**
 
-Run: `pnpm dev`. Visit `/course/<a-course-without-bookings>/dashboard` so the day-zero block shows. Confirm step 04 appears with the new copy and the CTA links to `/course/<slug>/marketing`.
+Run: `npm run dev`. Visit `/course/<a-course-without-bookings>/dashboard` so the day-zero block shows. Confirm step 04 appears with the new copy and the CTA links to `/course/<slug>/marketing`.
 
 If you don't have a day-zero course handy, temporarily comment out the `if (isDayZero)` guard in the dashboard page to force-render it for visual check, then restore the guard.
 
@@ -1598,7 +1598,7 @@ Stop dev (Ctrl-C).
 
 - [ ] **Step 3: Build**
 
-Run: `pnpm build`
+Run: `npm run build`
 Expected: build succeeds.
 
 - [ ] **Step 4: Commit**
@@ -1618,9 +1618,9 @@ git commit -m "feat(course): day-zero onboarding step 4 → marketing kit"
 - [ ] **Step 1: Run full test suite one more time**
 
 ```bash
-pnpm test
-pnpm test:e2e
-pnpm build
+npm test --
+npm run test:e2e
+npm run build
 ```
 
 All should pass.
