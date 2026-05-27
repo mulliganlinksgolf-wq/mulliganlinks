@@ -15,6 +15,7 @@ import { PricingCard } from '@/components/PricingCard'
 import { YardageShell, HoleHeader, HoleFooter } from '@/components/yardage/YardageShell'
 import { ReceiptCard } from '@/components/yardage/ReceiptCard'
 import { ProductTile } from '@/components/yardage/ProductTile'
+import GolferEscapeBanner from '@/components/home/GolferEscapeBanner'
 
 export const metadata: Metadata = {
   title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
@@ -58,6 +59,9 @@ export default async function HomePage({
 
           <div className="grid lg:grid-cols-[1.25fr_0.95fr] gap-10 lg:gap-12 items-start">
             <div>
+              <p className="font-mono text-[11px] tracking-[0.2em] text-[#0F3D2E]/60 uppercase mb-2">
+                Software for Golf Course Operators
+              </p>
               <h1
                 className="font-display text-[#0F3D2E] leading-[0.9] tracking-[-0.035em]"
                 style={{ fontSize: 'clamp(80px, 11vw, 104px)', fontWeight: 400 }}
@@ -122,6 +126,10 @@ export default async function HomePage({
             </div>
 
             <ReceiptCard />
+          </div>
+
+          <div className="mt-8">
+            <GolferEscapeBanner />
           </div>
 
           <HoleFooter note="Stroke index 7 · Hazard rating: severe" nextHole="Hole 02" />
