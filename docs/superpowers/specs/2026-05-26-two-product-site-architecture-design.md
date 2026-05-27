@@ -53,7 +53,7 @@ Four deliverables, shipped sequentially to `qa.teeahead.com` for review before m
 | Banner destination | Stub `/courses` as a simple public list | Full persona-escape route per the handoff |
 | Component namespacing | `src/components/play/`, `src/components/marketing/`, `src/components/home/` | Audience boundaries stay legible as the surface grows |
 | Tee-times rendering | No suspense boundary in v1 | `revalidate: 300` absorbs latency; fewer states to test |
-| Hero CTA price | "Get the pass · $89/mo" (Eagle tier) | Honest entry-tier price; matches what /join shows |
+| Hero CTA price | "Get the pass · $89/yr" (Eagle tier) | Honest entry-tier price; matches what /join shows |
 | Hero background | Solid green v1 | Visual consistency regardless of `hero_image_url` quality |
 | Ship strategy | One qa push per deliverable | Tight feedback loop; problems caught at the unit level |
 
@@ -168,7 +168,7 @@ type Props = { courseName: string, region: string, courseSlug: string }
 - Eyebrow: `font-mono text-[11px] tracking-[0.2em] uppercase opacity-80` → `{courseName} · {region}` (joined with `·`, omits region if empty)
 - Headline (two lines, hard `<br />`): `font-display text-[40px] sm:text-[52px] leading-[0.95] tracking-[-0.02em] mt-3` → "Book direct.<br/>Save 15% every round."
 - CTA row: `flex flex-col sm:flex-row gap-3 mt-6`
-  - Primary `<Link href={\`/join?course=${courseSlug}\`}>` wrapped in a client `<HeroPrimaryCta>` that fires `track('play_pass_cta_clicked', { slug, placement: 'hero' })` → "Get the pass · $89/mo"
+  - Primary `<Link href={\`/join?course=${courseSlug}\`}>` wrapped in a client `<HeroPrimaryCta>` that fires `track('play_pass_cta_clicked', { slug, placement: 'hero' })` → "Get the pass · $89/yr"
   - Secondary anchor `<a href="#tee-times">` → "Book a tee time"
 
 ### `PlayTeeTimePreview` (server with `TeeTimeTile` client child)
@@ -277,7 +277,7 @@ All events via `@vercel/analytics`'s `track()`. Fire-and-forget; never blocks na
 - **`hero_image_url` ignored** — read from the query for future use; not rendered in v1.
 - **Day-zero step 4** — added by modifying the inline `DayZeroOnboarding` block in `src/app/course/[slug]/dashboard/page.tsx`. Same step styling as existing steps 1–3. The link is shown regardless of whether the operator has bookings; once `isDayZero` is false the entire block disappears, so this step is only visible during onboarding.
 - **QR size param** — `/api/qr/[slug]?size=800` for download, `/api/qr/[slug]` (default 240) for in-page preview.
-- **Headline price** — hard-coded "$89/mo" in `PlayHero`. If membership pricing changes, this string must be updated alongside the existing homepage pricing in Hole 06.
+- **Headline price** — hard-coded "$89/yr" in `PlayHero`. If membership pricing changes, this string must be updated alongside the existing homepage pricing in Hole 06.
 
 ## Testing
 
