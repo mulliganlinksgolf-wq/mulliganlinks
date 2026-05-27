@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
+import { SelfGroupingOverrideControl } from '@/components/course/SelfGroupingOverrideControl'
 
 export default async function CourseBookingsPage({
   params,
@@ -19,10 +20,21 @@ export default async function CourseBookingsPage({
     .single()
   if (!course) notFound()
 
+  // Per-day self-grouping override for today
+  const today = new Date().toISOString().split('T')[0]
+  const { data: overrideRow } = await supabase
+    .from('course_tee_sheet_overrides')
+    .select('self_grouping_disabled')
+    .eq('course_id', course.id)
+    .eq('override_date', today)
+    .maybeSingle()
+  const isSelfGroupingDisabledToday = overrideRow?.self_grouping_disabled === true
+
   let query = supabase
     .from('bookings')
     .select(`
-      id, players, total_paid, status, created_at, points_awarded,
+      id, players, total_paid, status, created_at, points_awarded, guest_name, guest_phone, payment_method,
+      is_self_grouped,
       tee_times!inner(scheduled_at, course_id),
       profiles(full_name, phone)
     `)
@@ -47,7 +59,13 @@ export default async function CourseBookingsPage({
 
   const { data: bookings } = await query
 
-  const statuses = ['all', 'confirmed', 'completed', 'canceled', 'no_show']
+  const statuses = [
+    { value: 'all', label: 'All' },
+    { value: 'confirmed', label: 'Confirmed' },
+    { value: 'completed', label: 'Completed' },
+    { value: 'canceled', label: 'Canceled' },
+    { value: 'no_show', label: 'No show' },
+  ]
   const ranges = [
     { value: '', label: 'All time' },
     { value: 'today', label: 'Today' },
@@ -67,19 +85,25 @@ export default async function CourseBookingsPage({
         </div>
       </div>
 
+      <SelfGroupingOverrideControl
+        courseSlug={slug}
+        date={today}
+        isDisabled={isSelfGroupingDisabledToday}
+      />
+
       {/* Filters */}
       <div className="flex gap-2 flex-wrap">
         {statuses.map(s => (
           <a
-            key={s}
-            href={`?status=${s}&range=${range ?? ''}`}
+            key={s.value}
+            href={`?status=${s.value}&range=${range ?? ''}`}
             className={`px-3 py-1 text-xs rounded-full border font-medium capitalize transition-colors ${
-              (statusFilter ?? 'all') === s
+              (statusFilter ?? 'all') === s.value
                 ? 'bg-[#1B4332] text-[#FAF7F2] border-[#1B4332]'
                 : 'bg-white text-[#6B7770] border-gray-200 hover:border-[#1B4332]'
             }`}
           >
-            {s}
+            {s.label}
           </a>
         ))}
         <span className="w-px bg-gray-200 mx-1" />
@@ -103,10 +127,11 @@ export default async function CourseBookingsPage({
         <table className="w-full text-sm">
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
-              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Member</th>
+              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Golfer</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Tee Time</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Players</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Paid</th>
+              <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Method</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Status</th>
               <th className="text-left px-4 py-2.5 text-xs font-medium text-[#6B7770] uppercase tracking-wide">Booked</th>
             </tr>
@@ -117,15 +142,27 @@ export default async function CourseBookingsPage({
             ) : bookings.map((b: any) => (
               <tr key={b.id} className="hover:bg-gray-50">
                 <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">
-                  {b.profiles?.full_name ?? '—'}
+                  {b.profiles?.full_name ?? b.guest_name ?? '—'}
+                  {!b.profiles && b.guest_name && (
+                    <span className="ml-1.5 text-xs text-[#6B7770] font-normal">walk-in</span>
+                  )}
+                  {b.is_self_grouped && (
+                    <span className="ml-1.5 inline-block px-1.5 py-0.5 rounded text-[10px] font-medium uppercase tracking-wide bg-[#8FA889]/20 text-[#1B4332] border border-[#8FA889]/40">
+                      Self-grouped
+                    </span>
+                  )}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">
                   {new Date(b.tee_times?.scheduled_at).toLocaleString('en-US', {
-                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'
+                    month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
+                    timeZone: 'America/Detroit',
                   })}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">{b.players}</td>
                 <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">${b.total_paid?.toFixed(2)}</td>
+                <td className="px-4 py-2.5 text-[#6B7770] capitalize text-xs">
+                  {b.payment_method ?? '—'}
+                </td>
                 <td className="px-4 py-2.5">
                   <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
                     b.status === 'confirmed' ? 'bg-green-100 text-green-700' :

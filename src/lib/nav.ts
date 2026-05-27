@@ -1,0 +1,34 @@
+export interface NavItem {
+  href: string
+  label: string
+  icon: string
+  exact?: boolean
+  badge?: number
+}
+
+export const SIDEBAR_NAV_ITEMS: NavItem[] = [
+  { href: '/app',              label: 'Home',           icon: '◇', exact: true },
+  { href: '/app/courses',      label: 'Courses',        icon: '◯' },
+  { href: '/app/bookings',     label: 'Bookings',       icon: '◐' },
+  { href: '/app/partners',     label: 'Find a Partner', icon: '⊕' },
+  { href: '/app/leagues',      label: 'Leagues',        icon: '◉' },
+  { href: '/app/trading',      label: 'Exchange',       icon: '⇄' },
+  { href: '/app/points',       label: 'Points',         icon: '◆' },
+  { href: '/app/benefits',     label: 'Benefits',       icon: '✦' },
+  { href: '/app/card',         label: 'My Card',        icon: '◫' },
+  { href: '/app/billing',      label: 'Billing',        icon: '◧' },
+  { href: '/app/profile',      label: 'Profile',        icon: '⊙' },
+]
+
+export const BOTTOM_NAV_ITEMS: NavItem[] = [
+  { href: '/app',          label: 'Home',     icon: '◇', exact: true },
+  { href: '/app/courses',  label: 'Book',     icon: '◯' },
+  { href: '/app/points',   label: 'Points',   icon: '◆' },
+  { href: '/app/partners', label: 'Partners', icon: '⊕' },
+  { href: '/app/profile',  label: 'Profile',  icon: '⊙' },
+]
+
+export function isNavItemActive(pathname: string, href: string, exact = false): boolean {
+  if (exact) return pathname === href
+  return pathname === href || pathname.startsWith(href + '/')
+}

@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { FoundingGolferBanner } from '@/components/FoundingGolferBanner'
 
 export const metadata: Metadata = { title: 'Upgrade Membership' }
 
@@ -9,40 +10,32 @@ const TIERS = [
   {
     id: 'eagle',
     name: 'Eagle',
-    price: 79,
-    priceMonthly: 7.99,
-    color: 'ring-[#E0A800]/50',
-    badge: 'Most Popular',
-    badgeColor: 'bg-[#E0A800] text-[#1A1A1A]',
+    price: 89,
+    priceMonthly: 7.42,
     features: [
-      '$15/mo in tee time credits ($180/yr)',
-      '2 free rounds per year',
+      '$10/mo in tee time credits ($120/yr)',
+      '1 free round per year',
       'Zero booking fees, always',
-      '2× Fairway Points on every dollar',
+      '1.5× Fairway Points on every dollar',
       '48hr priority booking window',
-      '12 guest passes per year',
-      '10% green fee discount',
-      '$25 birthday credit',
+      '12 guest fee waivers per year',
+      '$10 birthday credit',
       'Unlimited free cancellation (1hr)',
     ],
   },
   {
     id: 'ace',
     name: 'Ace',
-    price: 149,
-    priceMonthly: 12.42,
-    color: 'ring-[#1B4332]/50',
-    badge: null,
-    badgeColor: '',
+    price: 159,
+    priceMonthly: 13.25,
     features: [
-      '$25/mo in tee time credits ($300/yr)',
-      '4 free rounds per year',
+      '$20/mo in tee time credits ($240/yr)',
+      '2 free rounds per year',
       'Zero booking fees, always',
-      '3× Fairway Points on every dollar',
+      '2× Fairway Points on every dollar',
       '72hr priority booking window',
-      'Unlimited guest passes',
-      '15% green fee discount',
-      '$50 birthday credit',
+      '24 guest fee waivers per year',
+      '$20 birthday credit',
       'Unlimited free cancellation (1hr)',
       '2 in-person lessons per year',
       'Dedicated concierge booking line',
@@ -51,88 +44,123 @@ const TIERS = [
   },
 ]
 
-export default async function MembershipPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ tier?: string }>
-}) {
+export default async function MembershipPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: membership } = await supabase
-    .from('memberships')
-    .select('tier')
-    .eq('user_id', user.id)
-    .single()
+  const [{ data: membership }, { data: counter }] = await Promise.all([
+    supabase.from('memberships').select('tier').eq('user_id', user.id).single(),
+    supabase.from('founding_golfer_counter').select('claimed, limit').eq('id', 1).single(),
+  ])
 
+  const spotsRemaining = counter ? counter.limit - counter.claimed : 0
   const currentTier = membership?.tier ?? 'fairway'
-  const { tier: preselected } = await searchParams
+
+  const headerSub =
+    currentTier === 'eagle'
+      ? "You're on Eagle."
+      : currentTier === 'ace'
+      ? "You're on Ace."
+      : 'Currently on Fairway (free).'
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Upgrade your membership</h1>
-        <p className="text-[#6B7770] text-sm mt-1">
-          You&apos;re currently on <span className="font-medium text-[#1A1A1A] capitalize">{currentTier}</span>.
-          Upgrade to earn more points, get credits, and unlock priority access.
-        </p>
+    <div className="max-w-3xl mx-auto">
+      <div className="mb-6">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-[#aaa] font-sans mb-1">Membership</p>
+        <h1 className="text-2xl font-bold font-serif text-white italic">Upgrade your game.</h1>
+        <p className="text-[11px] font-sans mt-1 text-[#8FA889]">{headerSub}</p>
       </div>
+      <div className="rounded-xl overflow-hidden" style={{ background: '#1B4332' }}>
+        <div className="p-6 space-y-6">
+          {/* Founding banner */}
+          <FoundingGolferBanner spotsRemaining={spotsRemaining} dark />
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {TIERS.map(tier => {
-          const isCurrent = currentTier === tier.id
-          return (
-            <div key={tier.id} className={`bg-white rounded-xl ring-2 ${tier.color} p-6 space-y-5 relative`}>
-              {tier.badge && (
-                <div className="absolute -top-3 left-6">
-                  <span className={`inline-block text-xs font-bold px-3 py-1 rounded-full ${tier.badgeColor}`}>
-                    {tier.badge}
-                  </span>
+          {/* Tier cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {TIERS.map(tier => {
+              const isCurrent = currentTier === tier.id
+              const isRecommended = currentTier !== 'eagle' && currentTier !== 'ace' && tier.id === 'eagle'
+              const tierNameColor = tier.id === 'eagle' ? '#E0A800' : '#8FA889'
+              const borderColor = isRecommended
+                ? 'border-[#E0A800]'
+                : isCurrent
+                ? 'border-[#555]'
+                : 'border-[#1d4c36]'
+
+              return (
+                <div
+                  key={tier.id}
+                  className={`rounded-xl border p-6 space-y-5 relative ${borderColor}`}
+                  style={{ background: '#163d2a' }}
+                >
+                  {isRecommended && (
+                    <div className="absolute -top-3 left-6">
+                      <span className="inline-block text-xs font-bold px-3 py-1 rounded-full bg-[#E0A800] text-[#1A1A1A]">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+
+                  <div>
+                    <h2 className="text-xl font-bold font-serif" style={{ color: tierNameColor }}>
+                      {tier.name}
+                    </h2>
+                    <div className="mt-2">
+                      <span className="text-3xl font-bold font-serif text-white">${tier.price}</span>
+                      <span className="ml-1" style={{ color: '#888' }}>/yr</span>
+                      <span className="block text-xs mt-0.5" style={{ color: '#555' }}>
+                        ~${tier.priceMonthly}/mo
+                      </span>
+                    </div>
+                  </div>
+
+                  <ul className="space-y-2">
+                    {tier.features.map(f => (
+                      <li key={f} className="flex items-start gap-2 text-sm font-sans" style={{ color: '#ddd' }}>
+                        <span className="font-bold mt-0.5 shrink-0" style={{ color: '#8FA889' }}>✓</span>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {isCurrent ? (
+                    <div
+                      className="w-full text-center py-2.5 rounded-lg text-sm font-semibold font-sans"
+                      style={{ background: '#1d4c36', color: '#666' }}
+                    >
+                      Current plan
+                    </div>
+                  ) : (
+                    <form action="/api/membership/checkout" method="POST">
+                      <input type="hidden" name="tier" value={tier.id} />
+                      <button
+                        type="submit"
+                        className="w-full rounded-lg py-2.5 text-sm font-semibold font-sans transition-colors"
+                        style={
+                          isRecommended
+                            ? { background: '#E0A800', color: '#1A1A1A' }
+                            : { background: '#1d4c36', color: '#aaa' }
+                        }
+                      >
+                        Upgrade to {tier.name} — ${tier.price}/yr
+                      </button>
+                    </form>
+                  )}
                 </div>
-              )}
+              )
+            })}
+          </div>
 
-              <div>
-                <h2 className="text-xl font-bold text-[#1A1A1A]">{tier.name}</h2>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold text-[#1A1A1A]">${tier.price}</span>
-                  <span className="text-[#6B7770] ml-1">/yr</span>
-                  <span className="block text-xs text-[#6B7770] mt-0.5">~${tier.priceMonthly}/mo</span>
-                </div>
-              </div>
-
-              <ul className="space-y-2">
-                {tier.features.map(f => (
-                  <li key={f} className="flex items-start gap-2 text-sm text-[#1A1A1A]">
-                    <span className="text-[#1B4332] font-bold mt-0.5 shrink-0">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              {isCurrent ? (
-                <div className="w-full text-center py-2.5 rounded-lg bg-[#FAF7F2] text-sm font-semibold text-[#6B7770]">
-                  Current plan
-                </div>
-              ) : (
-                <form action={`/api/membership/checkout`} method="POST">
-                  <input type="hidden" name="tier" value={tier.id} />
-                  <button
-                    type="submit"
-                    className="w-full rounded-lg bg-[#1B4332] py-2.5 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
-                  >
-                    Upgrade to {tier.name} — ${tier.price}/yr
-                  </button>
-                </form>
-              )}
-            </div>
-          )
-        })}
+          <Link
+            href="/app"
+            className="inline-flex text-sm font-sans"
+            style={{ color: '#555' }}
+          >
+            ← Back to dashboard
+          </Link>
+        </div>
       </div>
-
-<Link href="/app" className="inline-flex text-sm text-[#6B7770] hover:text-[#1A1A1A]">
-        ← Back to dashboard
-      </Link>
     </div>
   )
 }

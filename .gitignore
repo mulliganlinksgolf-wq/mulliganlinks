@@ -46,3 +46,9 @@ supabase/.temp
 
 # brainstorming sessions
 .superpowers/
+.env*.local
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

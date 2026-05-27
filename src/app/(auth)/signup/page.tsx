@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState('')
+  const [birthday, setBirthday] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -26,7 +27,7 @@ export default function SignupPage() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName, birthday } },
     })
     if (error) {
       setError(error.message)
@@ -65,6 +66,10 @@ export default function SignupPage() {
           <div className="space-y-1.5">
             <Label htmlFor="name">Full name</Label>
             <Input id="name" type="text" value={fullName} onChange={e => setFullName(e.target.value)} required placeholder="Jordan Smith" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="birthday">Date of birth</Label>
+            <Input id="birthday" type="date" value={birthday} onChange={e => setBirthday(e.target.value)} required max={new Date().toISOString().split('T')[0]} />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>

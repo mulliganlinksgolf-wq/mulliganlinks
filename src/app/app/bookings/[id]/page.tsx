@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { CancelBookingButton } from '@/components/CancelBookingButton'
+import { RequestButton } from '@/components/ServiceRequest/RequestButton'
 
 export default async function BookingDetailPage({
   params,
@@ -17,7 +18,7 @@ export default async function BookingDetailPage({
     .from('bookings')
     .select(`
       id, players, total_paid, status, created_at, points_awarded,
-      tee_times(scheduled_at, courses(name, city, state, slug))
+      tee_times(scheduled_at, course_id, courses(name, city, state, slug, service_requests_enabled))
     `)
     .eq('id', id)
     .eq('user_id', user!.id)
@@ -25,8 +26,9 @@ export default async function BookingDetailPage({
 
   if (!booking) notFound()
 
-  const course = (booking.tee_times as any)?.courses
-  const scheduledAt = new Date((booking.tee_times as any)?.scheduled_at)
+  const tt = booking.tee_times as any
+  const course = tt?.courses
+  const scheduledAt = new Date(tt?.scheduled_at)
   const canCancel = booking.status === 'confirmed' && scheduledAt.getTime() - Date.now() > 60 * 60 * 1000
 
   const calendarDate = scheduledAt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
@@ -94,6 +96,15 @@ export default async function BookingDetailPage({
       </div>
 
       {canCancel && <CancelBookingButton bookingId={booking.id} />}
+
+      {tt?.course_id && tt?.scheduled_at && (
+        <RequestButton
+          courseId={tt.course_id}
+          bookingId={booking.id}
+          teeTime={tt.scheduled_at}
+          serviceRequestsEnabled={course?.service_requests_enabled ?? true}
+        />
+      )}
     </div>
   )
 }

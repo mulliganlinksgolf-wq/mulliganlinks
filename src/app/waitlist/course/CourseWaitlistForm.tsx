@@ -1,40 +1,86 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useTransition, useCallback } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinCourseWaitlist } from './actions'
 
-export function CourseWaitlistForm() {
-  const router = useRouter()
+export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: string }) {
+  const { executeRecaptcha } = useGoogleReCaptcha()
+  const searchParams = useSearchParams()
+  const tier = searchParams.get('tier') ?? 'founding'
+
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
-  const [onGolfnow, setOnGolfnow] = useState<boolean | null>(null)
+  const [currentSoftware, setCurrentSoftware] = useState<string>('')
   const [avgGreenFee, setAvgGreenFee] = useState<string>('')
+  const [submitted, setSubmitted] = useState<string | null>(null)
+
+  const onGolfnow = currentSoftware === 'golfnow'
 
   const estimatedBarter =
     onGolfnow && avgGreenFee && !isNaN(parseInt(avgGreenFee, 10))
       ? 2 * parseInt(avgGreenFee, 10) * 300
       : null
 
-  function handleSubmit(formData: FormData) {
+  const handleSubmit = useCallback(async (formData: FormData) => {
     setError(null)
+
+    if (!executeRecaptcha) {
+      setError('Security check still loading — please try again in a moment.')
+      return
+    }
+
+    const token = await executeRecaptcha('course_waitlist')
+    formData.set('recaptcha_token', token)
     startTransition(async () => {
       const result = await joinCourseWaitlist(formData)
       if (result.success) {
-        router.push('/waitlist/course/confirmed')
+        const emailVal = (formData.get('email') as string)?.toLowerCase().trim() ?? ''
+        setSubmitted(emailVal)
       } else {
         setError(result.error ?? 'Something went wrong.')
       }
     })
-  }
+  }, [executeRecaptcha])
 
-  const selectClassName = "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+  const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
+
+  if (submitted) {
+    return (
+      <div className="space-y-6 text-center py-4">
+        <p className="text-4xl">✅</p>
+        <div className="space-y-2">
+          <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
+          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll follow up at <span className="font-semibold text-[#F4F1EA]">{submitted}</span> — but if you&apos;d rather talk this week, grab a time now.</p>
+        </div>
+        <a
+          href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
+        >
+          Book a 30-min Demo with Neil →
+        </a>
+        <p className="text-xs text-[#F4F1EA]/50">Or use the barter calculator to see exactly what GolfNow cost you last year.</p>
+        <a
+          href="/barter"
+          className="text-sm text-[#E0A800]/80 hover:text-[#E0A800] underline underline-offset-2 transition-colors"
+        >
+          Run the Barter Calculator →
+        </a>
+      </div>
+    )
+  }
 
   return (
     <form action={handleSubmit} className="space-y-6">
+      {/* Hidden tier field — captures which pricing tier the applicant wants */}
+      <input type="hidden" name="applied_tier" value={tier} />
+
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
           {error}
@@ -42,17 +88,17 @@ export function CourseWaitlistForm() {
       )}
 
       <div className="space-y-1.5">
-        <Label htmlFor="course_name">Course name *</Label>
-        <Input id="course_name" name="course_name" required disabled={isPending} placeholder="Oakland Hills Country Club" />
+        <Label htmlFor="course_name" className="text-[#F4F1EA]">Course name *</Label>
+        <Input id="course_name" name="course_name" required disabled={isPending} placeholder="Oakland Hills Country Club" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="contact_name">Your name *</Label>
-          <Input id="contact_name" name="contact_name" required disabled={isPending} placeholder="Alex Johnson" />
+          <Label htmlFor="contact_name" className="text-[#F4F1EA]">Your name *</Label>
+          <Input id="contact_name" name="contact_name" required disabled={isPending} placeholder="Alex Johnson" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="contact_role">Your role</Label>
+          <Label htmlFor="contact_role" className="text-[#F4F1EA]">Your role</Label>
           <select id="contact_role" name="contact_role" disabled={isPending} className={selectClassName}>
             <option value="">Select…</option>
             <option value="owner">Owner</option>
@@ -66,29 +112,29 @@ export function CourseWaitlistForm() {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email *</Label>
-          <Input id="email" name="email" type="email" required disabled={isPending} placeholder="alex@course.com" />
+          <Label htmlFor="email" className="text-[#F4F1EA]">Email *</Label>
+          <Input id="email" name="email" type="email" required disabled={isPending} placeholder="alex@course.com" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" name="phone" type="tel" disabled={isPending} placeholder="(248) 555-0100" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="city">City</Label>
-          <Input id="city" name="city" disabled={isPending} placeholder="Birmingham" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="state">State</Label>
-          <Input id="state" name="state" disabled={isPending} placeholder="MI" maxLength={2} />
+          <Label htmlFor="phone" className="text-[#F4F1EA]">Phone</Label>
+          <Input id="phone" name="phone" type="tel" disabled={isPending} placeholder="(248) 555-0100" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <Label htmlFor="num_holes">Number of holes</Label>
+          <Label htmlFor="city" className="text-[#F4F1EA]">City</Label>
+          <Input id="city" name="city" disabled={isPending} placeholder="Birmingham" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="state" className="text-[#F4F1EA]">State</Label>
+          <Input id="state" name="state" disabled={isPending} placeholder="MI" maxLength={2} className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="num_holes" className="text-[#F4F1EA]">Number of holes</Label>
           <select id="num_holes" name="num_holes" disabled={isPending} className={selectClassName}>
             <option value="">Select…</option>
             <option value="9">9</option>
@@ -98,14 +144,21 @@ export function CourseWaitlistForm() {
           </select>
         </div>
         <div className="space-y-1.5">
-          <Label htmlFor="annual_rounds">Est. annual rounds</Label>
-          <Input id="annual_rounds" name="annual_rounds" type="number" min="0" disabled={isPending} placeholder="15000" />
+          <Label htmlFor="annual_rounds" className="text-[#F4F1EA]">Est. annual rounds</Label>
+          <Input id="annual_rounds" name="annual_rounds" type="number" min="0" disabled={isPending} placeholder="15000" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
         </div>
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="current_software">Current tee sheet software</Label>
-        <select id="current_software" name="current_software" disabled={isPending} className={selectClassName}>
+        <Label htmlFor="current_software" className="text-[#F4F1EA]">Current tee sheet software</Label>
+        <select
+          id="current_software"
+          name="current_software"
+          disabled={isPending}
+          value={currentSoftware}
+          onChange={(e) => setCurrentSoftware(e.target.value)}
+          className={selectClassName}
+        >
           <option value="">Select…</option>
           <option value="golfnow">GolfNow</option>
           <option value="foreup">foreUP</option>
@@ -116,30 +169,25 @@ export function CourseWaitlistForm() {
         </select>
       </div>
 
-      <div className="space-y-3 bg-[#FAF7F2] rounded-xl p-4 ring-1 ring-black/5">
-        <Label>Are you currently on GolfNow?</Label>
-        <div className="flex gap-6">
-          {[
-            { value: 'yes', label: 'Yes' },
-            { value: 'no', label: 'No' },
-          ].map(({ value, label }) => (
-            <label key={value} className="flex items-center gap-2 cursor-pointer">
-              <input
-                type="radio"
-                name="on_golfnow"
-                value={value}
-                disabled={isPending}
-                onChange={() => setOnGolfnow(value === 'yes')}
-                className="accent-[#1B4332]"
-              />
-              <span className="text-sm">{label}</span>
-            </label>
-          ))}
-        </div>
+      {onGolfnow && (
+        <div className="space-y-4 bg-white/8 rounded-xl p-4 ring-1 ring-white/15">
+          <div className="space-y-1.5">
+            <Label htmlFor="contract_expiry_date" className="text-[#F4F1EA]">
+              Contract expiry date{' '}
+              <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
+            </Label>
+            <Input
+              id="contract_expiry_date"
+              name="contract_expiry_date"
+              type="date"
+              disabled={isPending}
+              defaultValue={prefillExpiryDate ?? ''}
+              className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
+            />
+          </div>
 
-        {onGolfnow && (
-          <div className="space-y-2 pt-2">
-            <Label htmlFor="avg_green_fee">Average green fee (rack rate, $)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="avg_green_fee" className="text-[#F4F1EA]">Average green fee (rack rate, $)</Label>
             <Input
               id="avg_green_fee"
               name="avg_green_fee"
@@ -149,6 +197,7 @@ export function CourseWaitlistForm() {
               placeholder="175"
               value={avgGreenFee}
               onChange={(e) => setAvgGreenFee(e.target.value)}
+              className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
             />
             {estimatedBarter && (
               <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 text-sm">
@@ -161,13 +210,13 @@ export function CourseWaitlistForm() {
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="space-y-1.5">
-        <Label htmlFor="biggest_frustration">
+        <Label htmlFor="biggest_frustration" className="text-[#F4F1EA]">
           What&apos;s your biggest frustration with your current setup?{' '}
-          <span className="text-[#6B7770] font-normal">(optional)</span>
+          <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
         </Label>
         <textarea
           id="biggest_frustration"
@@ -175,20 +224,20 @@ export function CourseWaitlistForm() {
           disabled={isPending}
           rows={3}
           placeholder="Barter costs, lack of customer data, booking fees eating into revenue…"
-          className="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          className="flex min-h-[80px] w-full rounded-md border border-white/20 bg-white/10 px-3 py-2 text-sm text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
         />
       </div>
 
       <Button
         type="submit"
         disabled={isPending}
-        className="w-full bg-[#1B4332] hover:bg-[#1B4332]/90 text-[#FAF7F2] font-semibold py-3"
+        className="w-full bg-[#E0A800] hover:bg-[#E0A800]/90 text-[#0a0a0a] font-bold py-3 rounded-lg"
       >
-        {isPending ? 'Submitting…' : 'Submit Founding Partner Application'}
+        {isPending ? 'Submitting…' : 'Reserve My Founding Partner Spot →'}
       </Button>
 
-      <p className="text-xs text-center text-[#6B7770]">
-        Founding Partner status is subject to review. We&apos;ll be in touch within 48 hours.
+      <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
+        After you apply: Neil or Billy will email you personally within 48 hours. Founding Partner status is reviewed manually — we&apos;re selective so every course in the network is one golfers actually want to play.
       </p>
     </form>
   )

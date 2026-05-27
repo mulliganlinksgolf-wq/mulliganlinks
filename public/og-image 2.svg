@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0F3D2E"/>
+
+  <!-- TeeAhead logo: T mark icon + eeAhead wordmark, centered -->
+  <g transform="translate(348, 215)">
+    <!-- Hollow T mark (from brand favicon geometry) -->
+    <path
+      fill-rule="evenodd"
+      fill="#F4F1EA"
+      d="M 0,4 H 108 V 30 H 76 V 116 H 32 V 30 H 0 Z
+         M 7,11 H 101 V 23 H 7 Z
+         M 39,37 H 69 V 109 H 39 Z"
+    />
+    <!-- Flagstick and pennant inside stem void -->
+    <rect x="53" y="37" width="3" height="52" fill="#F4F1EA"/>
+    <path d="M 56,37 L 67,47 L 56,57 Z" fill="#F4F1EA"/>
+    <!-- eeAhead wordmark tight to T mark -->
+    <text
+      x="118"
+      y="96"
+      font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+      font-weight="700"
+      font-size="80"
+      fill="#F4F1EA"
+      letter-spacing="-0.04em"
+    >eeAhead</text>
+  </g>
+
+  <!-- Tagline -->
+  <text
+    x="600"
+    y="430"
+    text-anchor="middle"
+    font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif"
+    font-weight="400"
+    font-size="26"
+    fill="#F4F1EA"
+    opacity="0.65"
+    letter-spacing="0.02em"
+  >Book ahead. Play more. Own your golf.</text>
+</svg>

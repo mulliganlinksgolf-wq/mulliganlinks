@@ -5,36 +5,72 @@ TeeAhead is Metro Detroit's local-first golf loyalty network and tee time bookin
 ## What TeeAhead does
 
 - Provides free tee sheet and booking software to golf courses (no barter tee times, no commissions, no data extraction)
-- Offers golfer loyalty memberships (Eagle at $79/yr, Ace at $149/yr) that beat GolfPass+ on every measurable benefit
+- Offers golfer loyalty memberships (Eagle at $89/yr, Ace at $159/yr) that beat GolfPass+ on price and benefits
 - Operates a Fairway Points loyalty currency that golfers earn on every round at partner courses
 
 ## Who it's for
 
 - Golf courses in Metro Detroit currently on GolfNow who want to stop losing $94,500+/yr in barter tee times
 - Golfers who play 10–30 rounds per year at 1–3 consistent home courses and want real local loyalty
-- Golf courses on legacy software (foreUP, Jonas) looking to modernize at zero cost
+- Golf courses on legacy software (foreUP, Jonas, Club Prophet, Lightspeed Golf) looking to modernize at zero cost
 
 ## Key facts
 
-- Eagle membership: $79/year — includes $180 in tee time credits, 2 free rounds, always-on booking fee waiver, 10% green fee discount, 12 guest passes, $25 birthday credit
-- Ace membership: $149/year — includes $300 in tee time credits, 4 free rounds, 15% green fee discount, unlimited guest passes, $50 birthday credit
-- Founding Partner program: First 10 courses get free platform for life; course #11+ pays $249/month
+- Eagle membership: $89/year — includes 250 bonus Fairway Points, 2x points multiplier, 1 annual guest pass, always-on booking fee waiver, 48-hour priority booking access
+- Ace membership: $159/year — includes 500 bonus Fairway Points, 3x points multiplier, 2 annual guest passes, always-on booking fee waiver, 72-hour priority booking access
+- Fairway membership: $0 — basic booking at partner courses, 1x points multiplier, zero booking fees
+- Founding Partner program: First 10 courses get the full platform free for year one; course #11+ pays $349/month
 - GolfNow charges courses ~$94,500/year in barter tee times; TeeAhead charges $0
-- Windsor Parke Golf Club saw 382% online revenue increase after leaving GolfNow
+- Windsor Parke Golf Club saw 382% online revenue increase (from $81,000 to $393,000) after leaving GolfNow
+- Missouri Bluffs Golf Club saw 36.3% green fee revenue increase after switching platforms
+- Brown Golf: 39.6% of all rounds over a 3-year period went to zero-revenue GolfNow barter slots
+- 100+ golf courses left GolfNow in Q1 2025 (NGCOA)
+
+## Pricing
+
+- Course software: $0 for Founding Partners (first year free); $349/month thereafter — no barter, no commissions
+- Golfer memberships: Fairway ($0), Eagle ($89/yr), Ace ($159/yr)
+- GolfPass+ comparison: $119/yr for GolfPass+; TeeAhead Eagle is $89/yr with more local benefits
 
 ## Founders
 
-- Neil Barris — co-founder, previously built Outing.golf (golf group booking platform)
-- Billy Beslock — co-founder, career at Ford Motor Company, lifelong golfer
+- Neil Barris — co-founder & CEO, 10 years enterprise software (Samsung, FinTech, Observability), previously built Outing.golf, neil@teeahead.com
+- Billy Beslock — co-founder & CTO, career engineer at Ford Motor Company, lifelong golfer, billy@teeahead.com
 
 ## Location
 
 Metro Detroit, Michigan, USA. Targeting Oakland County, Macomb County, Wayne County golf courses.
 
-## Website
+## Case Studies
 
-https://www.teeahead.com
+- [Windsor Parke Golf Club: 382% Revenue Increase After Leaving GolfNow](https://www.teeahead.com/case-studies/windsor-parke): Online revenue grew from $81,000 to $393,000 after eliminating GolfNow barter tee times.
+
+## Tee Sheet Software Comparisons
+
+- [Free Tee Time Software for Golf Courses](https://www.teeahead.com/tee-time-software): TeeAhead vs. GolfNow, foreUP, and Lightspeed Golf — pricing, features, and barter cost breakdown.
+- [Best GolfNow Alternative for Courses & Golfers](https://www.teeahead.com/golfnow-alternative): Side-by-side comparison for course operators and golfers considering leaving GolfNow.
+- [Best Tee Sheet Software for Golf Courses in 2026](https://www.teeahead.com/best-tee-sheet-software): Honest comparison of TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow.
+- [Free Golf Course Booking Software](https://www.teeahead.com/golf-course-booking-software): No commissions, no barter, Stripe-native payments.
+
+## Tools
+
+- [GolfNow Barter Cost Calculator](https://www.teeahead.com/barter): Calculate exactly how much your course loses to GolfNow barter tee times annually.
+- [GolfNow Damage Report](https://www.teeahead.com/damage): Estimate total revenue lost to GolfNow over your contract term.
+
+## Key pages
+
+- Homepage: https://www.teeahead.com
+- GolfNow alternative comparison: https://www.teeahead.com/golfnow-alternative
+- Windsor Parke case study: https://www.teeahead.com/case-studies/windsor-parke
+- Barter cost calculator: https://www.teeahead.com/barter
+- GolfNow damage report: https://www.teeahead.com/damage
+- Golfer waitlist: https://www.teeahead.com/waitlist/golfer
+- Course founding partner application: https://www.teeahead.com/waitlist/course
+- About the founders: https://www.teeahead.com/about
+- Contact: https://www.teeahead.com/contact
 
 ## Contact
 
 https://www.teeahead.com/contact
+neil@teeahead.com
+support@teeahead.com

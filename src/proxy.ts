@@ -2,7 +2,18 @@ import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 
 export async function proxy(request: NextRequest) {
-  return await updateSession(request)
+  const response = await updateSession(request)
+
+  if (request.nextUrl.pathname.startsWith('/book/')) {
+    // Allow /book/* to be embedded as iframes on course websites
+    response.headers.delete('X-Frame-Options')
+    response.headers.set('Content-Security-Policy', "frame-ancestors *")
+  } else {
+    response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+    response.headers.set('Content-Security-Policy', "frame-ancestors 'self'")
+  }
+
+  return response
 }
 
 export const config = {

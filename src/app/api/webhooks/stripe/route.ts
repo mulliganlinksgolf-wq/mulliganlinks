@@ -107,14 +107,14 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
 
   const { data: booking } = await admin
     .from('bookings')
-    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, tee_times(scheduled_at, course_id, courses(id, name))')
+    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, tee_times(scheduled_at, course_id, courses(id, name, slug))')
     .eq('id', bookingId)
     .single()
 
   if (!booking || (booking as any).payment_status === 'succeeded') return
 
   const tier = pi.metadata?.member_tier ?? 'free'
-  const MULTIPLIER: Record<string, number> = { free: 1, eagle: 2, ace: 3, fairway: 1 }
+  const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
   const multiplier = MULTIPLIER[tier] ?? 1
   const greenFeeCents = (booking.total_charged_cents ?? 0) - (booking.platform_fee_cents ?? 0)
   const pointsEarned = Math.floor((greenFeeCents / 100) * multiplier)
@@ -180,6 +180,7 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
   if (course && member) {
     sendCourseBookingAlert({
       courseId: course.id,
+      courseSlug: course.slug ?? '',
       memberName: member.full_name ?? 'Member',
       memberEmail: member.email ?? '',
       players: booking.players,

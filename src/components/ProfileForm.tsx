@@ -12,12 +12,13 @@ interface Props {
   email: string
   initialName: string
   initialPhone: string
+  isFoundingMember: boolean
   membership: { tier: string; status: string; current_period_end: string | null } | null
 }
 
 const tierLabels: Record<string, string> = { free: 'Fairway', eagle: 'Eagle', ace: 'Ace' }
 
-export function ProfileForm({ userId, email, initialName, initialPhone, membership }: Props) {
+export function ProfileForm({ userId, email, initialName, initialPhone, isFoundingMember, membership }: Props) {
   const [fullName, setFullName] = useState(initialName)
   const [phone, setPhone] = useState(initialPhone)
   const [saved, setSaved] = useState(false)
@@ -42,6 +43,12 @@ export function ProfileForm({ userId, email, initialName, initialPhone, membersh
 
   return (
     <div className="space-y-4">
+      {isFoundingMember && (
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-[#E0A800]/15 border border-[#E0A800]/40 w-fit">
+          <span className="text-[#E0A800]">★</span>
+          <span className="text-sm font-semibold text-[#1A1A1A]">Founding Member</span>
+        </div>
+      )}
       <Card className="bg-white border-0 shadow-sm">
         <CardHeader className="pb-3"><CardTitle className="text-base">Account details</CardTitle></CardHeader>
         <CardContent>

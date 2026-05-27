@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { StructuredData } from "@/components/StructuredData";
+import { LogRocketProvider } from "@/components/LogRocketProvider";
+import { createClient } from "@/lib/supabase/server";
 import "./globals.css";
 
 const inter = Inter({
@@ -13,24 +16,24 @@ const inter = Inter({
 const playfair = Playfair_Display({
   variable: "--font-display",
   subsets: ["latin"],
-  weight: ["700", "800", "900"],
+  weight: ["400", "700", "800", "900"],
   style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "TeeAhead | Free Golf Tee Time Booking & Loyalty App — Metro Detroit",
+    default: "TeeAhead | Free Golf Tee Sheet Software — Metro Detroit",
     template: "%s | TeeAhead",
   },
   description:
-    "Book tee times at Metro Detroit golf courses with zero booking fees. Earn Fairway Points and save $40/yr vs GolfPass+ with TeeAhead Eagle membership. Free for courses, always.",
+    "Free tee sheet software for golf courses — no barter, no commissions, no lock-in. Golfer loyalty that beats GolfPass+ for $89/yr. Metro Detroit.",
   metadataBase: new URL("https://www.teeahead.com"),
   openGraph: {
     type: "website",
     url: "https://www.teeahead.com",
     title: "TeeAhead | Free Golf Tee Time Booking & Loyalty — Metro Detroit",
     description:
-      "Book tee times at Metro Detroit golf courses with zero booking fees. Beat GolfPass+ with Eagle membership at $79/yr.",
+      "Book tee times at Metro Detroit golf courses with zero booking fees. Beat GolfPass+ with Eagle membership at $89/yr.",
     siteName: "TeeAhead",
     images: [
       {
@@ -43,13 +46,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@teeahead",
     title: "TeeAhead | Golf Tee Times & Loyalty — Metro Detroit",
     description:
-      "Zero booking fees. Beat GolfPass+ for $40 less. Free for partner courses.",
+      "Zero booking fees. Beat GolfPass+ for $30 less. Free for partner courses.",
     images: ["/og-image.png"],
   },
   alternates: {
-    canonical: "https://www.teeahead.com",
+    canonical: "/",
   },
   verification: {
     google: "UMxgTah2fiIao60gzONoz4OVsdiAu7LUxat6FO_5-a8",
@@ -69,11 +73,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
   return (
     <html
       lang="en"
@@ -81,8 +88,13 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <StructuredData />
+        <LogRocketProvider
+          userId={user?.id}
+          userEmail={user?.email}
+        />
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

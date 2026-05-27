@@ -2,8 +2,15 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendGolferWaitlistConfirmation } from '@/lib/resend'
+import { verifyRecaptcha } from '@/lib/recaptcha'
 
 export async function joinGolferWaitlist(formData: FormData) {
+  const recaptchaToken = (formData.get('recaptcha_token') as string) ?? ''
+  const isHuman = await verifyRecaptcha(recaptchaToken)
+  if (!isHuman) {
+    return { error: 'reCAPTCHA verification failed. Please try again.' }
+  }
+
   const email = (formData.get('email') as string)?.toLowerCase().trim()
   const firstName = (formData.get('first_name') as string)?.trim()
   const lastName = (formData.get('last_name') as string)?.trim()
@@ -12,7 +19,7 @@ export async function joinGolferWaitlist(formData: FormData) {
   const roundsPerYear = (formData.get('rounds_per_year') as string)?.trim() || null
   const currentMembership = (formData.get('current_membership') as string)?.trim() || null
   const interestedTier = (formData.get('interested_tier') as string)?.trim() || null
-  const referralSource = (formData.get('referral_source') as string)?.trim() || null
+  const hearAboutUs = (formData.get('hear_about_us') as string)?.trim() || null
 
   if (!email || !email.includes('@')) {
     return { error: 'Please enter a valid email address.' }
@@ -26,7 +33,7 @@ export async function joinGolferWaitlist(formData: FormData) {
 
   const supabase = createAdminClient()
 
-  const { data, error } = await supabase.from('golfer_waitlist').insert({
+  const { error } = await supabase.from('golfer_waitlist').insert({
     email,
     first_name: firstName,
     last_name: lastName,
@@ -35,8 +42,9 @@ export async function joinGolferWaitlist(formData: FormData) {
     rounds_per_year: roundsPerYear,
     current_membership: currentMembership,
     interested_tier: interestedTier,
-    referral_source: referralSource,
-  }).select('id').single()
+    // Store the structured hear_about_us value in referral_source for analytics
+    referral_source: hearAboutUs,
+  })
 
   if (error) {
     if (error.code === '23505') {
@@ -46,9 +54,13 @@ export async function joinGolferWaitlist(formData: FormData) {
     return { error: 'Something went wrong. Please try again.' }
   }
 
-  const position = data.id
+  const { count } = await supabase
+    .from('golfer_waitlist')
+    .select('*', { count: 'exact', head: true })
+
+  const position = count ?? 1
 
   await sendGolferWaitlistConfirmation({ email, firstName, position })
 
-  return { success: true, position }
+  return { success: true, position: position }
 }

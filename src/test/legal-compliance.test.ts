@@ -13,6 +13,7 @@ import path from 'path'
 
 const ROOT = path.resolve(__dirname, '../..')
 const PAGE = fs.readFileSync(path.join(ROOT, 'src/app/page.tsx'), 'utf-8')
+const SCORECARD = fs.readFileSync(path.join(ROOT, 'src/components/FoundersScorecard.tsx'), 'utf-8')
 const BARTER = fs.readFileSync(path.join(ROOT, 'src/components/BarterPage.tsx'), 'utf-8')
 
 describe('Homepage (page.tsx) — legal compliance', () => {
@@ -29,7 +30,8 @@ describe('Homepage (page.tsx) — legal compliance', () => {
   })
 
   it('attributes pull-quote to Neil Barris by name', () => {
-    expect(PAGE).toContain('Neil Barris, Co-Founder, TeeAhead')
+    // Founder attribution moved to FoundersScorecard component (April 2026 redesign)
+    expect(SCORECARD).toContain('Neil Barris')
   })
 
   it('comparison table removed — source notes moved to stat section', () => {
@@ -111,5 +113,21 @@ describe('Barter page (BarterPage.tsx) — legal compliance', () => {
   it('operating days slider minimum is 100, not 150', () => {
     expect(BARTER).toContain('min={100}')
     expect(BARTER).not.toContain('min={150}')
+  })
+})
+
+describe('Referral program — legal compliance', () => {
+  const REFERRAL_FORM = fs.readFileSync(
+    path.join(ROOT, 'src/app/waitlist/golfer/GolferWaitlistForm.tsx'),
+    'utf-8'
+  )
+
+  it('referral disclosure exists in the signup form when a course is selected', () => {
+    // Disclosure required: golfer must be told their home course earns a commission
+    expect(REFERRAL_FORM).toContain('Your home course earns 10%')
+  })
+
+  it('disclosure includes "first year of membership" scoping', () => {
+    expect(REFERRAL_FORM).toContain('first year of membership')
   })
 })

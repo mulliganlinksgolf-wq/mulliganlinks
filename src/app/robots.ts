@@ -6,8 +6,17 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/app/', '/admin/', '/course/', '/api/'],
+        disallow: ['/app/', '/admin/', '/course/', '/api/', '/_next/', '/join', '/onboarding/', '/auth/', '/checkin/', '/book/'],
       },
+      // Explicit allow for AI crawlers — no ambiguity
+      { userAgent: 'GPTBot', allow: '/' },
+      { userAgent: 'OAI-SearchBot', allow: '/' },
+      { userAgent: 'ChatGPT-User', allow: '/' },
+      { userAgent: 'ClaudeBot', allow: '/' },
+      { userAgent: 'PerplexityBot', allow: '/' },
+      { userAgent: 'Applebot-Extended', allow: '/' },
+      { userAgent: 'Google-Extended', allow: '/' },
+      { userAgent: 'Amazonbot', allow: '/' },
     ],
     sitemap: 'https://www.teeahead.com/sitemap.xml',
   }

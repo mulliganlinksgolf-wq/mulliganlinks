@@ -1,13 +1,29 @@
 'use client'
 
 import { useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { ShoppingCart } from 'lucide-react'
 import { updateTeeTimeStatus, updateBookingStatus } from '@/app/actions/teeTime'
+import { WalkInBookingModal } from './WalkInBookingModal'
+import { EditBookingModal } from './EditBookingModal'
+import { WaiveFeeModal } from './WaiveFeeModal'
+import { IssueRainCheckModal } from './IssueRainCheckModal'
+import { SendConfirmationPopover } from './SendConfirmationPopover'
+import { SetDealForm } from './SetDealForm'
 
 interface Booking {
   id: string
   players: number
   total_paid: number
   status: string
+  payment_status?: string | null
+  points_awarded?: number
+  user_id?: string | null
+  guest_name: string | null
+  guest_phone?: string | null
+  guest_email?: string | null
+  payment_method?: string | null
+  cart_selected?: boolean
   profiles: { full_name: string } | null
 }
 
@@ -18,20 +34,40 @@ interface TeeTime {
   available_players: number
   base_price: number
   status: string
+  special_price: number | null
+  special_label: string | null
   bookings: Booking[]
 }
 
-export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: string }) {
+interface EditTarget {
+  booking: Booking
+  teeTime: TeeTime
+}
+
+export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTimes: TeeTime[]; slug: string; courseId: string; courseName: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
+  const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
+  const [editTarget, setEditTarget] = useState<EditTarget | null>(null)
+  const [waiveTarget, setWaiveTarget] = useState<Booking | null>(null)
+  const [rainCheckTarget, setRainCheckTarget] = useState<Booking | null>(null)
+  const [dealTarget, setDealTarget] = useState<string | null>(null)
   const [, startTransition] = useTransition()
+  const router = useRouter()
 
   const formatTime = (iso: string) =>
-    new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'America/Detroit' })
+    new Date(iso).toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: 'America/Detroit',
+    })
 
   const statusColors: Record<string, string> = {
     open: 'bg-green-50 border-green-200',
+    full: 'bg-blue-50 border-blue-200',
     booked: 'bg-blue-50 border-blue-200',
     blocked: 'bg-red-50 border-red-200',
+    completed: 'bg-gray-50 border-gray-200',
   }
 
   function handleBlock(id: string) {
@@ -44,110 +80,276 @@ export function TeeSheetGrid({ teeTimes, slug }: { teeTimes: TeeTime[]; slug: st
     startTransition(() => updateBookingStatus(id, status))
   }
 
+  function getDisplayName(b: Booking) {
+    return b.profiles?.full_name ?? b.guest_name ?? 'Guest'
+  }
+
   return (
-    <div className="space-y-1">
-      {/* Column headers */}
-      <div className="grid grid-cols-12 gap-2 px-3 py-1 text-xs font-medium text-[#6B7770] uppercase tracking-wide">
-        <div className="col-span-2">Time</div>
-        <div className="col-span-2">Status</div>
-        <div className="col-span-2">Players</div>
-        <div className="col-span-2">Price</div>
-        <div className="col-span-4">Booking</div>
-      </div>
+    <>
+      <div className="space-y-1">
+        {/* Column headers */}
+        <div className="grid grid-cols-12 gap-2 px-3 py-1 text-xs font-medium text-[#6B7770] uppercase tracking-wide">
+          <div className="col-span-2">Time</div>
+          <div className="col-span-2">Status</div>
+          <div className="col-span-2">Players</div>
+          <div className="col-span-2">Price</div>
+          <div className="col-span-4">Booking</div>
+        </div>
 
-      {teeTimes.map(tt => {
-        const isExpanded = expanded === tt.id
-        const booking = tt.bookings?.[0]
+        {teeTimes.map(tt => {
+          const isExpanded = expanded === tt.id
+          const booking = tt.bookings?.[0]
+          const bookedPlayers = tt.bookings.reduce((sum, b) => sum + b.players, 0)
+          const allCompleted =
+            tt.bookings.length > 0 && tt.bookings.every(b => b.status === 'completed')
+          const displayStatus =
+            tt.status === 'blocked'
+              ? 'blocked'
+              : allCompleted
+              ? 'completed'
+              : bookedPlayers >= tt.max_players
+              ? 'full'
+              : tt.status
 
-        return (
-          <div key={tt.id} className="rounded border bg-white overflow-hidden">
-            <button
-              onClick={() => setExpanded(isExpanded ? null : tt.id)}
-              className={`w-full grid grid-cols-12 gap-2 px-3 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors border ${statusColors[tt.status] ?? 'bg-white border-gray-200'}`}
-            >
-              <div className="col-span-2 font-medium text-[#1A1A1A]">{formatTime(tt.scheduled_at)}</div>
-              <div className="col-span-2">
-                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                  tt.status === 'open' ? 'bg-green-100 text-green-700' :
-                  tt.status === 'booked' ? 'bg-blue-100 text-blue-700' :
-                  tt.status === 'blocked' ? 'bg-red-100 text-red-700' :
-                  'bg-gray-200 text-gray-600'
-                }`}>
-                  {tt.status}
-                </span>
-              </div>
-              <div className="col-span-2 text-[#6B7770]">
-                {tt.max_players - tt.available_players}/{tt.max_players}
-              </div>
-              <div className="col-span-2 text-[#6B7770]">${tt.base_price.toFixed(2)}</div>
-              <div className="col-span-4 text-[#6B7770] truncate">
-                {booking ? booking.profiles?.full_name ?? 'Guest' : '—'}
-              </div>
-            </button>
-
-            {isExpanded && (
-              <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 text-sm space-y-2">
-                {tt.bookings.length === 0 ? (
-                  <p className="text-[#6B7770]">No bookings for this tee time.</p>
-                ) : (
-                  tt.bookings.map(b => (
-                    <div key={b.id} className="flex items-center justify-between">
-                      <div>
-                        <span className="font-medium text-[#1A1A1A]">{b.profiles?.full_name ?? 'Guest'}</span>
-                        <span className="text-[#6B7770] ml-2">{b.players} player{b.players !== 1 ? 's' : ''}</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-[#1A1A1A]">${b.total_paid.toFixed(2)}</span>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${
-                          b.status === 'confirmed' ? 'bg-green-100 text-green-700' :
-                          b.status === 'completed' ? 'bg-[#8FA889]/30 text-[#1B4332]' :
-                          'bg-red-100 text-red-700'
-                        }`}>{b.status}</span>
-                      </div>
-                    </div>
-                  ))
-                )}
-
-                {/* Tee time actions */}
-                <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200">
-                  {tt.status === 'open' && (
-                    <button
-                      onClick={() => handleBlock(tt.id)}
-                      className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
-                    >
-                      Block slot
-                    </button>
+          return (
+            <div key={tt.id} className="rounded border bg-white overflow-hidden">
+              <button
+                onClick={() => setExpanded(isExpanded ? null : tt.id)}
+                className={`w-full grid grid-cols-12 gap-2 px-3 py-2.5 text-left text-sm hover:bg-gray-50 transition-colors border ${statusColors[displayStatus] ?? 'bg-white border-gray-200'}`}
+              >
+                <div className="col-span-2 font-medium text-[#1A1A1A]">
+                  {formatTime(tt.scheduled_at)}
+                </div>
+                <div className="col-span-2">
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                      displayStatus === 'open'
+                        ? 'bg-green-100 text-green-700'
+                        : displayStatus === 'full'
+                        ? 'bg-blue-100 text-blue-700'
+                        : displayStatus === 'completed'
+                        ? 'bg-gray-200 text-gray-600'
+                        : displayStatus === 'blocked'
+                        ? 'bg-red-100 text-red-700'
+                        : 'bg-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {displayStatus}
+                  </span>
+                </div>
+                <div className="col-span-2 text-[#6B7770]">
+                  {bookedPlayers}/{tt.max_players}
+                </div>
+                <div className="col-span-2 text-[#6B7770] flex items-center gap-1.5">
+                  {tt.special_price != null ? (
+                    <>
+                      <span className="text-gray-400 line-through">${tt.base_price.toFixed(2)}</span>
+                      <span className="font-semibold text-[#1A1A1A]">${Number(tt.special_price).toFixed(2)}</span>
+                      <span className="text-xs bg-amber-400 text-white font-bold px-1.5 py-0.5 rounded-full leading-none">
+                        DEAL
+                      </span>
+                    </>
+                  ) : (
+                    <>${tt.base_price.toFixed(2)}</>
                   )}
-                  {tt.status === 'blocked' && (
-                    <button
-                      onClick={() => handleUnblock(tt.id)}
-                      className="text-xs px-3 py-1 border border-[#1B4332] rounded hover:bg-[#1B4332]/5 text-[#1B4332]"
-                    >
-                      Unblock slot
-                    </button>
+                </div>
+                <div className="col-span-4 text-[#6B7770] truncate">
+                  {booking ? getDisplayName(booking) : '—'}
+                </div>
+              </button>
+
+              {isExpanded && (
+                <div className="px-4 py-3 bg-gray-50 border-t border-gray-200 text-sm space-y-2">
+                  {tt.bookings.length === 0 ? (
+                    <p className="text-[#6B7770]">No bookings for this tee time.</p>
+                  ) : (
+                    tt.bookings.map(b => (
+                      <div key={b.id} className="flex items-center justify-between">
+                        <div>
+                          <span className="font-medium text-[#1A1A1A]">{getDisplayName(b)}</span>
+                          {b.cart_selected && <ShoppingCart className="h-3 w-3 inline ml-1 text-emerald-600" />}
+                          <span className="text-[#6B7770] ml-2">
+                            {b.players} player{b.players !== 1 ? 's' : ''}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[#1A1A1A]">${b.total_paid.toFixed(2)}</span>
+                          <span
+                            className={`text-xs px-2 py-0.5 rounded-full ${
+                              b.status === 'confirmed'
+                                ? 'bg-green-100 text-green-700'
+                                : b.status === 'completed'
+                                ? 'bg-[#8FA889]/30 text-[#1B4332]'
+                                : 'bg-red-100 text-red-700'
+                            }`}
+                          >
+                            {b.status}
+                          </span>
+                          {b.status === 'confirmed' && (
+                            <button
+                              onClick={() => setEditTarget({ booking: b, teeTime: tt })}
+                              className="text-xs px-2 py-0.5 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
+                            >
+                              Edit
+                            </button>
+                          )}
+                          {b.status === 'confirmed' && b.user_id === null && (
+                            <SendConfirmationPopover
+                              bookingId={b.id}
+                              guestName={getDisplayName(b)}
+                              initialEmail={b.guest_email ?? undefined}
+                            />
+                          )}
+                          {(b.status === 'completed' || b.status === 'no_show') &&
+                            b.payment_status !== 'waived' &&
+                            b.payment_status !== 'refunded' && (
+                              <button
+                                onClick={() => setWaiveTarget(b)}
+                                className="text-xs px-2 py-0.5 border border-orange-300 rounded hover:bg-orange-50 text-orange-700"
+                              >
+                                Waive fee
+                              </button>
+                            )}
+                          {(b.status === 'completed' || b.status === 'no_show') && b.user_id && (
+                            <button
+                              onClick={() => setRainCheckTarget(b)}
+                              className="text-xs px-2 py-0.5 border border-blue-300 rounded hover:bg-blue-50 text-blue-700"
+                            >
+                              Rain check
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))
                   )}
-                  {tt.bookings.map(b => b.status === 'confirmed' && (
-                    <div key={b.id} className="flex gap-2">
+
+                  {/* Slot-level actions */}
+                  <div className="flex gap-2 mt-2 pt-2 border-t border-gray-200 flex-wrap">
+                    {bookedPlayers < tt.max_players && displayStatus !== 'completed' && (
                       <button
-                        onClick={() => handleBookingStatus(b.id, 'completed')}
+                        onClick={() => setBookingTeeTime(tt)}
                         className="text-xs px-3 py-1 bg-[#1B4332] text-[#FAF7F2] rounded hover:bg-[#1B4332]/90"
                       >
-                        Mark complete
+                        Book walk-in
                       </button>
+                    )}
+                    {tt.status === 'open' && (
                       <button
-                        onClick={() => handleBookingStatus(b.id, 'no_show')}
-                        className="text-xs px-3 py-1 border border-yellow-400 text-yellow-700 rounded hover:bg-yellow-50"
+                        onClick={() => handleBlock(tt.id)}
+                        className="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-100 text-[#6B7770]"
                       >
-                        No show
+                        Close slot
                       </button>
-                    </div>
-                  ))}
+                    )}
+                    {tt.status === 'blocked' && (
+                      <button
+                        onClick={() => handleUnblock(tt.id)}
+                        className="text-xs px-3 py-1 border border-[#1B4332] rounded hover:bg-[#1B4332]/5 text-[#1B4332]"
+                      >
+                        Open slot
+                      </button>
+                    )}
+                    {tt.bookings.map(
+                      b =>
+                        b.status === 'confirmed' && (
+                          <div key={b.id} className="flex gap-2">
+                            <button
+                              onClick={() => handleBookingStatus(b.id, 'completed')}
+                              className="text-xs px-3 py-1 bg-[#1B4332] text-[#FAF7F2] rounded hover:bg-[#1B4332]/90"
+                            >
+                              Mark complete
+                            </button>
+                            <button
+                              onClick={() => handleBookingStatus(b.id, 'no_show')}
+                              className="text-xs px-3 py-1 border border-yellow-400 text-yellow-700 rounded hover:bg-yellow-50"
+                            >
+                              No show
+                            </button>
+                          </div>
+                        )
+                    )}
+                    {displayStatus !== 'completed' && (
+                      <button
+                        onClick={() => setDealTarget(dealTarget === tt.id ? null : tt.id)}
+                        className="text-xs px-3 py-1 border border-amber-400 text-amber-700 rounded hover:bg-amber-50"
+                      >
+                        {tt.special_price != null ? 'Edit deal' : 'Set deal'}
+                      </button>
+                    )}
+                  </div>
+                  {dealTarget === tt.id && (
+                    <SetDealForm
+                      teeTimeId={tt.id}
+                      basePrice={tt.base_price}
+                      initialSpecialPrice={tt.special_price}
+                      initialSpecialLabel={tt.special_label}
+                      onSuccess={() => {
+                        setDealTarget(null)
+                        router.refresh()
+                      }}
+                      onClose={() => setDealTarget(null)}
+                    />
+                  )}
                 </div>
-              </div>
-            )}
-          </div>
-        )
-      })}
-    </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {bookingTeeTime && (
+        <WalkInBookingModal
+          teeTimeId={bookingTeeTime.id}
+          availablePlayers={bookingTeeTime.available_players}
+          basePrice={bookingTeeTime.base_price}
+          scheduledAt={bookingTeeTime.scheduled_at}
+          courseName={courseName}
+          onClose={() => setBookingTeeTime(null)}
+          onSuccess={() => {
+            setBookingTeeTime(null)
+            setExpanded(null)
+            router.refresh()
+          }}
+        />
+      )}
+
+      {editTarget && (
+        <EditBookingModal
+          booking={editTarget.booking}
+          isWalkIn={editTarget.booking.profiles === null}
+          maxSelectablePlayers={editTarget.teeTime.available_players + editTarget.booking.players}
+          basePrice={editTarget.teeTime.base_price}
+          scheduledAt={editTarget.teeTime.scheduled_at}
+          onClose={() => setEditTarget(null)}
+          onSuccess={() => {
+            setEditTarget(null)
+            router.refresh()
+          }}
+        />
+      )}
+
+      {waiveTarget && (
+        <WaiveFeeModal
+          bookingId={waiveTarget.id}
+          guestName={getDisplayName(waiveTarget)}
+          totalPaid={waiveTarget.total_paid}
+          onClose={() => setWaiveTarget(null)}
+          onSuccess={() => {
+            setWaiveTarget(null)
+            router.refresh()
+          }}
+        />
+      )}
+
+      {rainCheckTarget && rainCheckTarget.user_id && (
+        <IssueRainCheckModal
+          memberId={rainCheckTarget.user_id}
+          memberName={getDisplayName(rainCheckTarget)}
+          courseId={courseId}
+          suggestedAmountCents={Math.round(rainCheckTarget.total_paid * 100)}
+          onClose={() => setRainCheckTarget(null)}
+        />
+      )}
+    </>
   )
 }

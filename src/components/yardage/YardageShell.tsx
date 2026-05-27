@@ -1,0 +1,247 @@
+'use client'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { Menu, X } from 'lucide-react'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+
+const HOLES = [
+  { n: '01', par: 5, yds: 547, name: 'The Damage',     anchor: '#hole-01' },
+  { n: '02', par: 4, yds: 412, name: 'The Barter',     anchor: '#hole-02' },
+  { n: '03', par: 4, yds: 389, name: 'The Product',    anchor: '#hole-03' },
+  { n: '04', par: 3, yds: 178, name: 'The Membership', anchor: '#hole-04' },
+  { n: '05', par: 5, yds: 521, name: 'Live in 48hrs',  anchor: '#hole-05' },
+  { n: '06', par: 4, yds: 401, name: 'The Pricing',    anchor: '#hole-06' },
+  { n: '07', par: 4, yds: 423, name: 'The Proof',      anchor: '#hole-07' },
+  { n: '08', par: 3, yds: 165, name: 'The Q&A',        anchor: '#hole-08' },
+  { n: '09', par: 5, yds: 558, name: 'Sink the Putt',  anchor: '#hole-09' },
+]
+
+export function YardageShell({
+  initialHole = '01',
+  children,
+}: {
+  initialHole?: string
+  children: React.ReactNode
+}) {
+  const [currentHole, setCurrentHole] = useState(initialHole)
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
+
+  useEffect(() => {
+    const sections = document.querySelectorAll<HTMLElement>('section[id^="hole-"]')
+    if (sections.length === 0) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const n = entry.target.id.replace('hole-', '')
+            setCurrentHole(n)
+          }
+        }
+      },
+      { rootMargin: '-90px 0px -70% 0px', threshold: 0 }
+    )
+    sections.forEach((s) => observer.observe(s))
+    return () => observer.disconnect()
+  }, [])
+
+  return (
+    <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
+      <header className="sticky top-0 z-40 h-[60px] bg-[#082419] text-[#F4F1EA] border-b border-[#E0A800]/25 grid grid-cols-[auto_1fr_auto] items-center gap-8 px-6 sm:px-8 lg:px-10">
+
+        {/* Left — logo */}
+        <Link href="/" className="flex items-center">
+          <TeeAheadLogo className="h-8 w-auto brightness-0 invert" />
+        </Link>
+
+        {/* Center — nav, evenly spaced */}
+        <nav className="hidden md:flex items-center justify-center gap-8">
+          <Link href="/features" className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Features</Link>
+          <Link href="/pricing"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Pricing</Link>
+          <Link href="/about"    className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">About</Link>
+          <Link href="/contact"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Contact</Link>
+        </nav>
+
+        {/* Right — CTA (desktop) + hamburger (mobile) */}
+        <div className="flex items-center gap-3 justify-end">
+          <Link
+            href="/waitlist/course"
+            className="rounded-md bg-[#E0A800] px-4 py-2 text-[13px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors whitespace-nowrap"
+          >
+            Claim a spot →
+          </Link>
+          <button
+            type="button"
+            onClick={() => setMobileNavOpen(true)}
+            aria-label="Open menu"
+            className="md:hidden inline-flex items-center justify-center rounded-md p-1.5 text-[#F4F1EA] hover:bg-white/10"
+          >
+            <Menu size={22} />
+          </button>
+        </div>
+      </header>
+
+      {/* Mobile nav drawer */}
+      {mobileNavOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setMobileNavOpen(false)}
+            aria-hidden
+          />
+          <div className="absolute top-0 right-0 h-full w-[80%] max-w-[320px] bg-[#082419] text-[#F4F1EA] flex flex-col p-6 shadow-2xl">
+            <div className="flex items-center justify-between mb-8">
+              <TeeAheadLogo className="h-7 w-auto brightness-0 invert" />
+              <button
+                type="button"
+                onClick={() => setMobileNavOpen(false)}
+                aria-label="Close menu"
+                className="inline-flex items-center justify-center rounded-md p-1.5 text-[#F4F1EA] hover:bg-white/10"
+              >
+                <X size={22} />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-1 text-[#F4F1EA]">
+              <Link href="/features" onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] font-medium border-b border-white/10 hover:text-[#E0A800] transition-colors">Features</Link>
+              <Link href="/pricing"  onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] font-medium border-b border-white/10 hover:text-[#E0A800] transition-colors">Pricing</Link>
+              <Link href="/about"    onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] text-[#F4F1EA]/75 border-b border-white/10 hover:text-[#F4F1EA] transition-colors">About</Link>
+              <Link href="/contact"  onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] text-[#F4F1EA]/75 border-b border-white/10 hover:text-[#F4F1EA] transition-colors">Contact</Link>
+            </nav>
+            <Link
+              href="/waitlist/course"
+              onClick={() => setMobileNavOpen(false)}
+              className="mt-6 inline-flex items-center justify-center rounded-md bg-[#E0A800] px-4 py-3 text-[14px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
+            >
+              Claim a spot →
+            </Link>
+          </div>
+        </div>
+      )}
+
+      <div className="flex-1 grid lg:grid-cols-[220px_1fr]">
+        <aside className="hidden lg:flex flex-col bg-[#082419] text-[#F4F1EA] sticky top-[60px] self-start h-[calc(100vh-60px)] overflow-y-auto">
+          <div className="grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-2.5 font-mono text-[8.5px] tracking-[0.18em] uppercase font-bold text-[#F4F1EA]/50 border-b border-[#F4F1EA]/10">
+            <span>H</span>
+            <span>Hole</span>
+            <span className="text-center">Par</span>
+            <span className="text-right">Yds</span>
+          </div>
+
+          {HOLES.map((h) => {
+            const on = h.n === currentHole
+            return (
+              <Link
+                key={h.n}
+                href={h.anchor}
+                className={`grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-3 border-b border-[#F4F1EA]/8 items-center flex-1 min-h-[44px] ${
+                  on
+                    ? 'bg-black/30 border-l-[3px] border-l-[#E0A800] pl-[13px]'
+                    : 'border-l-[3px] border-l-transparent hover:bg-black/15'
+                }`}
+              >
+                <span
+                  className="font-display leading-none"
+                  style={{
+                    fontSize: 18,
+                    fontWeight: 400,
+                    color: on ? '#E0A800' : 'rgba(244,241,234,0.75)',
+                    fontStyle: on ? 'italic' : 'normal',
+                  }}
+                >
+                  {h.n.replace(/^0/, '')}
+                </span>
+                <span
+                  className={`text-[12px] leading-tight ${
+                    on ? 'font-bold text-[#F4F1EA]' : 'font-normal text-[#F4F1EA]/85'
+                  }`}
+                >
+                  {h.name}
+                </span>
+                <span className="font-mono text-[10px] text-center text-[#F4F1EA]/55">{h.par}</span>
+                <span className="font-mono text-[10px] text-right text-[#F4F1EA]/55">{h.yds}</span>
+              </Link>
+            )
+          })}
+
+          <div className="mt-auto px-4 py-3.5 bg-black/30 border-t border-[#E0A800]/30">
+            <div className="flex justify-between items-baseline">
+              <span className="font-mono text-[9px] tracking-[0.2em] uppercase text-[#E0A800] font-bold">Total</span>
+              <span
+                className="font-display text-[26px] text-[#E0A800] leading-none tracking-[-0.02em]"
+                style={{ fontWeight: 400 }}
+              >
+                3,594
+              </span>
+            </div>
+            <div className="mt-1 font-mono text-[8.5px] tracking-[0.16em] uppercase text-[#F4F1EA]/50 font-semibold">
+              9 holes · par 37
+            </div>
+          </div>
+        </aside>
+
+        <main className="min-w-0">{children}</main>
+      </div>
+
+      <div className="bg-[#FAF7F2] border-t border-[#0F3D2E]/10 px-6 sm:px-10 lg:px-14 py-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[9.5px] tracking-[0.18em] uppercase text-[#6B7770] font-semibold">
+        <span>Pressed in Detroit, 2026</span>
+        <span>Founders Edition</span>
+      </div>
+    </div>
+  )
+}
+
+export function HoleHeader({
+  num,
+  par,
+  yds,
+  name,
+  dark,
+}: {
+  num: string
+  par: number
+  yds: number
+  name: string
+  dark?: boolean
+}) {
+  return (
+    <div className="flex items-baseline gap-3.5 mb-4">
+      <span
+        className="font-display leading-[0.9] tracking-[-0.02em] text-[#E0A800]"
+        style={{ fontSize: 36, fontWeight: 400 }}
+      >
+        {num}
+      </span>
+      <span
+        className={`font-mono text-[10.5px] tracking-[0.18em] uppercase font-semibold ${
+          dark ? 'text-[#F4F1EA]/65' : 'text-[#6B7770]'
+        }`}
+      >
+        Par {par} · {yds} yds · {name}
+      </span>
+      <span className={`flex-1 h-px ${dark ? 'bg-[#F4F1EA]/15' : 'bg-[#0F3D2E]/10'}`} />
+    </div>
+  )
+}
+
+export function HoleFooter({
+  note,
+  nextHole,
+  dark,
+}: {
+  note: string
+  nextHole?: string
+  dark?: boolean
+}) {
+  return (
+    <div
+      className={`mt-8 pt-3.5 border-t border-dashed font-mono text-[9.5px] tracking-[0.16em] uppercase font-semibold flex flex-wrap justify-between gap-2 ${
+        dark
+          ? 'border-[#F4F1EA]/20 text-[#F4F1EA]/55'
+          : 'border-[#0F3D2E]/25 text-[#6B7770]'
+      }`}
+    >
+      <span>{note}</span>
+      {nextHole && <span>{nextHole} ↓</span>}
+    </div>
+  )
+}

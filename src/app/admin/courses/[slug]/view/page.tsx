@@ -3,6 +3,13 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { TeeSheetGrid } from '@/components/course/TeeSheetGrid'
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const admin = createAdminClient()
+  const { data } = await admin.from('courses').select('name').eq('slug', slug).single()
+  return { title: data?.name ? `${data.name} | Course View` : 'Course View' }
+}
+
 export default async function ViewAsCoursePage({
   params,
   searchParams,
@@ -16,7 +23,7 @@ export default async function ViewAsCoursePage({
 
   const { data: course } = await admin
     .from('courses')
-    .select('id, name, slug, city, state, status')
+    .select('id, name, slug, city, state, status, onboarding_step, onboarding_complete')
     .eq('slug', slug)
     .single()
 
@@ -100,7 +107,7 @@ export default async function ViewAsCoursePage({
             <p className="text-[#6B7770]">No tee times for this date.</p>
           </div>
         ) : (
-          <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} />
+          <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} courseName={course.name} />
         )}
       </div>
 
@@ -110,7 +117,21 @@ export default async function ViewAsCoursePage({
         <p className="text-amber-700">Course ID: <code className="font-mono text-xs bg-amber-100 px-1 py-0.5 rounded">{course.id}</code></p>
         <p className="text-amber-700">Slug: <code className="font-mono text-xs bg-amber-100 px-1 py-0.5 rounded">{course.slug}</code></p>
         <p className="text-amber-700">Status: {course.status}</p>
+        <p className="text-amber-700">
+          Onboarding:{' '}
+          {course.onboarding_complete
+            ? <span className="text-green-700 font-medium">Complete ✓</span>
+            : <span>Step {course.onboarding_step ?? 1} of 5</span>
+          }
+        </p>
         <div className="flex gap-3 pt-1">
+          <Link
+            href={`/onboarding/${course.id}/step-${Math.min((course.onboarding_step ?? 1), 5)}`}
+            target="_blank"
+            className="text-xs text-[#639922] underline font-medium"
+          >
+            Open onboarding wizard ↗
+          </Link>
           <Link href={`/course/${slug}`} target="_blank" className="text-xs text-[#1B4332] underline">Open real course portal ↗</Link>
           <Link href={`/course/${slug}/bookings`} target="_blank" className="text-xs text-[#1B4332] underline">View bookings ↗</Link>
           <Link href={`/course/${slug}/check-in`} target="_blank" className="text-xs text-[#1B4332] underline">Check-in ↗</Link>

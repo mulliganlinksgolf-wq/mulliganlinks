@@ -3,13 +3,21 @@ import { notFound, redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
 import { BookingPaymentForm } from '@/components/BookingPaymentForm'
 import { createAdminClient } from '@/lib/supabase/admin'
+import { getAndIssueMemberCredits } from '@/app/actions/booking'
+import { getAvailablePasses } from '@/app/actions/guestPasses'
+import { COMP_DEFAULT } from '@/lib/redemption'
+import { getTeeSheetConfig, getCoursePricing } from '@/lib/db/onboarding'
 
 export default async function BookPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ teeTimeId: string }>
+  searchParams: Promise<{ join?: string }>
 }) {
   const { teeTimeId } = await params
+  const { join } = await searchParams
+  const isJoinMode = join === '1'
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -26,7 +34,7 @@ export default async function BookPage({
 
   const { data: membership } = await supabase
     .from('memberships')
-    .select('tier')
+    .select('tier, comp_rounds_remaining, comp_rounds_reset_at')
     .eq('user_id', user.id)
     .eq('status', 'active')
     .maybeSingle()
@@ -36,38 +44,83 @@ export default async function BookPage({
   const course = teeTime.courses as any
   const stripeEnabled = course?.stripe_charges_enabled === true
 
-  const { data: pointsRows } = await supabase
-    .from('fairway_points')
-    .select('amount')
-    .eq('user_id', user.id)
+  // Display-correct comp rounds (if anniversary has passed, show the reset value without writing)
+  const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
+  const compRoundsRemaining = resetAt && resetAt < new Date()
+    ? (COMP_DEFAULT[tier] ?? 0)
+    : (membership?.comp_rounds_remaining ?? 0)
+
+  const courseId = (teeTime.courses as any)?.id
+
+  const [{ data: pointsRows }, creditBalanceCents, availablePasses, { data: redemptionSettings }, teeSheetConfig, coursePricing] = await Promise.all([
+    supabase.from('fairway_points').select('amount').eq('user_id', user.id),
+    getAndIssueMemberCredits(user.id, tier),
+    getAvailablePasses(user.id),
+    supabase
+      .from('course_redemption_settings')
+      .select('points_threshold')
+      .eq('course_id', courseId)
+      .single(),
+    getTeeSheetConfig(courseId),
+    getCoursePricing(courseId),
+  ])
+
+  // Resolve cart fee from pricing tiers
+  const rateName = (teeTime as any).rate_name as string | undefined
+  const matchedTier = rateName
+    ? (coursePricing.find(p => p.rate_name === rateName) ?? coursePricing[0])
+    : coursePricing[0] // already ordered by display_order ascending
+  const resolvedCartFeeCents = matchedTier?.cart_fee_cents ?? 0
+
+  const pointsThreshold = (redemptionSettings as { points_threshold: number } | null)?.points_threshold ?? 5000
 
   const pointsBalance = pointsRows?.reduce((s, r) => s + r.amount, 0) ?? 0
 
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">
+        <h1 className="text-2xl font-bold text-white">
           {stripeEnabled ? 'Complete Booking' : 'Confirm Booking'}
         </h1>
-        <p className="text-[#6B7770] mt-1">
+        <p className="text-[#8FA889] mt-1">
           {course?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
             weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
           })}
         </p>
       </div>
 
+      {isJoinMode && (
+        <div className="rounded-md bg-blue-50 border border-blue-200 p-3 text-sm">
+          <p className="font-medium text-blue-900">You&apos;re joining an existing group.</p>
+          <p className="mt-1 text-blue-800">
+            We&apos;ll email everyone the day before with first names so you know who you&apos;re playing with.
+            Names only — no contact info is shared.
+          </p>
+        </div>
+      )}
+
       {stripeEnabled ? (
         <BookingPaymentForm
           teeTime={teeTime as any}
           tier={tier}
           userId={user.id}
+          availablePasses={availablePasses}
+          joinExistingGroup={isJoinMode}
         />
       ) : (
         <BookingForm
           teeTime={teeTime as any}
           tier={tier}
           pointsBalance={pointsBalance}
+          creditBalanceCents={creditBalanceCents}
           userId={user.id}
+          availablePasses={availablePasses}
+          compRoundsRemaining={compRoundsRemaining}
+          compRoundsResetAt={membership?.comp_rounds_reset_at}
+          pointsThreshold={pointsThreshold}
+          cartPolicy={teeSheetConfig?.cart_policy ?? 'optional'}
+          cartFeeCents={resolvedCartFeeCents}
+          joinExistingGroup={isJoinMode}
         />
       )}
     </div>

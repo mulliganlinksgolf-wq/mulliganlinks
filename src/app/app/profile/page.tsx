@@ -9,7 +9,7 @@ export default async function ProfilePage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('full_name, phone')
+    .select('full_name, phone, founding_member')
     .eq('id', user.id)
     .single()
 
@@ -20,16 +20,33 @@ export default async function ProfilePage() {
     .eq('status', 'active')
     .single()
 
+  const tierLabel = membership?.tier === 'ace' ? 'Ace' : membership?.tier === 'eagle' ? 'Eagle' : 'Fairway'
+  const tierColor = membership?.tier === 'ace' ? '#8FA889' : membership?.tier === 'eagle' ? '#E0A800' : '#8FA889'
+  const memberSince = new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+
   return (
-    <div className="max-w-lg space-y-6">
-      <h1 className="text-2xl font-bold text-[#1A1A1A]">My Profile</h1>
-      <ProfileForm
-        userId={user.id}
-        email={user.email ?? ''}
-        initialName={profile?.full_name ?? ''}
-        initialPhone={profile?.phone ?? ''}
-        membership={membership ?? null}
-      />
+    <div className="max-w-lg">
+      <div className="mb-6">
+        <p className="text-[9px] uppercase tracking-[0.2em] text-[#aaa] font-sans mb-1">Profile</p>
+        <h1 className="text-2xl font-bold font-serif text-white italic">
+          {profile?.full_name ?? 'Your profile'}.
+        </h1>
+        <p className="text-[11px] font-sans mt-1">
+          <span style={{ color: tierColor }}>{tierLabel} Member</span>
+          <span style={{ color: '#555' }}> · Member since {memberSince}</span>
+        </p>
+      </div>
+
+      <div className="rounded-xl p-6 bg-[#1B4332]">
+        <ProfileForm
+          userId={user.id}
+          email={user.email ?? ''}
+          initialName={profile?.full_name ?? ''}
+          initialPhone={profile?.phone ?? ''}
+          isFoundingMember={profile?.founding_member ?? false}
+          membership={membership ?? null}
+        />
+      </div>
     </div>
   )
 }

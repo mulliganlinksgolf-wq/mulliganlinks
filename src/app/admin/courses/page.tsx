@@ -1,6 +1,8 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
 import Link from 'next/link'
+import InviteCoursePartner from '@/components/admin/InviteCoursePartner'
+import AddCourseModal from '@/components/admin/AddCourseModal'
 
 export const metadata = { title: 'Courses' }
 
@@ -17,16 +19,24 @@ export default async function AdminCoursesPage() {
   const admin = createAdminClient()
   const { data: courses } = await admin
     .from('courses')
-    .select('id, name, slug, city, state, status, created_at')
+    .select('id, name, slug, city, state, status, created_at, onboarding_step, onboarding_complete')
     .order('created_at', { ascending: false })
+
+  const { data: coursesForInvite } = await admin.from('courses').select('id, name').order('name')
 
   return (
     <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
-        <p className="text-[#6B7770] text-sm mt-1">
-          Active courses appear in the member booking flow.
-        </p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1A1A1A]">Partner Courses</h1>
+          <p className="text-[#6B7770] text-sm mt-1">
+            Active courses appear in the member booking flow.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <AddCourseModal />
+          <InviteCoursePartner courses={coursesForInvite ?? []} />
+        </div>
       </div>
 
       <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
@@ -63,6 +73,12 @@ export default async function AdminCoursesPage() {
                         className="text-xs text-[#1B4332] hover:underline font-medium"
                       >
                         View as course →
+                      </Link>
+                      <Link
+                        href={`/onboarding/${c.id}/step-${Math.min(c.onboarding_step ?? 1, 5)}`}
+                        className="text-xs text-[#639922] hover:underline font-medium"
+                      >
+                        {c.onboarding_complete ? 'Onboarding ✓' : `Onboarding (step ${c.onboarding_step ?? 1}/5)`}
                       </Link>
                       <form action={toggleCourse}>
                         <input type="hidden" name="id" value={c.id} />

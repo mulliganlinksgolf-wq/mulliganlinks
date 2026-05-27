@@ -9,8 +9,7 @@ import { platformFeeCents } from '@/lib/stripe/fees'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
-const DISCOUNT: Record<string, number> = { free: 0, fairway: 0, eagle: 10, ace: 15 }
-const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 2, ace: 3 }
+const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
 
 // Inner form rendered inside <Elements>
 function CheckoutForm({
@@ -20,7 +19,7 @@ function CheckoutForm({
   appFee,
   pointsEarned,
   tier,
-  discountAmt,
+  guestDiscount,
 }: {
   bookingId: string
   total: number
@@ -28,7 +27,7 @@ function CheckoutForm({
   appFee: number
   pointsEarned: number
   tier: string
-  discountAmt: number
+  guestDiscount: number
 }) {
   const stripe = useStripe()
   const elements = useElements()
@@ -63,10 +62,10 @@ function CheckoutForm({
             <span>Green fee</span>
             <span>${greenFee.toFixed(2)}</span>
           </div>
-          {discountAmt > 0 && (
+          {guestDiscount > 0 && (
             <div className="flex justify-between text-[#1B4332]">
-              <span>{DISCOUNT[tier]}% member discount</span>
-              <span>−${discountAmt.toFixed(2)}</span>
+              <span>Guest pass</span>
+              <span>−$15.00</span>
             </div>
           )}
           {appFee > 0 && (
@@ -121,37 +120,47 @@ export function BookingPaymentForm({
   teeTime,
   tier,
   userId,
+  availablePasses = [],
+  joinExistingGroup = false,
 }: {
   teeTime: TeeTime
   tier: string
   userId: string
+  availablePasses?: { id: string; expires_at: string }[]
+  joinExistingGroup?: boolean
 }) {
   const [players, setPlayers] = useState(1)
+  const [useGuestPass, setUseGuestPass] = useState(false)
   const [step, setStep] = useState<'select' | 'pay'>('select')
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [bookingId, setBookingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
 
-  const discountPct = DISCOUNT[tier] ?? 0
   const multiplier = MULTIPLIER[tier] ?? 1
   const baseSubtotal = teeTime.base_price * players
-  const discount = baseSubtotal * (discountPct / 100)
-  const greenFee = baseSubtotal - discount
+  const guestDiscount = useGuestPass ? 15 : 0
   const appFee = platformFeeCents(tier) / 100
-  const total = greenFee + appFee
-  const pointsEarned = Math.floor(greenFee * multiplier)
+  const total = baseSubtotal - guestDiscount + appFee
+  const pointsEarned = Math.floor(baseSubtotal * multiplier)
+  const selectedPass = availablePasses[0] ?? null
 
   function handleProceed() {
     setError(null)
     startTransition(async () => {
-      const result = await createPendingBooking({ teeTimeId: teeTime.id, players, tier })
+      const result = await createPendingBooking({
+        teeTimeId: teeTime.id,
+        players,
+        tier,
+        guestPassId: useGuestPass && selectedPass ? selectedPass.id : undefined,
+        joinExistingGroup,
+      })
       if (result.error || !result.bookingId) {
         setError(result.error ?? 'Failed to create booking')
         return
       }
 
-      // Get PaymentIntent client secret
+      // TODO: Cart selection (cartPolicy, cartFeeCents) not wired here — add alongside Stripe integration
       const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok || !data.client_secret) {
@@ -180,11 +189,11 @@ export function BookingPaymentForm({
         <CheckoutForm
           bookingId={bookingId}
           total={total}
-          greenFee={greenFee}
+          greenFee={baseSubtotal}
           appFee={platformFeeCents(tier)}
           pointsEarned={pointsEarned}
           tier={tier}
-          discountAmt={discount}
+          guestDiscount={guestDiscount}
         />
       </Elements>
     )
@@ -199,7 +208,7 @@ export function BookingPaymentForm({
             {[1, 2, 3, 4].map(n => (
               <button
                 key={n}
-                onClick={() => setPlayers(n)}
+                onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
                 disabled={n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
@@ -222,10 +231,18 @@ export function BookingPaymentForm({
             <span>${teeTime.base_price.toFixed(2)} × {players} player{players !== 1 ? 's' : ''}</span>
             <span>${baseSubtotal.toFixed(2)}</span>
           </div>
-          {discountPct > 0 && (
-            <div className="flex justify-between text-[#1B4332]">
-              <span>{discountPct}% member discount</span>
-              <span>−${discount.toFixed(2)}</span>
+          {selectedPass && players > 1 && (
+            <div className="flex items-center justify-between pt-1 border-t border-gray-100">
+              <button
+                onClick={() => setUseGuestPass(v => !v)}
+                className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
+              >
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
+                  {useGuestPass && <span className="text-white text-xs">✓</span>}
+                </div>
+                Use a guest pass — save $15 ({availablePasses.length} remaining)
+              </button>
+              {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
             </div>
           )}
           {appFee > 0 ? (

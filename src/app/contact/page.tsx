@@ -1,192 +1,299 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { FadeIn } from '@/components/FadeIn'
 import { submitCourseInquiry } from '@/app/actions/contact'
+import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'For Courses',
-  description: 'Bring TeeAhead to your course. Free software, zero barter, zero commissions — your tee sheet stays yours.',
+  title: 'Contact — Two Phones, Not a Ticket System',
+  description: 'Neil and Billy answer their own email and pick up their own phones. Reach the TeeAhead founders directly.',
+  alternates: { canonical: '/contact' },
+  openGraph: {
+    url: '/contact',
+    title: 'Contact TeeAhead — Reachable directly',
+    description: 'Email or call Neil Barris or Billy Beslock. Co-founders. Metro Detroit.',
+  },
 }
 
-export default function ContactPage() {
+const FOUNDERS = [
+  {
+    name: 'Neil Barris',
+    first: 'Neil',
+    role: 'Co-founder · Operator side',
+    initials: 'NB',
+    email: 'neil@teeahead.com',
+    phone: '+1 (248) 762-0531',
+    phoneHref: 'tel:+12487620531',
+    smsHref: 'sms:+12487620531',
+    bestFor: 'Course owners, GMs, pro shops — pricing, onboarding, data migration, or partnership questions.',
+    dark: true,
+  },
+  {
+    name: 'Billy Beslock',
+    first: 'Billy',
+    role: 'Co-founder · Golfer side',
+    initials: 'BB',
+    email: 'billy@teeahead.com',
+    phone: '+1 (248) 863-6330',
+    phoneHref: 'tel:+12488636330',
+    smsHref: 'sms:+12488636330',
+    bestFor: "Golfers — questions about membership tiers, Fairway Points, partner finder, or your home course. Or you're just curious.",
+    dark: false,
+  },
+]
+
+export default async function ContactPage() {
+  const supabase = await createClient()
+  const { data: contentRows } = await supabase
+    .from('content_blocks')
+    .select('key, value')
+    .ilike('key', 'contact.%')
+  const c: Record<string, string> = Object.fromEntries(
+    (contentRows ?? []).map((r: { key: string; value: string }) => [r.key, r.value])
+  )
+
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <header className="bg-[#FAF7F2]/95 border-b border-black/5 px-6 py-4">
+      {/* Nav */}
+      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto" />
+            <TeeAheadLogo className="h-12 w-auto" />
           </Link>
-          <Link
-            href="/signup"
-            className="inline-flex items-center justify-center rounded-lg bg-[#1B4332] px-4 py-2 text-sm font-medium text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
-          >
-            For Golfers
-          </Link>
+          <div className="flex items-center gap-5">
+            <Link href="/features" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Features</Link>
+            <Link href="/pricing"  className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Pricing</Link>
+            <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90">
+              Claim a spot →
+            </Link>
+          </div>
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="px-6 py-20 bg-[#1B4332] text-[#FAF7F2]">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5">
-            <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-            <span className="text-sm font-medium">Free for courses — always</span>
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-bold leading-tight">
-            Your tee sheet.<br />Your customers.<br />Your revenue.
-          </h1>
-          <p className="text-lg text-[#FAF7F2]/80 max-w-2xl mx-auto leading-relaxed">
-            TeeAhead gives your course a complete management platform at zero cost.
-            No barter tee times. No commissions. No data extraction. The software works
-            for you — not against you.
-          </p>
-        </div>
-      </section>
-
-      {/* What you get */}
-      <section className="px-6 py-16 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-2xl font-bold text-[#1A1A1A] mb-10 text-center">Everything a course needs. Nothing it doesn&apos;t.</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: '📋', title: 'Live tee sheet', body: 'Cloud-based, any device, real-time. Replace legacy systems in 48 hours.' },
-              { icon: '🌐', title: 'Online booking engine', body: 'White-label embed on your own website. Golfers book direct. You keep the relationship.' },
-              { icon: '⭐', title: 'Loyalty engine', body: 'Fairway Points auto-awarded every round. Members come back to earn — not to price-hunt.' },
-              { icon: '📊', title: 'Analytics dashboard', body: 'Utilization rates, revenue trends, member LTV. Data you actually own.' },
-              { icon: '🔔', title: 'Waitlist & auto-fill', body: 'Cancellations auto-filled via SMS and email. Save staff time. Recover lost revenue.' },
-              { icon: '💳', title: 'Integrated payments', body: 'Stripe and Square — online and in-person. No middleman on the transaction.' },
-            ].map((f) => (
-              <div key={f.title} className="bg-[#FAF7F2] rounded-xl p-6 space-y-2">
-                <div className="text-3xl">{f.icon}</div>
-                <h3 className="font-bold text-[#1A1A1A]">{f.title}</h3>
-                <p className="text-sm text-[#6B7770] leading-relaxed">{f.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* The math */}
-      <section className="px-6 py-16 bg-[#FAF7F2]">
-        <div className="max-w-3xl mx-auto text-center space-y-6">
-          <h2 className="text-2xl font-bold text-[#1A1A1A]">What GolfNow actually costs you</h2>
-          <p className="text-[#6B7770] leading-relaxed">
-            Studies of ~400 courses put the average barter cost at{' '}
-            <strong className="text-[#1A1A1A]">$37,000–$150K+ per year</strong> in surrendered tee time revenue —
-            and one operator documented that{' '}
-            <strong className="text-[#1A1A1A]">39.6% of all rounds</strong> over three years were zero-revenue barter.
-            Windsor Parke Golf Club saw a <strong className="text-[#1A1A1A]">382% increase in online revenue</strong> after switching
-            ($81K → $393K). Missouri Bluffs saw a 36.3% green fee revenue increase.
-          </p>
-          <div className="bg-[#1B4332] text-[#FAF7F2] rounded-xl p-8 text-center">
-            <p className="text-4xl font-bold">$0</p>
-            <p className="text-[#FAF7F2]/80 mt-2">What TeeAhead costs your course. Forever.</p>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact form */}
-      <section className="px-6 py-16 bg-white">
-        <div className="max-w-xl mx-auto">
-          <div className="text-center mb-10 space-y-2">
-            <h2 className="text-2xl font-bold text-[#1A1A1A]">Get in touch</h2>
-            <p className="text-[#6B7770]">
-              We&apos;ll get back to you within one business day. Onboarding takes 48 hours.
-              No contract, no commitment.
-            </p>
-          </div>
-
-          <form action={submitCourseInquiry} className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="space-y-1.5">
-                <label htmlFor="name" className="text-sm font-medium text-[#1A1A1A]">Your name</label>
-                <input
-                  id="name"
-                  name="name"
-                  type="text"
-                  required
-                  placeholder="Neil Barris"
-                  className="w-full rounded-lg border border-black/15 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label htmlFor="email" className="text-sm font-medium text-[#1A1A1A]">Email</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  placeholder="you@yourcourse.com"
-                  className="w-full rounded-lg border border-black/15 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
-                />
-              </div>
+      <main className="flex-1 px-6 sm:px-10 lg:px-16 py-16 sm:py-20">
+        <div className="max-w-6xl mx-auto">
+          <FadeIn>
+            {/* Header */}
+            <div className="flex items-center gap-3 mb-6">
+              <span className="w-7 h-px bg-[#E0A800]" />
+              <span className="font-mono text-xs tracking-[0.16em] uppercase text-[#6B7770]">
+                {c['contact.hero_eyebrow'] ?? 'Get in touch · Reachable directly'}
+              </span>
             </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="course" className="text-sm font-medium text-[#1A1A1A]">Course name</label>
-              <input
-                id="course"
-                name="course"
-                type="text"
-                required
-                placeholder="Pebble Hills Golf Club"
-                className="w-full rounded-lg border border-black/15 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="software" className="text-sm font-medium text-[#1A1A1A]">Current tee sheet software</label>
-              <select
-                id="software"
-                name="software"
-                className="w-full rounded-lg border border-black/15 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
-              >
-                <option value="">Select one</option>
-                <option value="golfnow">GolfNow / EZLinks</option>
-                <option value="lightspeed">Lightspeed Golf</option>
-                <option value="foreup">foreUP</option>
-                <option value="jonas">Jonas Club Software</option>
-                <option value="other">Other</option>
-                <option value="none">None / paper</option>
-              </select>
-            </div>
-
-            <div className="space-y-1.5">
-              <label htmlFor="message" className="text-sm font-medium text-[#1A1A1A]">Anything else?</label>
-              <textarea
-                id="message"
-                name="message"
-                rows={3}
-                placeholder="Tell us about your course, your biggest pain points, or anything you'd like us to know."
-                className="w-full rounded-lg border border-black/15 bg-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30 resize-none"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full rounded-lg bg-[#1B4332] py-3 text-sm font-semibold text-[#FAF7F2] hover:bg-[#1B4332]/90 transition-colors"
+            <h1
+              className="font-display text-[#0F3D2E] leading-[0.96] tracking-[-0.025em] max-w-3xl"
+              style={{ fontSize: 'clamp(48px, 8vw, 80px)', fontWeight: 400 }}
             >
-              Send inquiry
-            </button>
-
-            <p className="text-xs text-[#6B7770] text-center">
-              No spam. No sales pressure. We&apos;ll reach out to schedule a quick call.
+              {c['contact.hero_headline'] ?? (
+                <>Not a support ticket. <em className="italic text-[#E0A800]">Two&nbsp;phones.</em></>
+              )}
+            </h1>
+            <p className="mt-5 text-base sm:text-lg text-[#1A1A1A]/78 leading-relaxed max-w-2xl">
+              {c['contact.hero_subhead'] ?? "We're Neil and Billy. We answer our own email and pick up our own phones. If you run a Metro Detroit course or you're a golfer with a question — text, email, or use the form."}
             </p>
-          </form>
-        </div>
-      </section>
 
-      <footer className="bg-[#FAF7F2] border-t border-black/5 px-6 py-8">
-        <div className="max-w-6xl mx-auto flex flex-col items-center gap-3">
-          <TeeAheadLogo className="h-14 w-auto" />
-          <nav className="flex items-center gap-5 text-sm text-[#6B7770]">
-            <Link href="/terms" className="hover:text-[#1B4332] transition-colors">Terms</Link>
-            <span>·</span>
-            <Link href="/privacy" className="hover:text-[#1B4332] transition-colors">Privacy</Link>
-          </nav>
-          <p className="text-xs text-[#6B7770]">© 2026 TeeAhead</p>
+            {/* Founder cards */}
+            <div className="mt-10 grid md:grid-cols-2 gap-4">
+              {FOUNDERS.map((f) => <FounderCard key={f.name} f={f} />)}
+            </div>
+          </FadeIn>
+
+          {/* Secondary form */}
+          <FadeIn>
+            <div className="mt-14 grid lg:grid-cols-[1fr_1.4fr] gap-10 items-start">
+              <div>
+                <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-2.5">Or — a paper trail</p>
+                <h2 className="font-display text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-3" style={{ fontSize: 32, fontWeight: 400 }}>
+                  Rather <em className="italic text-[#E0A800]">write&nbsp;it&nbsp;out?</em>
+                </h2>
+                <p className="text-sm text-[#1A1A1A]/72 leading-[1.55]">
+                  Use the form. We'll route it to whichever of us is best to answer and reply within one business day.
+                </p>
+              </div>
+
+              <form action={submitCourseInquiry} className="bg-white border border-[#0F3D2E]/10 rounded-xl p-6 flex flex-col gap-4">
+                <div className="grid sm:grid-cols-2 gap-3">
+                  <Field id="name"  label="Your name" placeholder="Riley Mahoney" required />
+                  <Field id="email" label="Email"     placeholder="riley@plumhollow.com" type="email" required />
+                </div>
+                <Field id="course" label="Course or club (optional)" placeholder="Plum Hollow Country Club" />
+                <div>
+                  <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">I'm reaching out as a…</label>
+                  <div className="grid grid-cols-3 gap-1.5" role="radiogroup">
+                    {[
+                      { v: 'course',  l: 'Course operator' },
+                      { v: 'golfer',  l: 'Golfer' },
+                      { v: 'other',   l: 'Press / Other' },
+                    ].map((opt, i) => (
+                      <label key={opt.v} className="cursor-pointer">
+                        <input
+                          type="radio"
+                          name="audience"
+                          value={opt.v}
+                          defaultChecked={i === 0}
+                          className="peer sr-only"
+                        />
+                        <span className="block text-center text-[13px] font-medium px-3 py-2.5 rounded-md border border-[#0F3D2E]/15 text-[#0F3D2E] peer-checked:bg-[#0F3D2E] peer-checked:text-[#F4F1EA] peer-checked:border-[#0F3D2E] peer-checked:font-semibold transition-colors">
+                          {opt.l}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="message" className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">What's on your mind</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={4}
+                    placeholder="Tell us about your course and what you're hoping to figure out…"
+                    className="w-full rounded-md border border-[#0F3D2E]/15 bg-[#FAF7F2] px-3 py-2.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]/30 resize-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="rounded-md bg-[#0F3D2E] py-3 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90"
+                >
+                  Send → we reply within 1 business day
+                </button>
+                <p className="text-xs text-[#6B7770] text-center">No spam. No sales pressure.</p>
+              </form>
+            </div>
+          </FadeIn>
+        </div>
+      </main>
+
+      {/* ── Footer ────────────────────────────────────────────── */}
+      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
+
+            {/* Column 1 — Brand */}
+            <div className="col-span-2 sm:col-span-1 space-y-3">
+              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
+              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
+              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
+            </div>
+
+            {/* Column 2 — For Courses */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
+                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
+                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
+                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
+              </nav>
+            </div>
+
+            {/* Column 3 — Compare */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
+                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
+                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
+                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
+              </nav>
+            </div>
+
+            {/* Column 4 — Company */}
+            <div className="space-y-3">
+              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
+              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
+                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
+                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
+                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
+                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
+              </nav>
+            </div>
+
+          </div>
+          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
+            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
+            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+          </div>
         </div>
       </footer>
+    </div>
+  )
+}
+
+function FounderCard({ f }: { f: typeof FOUNDERS[0] }) {
+  const cls = f.dark
+    ? { bg: 'bg-[#0F3D2E] text-[#F4F1EA]', mute: 'text-[#F4F1EA]/60', line: 'border-[#F4F1EA]/15', accent: 'text-[#E0A800]', avatar: 'bg-[#E0A800] text-[#082419]', cta: 'bg-[#E0A800] text-[#082419] hover:bg-[#E0A800]/90', textBtn: 'border-[#E0A800] text-[#E0A800]' }
+    : { bg: 'bg-white border border-[#0F3D2E]/10 text-[#1A1A1A]', mute: 'text-[#6B7770]', line: 'border-[#0F3D2E]/10', accent: 'text-[#0F3D2E]', avatar: 'bg-[#0F3D2E] text-[#E0A800]', cta: 'bg-[#0F3D2E] text-[#F4F1EA] hover:bg-[#0F3D2E]/90', textBtn: 'border-[#0F3D2E] text-[#0F3D2E]' }
+
+  return (
+    <div className={`rounded-2xl p-7 sm:p-8 flex flex-col gap-5 ${cls.bg}`}>
+      <div className="flex items-center gap-3.5">
+        <div className={`size-16 rounded-full flex items-center justify-center font-display text-2xl ${cls.avatar}`} style={{ fontWeight: 400 }}>{f.initials}</div>
+        <div>
+          <p className="font-display text-[30px] leading-none tracking-[-0.015em]" style={{ fontWeight: 400 }}>{f.name}</p>
+          <p className={`font-mono text-[10.5px] tracking-[0.14em] uppercase mt-1 ${cls.mute}`}>{f.role}</p>
+        </div>
+      </div>
+
+      <p className={`text-sm leading-[1.5] ${cls.mute}`}>
+        <strong className={f.dark ? 'text-[#F4F1EA]' : 'text-[#1A1A1A]'}>Best for:</strong> {f.bestFor}
+      </p>
+
+      <div className={`pt-4 border-t flex flex-col gap-2 ${cls.line}`}>
+        <DetailRow label="Email" value={f.email} href={`mailto:${f.email}`} accent={cls.accent} mute={cls.mute} underline />
+        <DetailRow label="Phone" value={f.phone} href={f.phoneHref} fontMono mute={cls.mute} valueColor={f.dark ? 'text-[#F4F1EA]' : 'text-[#1A1A1A]'} />
+        <DetailRow label="Reply" value="Typically <4 hours, Mon–Fri" mute={cls.mute} />
+      </div>
+
+      <div className="mt-auto flex gap-2">
+        <a
+          href={`mailto:${f.email}`}
+          className={`flex-1 text-center rounded-md px-4 py-3 text-[13px] font-semibold ${cls.cta}`}
+        >
+          Email {f.first} →
+        </a>
+        <a
+          href={f.smsHref}
+          className={`rounded-md border px-5 py-3 text-[13px] font-medium ${cls.textBtn}`}
+        >
+          Text
+        </a>
+      </div>
+    </div>
+  )
+}
+
+function DetailRow({ label, value, href, accent, mute, valueColor, fontMono, underline }: {
+  label: string
+  value: string
+  href?: string
+  accent?: string
+  mute: string
+  valueColor?: string
+  fontMono?: boolean
+  underline?: boolean
+}) {
+  const valueClass = `${fontMono ? 'font-mono' : ''} text-[14px] ${valueColor ?? accent ?? ''} ${underline ? 'underline underline-offset-[3px]' : ''}`
+  return (
+    <div className="flex items-baseline gap-3">
+      <span className={`font-mono text-[10px] tracking-[0.12em] uppercase ${mute} min-w-[42px]`}>{label}</span>
+      {href ? <a href={href} className={`font-medium ${valueClass}`}>{value}</a> : <span className={valueClass}>{value}</span>}
+    </div>
+  )
+}
+
+function Field({ id, label, placeholder, type = 'text', required }: { id: string; label: string; placeholder: string; type?: string; required?: boolean }) {
+  return (
+    <div>
+      <label htmlFor={id} className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">{label}</label>
+      <input
+        id={id}
+        name={id}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        className="w-full rounded-md border border-[#0F3D2E]/15 bg-[#FAF7F2] px-3 py-2.5 text-[13px] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]/30"
+      />
     </div>
   )
 }

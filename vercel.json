@@ -1,3 +1,41 @@
 {
-  "name": "teeahead"
+  "name": "teeahead",
+  "crons": [
+    {
+      "path": "/api/crm/stale-leads",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/referral-payouts",
+      "schedule": "0 9 1 * *"
+    },
+    {
+      "path": "/api/cron/imap-sync",
+      "schedule": "0 13 * * *"
+    },
+    {
+      "path": "/api/cron/send-scheduled-emails",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/monthly-barter-receipts",
+      "schedule": "0 13 1 * *"
+    },
+    {
+      "path": "/api/cron/refresh-operating-days",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/pairing-notifications",
+      "schedule": "0 22 * * *"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "teeahead.com" }],
+      "destination": "https://www.teeahead.com/:path*",
+      "permanent": true
+    }
+  ]
 }

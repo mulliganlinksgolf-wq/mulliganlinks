@@ -1,4 +1,102 @@
 @import "tailwindcss";
+
+/* ── Brand design tokens ────────────────────────────────────
+   Source of truth for all TeeAhead brand colors, radii, shadows, and
+   motion values. Use named tokens for net-new components; hex codes in
+   the existing PR snippets are equivalent and remain valid.
+────────────────────────────────────────────────────────── */
+
+/* Named CSS custom properties — brand palette */
+:root {
+  --color-brand-green:       #0F3D2E;
+  --color-brand-deep-green:  #082419;
+  --color-brand-near-black:  #071f17;
+  --color-brand-gold:        #E0A800;
+  --color-brand-cream:       #FAF7F2;
+  --color-brand-warm-cream:  #F4F1EA;
+  --color-brand-ink:         #1A1A1A;
+  --color-brand-muted:       #6B7770;
+  --color-brand-sage:        #9DAA9F;
+  --color-brand-line:        rgba(15, 61, 46, 0.10);
+
+  --shadow-lift:  0 24px 56px rgba(15, 61, 46, 0.22);
+  --shadow-deep:  0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+/* Tailwind v4 theme extension — makes bg-brand-green etc. available */
+@theme inline {
+  --color-brand-green:       var(--color-brand-green);
+  --color-brand-deep-green:  var(--color-brand-deep-green);
+  --color-brand-near-black:  var(--color-brand-near-black);
+  --color-brand-gold:        var(--color-brand-gold);
+  --color-brand-cream:       var(--color-brand-cream);
+  --color-brand-warm-cream:  var(--color-brand-warm-cream);
+  --color-brand-ink:         var(--color-brand-ink);
+  --color-brand-muted:       var(--color-brand-muted);
+  --color-brand-sage:        var(--color-brand-sage);
+  --color-brand-line:        var(--color-brand-line);
+}
+
+/* Utility classes */
+@layer utilities {
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .display-number {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.9;
+  }
+
+  .live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(15, 61, 46, 0.06);
+    color: #0F3D2E;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+  }
+
+  .lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+/* Skeleton shimmer — branded cream/green gradient */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgba(15, 61, 46, 0.06) 25%,
+    rgba(15, 61, 46, 0.12) 50%,
+    rgba(15, 61, 46, 0.06) 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+
+@plugin "@tailwindcss/typography";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
