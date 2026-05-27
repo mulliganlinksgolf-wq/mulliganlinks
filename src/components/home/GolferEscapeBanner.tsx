@@ -21,46 +21,18 @@ export default function GolferEscapeBanner() {
     setHydrated(true)
   }, [])
 
-  if (!hydrated) {
-    return (
-      <div className="bg-[#0F3D2E]/5 border border-[#0F3D2E]/15 px-4 py-3 text-[13px] text-[#0F3D2E] flex items-center justify-between">
-        <span>
-          Looking to play, not run a course?{' '}
-          <Link
-            href="/courses"
-            className="underline underline-offset-2"
-            onClick={() => track('homepage_golfer_banner_clicked', { source: 'hole_01' })}
-          >
-            See if your course is on TeeAhead →
-          </Link>
-        </span>
-        <button
-          type="button"
-          aria-label="Dismiss"
-          className="text-[#0F3D2E]/60 hover:text-[#0F3D2E] text-[16px] leading-none px-1"
-          onClick={() => {
-            try { window.localStorage.setItem(STORAGE_KEY, 'true') } catch {}
-            setDismissed(true)
-          }}
-        >
-          ×
-        </button>
-      </div>
-    )
-  }
-
-  if (dismissed) return null
+  if (hydrated && dismissed) return null
 
   return (
     <div className="bg-[#0F3D2E]/5 border border-[#0F3D2E]/15 px-4 py-3 text-[13px] text-[#0F3D2E] flex items-center justify-between">
       <span>
         Looking to play, not run a course?{' '}
         <Link
-          href="/courses"
+          href="/waitlist/golfer"
           className="underline underline-offset-2"
           onClick={() => track('homepage_golfer_banner_clicked', { source: 'hole_01' })}
         >
-          See if your course is on TeeAhead →
+          Get on the loyalty waitlist →
         </Link>
       </span>
       <button

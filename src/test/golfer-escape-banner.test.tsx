@@ -20,7 +20,9 @@ describe('GolferEscapeBanner', () => {
   it('renders the banner copy when not dismissed', () => {
     render(<GolferEscapeBanner />)
     expect(screen.getByText(/Looking to play, not run a course/i)).toBeInTheDocument()
-    expect(screen.getByText(/See if your course is on TeeAhead/i)).toBeInTheDocument()
+    const link = screen.getByRole('link', { name: /Get on the loyalty waitlist/i })
+    expect(link).toBeInTheDocument()
+    expect(link).toHaveAttribute('href', '/waitlist/golfer')
   })
 
   it('hides itself when the localStorage flag is set', () => {
