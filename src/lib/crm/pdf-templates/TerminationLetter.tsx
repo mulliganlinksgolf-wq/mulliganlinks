@@ -66,7 +66,7 @@ export function TerminationLetterPDF({ course, noticeDateStr, lastDayStr, refund
           {course.contact_email ? <Text style={S.toDetail}>{course.contact_email}</Text> : null}
         </View>
 
-        <Text style={S.subjectLine}>RE: Notice of Partnership Termination — {course.name}</Text>
+        <Text style={S.subjectLine}>RE: Notice of Partnership Termination, {course.name}</Text>
 
         <Text style={S.body}>
           This letter serves as formal written notice that the Founding Partner Agreement between TeeAhead, LLC ("TeeAhead") and <Text style={S.bold}>{course.name}</Text> ("Partner Course") is being terminated in accordance with the terms of the Agreement.

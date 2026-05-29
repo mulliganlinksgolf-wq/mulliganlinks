@@ -55,7 +55,7 @@ export default async function TemplateReviewPage() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Review Template Drafts</h1>
           <p className="text-sm text-slate-500 mt-0.5">
-            May 2026 REPLY framework rewrite — 40 course templates
+            May 2026 REPLY framework rewrite, 40 course templates
           </p>
         </div>
         <Link

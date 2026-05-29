@@ -91,7 +91,7 @@ export default async function ViewAsCoursePage({
         </div>
       </div>
 
-      {/* Tee sheet — identical to what course staff see */}
+      {/* Tee sheet, identical to what course staff see */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-bold text-[#1A1A1A]">{formatDate(new Date(selectedDate + 'T12:00:00'))}</h1>

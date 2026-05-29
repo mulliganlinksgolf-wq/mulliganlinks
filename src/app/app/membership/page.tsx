@@ -143,7 +143,7 @@ export default async function MembershipPage() {
                             : { background: '#1d4c36', color: '#aaa' }
                         }
                       >
-                        Upgrade to {tier.name} — ${tier.price}/yr
+                        Upgrade to {tier.name}, ${tier.price}/yr
                       </button>
                     </form>
                   )}

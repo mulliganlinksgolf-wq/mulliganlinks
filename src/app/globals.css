@@ -253,3 +253,27 @@
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(15, 61, 46, 0.12);
 }
+
+/* Respect reduced-motion: show final state, no scroll-jacking or shimmer */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-hidden {
+    opacity: 1;
+    transform: none;
+  }
+  .fade-in-visible {
+    animation: none;
+  }
+  .pricing-card,
+  .pricing-card:hover {
+    transition: none;
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

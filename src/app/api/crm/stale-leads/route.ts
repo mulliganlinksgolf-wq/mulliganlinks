@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
 
   const html = `
     <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #1a1a1a;">
-      <h1 style="color: #1B4332; font-size: 20px; margin-bottom: 8px;">TeeAhead CRM — Stale Lead Digest</h1>
+      <h1 style="color: #1B4332; font-size: 20px; margin-bottom: 8px;">TeeAhead CRM, Stale Lead Digest</h1>
       <p style="color: #6B7770; font-size: 14px; margin-bottom: 24px;">
         ${total} lead${total !== 1 ? 's' : ''} with no activity in ${staleDays}+ days.
       </p>
@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
 
   const resend = getResend()
   if (!resend) {
-    return NextResponse.json({ message: `Skipped — no Resend key. Would have sent digest for ${total} stale leads.` })
+    return NextResponse.json({ message: `Skipped, no Resend key. Would have sent digest for ${total} stale leads.` })
   }
 
   const recipients = [
@@ -119,7 +119,7 @@ export async function GET(req: NextRequest) {
   const { error } = await resend.emails.send({
     from: process.env.RESEND_FROM_EMAIL ?? 'TeeAhead <hello@teeahead.com>',
     to: recipients,
-    subject: `TeeAhead CRM — ${total} stale lead${total !== 1 ? 's' : ''} need attention`,
+    subject: `TeeAhead CRM, ${total} stale lead${total !== 1 ? 's' : ''} need attention`,
     html,
   })
 

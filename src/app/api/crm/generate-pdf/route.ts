@@ -73,11 +73,11 @@ export async function POST(req: NextRequest) {
         contractYears: body.options?.contractYears ?? 1,
         monthlyFee: body.options?.monthlyFee ?? 349,
       })
-      docName = `Founding Partner Agreement — ${record.name}`
+      docName = `Founding Partner Agreement, ${record.name}`
       break
     case 'course-proposal':
       element = createElement(CourseProposalPDF, { course: record })
-      docName = `Course Proposal — ${record.name}`
+      docName = `Course Proposal, ${record.name}`
       break
     case 'benefits-schedule':
       element = createElement(BenefitsSchedulePDF, {
@@ -88,11 +88,11 @@ export async function POST(req: NextRequest) {
         eagleCredits: body.options?.eagleCredits ?? '',
         aceCredits: body.options?.aceCredits ?? '',
       })
-      docName = `Benefits Schedule — ${record.name}`
+      docName = `Benefits Schedule, ${record.name}`
       break
     case 'onboarding-packet':
       element = createElement(OnboardingPacketPDF, { course: record, generatedAt: now })
-      docName = `Onboarding Packet — ${record.name}`
+      docName = `Onboarding Packet, ${record.name}`
       break
     case 'termination-letter':
       element = createElement(TerminationLetterPDF, {
@@ -105,11 +105,11 @@ export async function POST(req: NextRequest) {
           : new Date(Date.now() + 30 * 864e5).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
         refundAmount: body.options?.refundAmount ?? 0,
       })
-      docName = `Termination Letter — ${record.name}`
+      docName = `Termination Letter, ${record.name}`
       break
     case 'membership-card':
       element = createElement(MembershipCardPDF, { member: record, generatedAt: now })
-      docName = `Membership Card — ${record.name}`
+      docName = `Membership Card, ${record.name}`
       break
     case 'outing-invoice': {
       const invoiceNumber = `INV-${new Date().getFullYear()}-${record.id.slice(0, 6).toUpperCase()}`
@@ -119,16 +119,16 @@ export async function POST(req: NextRequest) {
         dueDate: body.options?.dueDate ?? new Date(Date.now() + 14 * 864e5).toISOString().split('T')[0],
         depositPaid: body.options?.depositPaid ?? 0,
       })
-      docName = `Invoice — ${record.contact_name}`
+      docName = `Invoice, ${record.contact_name}`
       break
     }
     case 'outing-quote':
       element = createElement(OutingQuotePDF, { outing: record })
-      docName = `Outing Quote — ${record.contact_name}`
+      docName = `Outing Quote, ${record.contact_name}`
       break
     case 'outing-confirmation':
       element = createElement(OutingConfirmationPDF, { outing: record })
-      docName = `Outing Confirmation — ${record.contact_name}`
+      docName = `Outing Confirmation, ${record.contact_name}`
       break
     default:
       return NextResponse.json({ error: 'Unknown template' }, { status: 400 })

@@ -45,7 +45,7 @@ export function WaiveFeeModal({ bookingId, guestName, totalPaid, onClose, onSucc
         <div>
           <h2 className="text-lg font-bold text-[#1A1A1A]">Waive fee</h2>
           <p className="text-sm text-[#6B7770] mt-1">
-            {guestName} · ${totalPaid.toFixed(2)} — mark as no charge
+            {guestName} · ${totalPaid.toFixed(2)}, mark as no charge
           </p>
         </div>
 

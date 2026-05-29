@@ -15,7 +15,7 @@ export async function sendAdminNotification({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping email:', subject)
+    console.log('[notify] Resend not configured, skipping email:', subject)
     return
   }
 
@@ -42,20 +42,20 @@ export async function sendWelcomeEmail({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: 'Welcome to TeeAhead — confirm your email to get started',
+    subject: 'Welcome to TeeAhead, confirm your email to get started',
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Welcome to TeeAhead ⛳</h2>
         <p>Hey ${firstName},</p>
         <p>You're in. TeeAhead is the local-first golf membership built for golfers
-        who actually play — at their home course, with their regular group, without
+        who actually play, at their home course, with their regular group, without
         paying extra for the privilege.</p>
 
         <p>Once you confirm your email, here's what you get on the Fairway (free) tier:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
           <li>Book tee times at partner courses with zero booking fees</li>
           <li>Earn 1× Fairway Points on every dollar played</li>
-          <li>Free cancellation up to 1 hour out — always</li>
+          <li>Free cancellation up to 1 hour out, always</li>
         </ul>
 
         <p>Ready to earn more? Upgrade to Eagle ($89/yr) for 2× points, priority booking,
@@ -90,7 +90,7 @@ export async function sendGolferWaitlistConfirmation({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping golfer waitlist email')
+    console.log('[notify] Resend not configured, skipping golfer waitlist email')
     return
   }
 
@@ -106,7 +106,7 @@ export async function sendGolferWaitlistConfirmation({
         among the first to know when we go live.</p>
         <p>Here's what you're waiting for:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>Zero booking fees at partner courses — forever</li>
+          <li>Zero booking fees at partner courses, forever</li>
           <li>Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every single metric</li>
           <li>Real Fairway Points on every dollar played at local courses</li>
         </ul>
@@ -116,7 +116,7 @@ export async function sendGolferWaitlistConfirmation({
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
           TeeAhead · Your home course, redone right.<br />
-          Questions? Reply to this email — we read every one.
+          Questions? Reply to this email, we read every one.
         </p>
       </div>
     `,
@@ -134,7 +134,7 @@ export async function sendCourseWaitlistConfirmation({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping course waitlist email')
+    console.log('[notify] Resend not configured, skipping course waitlist email')
     return
   }
 
@@ -143,7 +143,7 @@ export async function sendCourseWaitlistConfirmation({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `${courseName} — Founding Partner application received`,
+    subject: `${courseName}, Founding Partner application received`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Application received 🏌️</h2>
@@ -153,7 +153,7 @@ export async function sendCourseWaitlistConfirmation({
         what happens next.</p>
         <p>As a quick reminder, Founding Partners get:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>The full TeeAhead platform — free for your first year</li>
+          <li>The full TeeAhead platform, free for your first year</li>
           <li>Direct tee sheet connection (we handle the tech)</li>
           <li>Featured placement in our marketing to Metro Detroit golfers</li>
         </ul>
@@ -193,7 +193,7 @@ export async function sendCourseAdminAlert({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping course admin alert')
+    console.log('[notify] Resend not configured, skipping course admin alert')
     return
   }
 
@@ -240,7 +240,7 @@ export async function sendBarterReceipt({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping barter receipt')
+    console.log('[notify] Resend not configured, skipping barter receipt')
     return
   }
 
@@ -257,7 +257,7 @@ export async function sendBarterReceipt({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `Your TeeAhead Barter Receipt — ${nowMonth}`,
+    subject: `Your TeeAhead Barter Receipt, ${nowMonth}`,
     html: `
       <div style="font-family: sans-serif; max-width: 520px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Your TeeAhead Barter Receipt ⛳</h2>
@@ -289,7 +289,7 @@ export async function sendBarterReceipt({
         <p style="font-size: 13px; color: #6B7770;">
           Estimate based on 2 barter tee times per day × 300 operating days × your average green fee,
           which is what GolfNow's standard barter agreement costs partner courses annually.
-          TeeAhead charges you $0 — for your first year.
+          TeeAhead charges you $0, for your first year.
         </p>
 
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
@@ -313,7 +313,7 @@ export async function sendBroadcast({
 }): Promise<{ sent: number; error?: string }> {
   const client = getResend()
   if (!client) {
-    console.log('[broadcast] Resend not configured — skipping:', subject)
+    console.log('[broadcast] Resend not configured, skipping:', subject)
     return { sent: 0, error: 'Resend not configured.' }
   }
   await Promise.all(
@@ -342,7 +342,7 @@ export async function sendFoundingPartnerApproval({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping founding partner email')
+    console.log('[notify] Resend not configured, skipping founding partner email')
     return
   }
 
@@ -351,13 +351,13 @@ export async function sendFoundingPartnerApproval({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `Welcome, Founding Partner #${partnerNumber} of 10 — ${courseName}`,
+    subject: `Welcome, Founding Partner #${partnerNumber} of 10, ${courseName}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Welcome, Founding Partner #${partnerNumber} of 10 ⛳</h2>
         <p>Hey ${firstName},</p>
         <p><strong>${courseName}</strong> is officially a TeeAhead Founding Partner.
-        You're locked in free for your first year — no catches.</p>
+        You're locked in free for your first year, no catches.</p>
         <div style="background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <p style="margin: 0; font-weight: 600; color: #166534;">Your Founding Partner agreement (short version):</p>
           <ol style="color: #166534; padding-left: 20px; line-height: 2; margin: 8px 0 0;">
@@ -369,7 +369,7 @@ export async function sendFoundingPartnerApproval({
         <ol style="color: #6B7770; padding-left: 20px; line-height: 2;">
           <li>Neil will reach out within 24 hours to schedule your onboarding call.</li>
           <li>We connect your tee sheet (we handle all the tech).</li>
-          <li>You go live — your golfers start earning Fairway Points immediately.</li>
+          <li>You go live, your golfers start earning Fairway Points immediately.</li>
         </ol>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
@@ -406,7 +406,7 @@ export async function sendReferralAttributionAlert({
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #0F3D2E;">Referral signup: ${golferFirstName}</h2>
         <p>${golferFirstName} just signed up as a <strong>${tierLabel}</strong> member through your referral link.</p>
-        <p>You'll earn <strong>${dollarStr}</strong> on the 1st of next month — and every month for 12 months.</p>
+        <p>You'll earn <strong>${dollarStr}</strong> on the 1st of next month, and every month for 12 months.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />
         <p style="color: #6B7770; font-size: 13px;">
           View your referral dashboard at teeahead.com/course/{your-slug}/referrals
@@ -494,12 +494,12 @@ export async function sendPartnerRequestAcceptedEmail({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: requesterEmail,
-    subject: `Your golf request was accepted — ${dateLabel}`,
+    subject: `Your golf request was accepted, ${dateLabel}`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">You're on! 🏌️</h2>
         <p>${escapedRecipientName} accepted your request to play on <strong>${dateLabel}</strong>.</p>
-        <p>Reach out to coordinate the details — tee time, course, who's driving the cart.</p>
+        <p>Reach out to coordinate the details, tee time, course, who's driving the cart.</p>
         <p style="margin: 24px 0;">
           <a href="https://teeahead.com/app/partners/requests"
              style="background: #1B4332; color: #FAF7F2; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block;">
@@ -547,7 +547,7 @@ export async function sendPartnerBookedEmail({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: otherEmail,
-    subject: `${escapedBookerName} booked their tee time for ${dateLabel} — your turn!`,
+    subject: `${escapedBookerName} booked their tee time for ${dateLabel}, your turn!`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
         <h2 style="color: #1B4332;">Your partner booked! ⛳</h2>
@@ -589,7 +589,7 @@ export async function sendMonthlyBarterReceipt({
 }) {
   const client = getResend()
   if (!client) {
-    console.log('[notify] Resend not configured — skipping monthly barter receipt')
+    console.log('[notify] Resend not configured, skipping monthly barter receipt')
     return
   }
 
@@ -601,10 +601,10 @@ export async function sendMonthlyBarterReceipt({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `Your monthly Barter Receipt — ${monthLabel}`,
+    subject: `Your monthly Barter Receipt, ${monthLabel}`,
     html: `
       <div style="font-family: sans-serif; max-width: 560px; color: #1A1A1A;">
-        <h2 style="color: #1B4332;">Your TeeAhead Barter Receipt — ${monthLabel}</h2>
+        <h2 style="color: #1B4332;">Your TeeAhead Barter Receipt, ${monthLabel}</h2>
         <p>Attached is the monthly Barter Receipt for <strong>${courseName}</strong>.</p>
         <p>If you'd been on GolfNow this month with the same booking pattern, we estimate you would have
         surrendered <strong>${formattedCost}</strong> in green fees as barter. Your cost on TeeAhead this

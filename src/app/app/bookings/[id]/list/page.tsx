@@ -83,7 +83,7 @@ export default async function ListBookingPage({
         </Link>
         <h1 className="text-2xl font-bold font-serif text-white italic mt-1">List This Time</h1>
         <p className="text-sm text-[#8FA889] mt-0.5">
-          Another member claims it — you get credit instantly.
+          Another member claims it, you get credit instantly.
         </p>
       </div>
 
@@ -121,7 +121,7 @@ export default async function ListBookingPage({
           <p className="text-xs text-[#8FA889] mt-1">
             {!course?.trading_enabled
               ? 'This course hasn\'t enabled member trading yet.'
-              : 'This tee time is too soon to list — the window has passed.'}
+              : 'This tee time is too soon to list, the window has passed.'}
           </p>
         </div>
       ) : (

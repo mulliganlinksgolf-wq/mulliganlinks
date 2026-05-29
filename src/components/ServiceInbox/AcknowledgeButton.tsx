@@ -61,7 +61,7 @@ export function AcknowledgeButton({ requestId, onAcknowledged }: AcknowledgeButt
         )}
       </button>
       {error && (
-        <span className="text-xs text-red-500">Couldn't acknowledge — try again</span>
+        <span className="text-xs text-red-500">Couldn't acknowledge, try again</span>
       )}
     </div>
   )

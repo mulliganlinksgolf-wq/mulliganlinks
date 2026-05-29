@@ -63,7 +63,7 @@ export default async function TradingPage({
         </p>
         <h1 className="text-2xl font-bold font-serif text-white italic">Available Times</h1>
         <p className="text-sm text-[#8FA889] mt-0.5">
-          Tee times listed by other members — claim one to play.
+          Tee times listed by other members, claim one to play.
         </p>
       </div>
 
@@ -78,7 +78,7 @@ export default async function TradingPage({
       )}
       {sp.claimed === '1' && (
         <div className="rounded-xl px-4 py-3" style={{ background: '#163d2a' }}>
-          <p className="text-emerald-400 text-sm font-semibold">✓ Time claimed — you&apos;re on the tee!</p>
+          <p className="text-emerald-400 text-sm font-semibold">✓ Time claimed, you&apos;re on the tee!</p>
           <p className="text-xs text-[#8FA889] mt-0.5">Show your booking confirmation at the pro shop.</p>
         </div>
       )}

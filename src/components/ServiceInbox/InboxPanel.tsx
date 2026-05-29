@@ -199,7 +199,7 @@ export function InboxPanel({ courseId }: { courseId: string }) {
         {displayedRequests.length === 0 ? (
           activeTab === 'open' ? (
             <p className="text-sm text-[#6B7770] py-4 text-center">
-              All clear — no requests right now.
+              All clear, no requests right now.
             </p>
           ) : (
             <p className="text-sm text-[#6B7770] py-4 text-center">

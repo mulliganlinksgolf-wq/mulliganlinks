@@ -117,12 +117,12 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
       })
       const data = await res.json()
       if (data.error) {
-        setCaptionError('Caption generation failed — write it manually')
+        setCaptionError('Caption generation failed, write it manually')
       } else {
         setCaptions(data.captions)
       }
     } catch {
-      setCaptionError('Caption generation failed — write it manually')
+      setCaptionError('Caption generation failed, write it manually')
     } finally {
       setGenerating(false)
     }
@@ -176,7 +176,7 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
     const text = captions[activePlatform]?.caption ?? ''
     if (!text.trim()) return
 
-    // Schedule only the active tab's platform — other platforms get scheduled
+    // Schedule only the active tab's platform, other platforms get scheduled
     // by switching tabs and clicking Schedule Post for each one independently
     const targetChannels = channels.filter(ch => ch.service === activePlatform)
 

@@ -67,7 +67,7 @@ export function RequestButton({ courseId, bookingId, teeTime, serviceRequestsEna
 
   return (
     <>
-      {/* Acknowledgment banner — shown when course responds */}
+      {/* Acknowledgment banner, shown when course responds */}
       {acknowledged && (
         <div className="fixed bottom-24 left-4 right-4 z-50 sm:left-auto sm:right-5 sm:w-80">
           <div

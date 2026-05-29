@@ -25,7 +25,7 @@ export async function activateCoursePartner(
 
   if (!invite) return { error: 'Invalid setup link' }
   if (new Date(invite.setup_token_expires_at) < new Date()) {
-    return { error: 'This setup link has expired — contact your TeeAhead account manager to resend' }
+    return { error: 'This setup link has expired, contact your TeeAhead account manager to resend' }
   }
 
   const { data: authData, error: authError } = await admin.auth.admin.createUser({

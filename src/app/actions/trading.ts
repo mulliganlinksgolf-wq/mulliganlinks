@@ -119,7 +119,7 @@ export async function updateTradingSettings(
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated' }
 
-  // Check both course_admins and crm_course_users — same logic as requireManager
+  // Check both course_admins and crm_course_users, same logic as requireManager
   const admin = createAdminClient()
   const [{ data: adminRow }, { data: crmRow }] = await Promise.all([
     admin.from('course_admins').select('id').eq('course_id', courseId).eq('user_id', user.id).maybeSingle(),

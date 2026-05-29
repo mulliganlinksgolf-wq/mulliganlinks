@@ -83,7 +83,7 @@ export async function updateTeeSheetConfig(
 
   const admin = createAdminClient()
 
-  // Strip id and course_id from the partial config — we set course_id ourselves
+  // Strip id and course_id from the partial config, we set course_id ourselves
   const { id: _id, course_id: _cid, ...rest } = config as Partial<TeeSheetConfig> & { id?: string; course_id?: string }
 
   const { error } = await admin

@@ -6,7 +6,7 @@ export function buildCoursePartnerInviteEmail(params: {
 }) {
   const { recipientName, courseName, setupUrl, adminName } = params
   return {
-    subject: `Your TeeAhead partner portal is ready — ${courseName}`,
+    subject: `Your TeeAhead partner portal is ready, ${courseName}`,
     html: `<!DOCTYPE html>
 <html><head><meta charset="utf-8"></head>
 <body style="font-family:-apple-system,sans-serif;max-width:560px;margin:0 auto;padding:32px 16px;color:#1A1A1A">

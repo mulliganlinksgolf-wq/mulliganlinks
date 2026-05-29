@@ -94,7 +94,7 @@ export default async function BookPage({
           <p className="font-medium text-blue-900">You&apos;re joining an existing group.</p>
           <p className="mt-1 text-blue-800">
             We&apos;ll email everyone the day before with first names so you know who you&apos;re playing with.
-            Names only — no contact info is shared.
+            Names only, no contact info is shared.
           </p>
         </div>
       )}

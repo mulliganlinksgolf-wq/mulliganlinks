@@ -92,7 +92,7 @@ interface SlotRow {
   bookings: BookingRow[] | null
 }
 
-// Exported for unit testing — runs the calculation against an in-memory
+// Exported for unit testing, runs the calculation against an in-memory
 // slot array, no DB. Returns null when the month has no qualifying rounds.
 export function computeMonthlyBarter(opts: {
   slots: Array<{ scheduled_at: string; bookings: BookingRow[] | null }>

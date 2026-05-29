@@ -53,7 +53,7 @@ export async function sendBookingConfirmation({
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: email,
-      subject: `You're on the tee — ${course?.name} ${dateStr}`,
+      subject: `You're on the tee, ${course?.name} ${dateStr}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">Booking confirmed ⛳</h2>
@@ -123,7 +123,7 @@ export async function sendCourseBookingAlert({
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: adminEmails,
-      subject: `New booking — ${timeStr} ${dateStr.split(',')[0]}`,
+      subject: `New booking, ${timeStr} ${dateStr.split(',')[0]}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">New tee time booking ⛳</h2>
@@ -184,7 +184,7 @@ export async function sendCancellationConfirmation({
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: email,
-      subject: `Booking canceled — ${courseName} ${dateStr}`,
+      subject: `Booking canceled, ${courseName} ${dateStr}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1A1A1A;">Booking canceled</h2>
@@ -249,7 +249,7 @@ export async function sendRainCheckEmail({
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: email,
-      subject: `Your rain check — $${amount} at ${courseName}`,
+      subject: `Your rain check, $${amount} at ${courseName}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">Rain check issued 🌧️</h2>
@@ -309,7 +309,7 @@ export async function sendPhoneBookingConfirmation({
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: guestEmail,
-      subject: `Tee time confirmed — ${courseName} ${dateStr}`,
+      subject: `Tee time confirmed, ${courseName} ${dateStr}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">You're on the tee ⛳</h2>

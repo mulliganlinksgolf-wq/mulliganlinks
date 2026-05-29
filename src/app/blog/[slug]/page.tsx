@@ -9,8 +9,8 @@ import { AuthorBio } from '@/components/blog/AuthorBio'
 import { Callout } from '@/components/blog/Callout'
 import { StatBlock } from '@/components/blog/StatBlock'
 import { ComparisonTable, Th, Td } from '@/components/blog/ComparisonTable'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 import { FadeIn } from '@/components/FadeIn'
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -100,25 +100,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       <PostSchema post={post} />
 
-      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/"><TeeAheadLogo className="h-12 w-auto" /></Link>
-          <div className="flex items-center gap-5">
-            <Link
-              href="/blog"
-              className="hidden sm:inline font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#0F3D2E]/70 hover:text-[#0F3D2E] transition-colors"
-            >
-              ← All posts
-            </Link>
-            <Link
-              href="/waitlist/course"
-              className="rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
-            >
-              Claim a spot →
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 sm:px-10 lg:px-16 py-12 sm:py-16">
         <FadeIn>

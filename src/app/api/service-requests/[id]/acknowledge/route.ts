@@ -61,7 +61,7 @@ export async function PATCH(
       return NextResponse.json(existing)
     }
 
-    // Send push notification to golfer (fire-and-forget — never fail the response)
+    // Send push notification to golfer (fire-and-forget, never fail the response)
     try {
       const { data: tokenRow } = await admin
         .from('push_tokens')
@@ -84,7 +84,7 @@ export async function PATCH(
           console.error('[service-requests/acknowledge] Expo push failed', await pushRes.text())
         }
       }
-      // web push requires VAPID keys — skip for now
+      // web push requires VAPID keys, skip for now
 
       await admin.from('service_requests').update({ golfer_notified: true }).eq('id', id)
     } catch (pushErr) {

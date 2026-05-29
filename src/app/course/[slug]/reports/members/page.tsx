@@ -44,13 +44,13 @@ export default async function MemberActivityPage({
       <DateRangePicker />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label={`New Members — ${latestMonthLabel}`} value={(latest?.members_attributed ?? 0).toString()} accent />
+        <KpiTile label={`New Members, ${latestMonthLabel}`} value={(latest?.members_attributed ?? 0).toString()} accent />
         <KpiTile label="Total Members Attributed" value={totalAttributed.toLocaleString()} sub="selected period" />
         <KpiTile label="Points Earned" value={totalPointsEarned.toLocaleString()} sub="selected period" />
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="font-semibold text-[#1A1A1A] mb-4">Fairway Points — Earned vs. Redeemed</h2>
+        <h2 className="font-semibold text-[#1A1A1A] mb-4">Fairway Points, Earned vs. Redeemed</h2>
         <PointsBarChart data={history} />
       </div>
 

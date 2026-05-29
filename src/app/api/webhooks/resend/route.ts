@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
   if (activity) {
     // Filter out the sender's own self-opens. When you send a test and immediately
     // open your own sent message to verify it landed, the tracking pixel fires from
-    // your IP — that's not real engagement. Anything within 30 seconds of send is
+    // your IP, that's not real engagement. Anything within 30 seconds of send is
     // almost certainly the sender checking their own work.
     const sentAt = new Date(activity.created_at).getTime()
     const now = Date.now()

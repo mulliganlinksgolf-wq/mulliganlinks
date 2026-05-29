@@ -57,7 +57,7 @@ export default async function RevenueReportPage({
       <DateRangePicker />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label={`Revenue — ${latestMonthLabel}`} value={`$${revenueMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} accent />
+        <KpiTile label={`Revenue, ${latestMonthLabel}`} value={`$${revenueMtd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} accent />
         <KpiTile label="Avg Green Fee" value={`$${Number(latest?.avg_green_fee ?? 0).toFixed(0)}`} />
         {momChange !== null && (
           <KpiTile label="Month-over-Month" value={`${momChange > 0 ? '+' : ''}${momChange}%`} />

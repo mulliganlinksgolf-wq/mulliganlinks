@@ -39,7 +39,7 @@ export async function POST(req: Request) {
   for (const { id } of due) {
     // Atomic claim: only one concurrent invocation can flip pending→sending
     // for a given row. The loser gets back no row and skips. This is the
-    // race fix — without it, two ticks of the every-minute pg_cron job
+    // race fix, without it, two ticks of the every-minute pg_cron job
     // would both call Resend for the same row.
     const { data: row } = await admin
       .from('crm_scheduled_emails')
@@ -77,7 +77,7 @@ export async function POST(req: Request) {
     }
 
     // Mirror to the sender's IMAP Sent folder so it shows up in their Mail app.
-    // Best-effort — IMAP errors don't fail the cron run.
+    // Best-effort, IMAP errors don't fail the cron run.
     const bareEmailMatch = row.from_email.match(/<([^>]+)>/)
     const fromEmailOnly = (bareEmailMatch?.[1] ?? row.from_email).toLowerCase()
     try {

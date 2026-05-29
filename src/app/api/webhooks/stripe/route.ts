@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     })
 
   if (insertError?.code === '23505') {
-    // Duplicate — already processed
+    // Duplicate, already processed
     return NextResponse.json({ received: true, duplicate: true })
   }
 
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
       .from('stripe_webhook_events')
       .update({ processing_error: String(err) })
       .eq('stripe_event_id', event.id)
-    // Still return 200 so Stripe doesn't retry — error is logged in DB
+    // Still return 200 so Stripe doesn't retry, error is logged in DB
   }
 
   return NextResponse.json({ received: true })
@@ -293,7 +293,7 @@ async function onAccountDeauthorized(data: any, admin: ReturnType<typeof createA
 }
 
 async function onPayout(payout: Stripe.Payout, eventType: string, admin: ReturnType<typeof createAdminClient>) {
-  // Payout events come from connected accounts — account ID in event
+  // Payout events come from connected accounts, account ID in event
   // We need the account ID to look up the course. It's in the event account field, but here we use metadata.
   // The account ID comes from the event's `account` field which isn't on the payout object directly.
   // For now, store by payout ID and update course later via account.updated.

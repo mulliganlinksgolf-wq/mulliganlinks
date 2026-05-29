@@ -98,7 +98,7 @@ export default async function CourseBillingPage({
         <div className="px-6 py-5 space-y-4 text-sm text-[#3a3a3a]">
           {[
             ['Platform fee', '$349/month, billed monthly. No setup fee.'],
-            ['Booking fee', 'TeeAhead collects 0% — you keep 100% of green fees.'],
+            ['Booking fee', 'TeeAhead collects 0%, you keep 100% of green fees.'],
             ['Tee sheet access', 'Full tee sheet management, real-time availability, waitlist automation.'],
             ['Fairway Points', 'Auto-awarded at 1pt per dollar. Redeemable at your course.'],
             ['Cancellation', '30-day written notice to hello@teeahead.com. No early-termination fee.'],

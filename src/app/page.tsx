@@ -4,7 +4,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { SiteFooter } from '@/components/SiteFooter'
 import { createClient } from '@/lib/supabase/server'
 import { FoundersScorecard } from '@/components/FoundersScorecard'
 import { captureReferralCode } from '@/lib/referrals/capture'
@@ -16,9 +16,18 @@ import { YardageShell, HoleHeader, HoleFooter } from '@/components/yardage/Yarda
 import { ReceiptCard } from '@/components/yardage/ReceiptCard'
 import { ProductTile } from '@/components/yardage/ProductTile'
 import GolferEscapeBanner from '@/components/home/GolferEscapeBanner'
+import {
+  BARTER_TEE_TIMES_PER_DAY,
+  OPERATING_DAYS,
+  TYPICAL_PEAK_RATE_LABEL,
+  HIGH_VOLUME_RATE_LABEL,
+  TYPICAL_ANNUAL_BARTER_LABEL,
+  HIGH_VOLUME_ANNUAL_BARTER_LABEL,
+  MONTHLY_PRICE_LABEL,
+} from '@/lib/barter-math'
 
 export const metadata: Metadata = {
-  title: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty — Metro Detroit',
+  title: { absolute: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty, Metro Detroit' },
   description:
     'TeeAhead is free tee sheet software for golf courses with no barter and no commissions, paired with a golfer loyalty membership that beats GolfPass+ for $89/yr. Metro Detroit launch.',
 }
@@ -50,7 +59,7 @@ export default async function HomePage({
 
       <YardageShell initialHole="01">
 
-        {/* ── Hole 01 — The Damage ──────────────────────────────── */}
+        {/* ── Hole 01, The Damage ──────────────────────────────── */}
         <section
           id="hole-01"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -66,24 +75,25 @@ export default async function HomePage({
                 className="font-display text-[#0F3D2E] leading-[0.9] tracking-[-0.035em]"
                 style={{ fontSize: 'clamp(80px, 11vw, 104px)', fontWeight: 400 }}
               >
-                $94,500<span className="text-[#E0A800]">.</span>
+                {TYPICAL_ANNUAL_BARTER_LABEL}<span className="text-[#E0A800]">.</span>
               </h1>
               <p className="mt-5 text-[16.5px] leading-[1.6] text-[#1A1A1A]/82 max-w-[460px]">
-                That&apos;s what GolfNow&apos;s barter model takes from the average course each year.{' '}
+                That&apos;s what GolfNow&apos;s barter model takes from a typical Metro Detroit course each year.{' '}
                 <span
                   className="font-display italic text-[19px] text-[#0F3D2E]"
                   style={{ fontWeight: 400 }}
                 >
                   Two tee times a day
                 </span>
-                , three hundred days, sold below your rack rate.
+                , three hundred days, sold below your rack rate. High-volume courses lose{' '}
+                {HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more.
               </p>
 
               <div className="mt-6 grid grid-cols-3 gap-5 bg-white border border-[#0F3D2E]/10 px-5 py-4">
                 {[
-                  { n: '2',   l: 'per day' },
-                  { n: '300', l: 'days/yr' },
-                  { n: '$0',  l: 'TeeAhead Y1' },
+                  { n: String(BARTER_TEE_TIMES_PER_DAY), l: 'per day' },
+                  { n: String(OPERATING_DAYS),          l: 'days/yr' },
+                  { n: '$0',                            l: 'TeeAhead Y1' },
                 ].map(({ n, l }, i) => (
                   <div key={l} className={i === 0 ? '' : 'border-l border-[#0F3D2E]/10 pl-3.5'}>
                     <p
@@ -99,6 +109,7 @@ export default async function HomePage({
                 ))}
               </div>
 
+              {/* Operator door */}
               <div className="mt-6 flex flex-wrap gap-2.5">
                 <Link
                   href="/waitlist/course"
@@ -114,15 +125,29 @@ export default async function HomePage({
                 </Link>
               </div>
 
-              <p className="mt-5 text-sm text-[#6B7770]">
-                Golfer instead?{' '}
-                <Link
-                  href="/waitlist/golfer"
-                  className="text-[#0F3D2E] underline underline-offset-4 font-semibold hover:text-[#0F3D2E]/80"
-                >
-                  Join the loyalty waitlist →
-                </Link>
+              {/* Three-number reconciliation: never show $0 without the $349 + barter context */}
+              <p className="mt-4 text-[13.5px] leading-relaxed text-[#6B7770] max-w-[460px]">
+                <strong className="text-[#0F3D2E]">Free your first year</strong>, then{' '}
+                {MONTHLY_PRICE_LABEL}/mo flat. No barter, no commissions, no contract. Set
+                against {TYPICAL_ANNUAL_BARTER_LABEL}+ a year in surrendered tee times.
               </p>
+              <p className="mt-2 text-[12.5px] leading-relaxed text-[#6B7770] max-w-[460px]">
+                We migrate you in under 48 hours, and if you ever leave we migrate you back
+                out, free. No lock-in either direction.
+              </p>
+
+              {/* Golfer door, balanced second entry into the golfer narrative */}
+              <div className="mt-6 border-t border-[#0F3D2E]/10 pt-5">
+                <p className="font-mono text-[10px] tracking-[0.2em] text-[#0F3D2E]/55 uppercase mb-2.5">
+                  Here for the golf, not the back office?
+                </p>
+                <Link
+                  href="#hole-04"
+                  className="inline-flex items-center rounded-md border-2 border-[#E0A800] bg-[#E0A800]/10 px-5 py-3 text-sm font-bold text-[#0F3D2E] hover:bg-[#E0A800]/20 transition-colors"
+                >
+                  I&apos;m a golfer → see the membership
+                </Link>
+              </div>
             </div>
 
             <ReceiptCard />
@@ -135,7 +160,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 7 · Hazard rating: severe" nextHole="Hole 02" />
         </section>
 
-        {/* ── Hole 02 — The Barter (dark) ───────────────────────── */}
+        {/* ── Hole 02, The Barter (dark) ───────────────────────── */}
         <section
           id="hole-02"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
@@ -155,14 +180,14 @@ export default async function HomePage({
                 <p>
                   Approximately{' '}
                   <strong className="text-[#F4F1EA]">two prime-time tee times per day</strong>,
-                  surrendered to &quot;Hot Deal&quot; discounts. On paper it sounds reasonable —
+                  surrendered to &quot;Hot Deal&quot; discounts. On paper it sounds reasonable:
                   free software in exchange for filling slow slots.
                 </p>
                 <p>
-                  In practice, those slots add up. At average rack rates across 300 operating
-                  days, the typical course gives away{' '}
-                  <strong className="text-[#F4F1EA]">$94,500 a year</strong>. High-volume
-                  courses lose $150K+.
+                  In practice, those slots add up. At a typical {TYPICAL_PEAK_RATE_LABEL} peak
+                  rate across {OPERATING_DAYS} operating days, the average course gives away{' '}
+                  <strong className="text-[#F4F1EA]">{TYPICAL_ANNUAL_BARTER_LABEL} a year</strong>.
+                  High-volume courses at resort rates lose {HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more.
                 </p>
                 <p>
                   It gets worse. Price-parity clauses prevent courses from offering lower rates
@@ -177,10 +202,10 @@ export default async function HomePage({
                 The barter math
               </p>
               {[
-                ['2', 'tee times/day'],
-                ['×', '300 days/year'],
-                ['×', '$157 rack rate'],
-                ['=', '$94,500/yr'],
+                [String(BARTER_TEE_TIMES_PER_DAY), 'tee times/day'],
+                ['×', `${OPERATING_DAYS} days/year`],
+                ['×', `${TYPICAL_PEAK_RATE_LABEL} typical peak rate`],
+                ['=', `${TYPICAL_ANNUAL_BARTER_LABEL}/yr`],
               ].map(([n, l], i) => (
                 <div
                   key={l}
@@ -203,13 +228,17 @@ export default async function HomePage({
                   </span>
                 </div>
               ))}
+              <p className="pt-2.5 mt-1 border-t border-[#F4F1EA]/10 text-[11px] leading-relaxed text-[#F4F1EA]/55">
+                High-volume courses at {HIGH_VOLUME_RATE_LABEL} resort rates:{' '}
+                <span className="text-[#E0A800] font-semibold">{HIGH_VOLUME_ANNUAL_BARTER_LABEL}/yr.</span>
+              </p>
             </div>
           </div>
 
           <HoleFooter note="Stroke index 4 · Dogleg right" nextHole="Hole 03" dark />
         </section>
 
-        {/* ── Hole 03 — The Product ─────────────────────────────── */}
+        {/* ── Hole 03, The Product ─────────────────────────────── */}
         <section
           id="hole-03"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -231,7 +260,7 @@ export default async function HomePage({
             <ProductTile
               eyebrow="For the GM"
               title="The day at a glance"
-              desc="Revenue, utilization, top members — and who's about to churn."
+              desc="Revenue, utilization, top members, and who's about to churn."
               imageSrc="/screenshots/dashboard.png"
             />
             <ProductTile
@@ -252,7 +281,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 9 · Wide fairway" nextHole="Hole 04" />
         </section>
 
-        {/* ── Hole 04 — The Membership ──────────────────────────── */}
+        {/* ── Hole 04, The Membership ──────────────────────────── */}
         <section
           id="hole-04"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -317,7 +346,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 17 · Easy green" nextHole="Hole 05" />
         </section>
 
-        {/* ── Hole 05 — Live in 48hrs ───────────────────────────── */}
+        {/* ── Hole 05, Live in 48hrs ───────────────────────────── */}
         <section
           id="hole-05"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
@@ -397,7 +426,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 13 · Cart path right" nextHole="Hole 06" dark />
         </section>
 
-        {/* ── Hole 06 — The Pricing ─────────────────────────────── */}
+        {/* ── Hole 06, The Pricing ─────────────────────────────── */}
         <section
           id="hole-06"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -424,6 +453,7 @@ export default async function HomePage({
                   'Book tee times at partner courses',
                   'Join partial groups as a solo or twosome',
                   '1× Fairway Points per dollar',
+                  'Standard $1.49 booking fee',
                   'Free cancellation (1hr policy)',
                   'In-round service requests',
                 ]}
@@ -470,21 +500,22 @@ export default async function HomePage({
             </div>
 
             <p className="mt-6 text-xs text-[#9DAA9F] max-w-2xl">
-              Fairway Points never expire while your account is active. Redeemable toward
-              future tee time bookings or membership renewal.
+              Fairway Points never expire while your account is active. Play a season and
+              5,000 of them redeem for a complimentary round at any partner course: about
+              every 71 rounds on Fairway, 48 as Eagle, 36 as Ace.
             </p>
 
             <p className="mt-6 text-sm text-[#6B7770] max-w-xl leading-relaxed">
               Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days,
-              once they&apos;ve earned enough Fairway Points to see the math. Start free.
-              Upgrade when it makes sense.
+              once the included complimentary round and birthday credit have paid for the
+              membership on their own. Start free. Upgrade when it makes sense.
             </p>
           </div>
 
           <HoleFooter note="Stroke index 11 · Bunkered left" nextHole="Hole 07" />
         </section>
 
-        {/* ── Hole 07 — The Proof ───────────────────────────────── */}
+        {/* ── Hole 07, The Proof ───────────────────────────────── */}
         <section
           id="hole-07"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -532,7 +563,7 @@ export default async function HomePage({
               </Link>
             </div>
 
-            {/* Source attributions — required for legal compliance. Strings below are checked by legal-compliance.test.ts:
+            {/* Source attributions, required for legal compliance. Strings below are checked by legal-compliance.test.ts:
                 NGCOA member survey data and Golf Inc. industry analysis (2024).
                 Based on 2 barter tee times/day at average rack rates across NGCOA member survey data and Golf Inc. industry analysis.
                 NGCOA member survey data & Golf Inc. industry analysis, 2024.
@@ -551,7 +582,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 5 · Approach left" nextHole="Hole 08" />
         </section>
 
-        {/* ── Hole 08 — The Q&A ─────────────────────────────────── */}
+        {/* ── Hole 08, The Q&A ─────────────────────────────────── */}
         <section
           id="hole-08"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10"
@@ -561,7 +592,7 @@ export default async function HomePage({
           <HoleFooter note="Stroke index 15 · Short par 3" nextHole="Hole 09" />
         </section>
 
-        {/* ── Hole 09 — Sink the Putt ───────────────────────────── */}
+        {/* ── Hole 09, Sink the Putt ───────────────────────────── */}
         <section
           id="hole-09"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 bg-[#082419]"
@@ -573,68 +604,7 @@ export default async function HomePage({
 
       </YardageShell>
 
-      {/* ── Functional footer (preserved from prior design) ───── */}
-      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
-
-            <div className="col-span-2 sm:col-span-1 space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
-                Book ahead. Play more. Own your golf.
-              </p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-              <div className="flex items-center gap-3 pt-1">
-                <a href="https://www.instagram.com/teeahead/" target="_blank" rel="noopener noreferrer" aria-label="TeeAhead on Instagram" className="text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                </a>
-                <a href="https://www.facebook.com/profile.php?id=61589249283068" target="_blank" rel="noopener noreferrer" aria-label="TeeAhead on Facebook" className="text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-                </a>
-                <a href="https://x.com/teeahead" target="_blank" rel="noopener noreferrer" aria-label="TeeAhead on X" className="text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                </a>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/features" className="hover:text-[#F4F1EA] transition-colors">All Features</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
-              </nav>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
-                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
-                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
-                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
-              </nav>
-            </div>
-
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   )
 }

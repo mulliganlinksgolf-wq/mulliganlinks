@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 
 export type SeoSection =
   | { kind: 'narrative'; eyebrow: string; headline: ReactNode; body: ReactNode }
@@ -40,30 +40,10 @@ export function SeoLandingTemplate({
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
       {schema}
 
-      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto" />
-          </Link>
-          <div className="flex items-center gap-5">
-            <Link href="/features" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E] transition-colors">
-              Features
-            </Link>
-            <Link href="/pricing" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E] transition-colors">
-              Pricing
-            </Link>
-            <Link
-              href="/waitlist/course"
-              className="rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
-            >
-              Claim a spot →
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
-        {/* Hero — editorial, cream */}
+        {/* Hero, editorial, cream */}
         <section className="px-6 sm:px-10 lg:px-16 py-16 sm:py-24">
           <FadeIn>
             <div className="max-w-5xl mx-auto">
@@ -109,7 +89,7 @@ export function SeoLandingTemplate({
           </FadeIn>
         </section>
 
-        {/* Sections — narrative / stats / comparison / faq, alternating bg */}
+        {/* Sections, narrative / stats / comparison / faq, alternating bg */}
         {config.sections.map((section, i) => {
           const dark = i % 2 === 1
           return (

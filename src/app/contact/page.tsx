@@ -1,17 +1,17 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { submitCourseInquiry } from '@/app/actions/contact'
 import { createClient } from '@/lib/supabase/server'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'Contact — Two Phones, Not a Ticket System',
+  title: 'Contact: Two Phones, Not a Ticket System',
   description: 'Neil and Billy answer their own email and pick up their own phones. Reach the TeeAhead founders directly.',
   alternates: { canonical: '/contact' },
   openGraph: {
     url: '/contact',
-    title: 'Contact TeeAhead — Reachable directly',
+    title: 'Contact TeeAhead, Reachable directly',
     description: 'Email or call Neil Barris or Billy Beslock. Co-founders. Metro Detroit.',
   },
 }
@@ -26,7 +26,7 @@ const FOUNDERS = [
     phone: '+1 (248) 762-0531',
     phoneHref: 'tel:+12487620531',
     smsHref: 'sms:+12487620531',
-    bestFor: 'Course owners, GMs, pro shops — pricing, onboarding, data migration, or partnership questions.',
+    bestFor: 'Course owners, GMs, pro shops, pricing, onboarding, data migration, or partnership questions.',
     dark: true,
   },
   {
@@ -38,7 +38,7 @@ const FOUNDERS = [
     phone: '+1 (248) 863-6330',
     phoneHref: 'tel:+12488636330',
     smsHref: 'sms:+12488636330',
-    bestFor: "Golfers — questions about membership tiers, Fairway Points, partner finder, or your home course. Or you're just curious.",
+    bestFor: "Golfers, questions about membership tiers, Fairway Points, partner finder, or your home course. Or you're just curious.",
     dark: false,
   },
 ]
@@ -55,21 +55,7 @@ export default async function ContactPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      {/* Nav */}
-      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto" />
-          </Link>
-          <div className="flex items-center gap-5">
-            <Link href="/features" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Features</Link>
-            <Link href="/pricing"  className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Pricing</Link>
-            <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90">
-              Claim a spot →
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1 px-6 sm:px-10 lg:px-16 py-16 sm:py-20">
         <div className="max-w-6xl mx-auto">
@@ -90,7 +76,7 @@ export default async function ContactPage() {
               )}
             </h1>
             <p className="mt-5 text-base sm:text-lg text-[#1A1A1A]/78 leading-relaxed max-w-2xl">
-              {c['contact.hero_subhead'] ?? "We're Neil and Billy. We answer our own email and pick up our own phones. If you run a Metro Detroit course or you're a golfer with a question — text, email, or use the form."}
+              {c['contact.hero_subhead'] ?? "We're Neil and Billy. We answer our own email and pick up our own phones. If you run a Metro Detroit course or you're a golfer with a question, text, email, or use the form."}
             </p>
 
             {/* Founder cards */}
@@ -103,7 +89,7 @@ export default async function ContactPage() {
           <FadeIn>
             <div className="mt-14 grid lg:grid-cols-[1fr_1.4fr] gap-10 items-start">
               <div>
-                <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-2.5">Or — a paper trail</p>
+                <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-2.5">Or, a paper trail</p>
                 <h2 className="font-display text-[#0F3D2E] tracking-[-0.015em] leading-[1.1] mb-3" style={{ fontSize: 32, fontWeight: 400 }}>
                   Rather <em className="italic text-[#E0A800]">write&nbsp;it&nbsp;out?</em>
                 </h2>
@@ -164,58 +150,7 @@ export default async function ContactPage() {
         </div>
       </main>
 
-      {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
-
-            {/* Column 1 — Brand */}
-            <div className="col-span-2 sm:col-span-1 space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-
-            {/* Column 2 — For Courses */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors">Software Cost Calculator</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">Join Waitlist</Link>
-              </nav>
-            </div>
-
-            {/* Column 3 — Compare */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/tee-time-software" className="hover:text-[#F4F1EA] transition-colors">Tee Time Software</Link>
-                <Link href="/best-tee-sheet-software" className="hover:text-[#F4F1EA] transition-colors">Best Tee Sheet</Link>
-                <Link href="/golfnow-alternative" className="hover:text-[#F4F1EA] transition-colors">GolfNow Alternative</Link>
-                <Link href="/golf-course-booking-software" className="hover:text-[#F4F1EA] transition-colors">Booking Software</Link>
-              </nav>
-            </div>
-
-            {/* Column 4 — Company */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   )
 }

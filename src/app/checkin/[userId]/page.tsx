@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
 import { CheckInPanel } from '@/components/course/CheckInPanel'
 
-export const metadata = { title: 'Member Check-in — TeeAhead' }
+export const metadata = { title: 'Member Check-in, TeeAhead' }
 
 export default async function CheckInPage({
   params,

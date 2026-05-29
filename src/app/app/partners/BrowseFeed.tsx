@@ -19,7 +19,7 @@ export function BrowseFeed({ grouped, canRequest, sentToAvailabilityIds }: Brows
     return (
       <div className="text-center py-16">
         <p className="text-[#8FA889] text-lg">No one's posted availability for the next two weeks.</p>
-        <p className="text-[#8FA889] text-sm mt-1">Be the first — add your availability.</p>
+        <p className="text-[#8FA889] text-sm mt-1">Be the first, add your availability.</p>
         <a
           href="/app/partners/my-availability"
           className="inline-block mt-4 bg-white text-[#1B4332] font-semibold px-6 py-2.5 rounded-lg text-sm hover:bg-[#FAF7F2]"

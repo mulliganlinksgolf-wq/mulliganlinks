@@ -5,9 +5,11 @@
 
 import { useState, useEffect, ReactNode } from 'react'
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
 import { METRO_DETROIT_COURSES } from '@/lib/metro-detroit-courses'
+import { TYPICAL_PEAK_RATE, OPERATING_DAYS } from '@/lib/barter-math'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
 
 interface DamagePageProps {
   spotsRemaining: number
@@ -29,8 +31,8 @@ async function handleLeadSubmit(lead: {
 }
 
 export function DamagePage({ spotsRemaining }: DamagePageProps) {
-  const [greenFee, setGreenFee] = useState(85)
-  const [operatingDays, setOperatingDays] = useState(280)
+  const [greenFee, setGreenFee] = useState(TYPICAL_PEAK_RATE)
+  const [operatingDays, setOperatingDays] = useState(OPERATING_DAYS)
   const [barterTeeTimes, setBarterTeeTimes] = useState(2)
   const [yearsOnGolfNow, setYearsOnGolfNow] = useState(3)
 
@@ -43,8 +45,12 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
 
   // Animate annualBarterCost
   useEffect(() => {
-    const start = displayedAnnual
     const end = annualBarterCost
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayedAnnual(end)
+      return
+    }
+    const start = displayedAnnual
     const duration = 600
     const startTime = performance.now()
     const tick = (now: number) => {
@@ -60,8 +66,12 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
 
   // Animate totalDamage
   useEffect(() => {
-    const start = displayedTotal
     const end = totalDamage
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setDisplayedTotal(end)
+      return
+    }
+    const start = displayedTotal
     const duration = 600
     const startTime = performance.now()
     const tick = (now: number) => {
@@ -97,15 +107,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
   return (
     <div className="min-h-screen bg-[#082419] text-[#F4F1EA] flex flex-col">
 
-      {/* Nav */}
-      <header className="border-b border-[#F4F1EA]/8 px-6 py-4 flex-shrink-0">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/"><TeeAheadLogo className="h-10 w-auto brightness-0 invert" /></Link>
-          <Link href="/waitlist/course" className="px-4 py-2 rounded-md bg-[#E0A800] text-[#082419] text-sm font-bold hover:bg-[#E0A800]/90">
-            Claim a spot →
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
 
@@ -129,10 +131,10 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
                 ${displayedTotal.toLocaleString()}<span className="text-[#E0A800]">.</span>
               </p>
               <p className="mt-4 text-base sm:text-lg text-[#F4F1EA]/78 leading-relaxed max-w-md">
-                <strong className="text-[#F4F1EA]">${displayedAnnual.toLocaleString()}/year</strong> in barter tee times. Adjust the sliders — the number updates as you drag.
+                <strong className="text-[#F4F1EA]">${displayedAnnual.toLocaleString()}/year</strong> in barter tee times. Adjust the sliders, the number updates as you drag.
               </p>
 
-              {/* Tangibles — editorial, no emoji */}
+              {/* Tangibles, editorial, no emoji */}
               {tangibles.length > 0 && (
                 <div className="mt-7 pt-5 border-t border-[#F4F1EA]/10">
                   <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-3">
@@ -205,7 +207,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
                 onClick={() => setOpenLeadModal((n) => n + 1)}
                 className="mt-1 rounded-md bg-[#E0A800] py-3.5 text-sm font-bold text-[#082419] hover:bg-[#E0A800]/90"
               >
-                Claim a founding spot — save ${displayedTotal.toLocaleString()} going forward →
+                Claim a founding spot, save ${displayedTotal.toLocaleString()} going forward →
               </button>
 
               <p className="text-[11px] text-[#F4F1EA]/40 text-center font-mono tracking-[0.06em]">
@@ -216,7 +218,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
           </div>
         </section>
 
-        {/* ── Proof — cream, restyled ────────────────────────────── */}
+        {/* ── Proof, cream, restyled ────────────────────────────── */}
         <section className="px-6 sm:px-10 lg:px-16 py-16 bg-[#FAF7F2] text-[#1A1A1A]">
           <div className="max-w-5xl mx-auto">
             <div className="flex items-baseline gap-3 mb-10">
@@ -240,7 +242,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
           </div>
         </section>
 
-        {/* ── Lead Capture — unchanged behavior, restyled wrapper ── */}
+        {/* ── Lead Capture, unchanged behavior, restyled wrapper ── */}
         <section className="px-6 py-10 bg-[#FAF7F2]">
           <div className="max-w-2xl mx-auto">
             <SoftwareCostLeadCapture
@@ -278,7 +280,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
               </Link>
             </div>
             <p className="text-sm text-[#6B7770]">
-              Questions? Email Neil — <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">neil@teeahead.com</a>
+              Questions? Email Neil, <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">neil@teeahead.com</a>
             </p>
           </div>
         </section>
@@ -297,52 +299,7 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
 
       </main>
 
-      {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-
-            {/* Column 1 — Brand */}
-            <div className="space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
-                Book ahead. Play more. Own your golf.
-              </p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-
-            {/* Column 2 — Product */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
-                <Link href="/#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
-                <Link href="/#how-it-works" className="hover:text-[#F4F1EA] transition-colors">How It Works</Link>
-              </nav>
-            </div>
-
-            {/* Column 3 — Company */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-            <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
-              Competitor references are for comparative purposes only and based on publicly available
-              information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   )

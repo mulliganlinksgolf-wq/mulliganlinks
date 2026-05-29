@@ -38,14 +38,14 @@ export async function POST(req: Request) {
 
   let paidCount = 0
   for (const [courseId, batch] of byCourse) {
-    if (batch.total < 100) continue // skip payouts under $1 — roll forward to next month
+    if (batch.total < 100) continue // skip payouts under $1, roll forward to next month
 
     try {
       const transfer = await stripe.transfers.create({
         amount: batch.total,
         currency: 'usd',
         destination: batch.stripeAccount,
-        description: `TeeAhead referral rev share — ${batch.ids.length} member${batch.ids.length !== 1 ? 's' : ''}`,
+        description: `TeeAhead referral rev share, ${batch.ids.length} member${batch.ids.length !== 1 ? 's' : ''}`,
         metadata: {
           course_id: courseId,
           referral_count: String(batch.ids.length),

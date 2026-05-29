@@ -44,7 +44,7 @@ export default async function CourseHelpPage({
 
       {totalPublished === 0 ? (
         <div className="rounded-xl border border-dashed border-gray-300 bg-white px-8 py-16 text-center">
-          <p className="text-gray-500">We&apos;re building out the help center — check back soon.</p>
+          <p className="text-gray-500">We&apos;re building out the help center, check back soon.</p>
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">

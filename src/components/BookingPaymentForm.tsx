@@ -160,7 +160,7 @@ export function BookingPaymentForm({
         return
       }
 
-      // TODO: Cart selection (cartPolicy, cartFeeCents) not wired here — add alongside Stripe integration
+      // TODO: Cart selection (cartPolicy, cartFeeCents) not wired here, add alongside Stripe integration
       const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
       const data = await res.json()
       if (!res.ok || !data.client_secret) {
@@ -240,7 +240,7 @@ export function BookingPaymentForm({
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
                   {useGuestPass && <span className="text-white text-xs">✓</span>}
                 </div>
-                Use a guest pass — save $15 ({availablePasses.length} remaining)
+                Use a guest pass, save $15 ({availablePasses.length} remaining)
               </button>
               {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
             </div>

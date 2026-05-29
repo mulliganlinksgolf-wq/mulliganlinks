@@ -3,11 +3,12 @@ import { BestTeeSheetSchema } from '@/components/BestTeeSheetSchema'
 import { SeoLandingTemplate, type SeoLandingConfig } from '@/components/seo/SeoLandingTemplate'
 import { createClient } from '@/lib/supabase/server'
 import { captureReferralCode } from '@/lib/referrals/capture'
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
 
 export const metadata: Metadata = {
   title: 'Best Tee Sheet Software for Golf Courses in 2026',
   description:
-    'An honest comparison of the best tee sheet software for golf courses in 2026 — TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. Pricing, features, and who each platform is best for.',
+    'An honest comparison of the best tee sheet software for golf courses in 2026, TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. Pricing, features, and who each platform is best for.',
   alternates: {
     canonical: 'https://www.teeahead.com/best-tee-sheet-software',
   },
@@ -46,7 +47,7 @@ export default async function BestTeeSheetSoftwarePage({
     ),
     subhead:
       c['besttee.hero_subhead'] ??
-      'An honest read on TeeAhead, foreUP, Lightspeed, Club Caddie, and GolfNow — written by a vendor in this space, so weight the self-assessment accordingly.',
+      'An honest read on TeeAhead, foreUP, Lightspeed, Club Caddie, and GolfNow, written by a vendor in this space, so weight the self-assessment accordingly.',
     sections: [
       {
         kind: 'narrative',
@@ -61,7 +62,7 @@ export default async function BestTeeSheetSoftwarePage({
           <>
             <p>
               {c['besttee.eval_intro'] ??
-                'We looked at the five platforms Metro Detroit operators evaluate most often — TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. For each, the same question: monthly cost (including the hidden cost of barter), whether loyalty is built in, contract terms, payment processing, and reporting.'}
+                'We looked at the five platforms Metro Detroit operators evaluate most often, TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. For each, the same question: monthly cost (including the hidden cost of barter), whether loyalty is built in, contract terms, payment processing, and reporting.'}
             </p>
             <p>
               Competitor pricing comes from publicly available information and industry
@@ -81,7 +82,7 @@ export default async function BestTeeSheetSoftwarePage({
         stats: [
           { num: '$0 / $349', label: 'TeeAhead · Founding Y1, then flat monthly', sub: 'no barter, no commissions' },
           { num: '$300–$800', label: 'foreUP & Lightspeed monthly SaaS range', sub: 'industry sources, 2024–2025' },
-          { num: '$94,500', label: 'GolfNow average annual barter cost', sub: 'NGCOA member survey' },
+          { num: TYPICAL_ANNUAL_BARTER_LABEL, label: 'GolfNow typical annual barter cost', sub: `NGCOA member survey · ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} resort ceiling` },
         ],
       },
       {
@@ -104,11 +105,11 @@ export default async function BestTeeSheetSoftwarePage({
         items: [
           {
             q: 'How does TeeAhead compare to foreUP on price?',
-            a: 'foreUP runs $400–$800/mo with no barter. TeeAhead is $0 for Founding Partners in year one, then $349/mo flat. For a course doing $94,500/yr in GolfNow barter, the swing to either platform is dramatic — TeeAhead just lands lower.',
+            a: `foreUP runs $400–$800/mo with no barter. TeeAhead is $0 for Founding Partners in year one, then $349/mo flat. For a course doing ${TYPICAL_ANNUAL_BARTER_LABEL} to ${HIGH_VOLUME_ANNUAL_BARTER_LABEL}/yr in GolfNow barter, the swing to either platform is dramatic, and TeeAhead just lands lower.`,
           },
           {
             q: 'Is Club Caddie a real alternative for Michigan courses?',
-            a: 'Yes — Detroit-based, $200–$500/mo, solid POS. No built-in loyalty network and no league management. Good fit if you want local support and already have a loyalty program.',
+            a: 'Yes, Detroit-based, $200–$500/mo, solid POS. No built-in loyalty network and no league management. Good fit if you want local support and already have a loyalty program.',
           },
           {
             q: 'Why would I choose GolfNow if the barter is so expensive?',

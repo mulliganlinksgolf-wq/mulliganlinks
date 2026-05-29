@@ -1,17 +1,19 @@
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { createClient } from '@/lib/supabase/server'
 import { CourseWaitlistSection } from './CourseWaitlistSection'
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata = {
   title: 'Founding Partner Application',
-  description: 'Claim one of 10 Founding Partner spots. Free tee sheet software for your first year — zero barter, zero commissions, live within 48 hours.',
+  description: 'Claim one of 10 Founding Partner spots. Free tee sheet software for your first year, zero barter, zero commissions, live within 48 hours.',
   alternates: { canonical: '/waitlist/course' },
   openGraph: {
     url: '/waitlist/course',
     title: 'TeeAhead Founding Partner Application',
-    description: 'Claim one of 10 Founding Partner spots. Free platform for your first year — zero barter, zero commissions.',
+    description: 'Claim one of 10 Founding Partner spots. Free platform for your first year, zero barter, zero commissions.',
   },
 }
 
@@ -30,23 +32,9 @@ export default async function CourseWaitlistPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
-      {/* ── Header / Nav ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-3 py-1">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-xs font-semibold text-[#E0A800] tracking-wide uppercase">Waitlist Open</span>
-            </div>
-            <Link href="/" className="text-sm text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors">← Back</Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
-      {/* ── Hero — split: pitch left, form right ─────────────────── */}
+      {/* ── Hero, split: pitch left, form right ─────────────────── */}
       <section className="bg-[#082419] px-6 sm:px-10 lg:px-16 py-16 sm:py-20 text-[#F4F1EA]">
         <FadeIn>
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.15fr_1fr] gap-10 lg:gap-14 items-center">
@@ -67,7 +55,7 @@ export default async function CourseWaitlistPage() {
               </h1>
 
               <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#F4F1EA]/78 max-w-xl">
-                {c['waitlist_course.hero_subhead'] ?? 'Independent Metro Detroit courses only. No barter, no commissions, no data extraction — and we never market to your golfers. After year one, $349/mo flat. Cancel anytime.'}
+                {c['waitlist_course.hero_subhead'] ?? 'Independent Metro Detroit courses only. No barter, no commissions, no data extraction, and we never market to your golfers. After year one, $349/mo flat. Cancel anytime.'}
               </p>
 
             </div>
@@ -137,7 +125,7 @@ export default async function CourseWaitlistPage() {
         </div>
       </div>
 
-      {/* ── Benefits — numbered, no emoji ────────────────────── */}
+      {/* ── Benefits, numbered, no emoji ────────────────────── */}
       <section className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-16 border-t-4 border-[#E0A800]">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-baseline gap-3 mb-10">
@@ -148,10 +136,10 @@ export default async function CourseWaitlistPage() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { n: '01', t: 'Kill the barter', d: 'Stop handing GolfNow $80K–$150K a year in free tee times. Keep every dollar your golfers spend.' },
+              { n: '01', t: 'Kill the barter', d: `Stop handing GolfNow ${TYPICAL_ANNUAL_BARTER_LABEL} to ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} a year in free tee times. Keep every dollar your golfers spend.` },
               { n: '02', t: 'Own your golfer data', d: 'Every profile, every email belongs to your course. Full CSV export anytime. We never market to your golfers.' },
               { n: '03', t: 'Live in 48 hours', d: "We handle the entire setup. Your staff touches nothing. If you're not live within 48 hours, we'll make it right." },
-              { n: '04', t: 'Earn while you sleep', d: 'Refer a golfer who picks your course as their home course and earn 10% of their membership monthly — automatic payouts.' },
+              { n: '04', t: 'Earn while you sleep', d: 'Refer a golfer who picks your course as their home course and earn 10% of their membership monthly, with automatic payouts.' },
             ].map(({ n, t, d }) => (
               <div key={n} className="border-t border-[#0F3D2E] pt-4">
                 <p className="font-mono text-xs text-[#E0A800] font-bold tracking-[0.1em] mb-2.5">{n}</p>
@@ -198,7 +186,7 @@ export default async function CourseWaitlistPage() {
                 <p className="text-sm text-[#6B7770] leading-relaxed">{description}</p>
                 {multiYearNote && (
                   <p className="text-xs text-[#9DAA9F] mt-1">
-                    Multi-year contracts available at a discount — ask Neil or Billy.
+                    Multi-year contracts available at a discount. Ask Neil or Billy.
                   </p>
                 )}
               </div>
@@ -217,8 +205,8 @@ export default async function CourseWaitlistPage() {
             </div>
             <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
             <div className="space-y-0.5">
-              <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em]" style={{ fontWeight: 400 }}>$94,500</p>
-              <p className="text-xs text-[#6B7770] leading-snug">avg annual barter cost<br/>per course</p>
+              <p className="font-display text-2xl text-[#0F3D2E] tracking-[-0.02em]" style={{ fontWeight: 400 }}>{TYPICAL_ANNUAL_BARTER_LABEL}</p>
+              <p className="text-xs text-[#6B7770] leading-snug">typical annual barter cost<br/>per daily-fee course</p>
             </div>
             <div className="hidden sm:block w-px h-10 bg-[#0F3D2E]/15" />
             <div className="space-y-0.5">
@@ -232,51 +220,7 @@ export default async function CourseWaitlistPage() {
       {/* ── GolfNow Countdown + Form section ─────────────────── */}
       <CourseWaitlistSection spotsRemaining={spotsRemaining} />
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-
-            {/* Column 1 — Brand */}
-            <div className="space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
-                Book ahead. Play more. Own your golf.
-              </p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-
-            {/* Column 2 — Product */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-1.5 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="/waitlist/golfer#pricing" className="hover:text-[#F4F1EA] transition-colors pl-3">Pricing</Link>
-                <Link href="/waitlist/course" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors mt-1">For Courses</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors pl-3">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors pl-3">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors pl-3">Software Cost Calculator</Link>
-              </nav>
-            </div>
-
-            {/* Column 3 — Company */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   )

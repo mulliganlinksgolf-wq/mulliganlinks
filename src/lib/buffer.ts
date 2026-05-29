@@ -181,7 +181,7 @@ export async function createPost(
   const results: { id: string; dueAt: string }[] = []
   for (const channel of input.channels) {
     if (channel.service === 'instagram' && !input.mediaUrls?.length) {
-      throw new Error('Instagram posts require an image — attach one and try again')
+      throw new Error('Instagram posts require an image, attach one and try again')
     }
     const dueAtField = input.dueAt ? `, dueAt: "${input.dueAt}"` : ''
     const metadataField = metadataForService(channel.service)

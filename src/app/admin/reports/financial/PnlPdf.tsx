@@ -23,7 +23,7 @@ export default function PnlPdf({ rows, generatedAt }: { rows: PnlRow[]; generate
     <Document>
       <Page size="A4" orientation="landscape" style={s.page}>
         <View style={s.header}>
-          <Text style={s.title}>TeeAhead — P&L Report</Text>
+          <Text style={s.title}>TeeAhead, P&L Report</Text>
           <Text style={s.subtitle}>Generated {generatedAt}</Text>
         </View>
 

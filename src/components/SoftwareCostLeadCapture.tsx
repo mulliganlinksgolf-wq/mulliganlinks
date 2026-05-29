@@ -1,7 +1,7 @@
 'use client'
 
 /**
- * TeeAhead — Software Cost Lead Capture
+ * TeeAhead, Software Cost Lead Capture
  *
  * DROP-IN for /software-cost page.
  *
@@ -162,7 +162,7 @@ export default function SoftwareCostLeadCapture({
 
   const handleLinkedIn = useCallback(() => {
     const text = encodeURIComponent(
-      `We just calculated what our golf management software is actually costing us — ${fmt(costs.totalExtraction)}/year in subscriptions, processing markups, and marketplace barter. TeeAhead charges $349/month flat. No barter. No commissions. No data extraction. Worth a look: https://teeahead.com/software-cost`
+      `We just calculated what our golf management software is actually costing us: ${fmt(costs.totalExtraction)}/year in subscriptions, processing markups, and marketplace barter. TeeAhead charges $349/month flat. No barter. No commissions. No data extraction. Worth a look: https://teeahead.com/software-cost`
     )
     window.open(
       `https://www.linkedin.com/sharing/share-offsite/?url=https://teeahead.com/software-cost&summary=${text}`,
@@ -174,10 +174,10 @@ export default function SoftwareCostLeadCapture({
 
   return (
     <>
-      {/* ── Share / Download bar — shown below results ── */}
+      {/* ── Share / Download bar, shown below results ── */}
       <div style={styles.shareBar}>
         <p style={styles.shareLabel}>
-          Share your results — help other courses see the real cost
+          Share your results, help other courses see the real cost
         </p>
         <div style={styles.shareRow}>
           <button style={styles.shareBtn} onClick={() => setModalOpen(true)}>
@@ -225,7 +225,7 @@ export default function SoftwareCostLeadCapture({
                 </h2>
                 <p style={styles.modalSub}>
                   We'll send you a personalized PDF showing your exact extraction
-                  numbers — and what you'd save with TeeAhead.
+                  numbers, and what you'd save with TeeAhead.
                 </p>
 
                 {/* Pain summary */}

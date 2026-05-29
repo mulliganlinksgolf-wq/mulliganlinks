@@ -45,7 +45,7 @@ export async function issueRainCheck({
 
   if (error || !data) return { error: 'Failed to issue rain check' }
 
-  // Fire-and-forget — member gets their code by email too
+  // Fire-and-forget, member gets their code by email too
   sendRainCheckEmail({
     userId: memberId,
     courseName: (await createAdminClient().from('courses').select('name').eq('id', courseId).single()).data?.name ?? 'the course',

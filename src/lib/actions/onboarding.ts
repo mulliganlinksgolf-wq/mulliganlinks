@@ -216,7 +216,7 @@ export async function goLive(courseId: string): Promise<void> {
 
   if (updateError) throw new Error('Failed to go live: ' + updateError.message)
 
-  // Email failures must not block the go-live state — DB write is the source of truth
+  // Email failures must not block the go-live state, DB write is the source of truth
   try {
     await Promise.all([sendGoLiveAlert(course), sendCourseWelcome(course)])
   } catch (err) {

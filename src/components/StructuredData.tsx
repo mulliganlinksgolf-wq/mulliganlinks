@@ -84,7 +84,7 @@ export function StructuredData() {
         offers: [
           {
             '@type': 'Offer',
-            name: 'Fairway — Free Tier',
+            name: 'Fairway, Free Tier',
             price: '0',
             priceCurrency: 'USD',
             description: 'Book tee times at partner courses, earn Fairway Points, zero booking fees.',

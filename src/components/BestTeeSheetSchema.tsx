@@ -1,3 +1,5 @@
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
+
 export function BestTeeSheetSchema() {
   const schemas = [
     {
@@ -7,11 +9,11 @@ export function BestTeeSheetSchema() {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       url: 'https://www.teeahead.com',
-      description: 'The best tee sheet software for independent golf courses — no barter tee times, no commissions, built-in golfer loyalty program. Free first year for Founding Partners, then $349/month.',
+      description: 'The best tee sheet software for independent golf courses, no barter tee times, no commissions, built-in golfer loyalty program. Free first year for Founding Partners, then $349/month.',
       offers: [
         {
           '@type': 'Offer',
-          name: 'Founding Partner — Free Year One',
+          name: 'Founding Partner, Free Year One',
           price: '0',
           priceCurrency: 'USD',
         },
@@ -55,7 +57,7 @@ export function BestTeeSheetSchema() {
           name: 'What is the cheapest tee sheet software for golf courses?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'TeeAhead is the least expensive full-featured tee sheet software at $349/month, with the first year free for Founding Partner courses. GolfNow offers free software but requires barter tee times worth $80,000–$100,000/year in foregone revenue, making it the most expensive option in practice.',
+            text: `TeeAhead is the least expensive full-featured tee sheet software at $349/month, with the first year free for Founding Partner courses. GolfNow offers free software but requires barter tee times worth ${TYPICAL_ANNUAL_BARTER_LABEL}–${HIGH_VOLUME_ANNUAL_BARTER_LABEL}/year in foregone revenue, making it the most expensive option in practice.`,
           },
         },
         {
@@ -63,7 +65,7 @@ export function BestTeeSheetSchema() {
           name: 'Does tee sheet software replace GolfNow?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. Modern tee sheet platforms like TeeAhead, foreUP, and Lightspeed Golf provide all the functionality of GolfNow — online booking, tee sheet management, payment processing — without requiring barter tee times or paying commissions per booking. Courses that switch typically recover the software cost within the first few weeks of the season.',
+            text: 'Yes. Modern tee sheet platforms like TeeAhead, foreUP, and Lightspeed Golf provide all the functionality of GolfNow, online booking, tee sheet management, payment processing, without requiring barter tee times or paying commissions per booking. Courses that switch typically recover the software cost within the first few weeks of the season.',
           },
         },
       ],
@@ -73,7 +75,7 @@ export function BestTeeSheetSchema() {
       '@type': 'Article',
       '@id': 'https://www.teeahead.com/best-tee-sheet-software#article',
       headline: 'Best Tee Sheet Software for Golf Courses in 2026',
-      description: 'An honest comparison of the best tee sheet software for golf courses in 2026 — TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. Pricing, features, and who each platform is best for.',
+      description: 'An honest comparison of the best tee sheet software for golf courses in 2026, TeeAhead, foreUP, Lightspeed Golf, Club Caddie, and GolfNow. Pricing, features, and who each platform is best for.',
       url: 'https://www.teeahead.com/best-tee-sheet-software',
       mainEntityOfPage: {
         '@type': 'WebPage',

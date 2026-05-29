@@ -33,7 +33,7 @@ export default function SignupPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      // Fire-and-forget admin notification — don't await, never block signup
+      // Fire-and-forget admin notification, don't await, never block signup
       fetch('/api/auth/signup-notification', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -59,7 +59,7 @@ export default function SignupPage() {
     <Card className="bg-white border-0 shadow-sm">
       <CardHeader>
         <CardTitle className="text-[#1A1A1A]">Create your account</CardTitle>
-        <CardDescription className="text-[#6B7770]">Start with Fairway — free forever. Upgrade anytime.</CardDescription>
+        <CardDescription className="text-[#6B7770]">Start with Fairway, free forever. Upgrade anytime.</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">

@@ -70,7 +70,7 @@ export default async function ViewAsMemberPage({
         </div>
       </div>
 
-      {/* Member header — exactly as they see it */}
+      {/* Member header, exactly as they see it */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1A1A1A]">Hey, {firstName} 👋</h1>

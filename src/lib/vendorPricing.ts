@@ -24,7 +24,7 @@ export const VENDOR_PRICING = {
     parent: 'Battery Ventures / Clubessential Holdings (PE)',
     marketplaceDefault: true,
     receipt:
-      "foreUP is owned by Battery Ventures, part of a 10,000-customer PE rollup. Their default Supreme Golf integration distributes your tee times to Barstool Golf Time, Golf Digest, and CBS Sports. Every booking through those channels makes Barstool the customer relationship — not you.",
+      "foreUP is owned by Battery Ventures, part of a 10,000-customer PE rollup. Their default Supreme Golf integration distributes your tee times to Barstool Golf Time, Golf Digest, and CBS Sports. Every booking through those channels makes Barstool the customer relationship, not you.",
   },
   lightspeed: {
     name: 'Lightspeed Golf',
@@ -34,7 +34,7 @@ export const VENDOR_PRICING = {
     parent: 'Lightspeed Commerce (public company)',
     marketplaceDefault: true,
     receipt:
-      "Lightspeed's privacy policy explicitly states they *'may sell non-personally identifiable information that has been derived from aggregated and de-identified Personal Data.'* Across 2,000+ courses, that aggregated dataset is one of the most valuable assets in golf — and your course data trains it.",
+      "Lightspeed's privacy policy explicitly states they *'may sell non-personally identifiable information that has been derived from aggregated and de-identified Personal Data.'* Across 2,000+ courses, that aggregated dataset is one of the most valuable assets in golf, and your course data trains it.",
   },
   clubcaddie: {
     name: 'Club Caddie',
@@ -44,7 +44,7 @@ export const VENDOR_PRICING = {
     parent: 'Jonas Software / Constellation Software',
     marketplaceDefault: true,
     receipt:
-      "Club Caddie's privacy policy explicitly says: *'if you book a tee time through the Services, your information will be shared with a third-party tee time aggregator we contract with.'* Your golfers' data goes to aggregators by default — not by accident.",
+      "Club Caddie's privacy policy explicitly says: *'if you book a tee time through the Services, your information will be shared with a third-party tee time aggregator we contract with.'* Your golfers' data goes to aggregators by default, not by accident.",
   },
   clubprophet: {
     name: 'Club Prophet',
@@ -54,7 +54,7 @@ export const VENDOR_PRICING = {
     parent: 'Independent (30+ years, 1,700 facilities)',
     marketplaceDefault: true,
     receipt:
-      "Club Prophet integrated with Supreme Golf in December 2025 — meaning your tee times are now distributed across Barstool Golf Time, Golf Digest, and CBS Sports unless you've explicitly turned it off. Did anyone tell you?",
+      "Club Prophet integrated with Supreme Golf in December 2025, meaning your tee times are now distributed across Barstool Golf Time, Golf Digest, and CBS Sports unless you've explicitly turned it off. Did anyone tell you?",
   },
   jonas: {
     name: 'Jonas Club Software',
@@ -64,7 +64,7 @@ export const VENDOR_PRICING = {
     parent: 'Constellation Software',
     marketplaceDefault: false,
     receipt:
-      "Jonas is enterprise-tier — primarily private clubs. They don't push to public marketplaces, but their aggregate data clauses are standard: anything anonymized can be shared with third parties without restriction.",
+      "Jonas is enterprise-tier, primarily private clubs. They don't push to public marketplaces, but their aggregate data clauses are standard: anything anonymized can be shared with third parties without restriction.",
   },
   quick18: {
     name: 'Quick 18 (Sagacity)',
@@ -74,7 +74,7 @@ export const VENDOR_PRICING = {
     parent: 'Sagacity Golf',
     marketplaceDefault: true,
     receipt:
-      "Sagacity's value prop is dynamic pricing 'based on cross-course market data' — which is your data, plus 700 other courses' data, used to set prices at all of them. You're paying them to learn from your operation and sell that learning to your competitors.",
+      "Sagacity's value prop is dynamic pricing 'based on cross-course market data', which is your data, plus 700 other courses' data, used to set prices at all of them. You're paying them to learn from your operation and sell that learning to your competitors.",
   },
   teesnap: {
     name: 'Teesnap',
@@ -84,7 +84,7 @@ export const VENDOR_PRICING = {
     parent: 'Independent',
     marketplaceDefault: false,
     receipt:
-      "Teesnap is one of the more reserved players on consumer data, but they integrate directly with GolfNow as a partner — meaning if you've enabled distribution, you're back in the GolfNow ecosystem.",
+      "Teesnap is one of the more reserved players on consumer data, but they integrate directly with GolfNow as a partner, meaning if you've enabled distribution, you're back in the GolfNow ecosystem.",
   },
   other: {
     name: 'Other / Not sure',
@@ -94,7 +94,7 @@ export const VENDOR_PRICING = {
     parent: 'Various',
     marketplaceDefault: true,
     receipt:
-      "If you're not sure what your vendor is doing with your data, that's the problem. Read your contract's data section and your vendor's privacy policy — specifically the 'aggregated information' and 'third-party partners' clauses. Most courses are surprised by what they find.",
+      "If you're not sure what your vendor is doing with your data, that's the problem. Read your contract's data section and your vendor's privacy policy, specifically the 'aggregated information' and 'third-party partners' clauses. Most courses are surprised by what they find.",
   },
 } as const
 

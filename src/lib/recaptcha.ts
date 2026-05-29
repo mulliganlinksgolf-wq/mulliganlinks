@@ -2,12 +2,12 @@ const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET_KEY
 
 export async function verifyRecaptcha(token: string): Promise<boolean> {
   if (!RECAPTCHA_SECRET) {
-    console.warn('[recaptcha] RECAPTCHA_SECRET_KEY not set — skipping verification')
+    console.warn('[recaptcha] RECAPTCHA_SECRET_KEY not set, skipping verification')
     return true
   }
 
   if (!token) {
-    console.warn('[recaptcha] empty token received — reCAPTCHA script may not have loaded on client')
+    console.warn('[recaptcha] empty token received, reCAPTCHA script may not have loaded on client')
     return false
   }
 

@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
-// Hardcoded fallback — also checked against profiles.is_admin in DB
+// Hardcoded fallback, also checked against profiles.is_admin in DB
 const ADMIN_EMAILS = ['mulliganlinksgolf@gmail.com', 'neil@teeahead.com', 'beslock@yahoo.com']
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {

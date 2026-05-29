@@ -73,7 +73,7 @@ export function BookingForm({
   const subtotal = teeTime.base_price * players
   const greenFeeCents = Math.round(teeTime.base_price * players * 100)
 
-  // Comp/free round covers the member's own green fee (1 player) — others still pay
+  // Comp/free round covers the member's own green fee (1 player), others still pay
   const memberFeeDiscount = (useCompRound || useFreeRound) ? teeTime.base_price : 0
   const guestDiscount = useGuestPass ? 15 : 0
   const cartFeeAdded = (cartSelected && cartPolicy !== 'walking_only') ? cartFeeCents / 100 : 0
@@ -115,7 +115,7 @@ export function BookingForm({
         tier,
         guestPassId: useGuestPass && availablePasses[0] ? availablePasses[0].id : undefined,
         redemptionType: useCompRound ? 'complimentary' : useFreeRound ? 'points' : undefined,
-        // cart fields — action updated in Task 8
+        // cart fields, action updated in Task 8
         cartSelected: cartSelected,
         cartFeeCents: cartSelected ? cartFeeCents : 0,
         joinExistingGroup,
@@ -185,7 +185,7 @@ export function BookingForm({
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
                   {useGuestPass && <span className="text-white text-xs">✓</span>}
                 </div>
-                Use a guest pass — save $15 ({availablePasses.length} remaining)
+                Use a guest pass, save $15 ({availablePasses.length} remaining)
               </button>
               {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
             </div>
@@ -249,7 +249,7 @@ export function BookingForm({
             {rainCheckError && <p className="text-xs text-red-600">{rainCheckError}</p>}
           </div>
 
-          {/* Complimentary round toggle — Eagle/Ace only */}
+          {/* Complimentary round toggle, Eagle/Ace only */}
           {compRoundsRemaining > 0 && (
             <div className="flex items-center justify-between py-2 border-b border-[#e5e7eb]">
               <div>

@@ -125,7 +125,7 @@ export async function sendConnectionRequest(
     return { error: 'Message must be 280 characters or fewer.' }
   }
 
-  // Check block — silently succeed if blocked (don't reveal the block)
+  // Check block, silently succeed if blocked (don't reveal the block)
   const { data: blocked } = await supabase!.rpc('is_blocked', {
     user_a: user!.id,
     user_b: recipientId,

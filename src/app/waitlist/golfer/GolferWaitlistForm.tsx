@@ -36,7 +36,7 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
     if (selectedCourseId) formData.set('selected_course_id', selectedCourseId)
 
     if (!executeRecaptcha) {
-      setError('Security check still loading — please try again in a moment.')
+      setError('Security check still loading, please try again in a moment.')
       return
     }
 
@@ -77,7 +77,7 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
             </div>
           ))}
         </div>
-        <a href="/#pricing" className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors">
+        <a href="/pricing" className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors">
           Compare memberships →
         </a>
       </div>
@@ -163,7 +163,7 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
           </select>
         </div>
 
-        {/* Course picker — shown only when "My home course" is selected */}
+        {/* Course picker, shown only when "My home course" is selected */}
         {hearAboutUs === 'my_home_course' && (
           <div className="space-y-1.5">
             <Label htmlFor="course_search" className="text-[#F4F1EA]">Which course?</Label>
@@ -219,7 +219,7 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
       {/* ── Optional fields ─────────────────────────── */}
       <div className="space-y-5 pt-4 border-t border-white/10">
         <p className="text-sm font-medium text-[#F4F1EA]/70">
-          Optional — help us personalize your experience
+          Optional: help us personalize your experience
         </p>
 
         <div className="space-y-1.5">
@@ -259,9 +259,9 @@ export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string;
           <legend className="text-sm font-medium text-[#F4F1EA]">Which tier interests you most?</legend>
           <div className="space-y-2">
             {[
-              { value: 'fairway', label: 'Fairway — Free forever' },
-              { value: 'eagle', label: 'Eagle — $89/yr (most popular)' },
-              { value: 'ace', label: 'Ace — $159/yr (all-in)' },
+              { value: 'fairway', label: 'Fairway · Free forever' },
+              { value: 'eagle', label: 'Eagle · $89/yr (most popular)' },
+              { value: 'ace', label: 'Ace · $159/yr (all-in)' },
               { value: 'not_sure', label: 'Not sure yet' },
             ].map(({ value, label }) => (
               <label key={value} className="flex items-center gap-3 cursor-pointer">

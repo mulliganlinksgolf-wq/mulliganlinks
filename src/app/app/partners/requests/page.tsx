@@ -7,7 +7,7 @@ import { RequestsWithRating } from './RequestsWithRating'
 import { PendingRatings } from './PendingRatings'
 import type { RatingPrompt } from './PendingRatings'
 
-export const metadata: Metadata = { title: 'Partner Requests — TeeAhead' }
+export const metadata: Metadata = { title: 'Partner Requests, TeeAhead' }
 
 const STATUS_BADGE: Record<string, string> = {
   pending: 'bg-yellow-500/20 text-yellow-300',

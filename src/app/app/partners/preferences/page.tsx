@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import type { PartnerPreferences } from '@/types/partners'
 import { PreferencesForm } from './PreferencesForm'
 
-export const metadata: Metadata = { title: 'Partner Profile — TeeAhead' }
+export const metadata: Metadata = { title: 'Partner Profile, TeeAhead' }
 
 export default async function PreferencesPage() {
   const supabase = await createClient()

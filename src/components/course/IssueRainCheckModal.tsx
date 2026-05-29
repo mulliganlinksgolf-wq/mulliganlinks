@@ -66,7 +66,7 @@ export function IssueRainCheckModal({ memberId, memberName, courseId, suggestedA
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-sm p-6 space-y-5">
         <div>
           <h2 className="text-lg font-bold text-[#1A1A1A]">Issue rain check</h2>
-          <p className="text-sm text-[#6B7770] mt-1">For {memberName} — redeemable on a future booking</p>
+          <p className="text-sm text-[#6B7770] mt-1">For {memberName}, redeemable on a future booking</p>
         </div>
 
         {/* Quick-select amounts */}
@@ -108,7 +108,7 @@ export function IssueRainCheckModal({ memberId, memberName, courseId, suggestedA
             type="text"
             value={note}
             onChange={e => setNote(e.target.value)}
-            placeholder="e.g. Rain delay — 9 holes played"
+            placeholder="e.g. Rain delay, 9 holes played"
             className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
           />
         </div>

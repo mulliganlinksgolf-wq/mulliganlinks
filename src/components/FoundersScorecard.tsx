@@ -54,7 +54,7 @@ const HOLES: Hole[] = [
     par: "Billy's Side",
     notes: (
       <>
-        Billy&apos;s been the golfer on the other side — paying booking fees,
+        Billy&apos;s been the golfer on the other side, paying booking fees,
         watching credits expire, feeling like a transaction instead of a regular.
       </>
     ),
@@ -191,7 +191,7 @@ export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: nu
           </div>
         ))}
 
-        {/* Footer — signatures + CTAs */}
+        {/* Footer, signatures + CTAs */}
         <div className="border-t border-[#0F3D2E]/10 px-4 sm:px-8 py-5 grid sm:grid-cols-2 gap-6 items-center">
           {/* Left: signatures */}
           <div className="flex gap-5 sm:gap-8 flex-wrap">

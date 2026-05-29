@@ -32,13 +32,13 @@ export function HottestLaggardSlots({ cells }: { cells: UtilizationCell[] }) {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <SlotList
         title="Hottest Slots"
-        tagline="Sells out the most consistently — best candidates for pricing experiments"
+        tagline="Sells out the most consistently, best candidates for pricing experiments"
         accent="emerald"
         cells={hottest}
       />
       <SlotList
         title="Laggard Slots"
-        tagline="Least-booked among slots that got at least one booking — candidates for promotion or pace-of-play tweaks"
+        tagline="Least-booked among slots that got at least one booking, candidates for promotion or pace-of-play tweaks"
         accent="amber"
         cells={laggard}
       />

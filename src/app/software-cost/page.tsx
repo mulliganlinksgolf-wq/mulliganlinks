@@ -6,9 +6,9 @@ import { createClient } from '@/lib/supabase/server'
 import { SoftwareCostPage } from '@/components/SoftwareCostPage'
 
 export const metadata: Metadata = {
-  title: 'Software Cost Calculator: What is your golf software actually costing you? — TeeAhead',
+  title: 'Software Cost Calculator',
   description:
-    'foreUP, Lightspeed, Club Caddie, Club Prophet — they all charge real money and route your golfer data through marketplaces. Calculate the full cost in 30 seconds. No login. No email required.',
+    'foreUP, Lightspeed, Club Caddie, Club Prophet: they all charge real money and route your golfer data through marketplaces. Calculate the full cost in 30 seconds. No login. No email required.',
   openGraph: {
     title: 'What is your golf software actually costing you?',
     description:

@@ -22,7 +22,7 @@ export async function captureReferralCode(code: string | null) {
 
   if (!data) return // silently ignore invalid or inactive codes
 
-  // cookies().set() throws in Server Components — only works in Route Handlers/Actions.
+  // cookies().set() throws in Server Components, only works in Route Handlers/Actions.
   // Wrap so a direct ?ref= on a page never crashes the render.
   try {
     const cookieStore = await cookies()
@@ -34,7 +34,7 @@ export async function captureReferralCode(code: string | null) {
       path: '/',
     })
   } catch {
-    // swallow — /join route handler is the canonical path that sets the cookie
+    // swallow, /join route handler is the canonical path that sets the cookie
   }
 }
 

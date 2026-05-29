@@ -76,7 +76,7 @@ export function CheckInPanel({ memberId, memberName, tier, pointsBalance, course
         </span>
       </div>
 
-      {/* Course selector — only shown if admin of multiple courses */}
+      {/* Course selector, only shown if admin of multiple courses */}
       {courses.length > 1 && (
         <div>
           <label className="text-sm font-medium text-[#1A1A1A] block mb-1.5">Course</label>

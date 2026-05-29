@@ -11,7 +11,7 @@ export function ImpersonateRedirect() {
   const router = useRouter()
 
   useEffect(() => {
-    // Must run client-side — hash is never visible during SSR
+    // Must run client-side, hash is never visible during SSR
     if (!window.location.hash.includes('type=magiclink')) return
 
     const params = new URLSearchParams(window.location.hash.slice(1))

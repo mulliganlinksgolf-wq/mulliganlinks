@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     const savings = Math.round(lead.calculatedSavings ?? 0).toLocaleString()
 
     await sendAdminNotification({
-      subject: `New lead: ${esc(lead.courseName || lead.name)} — $${savings}/yr savings`,
+      subject: `New lead: ${esc(lead.courseName || lead.name)}, $${savings}/yr savings`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">New calculator lead</h2>

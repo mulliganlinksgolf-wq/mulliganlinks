@@ -1,12 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { createClient } from '@/lib/supabase/server'
 import { FadeIn } from '@/components/FadeIn'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
+import {
+  TYPICAL_ANNUAL_BARTER_LABEL,
+  HIGH_VOLUME_ANNUAL_BARTER_LABEL,
+  MONTHLY_PRICE_LABEL,
+} from '@/lib/barter-math'
 
 export const metadata: Metadata = {
-  title: 'Pricing — TeeAhead',
+  title: 'Pricing',
   description: 'No barter. No commissions. No hidden fees. Founding Partner courses get their first year free. Golfer memberships start at $0.',
   alternates: { canonical: '/pricing' },
 }
@@ -25,7 +30,7 @@ export default async function PricingPage() {
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <PricingNav />
+      <SiteHeader />
 
       <main className="flex-1">
         <PricingHero c={c} />
@@ -36,26 +41,6 @@ export default async function PricingPage() {
 
       <SiteFooter />
     </div>
-  )
-}
-
-function PricingNav() {
-  return (
-    <header className="sticky top-0 z-50 bg-[#FAF7F2]/95 backdrop-blur border-b border-[#0F3D2E]/10">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/">
-          <TeeAheadLogo className="h-10 sm:h-12 w-auto" />
-        </Link>
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Link href="/features" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Features</Link>
-          <Link href="/pricing" className="hidden sm:inline text-sm text-[#0F3D2E] font-semibold">Pricing</Link>
-          <Link href="/about" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">About</Link>
-          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-3.5 sm:px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 whitespace-nowrap">
-            Claim a spot →
-          </Link>
-        </div>
-      </div>
-    </header>
   )
 }
 
@@ -81,7 +66,7 @@ function PricingHero({ c }: { c: Record<string, string> }) {
               )}
             </h1>
             <p className="mt-5 text-base sm:text-lg leading-relaxed text-[#1A1A1A]/78 max-w-lg">
-              {c['pricing.hero_subhead'] ?? "We're not the cheapest. We're the honest one. No barter, no commissions, no data extraction — and Founding Partner courses get the first year free."}
+              {c['pricing.hero_subhead'] ?? "We're not the cheapest. We're the honest one. No barter, no commissions, no data extraction, and Founding Partner courses get the first year free."}
             </p>
           </div>
 
@@ -91,9 +76,9 @@ function PricingHero({ c }: { c: Record<string, string> }) {
               <div className="pr-4 sm:pr-5 border-r border-[#0F3D2E]/10">
                 <p className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-3">GolfNow&apos;s &ldquo;free&rdquo;</p>
                 <p className="font-display text-[40px] sm:text-6xl text-[#1A1A1A] leading-[0.9] tracking-[-0.025em]" style={{ fontWeight: 400 }}>
-                  $94,500<span className="text-[#C24A3B]">.</span>
+                  {TYPICAL_ANNUAL_BARTER_LABEL}<span className="text-[#C24A3B]">.</span>
                 </p>
-                <p className="text-xs text-[#6B7770] mt-2 leading-snug">Per year in barter tee times the average course gives away. Plus commissions on every booking.</p>
+                <p className="text-xs text-[#6B7770] mt-2 leading-snug">Per year in barter tee times the typical daily-fee course gives away ({HIGH_VOLUME_ANNUAL_BARTER_LABEL}+ for high-volume courses). Plus commissions on every booking.</p>
                 <ul className="mt-3.5">
                   {['Barter required', 'Commissions per booking', 'Your golfers, their database'].map(t => (
                     <li key={t} className="flex gap-2 text-xs text-[#6B7770] py-0.5 items-baseline">
@@ -118,7 +103,7 @@ function PricingHero({ c }: { c: Record<string, string> }) {
               </div>
             </div>
             <div className="mt-5 px-4 py-3 bg-[#0F3D2E]/[0.06] rounded-md text-xs text-[#0F3D2E] leading-snug">
-              <strong>Founding Partner Year 1:</strong> $94,500 saved. That&apos;s the deal.
+              <strong>Founding Partner Year 1:</strong> a typical {TYPICAL_ANNUAL_BARTER_LABEL} saved, then {MONTHLY_PRICE_LABEL}/mo flat. That&apos;s the deal.
             </div>
           </div>
         </div>
@@ -155,7 +140,7 @@ function CourseAndGolferPricing({ c, spotsRemaining }: { c: Record<string, strin
             </div>
 
             <p className="text-sm text-[#6B7770] leading-relaxed max-w-3xl">
-              {c['pricing.founding_note'] ?? 'The first 10 Founding Partner courses get TeeAhead free for their first year. Standard pricing is $349/month after that — still 95% cheaper than a typical GolfNow barter contract.'}
+              {c['pricing.founding_note'] ?? 'The first 10 Founding Partner courses get TeeAhead free for their first year. Standard pricing is $349/month after that, still over 90% cheaper than a typical GolfNow barter contract.'}
             </p>
           </div>
         </FadeIn>
@@ -178,6 +163,10 @@ function CourseAndGolferPricing({ c, spotsRemaining }: { c: Record<string, strin
               <GolferTierCard tier="eagle" hero />
               <GolferTierCard tier="ace" />
             </div>
+
+            <p className="text-sm text-[#6B7770] leading-relaxed max-w-3xl">
+              Play a season, earn a free round. Fairway Points never expire, and 5,000 of them redeem for one complimentary round, about every 71 rounds on Fairway, 48 as Eagle (1.5×), or 36 as Ace (2×). The membership pays for itself on the included complimentary round and birthday credit. Points are the long game on top.
+            </p>
           </div>
         </FadeIn>
       </div>
@@ -258,7 +247,7 @@ function StandardCard() {
 const GOLFER_TIERS = {
   fairway: {
     name: 'Fairway', sub: 'Free, forever', price: '$0', unit: '', badge: null,
-    feats: ['Book at partner courses', '1× Fairway Points', 'Free 1hr cancellation', 'In-round service'],
+    feats: ['Book at partner courses', '1× Fairway Points', 'Standard $1.49 booking fee', 'Free 1hr cancellation', 'In-round service'],
     href: '/waitlist/golfer',
   },
   eagle: {
@@ -327,7 +316,7 @@ const COMPARE_ROWS = [
 
 const FAQS = [
   { q: 'What happens after my Founding Partner year ends?', a: 'You stay at $349/mo, flat. No annual commitment, cancel anytime.' },
-  { q: "Why isn't there a free tier for golfers? There is.", a: 'Fairway tier is free forever. Eagle is for golfers who play more than ~4 rounds/year — the math turns positive on round 3.' },
+  { q: "Why isn't there a free tier for golfers? There is.", a: 'Fairway tier is free forever. Eagle ($89) pays for itself on the included complimentary round and the $10 birthday credit alone. Faster points, priority booking, and the guest pass are upside. Ace ($159) clears its price on two complimentary rounds plus the $20 birthday credit.' },
   { q: 'Do you actually pay rev share?', a: 'Yes. Stripe Connect auto-pays 10% of every membership you refer, monthly, for 12 months.' },
   { q: 'Can I export everything?', a: 'Always. Full CSV export from the Members page. Your data is yours.' },
 ]
@@ -360,6 +349,9 @@ function CompareAndFAQ() {
                   <span className="text-[13px] text-[#0F3D2E] font-semibold">{r.t}</span>
                 </div>
               ))}
+              <p className="px-5 py-3 border-t border-[#0F3D2E]/10 text-[11px] text-[#9DAA9F] leading-relaxed">
+                GolfPass+ pricing and features as of May 2026, subject to change. TeeAhead is not affiliated with or endorsed by NBC Sports Next.
+              </p>
             </div>
 
             {/* FAQ */}

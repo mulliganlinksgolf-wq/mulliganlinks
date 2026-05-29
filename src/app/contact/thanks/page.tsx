@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-export const metadata = { title: 'Thanks — We\'ll be in touch' }
+export const metadata = { title: 'Thanks, We\'ll be in touch' }
 
 export default function ContactThanksPage() {
   return (

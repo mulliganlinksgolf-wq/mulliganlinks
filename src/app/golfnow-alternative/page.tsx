@@ -3,11 +3,17 @@ import { GolfnowAlternativeSchema } from '@/components/GolfnowAlternativeSchema'
 import { SeoLandingTemplate, type SeoLandingConfig } from '@/components/seo/SeoLandingTemplate'
 import { createClient } from '@/lib/supabase/server'
 import { captureReferralCode } from '@/lib/referrals/capture'
+import {
+  OPERATING_DAYS,
+  TYPICAL_PEAK_RATE_LABEL,
+  TYPICAL_ANNUAL_BARTER_LABEL,
+  HIGH_VOLUME_ANNUAL_BARTER_LABEL,
+} from '@/lib/barter-math'
 
 export const metadata: Metadata = {
   title: 'Best GolfNow Alternative for Courses & Golfers',
   description:
-    'TeeAhead is the top GolfNow alternative — free tee sheet software with no barter tee times, no commissions, and a golfer loyalty program that beats GolfPass+. Metro Detroit launch.',
+    'TeeAhead is the top GolfNow alternative: free tee sheet software with no barter tee times, no commissions, and a golfer loyalty program that beats GolfPass+. Metro Detroit launch.',
   alternates: {
     canonical: 'https://www.teeahead.com/golfnow-alternative',
   },
@@ -46,7 +52,7 @@ export default async function GolfNowAlternativePage({
     ),
     subhead:
       c['golfnow.hero_subhead'] ??
-      "TeeAhead is Metro Detroit's golf platform — free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every metric.",
+      "TeeAhead is Metro Detroit's golf platform: free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every metric.",
     sections: [
       {
         kind: 'narrative',
@@ -66,8 +72,10 @@ export default async function GolfNowAlternativePage({
             <p>
               Standard GolfNow agreements require{' '}
               <strong>2 prime-time tee times per day</strong> as barter, at published rack
-              rates. At average prices across 300 operating days, the typical course gives
-              away <strong>$94,500 a year</strong>.
+              rates. At a typical {TYPICAL_PEAK_RATE_LABEL} peak rate across {OPERATING_DAYS}{' '}
+              operating days, the average daily-fee course gives away{' '}
+              <strong>{TYPICAL_ANNUAL_BARTER_LABEL} a year</strong>. High-volume courses at
+              resort rates lose {HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more.
             </p>
             <p>
               It gets worse. Price-parity clauses prevent courses from offering lower rates
@@ -82,9 +90,9 @@ export default async function GolfNowAlternativePage({
         eyebrow: 'The damage',
         stats: [
           {
-            num: '$94,500',
-            label: 'Annual barter cost · average course',
-            sub: 'NGCOA & Golf Inc. 2024',
+            num: TYPICAL_ANNUAL_BARTER_LABEL,
+            label: 'Typical annual barter cost · daily-fee course',
+            sub: `NGCOA & Golf Inc. 2024 · ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} resort ceiling`,
           },
           {
             num: '382%',
@@ -116,15 +124,15 @@ export default async function GolfNowAlternativePage({
         items: [
           {
             q: 'Why is GolfNow free for golfers but expensive for courses?',
-            a: 'GolfNow pays for golfer acquisition with the barter tee times your course surrenders. Two tee times a day at rack rate adds up to ~$94,500 a year for the average course.',
+            a: `GolfNow pays for golfer acquisition with the barter tee times your course surrenders. Two tee times a day at a typical ${TYPICAL_PEAK_RATE_LABEL} peak rate adds up to ~${TYPICAL_ANNUAL_BARTER_LABEL} a year for the average daily-fee course, and ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more for high-volume courses.`,
           },
           {
             q: 'How does TeeAhead make money if courses pay nothing in year 1?',
-            a: 'TeeAhead earns from golfer memberships (Fairway/Eagle/Ace). Courses pay $0 year 1, then $349/mo flat — never barter, never commissions.',
+            a: 'TeeAhead earns from golfer memberships (Fairway/Eagle/Ace). Courses pay $0 year 1, then $349/mo flat, never barter, never commissions.',
           },
           {
             q: 'Will I lose my golfers if I leave GolfNow?',
-            a: "Windsor Parke grew online revenue 382% after leaving — from $81K to $393K. The golfers who actually played the course came back to book direct. The ones who only came for GolfNow's discount weren't profitable anyway.",
+            a: "Windsor Parke grew online revenue 382% after leaving, from $81K to $393K. The golfers who actually played the course came back to book direct. The ones who only came for GolfNow's discount weren't profitable anyway.",
           },
           {
             q: 'How long does migration take?',

@@ -34,7 +34,7 @@ export async function sendCourseWelcome(course: {
   <ol style="color: #444; line-height: 2;">
     <li>Install the booking widget on your site (instructions in your onboarding portal)</li>
     <li>Share your hosted booking page on your Google Business Profile</li>
-    <li>Tell your regulars — they can join TeeAhead and earn points every round at your course</li>
+    <li>Tell your regulars, they can join TeeAhead and earn points every round at your course</li>
   </ol>
   <p>Questions? Reply to this email.</p>
   <p>Welcome to TeeAhead.</p>
@@ -47,7 +47,7 @@ export async function sendCourseWelcome(course: {
   const { error } = await resend.emails.send({
     from,
     to: course.email,
-    subject: `You're live on TeeAhead — here's what's next`,
+    subject: `You're live on TeeAhead, here's what's next`,
     html,
   })
 

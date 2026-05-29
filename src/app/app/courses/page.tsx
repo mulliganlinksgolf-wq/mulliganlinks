@@ -34,7 +34,7 @@ export default async function CoursesPage({
         <div className="p-4">
           {!courses || courses.length === 0 ? (
             <div className="rounded-lg p-12 text-center" style={{ background: '#163d2a' }}>
-              <p style={{ color: '#888' }}>No courses in your area yet — we&apos;re growing.</p>
+              <p style={{ color: '#888' }}>No courses in your area yet, we&apos;re growing.</p>
               <p className="text-sm mt-2" style={{ color: '#555' }}>
                 Check back soon or tell your home course about TeeAhead.
               </p>

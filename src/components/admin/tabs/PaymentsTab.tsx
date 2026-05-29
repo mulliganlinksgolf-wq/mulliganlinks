@@ -21,7 +21,7 @@ export default function PaymentsTab({ bookings, membership }: PaymentsTabProps) 
       id: b.id,
       date: b.paid_at ?? b.created_at,
       description: b.course_name
-        ? `${b.course_name} — ${b.players} player${b.players !== 1 ? 's' : ''}`
+        ? `${b.course_name}, ${b.players} player${b.players !== 1 ? 's' : ''}`
         : 'Tee time booking',
       amount: b.total_charged_cents!,
       status: b.payment_status ?? 'unknown',

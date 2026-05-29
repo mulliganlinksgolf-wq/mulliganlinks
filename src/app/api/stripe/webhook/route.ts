@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendReferralAttributionAlert } from '@/lib/resend'
 
-// 10% rev share rate — change site_config row 'referral_rev_share_rate' in V1.1 to make this dynamic
+// 10% rev share rate, change site_config row 'referral_rev_share_rate' in V1.1 to make this dynamic
 const REV_SHARE_RATE = 0.1
 
 // Hardcoded per-tier amounts in cents (Eagle $89/yr, Ace $159/yr)
@@ -77,13 +77,13 @@ async function handleMembershipActivated(
       membership_id: membership?.id ?? null,
       membership_tier: tier,
       membership_amount_cents: priceCents,
-      // Lock rev share at initial signup tier — upgrades do NOT earn additional rev share (V1.1 TODO)
+      // Lock rev share at initial signup tier, upgrades do NOT earn additional rev share (V1.1 TODO)
       rev_share_cents: revShareCents,
       payout_status: 'pending',
     })
     .eq('profile_id', profileId)
     .gte('expires_at', new Date().toISOString())
-    .is('membership_tier', null) // only set once — don't overwrite on upgrade
+    .is('membership_tier', null) // only set once, don't overwrite on upgrade
     .select('course_id')
     .single()
 

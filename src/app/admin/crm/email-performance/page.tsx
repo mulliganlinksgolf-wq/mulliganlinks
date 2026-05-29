@@ -47,7 +47,7 @@ export default async function EmailPerformancePage() {
     if (r.opened_at) byType[key].opened++
   }
 
-  // By template — derive template name from subject in body ("Subject: ...")
+  // By template, derive template name from subject in body ("Subject: ...")
   const byTemplate: Record<string, { sent: number; opened: number; lastSent: string }> = {}
   for (const r of rows) {
     const subjectMatch = (r.body ?? '').match(/Subject:\s*(.+)/)
@@ -59,7 +59,7 @@ export default async function EmailPerformancePage() {
   }
   const templateRows = Object.entries(byTemplate).sort((a, b) => b[1].sent - a[1].sent)
 
-  // Opened rows — build per-contact detail list
+  // Opened rows, build per-contact detail list
   const openedRows = rows.filter(r => r.opened_at)
 
   // Batch-fetch contact names for opened rows only
@@ -173,7 +173,7 @@ export default async function EmailPerformancePage() {
       {/* Who opened */}
       <div>
         <h2 className="text-base font-semibold text-[#1A1A1A] mb-1">Who opened</h2>
-        <p className="text-xs text-slate-500 mb-3">Emails confirmed opened by the recipient — sorted by most recent open.</p>
+        <p className="text-xs text-slate-500 mb-3">Emails confirmed opened by the recipient, sorted by most recent open.</p>
         <div className="rounded-xl border border-slate-200 overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-slate-50">

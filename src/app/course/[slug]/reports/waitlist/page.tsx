@@ -59,7 +59,7 @@ export default async function WaitlistReportPage({
         <p className="text-sm text-emerald-800">
           TeeAhead automatically filled <strong>{totalFills.toLocaleString()} cancelled tee times</strong> in the selected period
           via the waitlist system, recovering an estimated <strong>${totalRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</strong> in green fee
-          revenue that would have been lost — with zero staff effort.
+          revenue that would have been lost, with zero staff effort.
         </p>
       </div>
     </div>

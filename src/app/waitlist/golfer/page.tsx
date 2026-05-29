@@ -1,13 +1,14 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { TierPicker } from './TierPicker'
 import { createClient } from '@/lib/supabase/server'
 import { captureReferralCode } from '@/lib/referrals/capture'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'Join the Golfer Waitlist — TeeAhead',
+  title: 'Join the Golfer Waitlist',
   description: 'Get early access to TeeAhead, the local-first golf loyalty network coming to Metro Detroit.',
 }
 
@@ -21,6 +22,7 @@ const tiers = [
     features: [
       'Book tee times at partner courses',
       '1× Fairway Points per dollar',
+      'Standard $1.49 booking fee per round',
       'Free cancellation (1hr policy)',
       'In-round service requests (tap for help mid-round)',
     ],
@@ -50,6 +52,7 @@ const tiers = [
     badge: null,
     features: [
       '500 bonus Fairway Points',
+      '2 complimentary rounds/yr (course-provided, subject to availability)',
       '2× Fairway Points per dollar',
       'Priority booking: 72hr early access',
       'Always-on booking fee waiver',
@@ -81,23 +84,9 @@ export default async function GolferWaitlistPage({
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
 
-      {/* ── Header / Nav ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-50 bg-[#0F3D2E]/97 backdrop-blur border-b border-white/8">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-14 w-auto brightness-0 invert" />
-          </Link>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 bg-[#E0A800]/15 border border-[#E0A800]/40 rounded-full px-3 py-1">
-              <span className="size-2 rounded-full bg-[#E0A800] animate-pulse" />
-              <span className="text-xs font-semibold text-[#E0A800] tracking-wide uppercase">Waitlist Open</span>
-            </div>
-            <Link href="/" className="text-sm text-[#F4F1EA]/70 hover:text-[#F4F1EA] transition-colors">← Back</Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
-      {/* ── Hero — editorial, cream, with member card ────────────── */}
+      {/* ── Hero, editorial, cream, with member card ────────────── */}
       <section className="bg-[#FAF7F2] px-6 sm:px-10 lg:px-16 py-16 sm:py-20">
         <FadeIn>
           <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-10 lg:gap-14 items-center">
@@ -120,7 +109,7 @@ export default async function GolferWaitlistPage({
 
               <p className="mt-6 text-base sm:text-lg leading-relaxed text-[#1A1A1A]/78 max-w-xl">
                 TeeAhead is the local-first alternative to GolfPass+. Zero booking fees on Eagle. Points that never expire. Eagle membership is{' '}
-                <strong className="text-[#0F3D2E]">$89/yr</strong> — $30 less than GolfPass+ with more credits and more flexibility.
+                <strong className="text-[#0F3D2E]">$89/yr</strong>, $30 less than GolfPass+ with more credits and more flexibility.
               </p>
 
               <div className="mt-7 flex flex-col sm:flex-row gap-3">
@@ -214,7 +203,7 @@ export default async function GolferWaitlistPage({
       </section>
 
       {/* ── Tab strip ────────────────────────────────────────── */}
-      <div className="bg-white border-b border-[#0F3D2E]/10 sticky top-[73px] z-40">
+      <div className="bg-white border-b border-[#0F3D2E]/10 sticky top-[60px] z-40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex justify-center gap-2 py-3">
             <span aria-current="page" className="px-6 py-2.5 rounded-lg bg-[#0F3D2E] text-sm font-semibold text-[#F4F1EA]">
@@ -253,57 +242,19 @@ export default async function GolferWaitlistPage({
               </div>
             ))}
           </div>
+          <p className="mt-3 text-[11px] text-[#9DAA9F] leading-relaxed text-center">
+            GolfPass+ pricing and features as of May 2026, subject to change. TeeAhead is not affiliated with or endorsed by NBC Sports Next.
+          </p>
+          <p className="mt-5 text-sm text-[#6B7770] leading-relaxed text-center">
+            Play a season, earn a free round: 5,000 Fairway Points redeem for one complimentary round, about every 71 rounds on Fairway, 48 as Eagle (1.5×), 36 as Ace (2×). Eagle pays for itself on the included complimentary round and $10 birthday credit alone. Points are the long game on top.
+          </p>
         </div>
       </section>
 
       {/* ── Tier cards + Form ────────────────────────────────── */}
       <TierPicker tiers={tiers} initialTier={tier ?? 'fairway'} courses={activeCourses ?? []} />
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="bg-[#071f17] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-
-            {/* Column 1 — Brand */}
-            <div className="space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
-                Book ahead. Play more. Own your golf.
-              </p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-
-            {/* Column 2 — Product */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-1.5 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="#pricing" className="hover:text-[#F4F1EA] transition-colors pl-3">Pricing</Link>
-                <Link href="/waitlist/course" className="text-[10px] font-bold tracking-wider uppercase text-[#F4F1EA]/50 hover:text-[#F4F1EA] transition-colors mt-1">For Courses</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors pl-3">Barter Calculator</Link>
-                <Link href="/damage" className="hover:text-[#F4F1EA] transition-colors pl-3">GolfNow Damage Report</Link>
-                <Link href="/software-cost" className="hover:text-[#F4F1EA] transition-colors pl-3">Software Cost Calculator</Link>
-              </nav>
-            </div>
-
-            {/* Column 3 — Company */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/contact" className="hover:text-[#F4F1EA] transition-colors">Contact</Link>
-                <Link href="/about" className="hover:text-[#F4F1EA] transition-colors">About</Link>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   )

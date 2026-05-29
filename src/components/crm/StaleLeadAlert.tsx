@@ -13,7 +13,7 @@ export function StaleLeadAlert({ staleCourses, staleOutings, staleDays }: Props)
     <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
       <div className="flex items-center gap-2 mb-3">
         <span className="text-amber-600 font-semibold text-sm">
-          ⚠️ {total} stale lead{total !== 1 ? 's' : ''} — no activity in {staleDays}+ days
+          ⚠️ {total} stale lead{total !== 1 ? 's' : ''}, no activity in {staleDays}+ days
         </span>
       </div>
       <ul className="space-y-1">

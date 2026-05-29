@@ -39,7 +39,7 @@ export default async function AdminUsersPage({
       .map((w: any) => ({ id: `w-${w.id}`, email: w.email, name: null, created_at: w.created_at })),
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
-  // profiles has no email column — email lives in auth.users
+  // profiles has no email column, email lives in auth.users
   const [profilesResult, { data: { users: authUsers } }] = await Promise.all([
     admin
       .from('profiles')

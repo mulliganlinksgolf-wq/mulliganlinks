@@ -1,3 +1,9 @@
+import {
+  TYPICAL_PEAK_RATE_LABEL,
+  TYPICAL_ANNUAL_BARTER_LABEL,
+  HIGH_VOLUME_ANNUAL_BARTER_LABEL,
+} from '@/lib/barter-math'
+
 export function GolfnowAlternativeSchema() {
   const breadcrumb = {
     '@context': 'https://schema.org',
@@ -14,7 +20,7 @@ export function GolfnowAlternativeSchema() {
     '@id': 'https://www.teeahead.com/golfnow-alternative#article',
     headline: 'The Best GolfNow Alternative for Golf Courses and Golfers',
     description:
-      'TeeAhead is Metro Detroit\'s local-first golf platform — free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every metric.',
+      'TeeAhead is Metro Detroit\'s local-first golf platform, free tee sheet software for courses with zero barter tee times, and a loyalty membership for golfers that beats GolfPass+ on every metric.',
     url: 'https://www.teeahead.com/golfnow-alternative',
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -55,7 +61,7 @@ export function GolfnowAlternativeSchema() {
         name: 'What does GolfNow actually cost a golf course?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'GolfNow requires courses to provide 2 barter tee times per day that GolfNow sells and keeps the revenue from. At a $315 average rack rate, that transfers roughly $94,500 per year in tee time revenue from the course to GolfNow — revenue that never appears on any invoice.',
+          text: `GolfNow requires courses to provide 2 barter tee times per day that GolfNow sells and keeps the revenue from. At a typical ${TYPICAL_PEAK_RATE_LABEL} peak rate, that transfers roughly ${TYPICAL_ANNUAL_BARTER_LABEL} per year in tee time revenue from the average daily-fee course to GolfNow, and ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more for high-volume courses. Revenue that never appears on any invoice.`,
         },
       },
       {
@@ -71,7 +77,7 @@ export function GolfnowAlternativeSchema() {
         name: 'Who should consider leaving GolfNow?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Established courses with a returning customer base and an existing email list are the best candidates to leave GolfNow. If the majority of your GolfNow bookings are from golfers who already know your course, you are effectively paying GolfNow to take credit for demand you generated yourself. Courses that have made the switch — like Windsor Parke and Missouri Bluffs — consistently report revenue gains after leaving.',
+          text: 'Established courses with a returning customer base and an existing email list are the best candidates to leave GolfNow. If the majority of your GolfNow bookings are from golfers who already know your course, you are effectively paying GolfNow to take credit for demand you generated yourself. Courses that have made the switch, like Windsor Parke and Missouri Bluffs, consistently report revenue gains after leaving.',
         },
       },
       {
@@ -79,7 +85,7 @@ export function GolfnowAlternativeSchema() {
         name: 'Is TeeAhead really free for golf courses?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The first year is free for Founding Partner courses (the first 10 to join). After year one, TeeAhead costs $349/month — a flat SaaS fee with no barter tee times, no per-booking commissions, and no hidden fees. Compare this to GolfNow, where the effective annual cost in barter tee times alone typically exceeds $90,000.',
+          text: 'The first year is free for Founding Partner courses (the first 10 to join). After year one, TeeAhead costs $349/month, a flat SaaS fee with no barter tee times, no per-booking commissions, and no hidden fees. Compare this to GolfNow, where the effective annual cost in barter tee times alone typically exceeds $90,000.',
         },
       },
     ],

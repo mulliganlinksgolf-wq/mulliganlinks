@@ -3,7 +3,7 @@ import ScorecardRows from './ScorecardRows'
 import { getMemberState, getSubHeadline, getTierInfo } from '@/lib/member-dashboard'
 import type { MemberTier } from '@/lib/member-dashboard'
 
-// Matches the DB booking shape exactly — snake_case from Supabase
+// Matches the DB booking shape exactly, snake_case from Supabase
 type Booking = {
   id: string
   course_name: string
@@ -40,7 +40,7 @@ export function RoundCard({
 
   return (
     <div className="rounded-2xl overflow-hidden bg-[#082419]">
-      {/* Header — dark editorial */}
+      {/* Header, dark editorial */}
       <div className="px-6 pt-6 pb-5">
         <div className="flex items-start justify-between gap-3 mb-4">
           <div>
@@ -58,7 +58,7 @@ export function RoundCard({
         <p className="text-[12px] text-[#F4F1EA]/65 leading-relaxed">{subHeadline}</p>
       </div>
 
-      {/* Stats strip — Playfair 400 numbers */}
+      {/* Stats strip, Playfair 400 numbers */}
       <div className="grid grid-cols-3 bg-white/[0.04] border-y border-white/[0.06]">
         <div className="px-4 py-4 text-center border-r border-white/[0.06]">
           <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-[#F4F1EA]/55 font-semibold mb-1.5">Points</p>
@@ -101,11 +101,11 @@ export function RoundCard({
       {/* Section label */}
       <div className="px-5 py-2 bg-black/20">
         <span className="font-mono text-[9px] tracking-[0.14em] uppercase text-[#F4F1EA]/55 font-semibold">
-          {state === 'new' ? 'Scorecard — 3 holes left' : 'This week'}
+          {state === 'new' ? 'Scorecard, 3 holes left' : 'This week'}
         </span>
       </div>
 
-      {/* Scorecard rows — internal styling untouched, isolated row component */}
+      {/* Scorecard rows, internal styling untouched, isolated row component */}
       <div className="bg-white/[0.03]">
         <ScorecardRows
           state={state}

@@ -66,7 +66,7 @@ export async function getCourseNetworkData(month: string): Promise<{
   ])
   if (coursesError) throw new Error(`[getCourseNetworkData] courses query failed: ${coursesError.message}`)
   if (metricsError) throw new Error(`[getCourseNetworkData] metrics query failed: ${metricsError.message}`)
-  // audit log is best-effort — don't throw, just use empty fallback
+  // audit log is best-effort, don't throw, just use empty fallback
   if (auditError) console.error('[getCourseNetworkData] audit log query failed (non-fatal):', auditError.message)
   const auditRows = auditError ? [] : (auditLog ?? [])
 

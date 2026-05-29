@@ -78,7 +78,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
   // When reply mode flips on, force the subject to match the thread.
   // (Email clients use Message-ID for threading, but a matching subject is still
-  // what humans see in the inbox preview — and it's standard email etiquette.)
+  // what humans see in the inbox preview, and it's standard email etiquette.)
   useEffect(() => {
     if (replyMode && previousEmail) {
       const prevSubject = previousEmail.subject
@@ -95,14 +95,14 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
       enriched.first_name = enriched.name.split(' ')[0]
     }
     if (!enriched.sender_name) {
-      // Use the logged-in user's name — falls back to sentBy if auth hasn't resolved yet
+      // Use the logged-in user's name, falls back to sentBy if auth hasn't resolved yet
       enriched.sender_name = loggedInSenderName ?? (sentBy.charAt(0).toUpperCase() + sentBy.slice(1))
     }
     return text.replace(/\{\{(\w+)\}\}/g, (_, key) => enriched[key] ?? enriched[key.toLowerCase()] ?? `{{${key}}}`)
   }
 
   function applyTemplate(template: CrmEmailTemplate) {
-    // In reply mode, preserve the thread subject — the template only fills the body.
+    // In reply mode, preserve the thread subject, the template only fills the body.
     if (!(replyMode && previousEmail)) {
       setSubject(substituteVars(template.subject))
     }

@@ -162,9 +162,9 @@ export function CourseKanban({ initialCourses }: Props) {
           className="py-2 pl-3 pr-8 text-sm border border-slate-200 rounded-lg bg-white text-slate-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 appearance-none cursor-pointer"
         >
           <option value="">All Tiers</option>
-          <option value="Tier 1">Tier 1 — GolfNow/Lightspeed</option>
-          <option value="Tier 2">Tier 2 — Paid SaaS</option>
-          <option value="Tier 3">Tier 3 — Manual/Unknown</option>
+          <option value="Tier 1">Tier 1, GolfNow/Lightspeed</option>
+          <option value="Tier 2">Tier 2, Paid SaaS</option>
+          <option value="Tier 3">Tier 3, Manual/Unknown</option>
         </select>
 
         <select

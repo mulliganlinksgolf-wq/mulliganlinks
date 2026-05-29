@@ -3,11 +3,12 @@ import { TeeTimeSoftwareSchema } from '@/components/TeeTimeSoftwareSchema'
 import { SeoLandingTemplate, type SeoLandingConfig } from '@/components/seo/SeoLandingTemplate'
 import { createClient } from '@/lib/supabase/server'
 import { captureReferralCode } from '@/lib/referrals/capture'
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
 
 export const metadata: Metadata = {
   title: 'Free Tee Time Software for Golf Courses',
   description:
-    'Free tee sheet software for golf courses — no barter tee times, no commissions, no lock-in. Windsor Parke grew online revenue 382% after switching. Metro Detroit launch.',
+    'Free tee sheet software for golf courses, no barter tee times, no commissions, no lock-in. Windsor Parke grew online revenue 382% after switching. Metro Detroit launch.',
   alternates: {
     canonical: 'https://www.teeahead.com/tee-time-software',
   },
@@ -46,7 +47,7 @@ export default async function TeeTimeSoftwarePage({
     ),
     subhead:
       c['teetime.hero_subhead'] ??
-      'Real-time booking, QR check-in, Stripe payments, golfer loyalty, league management, and revenue reports — included. No barter, no commissions, no hidden fees.',
+      'Real-time booking, QR check-in, Stripe payments, golfer loyalty, league management, and revenue reports, included. No barter, no commissions, no hidden fees.',
     sections: [
       {
         kind: 'narrative',
@@ -64,13 +65,14 @@ export default async function TeeTimeSoftwarePage({
                 'foreUP and Lightspeed run $300–$800/month in fixed SaaS. For a small or mid-size course, that is $4,000–$10,000/year in overhead.'}
             </p>
             <p>
-              GolfNow is &ldquo;free&rdquo; — but the ~2 prime-time tee times per day in barter
-              cost the average course $94,500/year in lost revenue.
+              GolfNow is &ldquo;free,&rdquo; but the ~2 prime-time tee times per day in barter
+              cost the average daily-fee course {TYPICAL_ANNUAL_BARTER_LABEL}/year in lost
+              revenue, and {HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more for high-volume courses.
             </p>
             <p>
               And none of the incumbents bundle golfer loyalty. Driving repeat rounds means a
               separate vendor, separate cost, separate login. TeeAhead bundles loyalty into the
-              tee sheet at the platform level — the only one that does.
+              tee sheet at the platform level (the only one that does).
             </p>
           </>
         ),
@@ -81,7 +83,7 @@ export default async function TeeTimeSoftwarePage({
         stats: [
           { num: '382%', label: 'Windsor Parke online revenue growth post-GolfNow', sub: '$81K → $393K' },
           { num: '36.3%', label: 'Missouri Bluffs green-fee revenue lift after switching', sub: 'Golf Inc. case study' },
-          { num: '$94,500', label: 'Average annual barter cost on GolfNow', sub: 'NGCOA 2024–2025' },
+          { num: TYPICAL_ANNUAL_BARTER_LABEL, label: 'Typical annual barter cost on GolfNow', sub: `NGCOA 2024–2025 · ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} resort ceiling` },
         ],
       },
       {
@@ -109,7 +111,7 @@ export default async function TeeTimeSoftwarePage({
           },
           {
             q: 'How does TeeAhead make money if courses pay nothing?',
-            a: 'TeeAhead earns from golfer memberships — Fairway, Eagle, and Ace. Courses are never the revenue source. That alignment is the point.',
+            a: 'TeeAhead earns from golfer memberships, Fairway, Eagle, and Ace. Courses are never the revenue source. That alignment is the point.',
           },
           {
             q: 'What is the migration path from foreUP or Lightspeed?',
@@ -117,7 +119,7 @@ export default async function TeeTimeSoftwarePage({
           },
           {
             q: 'Can I see real numbers from a course that switched?',
-            a: 'Yes — Windsor Parke grew online revenue from $81K to $393K (382%) after leaving GolfNow. Missouri Bluffs grew green-fee revenue 36.3%. Both case studies are linked from the homepage.',
+            a: 'Yes, Windsor Parke grew online revenue from $81K to $393K (382%) after leaving GolfNow. Missouri Bluffs grew green-fee revenue 36.3%. Both case studies are linked from the homepage.',
           },
         ],
       },

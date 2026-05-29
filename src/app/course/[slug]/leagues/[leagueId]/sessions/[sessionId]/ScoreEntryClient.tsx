@@ -88,7 +88,7 @@ export default function ScoreEntryClient({
           ← {leagueName}
         </Link>
         <h1 className="text-xl font-bold text-[#1A1A1A] mt-1">
-          Session {sessionNumber} — Score Entry
+          Session {sessionNumber}, Score Entry
         </h1>
         <p className="text-sm text-[#6B7770]">
           {new Date(sessionDate).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}

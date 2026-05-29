@@ -1,14 +1,30 @@
+import {
+  BARTER_TEE_TIMES_PER_DAY,
+  OPERATING_DAYS,
+  TYPICAL_PEAK_RATE,
+  TYPICAL_ANNUAL_BARTER_LABEL,
+} from '@/lib/barter-math'
+
+// One bookable tee time = one rack-rate unit. Every number below derives from the
+// shared barter-math constants so the receipt reconciles with the hero headline:
+// barter slots/day x rack rate x operating days = the displayed annual figure.
+const RACK = TYPICAL_PEAK_RATE // $/tee time
+
 const SLOTS = [
-  { t: '6:20', name: 'Mahoney (+3)',   amt: '184', barter: false },
-  { t: '6:30', name: 'GolfNow barter', amt: '0',   barter: true },
-  { t: '6:40', name: 'Cohen (+1)',     amt: '92',  barter: false },
-  { t: '6:50', name: 'Reuther (+3)',   amt: '184', barter: false },
-  { t: '7:00', name: 'Patel (+3)',     amt: '184', barter: false },
-  { t: '7:10', name: 'Hernandez (+2)', amt: '138', barter: false },
-  { t: '7:20', name: 'GolfNow barter', amt: '0',   barter: true },
-  { t: '7:30', name: 'Spadafora (+1)', amt: '92',  barter: false },
-  { t: '7:40', name: 'Bauer (+3)',     amt: '184', barter: false },
+  { t: '6:20', name: 'Mahoney',        barter: false },
+  { t: '6:30', name: 'GolfNow barter', barter: true },
+  { t: '6:40', name: 'Cohen',          barter: false },
+  { t: '6:50', name: 'Reuther',        barter: false },
+  { t: '7:00', name: 'Patel',          barter: false },
+  { t: '7:10', name: 'Hernandez',      barter: false },
+  { t: '7:20', name: 'GolfNow barter', barter: true },
+  { t: '7:30', name: 'Spadafora',      barter: false },
+  { t: '7:40', name: 'Bauer',          barter: false },
 ]
+
+const bookedCount = SLOTS.filter((s) => !s.barter).length
+const subtotal = bookedCount * RACK // kept revenue for the wave
+const lostPerDay = BARTER_TEE_TIMES_PER_DAY * RACK // barter slots x rack rate
 
 export function ReceiptCard() {
   return (
@@ -77,7 +93,7 @@ export function ReceiptCard() {
                 r.barter ? 'text-[#C24A3B] line-through decoration-[#C24A3B]' : 'text-[#0F3D2E]'
               }`}
             >
-              {r.barter ? '— 0' : r.amt}
+              {r.barter ? `— ${RACK}` : RACK}
             </span>
           </div>
         ))}
@@ -91,7 +107,7 @@ export function ReceiptCard() {
               className="font-display text-[22px] text-[#0F3D2E]"
               style={{ fontWeight: 400 }}
             >
-              $1,058
+              ${subtotal.toLocaleString()}
             </span>
           </div>
           <div className="flex justify-between items-baseline mt-1">
@@ -102,25 +118,25 @@ export function ReceiptCard() {
               className="font-display text-[18px] text-[#C24A3B]"
               style={{ fontWeight: 400 }}
             >
-              − $315
+              − ${lostPerDay.toLocaleString()}
             </span>
           </div>
         </div>
 
         <div className="mt-3.5 px-3 py-2.5 bg-[#082419] text-[#F4F1EA] text-center">
           <p className="text-[8.5px] tracking-[0.22em] uppercase text-[#F4F1EA]/65 font-bold mb-1">
-            × 300 days =
+            × {OPERATING_DAYS} days =
           </p>
           <p
             className="font-display text-[26px] tracking-[-0.02em]"
             style={{ fontWeight: 400 }}
           >
-            $94,500<span className="text-[#E0A800]">/yr</span>
+            {TYPICAL_ANNUAL_BARTER_LABEL}<span className="text-[#E0A800]">/yr</span>
           </p>
         </div>
 
         <p className="mt-3 text-center text-[8.5px] italic text-[#6B7770]">
-          Receipt — Plum Hollow CC, today&apos;s wave
+          Receipt, Plum Hollow CC, today&apos;s wave
         </p>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'Referrals — Admin' }
+export const metadata = { title: 'Referrals, Admin' }
 
 const STATUS_COLORS: Record<string, string> = {
   pending: 'bg-yellow-50 text-yellow-700 border-yellow-200',
@@ -208,7 +208,7 @@ export default async function AdminReferralsPage() {
           <div>
             <p className="text-sm font-semibold text-orange-800">Rev share expiring within 30 days</p>
             <p className="text-xs text-orange-700 mt-0.5">
-              {expiringSoon.map(r => r.name).join(', ')} — pay out before the window closes or the referral expires.
+              {expiringSoon.map(r => r.name).join(', ')}, pay out before the window closes or the referral expires.
             </p>
           </div>
         </div>

@@ -13,7 +13,7 @@ export interface RecordReferralResult {
 /**
  * Record referral attribution for a newly created profile.
  * Priority: cookie (link/QR) > dropdown selection.
- * A golfer can only ever be attributed to one course — the UNIQUE constraint on
+ * A golfer can only ever be attributed to one course, the UNIQUE constraint on
  * profile_id enforces this at the DB level. Duplicate attempts are silently ignored.
  */
 export async function recordReferral({
@@ -71,7 +71,7 @@ export async function recordReferral({
 
   if (error) {
     if (error.code === '23505') {
-      // Unique violation — golfer already attributed. Silent no-op.
+      // Unique violation, golfer already attributed. Silent no-op.
       return { attributed: false }
     }
     console.error('[referral] insert failed', error)

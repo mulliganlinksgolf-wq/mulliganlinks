@@ -62,7 +62,7 @@ export function CourseProposalPDF({ course }: Props) {
         <View style={S.section}>
           <Text style={S.sectionTitle}>Executive Summary</Text>
           <Text style={S.para}>
-            TeeAhead is a subscription-based golf loyalty network built for metro Detroit. Golfers pay a monthly membership and receive exclusive benefits — discounted rounds, priority tee times, and barter credits — at our network of partner courses. Partner courses pay a single flat monthly Platform Fee and gain access to a curated base of active, paying golfers with no per-round commissions, no revenue share, and no technology lift required.
+            TeeAhead is a subscription-based golf loyalty network built for metro Detroit. Golfers pay a monthly membership and receive exclusive benefits, discounted rounds, priority tee times, and barter credits, at our network of partner courses. Partner courses pay a single flat monthly Platform Fee and gain access to a curated base of active, paying golfers with no per-round commissions, no revenue share, and no technology lift required.
           </Text>
           <Text style={S.para}>
             We are inviting a limited group of courses to join as Founding Partners before our public launch. {course.name} is an ideal fit for the TeeAhead network, and we are reserving a spot.
@@ -95,7 +95,7 @@ export function CourseProposalPDF({ course }: Props) {
 
         {/* Membership Tiers */}
         <View style={S.section}>
-          <Text style={S.sectionTitle}>Member Tiers — What Your Course Honors</Text>
+          <Text style={S.sectionTitle}>Member Tiers, What Your Course Honors</Text>
           <View style={S.tiersRow}>
             <View style={S.tierBox}>
               <Text style={S.tierName}>Eagle</Text>
@@ -113,21 +113,21 @@ export function CourseProposalPDF({ course }: Props) {
               </Text>
             </View>
           </View>
-          <Text style={S.tierNote}>Exact benefit rates are negotiated during onboarding and locked for the full contract term. You set the rates — we drive the members to your door.</Text>
+          <Text style={S.tierNote}>Exact benefit rates are negotiated during onboarding and locked for the full contract term. You set the rates, we drive the members to your door.</Text>
         </View>
 
         {/* Pricing */}
         <View style={S.pricingBox}>
-          <Text style={S.pricingTitle}>Course Pricing — Simple and Predictable</Text>
+          <Text style={S.pricingTitle}>Course Pricing, Simple and Predictable</Text>
           {([
-            ['$349/month', 'flat Platform Fee — no per-round commissions, no revenue share'],
+            ['$349/month', 'flat Platform Fee, no per-round commissions, no revenue share'],
             ['First month free', 'complimentary onboarding period for all new partners'],
             ['Rate locked', 'Founding Partner fee guaranteed for the full contract term'],
-            ['Cancel anytime', '30 days written notice — no long-term trap clauses'],
+            ['Cancel anytime', '30 days written notice, no long-term trap clauses'],
           ] as [string, string][]).map(([label, desc], i) => (
             <View key={i} style={S.pricingRow}>
               <Text style={S.pricingDot}>•</Text>
-              <Text style={S.pricingText}><Text style={S.bold}>{label}</Text> — {desc}</Text>
+              <Text style={S.pricingText}><Text style={S.bold}>{label}</Text>, {desc}</Text>
             </View>
           ))}
         </View>
@@ -136,8 +136,8 @@ export function CourseProposalPDF({ course }: Props) {
         <View style={S.section}>
           <Text style={S.sectionTitle}>Why Partner with TeeAhead?</Text>
           {([
-            ['Incremental rounds at zero acquisition cost', 'We bring committed, paying golfers to you — no GolfNow-style discounting, no last-minute fire-sales.'],
-            ['Fill off-peak and shoulder-season inventory', 'Member offers are targeted to weekday, twilight, and shoulder-season slots — the tee times that are hardest to fill.'],
+            ['Incremental rounds at zero acquisition cost', 'We bring committed, paying golfers to you, no GolfNow-style discounting, no last-minute fire-sales.'],
+            ['Fill off-peak and shoulder-season inventory', 'Member offers are targeted to weekday, twilight, and shoulder-season slots, the tee times that are hardest to fill.'],
             ['No technology integration required', 'You manage your tee sheet exactly as you do today. No new software, no POS changes, no training overhead.'],
             ['Monthly performance analytics', 'Know exactly how many TeeAhead Members visited, what they played, and what revenue they generated.'],
             ['Co-marketing included at no extra cost', 'Your course is featured in TeeAhead email campaigns, homepage spotlights, and seasonal promotions to our growing member list.'],
@@ -153,7 +153,7 @@ export function CourseProposalPDF({ course }: Props) {
         <View style={S.section}>
           <Text style={S.sectionTitle}>Founding Partner Benefits</Text>
           {([
-            ['Permanent "Founding Partner" badge', 'Displayed on your TeeAhead listing indefinitely — visible to every member who searches or browses your course.'],
+            ['Permanent "Founding Partner" badge', 'Displayed on your TeeAhead listing indefinitely, visible to every member who searches or browses your course.'],
             ['Priority placement in search and recommendations', 'Founding Partners appear first in member search results, course spotlights, and homepage features for the life of the network.'],
             ['Founding Partner rate lock', 'Your $349/mo Platform Fee is locked for the full contract term. We cannot raise your rate without sixty days notice and your written consent.'],
             ['Direct founder access', 'Monthly check-in with the TeeAhead founding team. Your feedback directly shapes our product roadmap and member features.'],

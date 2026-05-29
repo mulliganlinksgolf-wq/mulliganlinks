@@ -9,8 +9,8 @@ const COURSE_FAQS = [
 
 const GOLFER_FAQS = [
   { q: 'When does TeeAhead launch?', a: 'Metro Detroit, summer 2026. Waitlist members get first access plus 250 bonus Fairway Points on signup.' },
-  { q: 'Will my home course actually be on TeeAhead?', a: "We're targeting all independent Metro Detroit courses. If yours isn't on the list yet, refer them — you'll earn priority access." },
-  { q: 'Why pay $89 for Eagle when GolfPass+ is $119?', a: 'Eagle has zero booking fees (GolfPass+ charges $2.49–$3.49/round), points that never expire, partner-finder access, and works at local courses — not national chains.' },
+  { q: 'Will my home course actually be on TeeAhead?', a: "We're targeting all independent Metro Detroit courses. If yours isn't on the list yet, refer them, you'll earn priority access." },
+  { q: 'Why pay $89 for Eagle when GolfPass+ is $119?', a: 'Eagle has zero booking fees (GolfPass+ charges $2.49–$3.49/round), points that never expire, partner-finder access, and works at local courses, not national chains.' },
   { q: "Who's behind TeeAhead?", a: "Two Metro Detroit golfers: Neil (operator-side at Outing.golf) and Billy (lifelong member). See the founders' scorecard above." },
 ]
 

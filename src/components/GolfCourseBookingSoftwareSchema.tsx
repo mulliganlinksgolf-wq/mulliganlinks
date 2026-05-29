@@ -1,3 +1,5 @@
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
+
 export function GolfCourseBookingSoftwareSchema() {
   const schemas = [
     {
@@ -11,7 +13,7 @@ export function GolfCourseBookingSoftwareSchema() {
       offers: [
         {
           '@type': 'Offer',
-          name: 'Founding Partner — Free Year One',
+          name: 'Founding Partner, Free Year One',
           price: '0',
           priceCurrency: 'USD',
           description: 'Full platform free for the first year for Founding Partner courses.',
@@ -27,7 +29,7 @@ export function GolfCourseBookingSoftwareSchema() {
             priceCurrency: 'USD',
             unitCode: 'MON',
           },
-          description: 'Flat monthly rate — no commissions, no barter, no booking fees.',
+          description: 'Flat monthly rate, no commissions, no barter, no booking fees.',
         },
       ],
       publisher: { '@id': 'https://www.teeahead.com/#organization' },
@@ -41,7 +43,7 @@ export function GolfCourseBookingSoftwareSchema() {
           name: 'Does golf course booking software charge commissions?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'It depends on the platform. GolfNow requires barter tee times worth $80,000–$100,000/year in foregone revenue. Other third-party booking engines charge $1–$3.50 per player per round. TeeAhead charges a flat $349/month with zero commissions and zero barter tee times — courses keep 100% of every round they sell.',
+            text: `It depends on the platform. GolfNow requires barter tee times worth ${TYPICAL_ANNUAL_BARTER_LABEL}–${HIGH_VOLUME_ANNUAL_BARTER_LABEL}/year in foregone revenue. Other third-party booking engines charge $1–$3.50 per player per round. TeeAhead charges a flat $349/month with zero commissions and zero barter tee times, so courses keep 100% of every round they sell.`,
           },
         },
         {
@@ -49,7 +51,7 @@ export function GolfCourseBookingSoftwareSchema() {
           name: 'What is the best free golf course booking software?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'TeeAhead offers a full first year free for Founding Partner courses (the first 10 to join) and charges $349/month thereafter with no commissions or barter tee times. GolfNow offers free software but requires barter tee times that transfer $80,000–$100,000/year in revenue to GolfNow — making it one of the most expensive options in practice.',
+            text: `TeeAhead offers a full first year free for Founding Partner courses (the first 10 to join) and charges $349/month thereafter with no commissions or barter tee times. GolfNow offers free software but requires barter tee times that transfer ${TYPICAL_ANNUAL_BARTER_LABEL}–${HIGH_VOLUME_ANNUAL_BARTER_LABEL}/year in revenue to GolfNow, making it one of the most expensive options in practice.`,
           },
         },
         {

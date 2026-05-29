@@ -141,7 +141,7 @@ export default function SocialQueue({ channels, scheduledPosts, onFillSaturdaySl
       {missingSaturdaySlot && (
         <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 flex items-start justify-between gap-3">
           <p className="text-sm text-amber-800">
-            ⚠️ No post scheduled for Saturday 8am — your highest-value slot is empty.
+            ⚠️ No post scheduled for Saturday 8am, your highest-value slot is empty.
           </p>
           <button
             onClick={onFillSaturdaySlot}

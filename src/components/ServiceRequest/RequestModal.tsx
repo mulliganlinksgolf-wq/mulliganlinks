@@ -88,7 +88,7 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
           ))}
         </div>
 
-        {/* Hole picker — visible after category selection */}
+        {/* Hole picker, visible after category selection */}
         {selected && (
           <div className="px-4 pb-3">
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
@@ -112,7 +112,7 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
           </div>
         )}
 
-        {/* Notes textarea — visible after selection */}
+        {/* Notes textarea, visible after selection */}
         {selected && (
           <div className="px-4 pb-3">
             <textarea
@@ -132,7 +132,7 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
         {/* Error */}
         {error && (
           <p className="px-4 pb-2 text-xs text-red-500 font-sans">
-            Couldn't send — try again
+            Couldn't send, try again
           </p>
         )}
 

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { FadeIn } from '@/components/FadeIn'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
-  title: 'Features — TeeAhead',
+  title: 'Features',
   description: 'One platform, both sides of the round. Tee sheet, loyalty, exchange, and payments for independent golf courses and the people who actually play.',
   alternates: { canonical: '/features' },
 }
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function FeaturesPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2]">
-      <FeaturesNav />
+      <SiteHeader />
       <FeaturesHero />
       <CourseChapter />
       <GolferChapter />
@@ -22,26 +22,6 @@ export default function FeaturesPage() {
       <FinalCTA />
       <SiteFooter />
     </div>
-  )
-}
-
-function FeaturesNav() {
-  return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur border-b border-[#0F3D2E]/10">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/">
-          <TeeAheadLogo className="h-10 sm:h-12 w-auto" />
-        </Link>
-        <div className="flex items-center gap-3 sm:gap-5">
-          <Link href="/features" className="hidden sm:inline text-sm text-[#0F3D2E] font-semibold">Features</Link>
-          <Link href="/pricing" className="text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">Pricing</Link>
-          <Link href="/about" className="hidden sm:inline text-sm text-[#0F3D2E]/70 hover:text-[#0F3D2E]">About</Link>
-          <Link href="/waitlist/course" className="inline-flex items-center rounded-md bg-[#0F3D2E] px-3.5 sm:px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 whitespace-nowrap">
-            Claim a spot →
-          </Link>
-        </div>
-      </div>
-    </header>
   )
 }
 
@@ -66,7 +46,7 @@ function FeaturesHero() {
               of the round.
             </h1>
             <p className="mt-6 text-base sm:text-lg text-[#1A1A1A]/78 leading-relaxed max-w-xl">
-              Tee sheet, loyalty, exchange, payments — built for the course operator who actually runs the day, and the regular who actually plays the round. No barter, no commissions, no national-chain lock-in.
+              Tee sheet, loyalty, exchange, payments, built for the course operator who actually runs the day, and the regular who actually plays the round. No barter, no commissions, no national-chain lock-in.
             </p>
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
               <Link
@@ -84,7 +64,7 @@ function FeaturesHero() {
             </div>
           </div>
 
-          {/* Product peek — real screenshots from /public/screenshots/ */}
+          {/* Product peek, real screenshots from /public/screenshots/ */}
           <div className="hidden lg:block relative h-[460px]">
             <Image
               src="/screenshots/dashboard.png"
@@ -151,7 +131,7 @@ function CourseChapter() {
               src="/screenshots/dashboard.png"
               width={924}
               height={540}
-              alt="Course dashboard — revenue, utilization, top members"
+              alt="Course dashboard showing revenue, utilization, and top members"
               className="rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-white/10 w-full h-auto"
             />
           </div>
@@ -319,17 +299,17 @@ function GolferChapter() {
           {/* Diagram: 4 callouts framing a centered phone */}
           <div className="relative grid lg:grid-cols-[1fr_320px_1fr] items-center gap-12 lg:gap-0 min-h-[560px]">
 
-            {/* Left column — Fairway Points + Tee time exchange */}
+            {/* Left column, Fairway Points + Tee time exchange */}
             <div className="flex flex-col gap-14 lg:pr-10">
-              <CalloutRight num="07" eyebrow="Fairway Points" headline={<>Loyalty that <em className="italic text-[#E0A800]">actually compounds</em></>}>
-                Earn at every course. Eagle 1.5×, Ace 2×. No expiration. Redeem at any partner.
+              <CalloutRight num="07" eyebrow="Fairway Points" headline={<>Play a season, <em className="italic text-[#E0A800]">earn a free round</em></>}>
+                5,000 points redeem for a complimentary round. About every 71 rounds on Fairway, 48 as Eagle (1.5×), 36 as Ace (2×). Points never expire.
               </CalloutRight>
               <CalloutRight num="09" eyebrow="Tee time exchange" headline={<>List a round, <em className="italic text-[#E0A800]">earn the credit back</em></>}>
                 Can&apos;t make it? Trade your tee time on the member exchange. No Venmo, no group texts.
               </CalloutRight>
             </div>
 
-            {/* Center — phone */}
+            {/* Center, phone */}
             <div className="relative flex justify-center items-center">
               <svg viewBox="0 0 500 500" className="absolute inset-0 m-auto w-full max-w-[500px] opacity-[0.08]" aria-hidden>
                 <circle cx="250" cy="250" r="240" fill="none" stroke="#0F3D2E" strokeWidth="1" strokeDasharray="2 6" />
@@ -348,7 +328,7 @@ function GolferChapter() {
               </div>
             </div>
 
-            {/* Right column — Book at zero fees + Find a partner */}
+            {/* Right column, Book at zero fees + Find a partner */}
             <div className="flex flex-col gap-14 lg:pl-10">
               <CalloutLeft num="08" eyebrow="Book at zero fees" headline={<>Eagle and Ace pay <em className="italic text-[#E0A800]">$0 in fees</em></>}>
                 Every round, every course. No &ldquo;$2.49 service fee&rdquo; surprises at checkout.
@@ -360,7 +340,7 @@ function GolferChapter() {
 
           </div>
 
-          {/* In-round service — wide footer strip */}
+          {/* In-round service, wide footer strip */}
           <div className="bg-[#0F3D2E]/[0.06] rounded-2xl px-7 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
             <div className="flex items-center gap-5">
               <span className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-none" style={{ fontSize: 44, fontWeight: 400 }}>&lt;1s</span>
@@ -370,7 +350,7 @@ function GolferChapter() {
               </div>
             </div>
             <p className="text-[13px] text-[#1A1A1A]/72 leading-relaxed max-w-sm">
-              Beverage, cart, pace-of-play — your staff sees it instantly. No waving down the cart lady.
+              Beverage, cart, pace-of-play: your staff sees it instantly. No waving down the cart lady.
             </p>
           </div>
 
@@ -533,7 +513,7 @@ function AllFeaturesGrid() {
                     {cat.c}
                   </h3>
 
-                  {/* Features — 2 columns */}
+                  {/* Features, 2 columns */}
                   <ul className="grid grid-cols-2 gap-x-3 gap-y-2 mb-6">
                     {cat.items.map(item => (
                       <li key={item} className="grid grid-cols-[10px_1fr] gap-1.5 text-[12.5px] leading-snug items-baseline">
@@ -559,7 +539,7 @@ function AllFeaturesGrid() {
           </div>
 
           <p className="max-w-3xl text-[14px] text-[#6B7770] leading-relaxed">
-            Everything above is included for Founding Partner courses for their first year — and for every TeeAhead golfer on every tier.
+            Everything above is included for Founding Partner courses for their first year, and for every TeeAhead golfer on every tier.
           </p>
 
         </div>

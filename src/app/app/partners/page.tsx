@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import type { PartnerAvailability, Gender, OpenTo } from '@/types/partners'
 import { BrowseFeed } from './BrowseFeed'
 
-export const metadata: Metadata = { title: 'Find a Partner — TeeAhead' }
+export const metadata: Metadata = { title: 'Find a Partner, TeeAhead' }
 
 function buildDateLabel(dateStr: string): string {
   const today = new Date()
@@ -12,8 +12,8 @@ function buildDateLabel(dateStr: string): string {
   const d = new Date(dateStr + 'T12:00:00')
   const diff = Math.round((d.getTime() - today.getTime()) / 86_400_000)
   const formatted = d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-  if (diff === 0) return `Today — ${formatted}`
-  if (diff === 1) return `Tomorrow — ${formatted}`
+  if (diff === 0) return `Today, ${formatted}`
+  if (diff === 1) return `Tomorrow, ${formatted}`
   return formatted
 }
 
@@ -112,7 +112,7 @@ export default async function PartnersPage() {
     }))
     .filter((av: any) => {
       const prefs = av.preferences
-      if (!prefs) return true // no prefs set — show them
+      if (!prefs) return true // no prefs set, show them
       const posterGender = (prefs.gender ?? 'prefer_not_to_say') as Gender
       const posterOpenTo = (prefs.open_to ?? 'anyone') as OpenTo
       return isGenderCompatible(viewerGender, viewerOpenTo, posterGender, posterOpenTo)

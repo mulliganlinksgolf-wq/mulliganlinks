@@ -34,10 +34,10 @@ export default async function PartnerFinderReportPage() {
   const stats = [
     { label: 'Members with visible profiles', value: prefsCount ?? 0 },
     { label: 'Active availability windows', value: availCount ?? 0 },
-    { label: 'Requests — Pending', value: pendingCount ?? 0 },
-    { label: 'Requests — Accepted', value: acceptedCount ?? 0 },
-    { label: 'Requests — Declined', value: declinedCount ?? 0 },
-    { label: 'Requests — Withdrawn', value: withdrawnCount ?? 0 },
+    { label: 'Requests, Pending', value: pendingCount ?? 0 },
+    { label: 'Requests, Accepted', value: acceptedCount ?? 0 },
+    { label: 'Requests, Declined', value: declinedCount ?? 0 },
+    { label: 'Requests, Withdrawn', value: withdrawnCount ?? 0 },
   ]
 
   return (

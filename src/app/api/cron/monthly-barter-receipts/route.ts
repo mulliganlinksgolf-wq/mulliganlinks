@@ -1,7 +1,7 @@
 // Monthly cron: on the 1st of each month, generate and email a Barter
 // Receipt for every active partner course covering the previous month.
 //
-// Schedule: vercel.json — "0 13 1 * *" (13:00 UTC = 8am ET in winter,
+// Schedule: vercel.json, "0 13 1 * *" (13:00 UTC = 8am ET in winter,
 // 9am ET in summer). Vercel sends a GET request with the CRON_SECRET
 // in the Authorization header.
 
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
   }
 
   // Last completed month in UTC. Vercel cron fires at 13:00 UTC on the
-  // 1st, so "now" is always inside the new month — we want the month before.
+  // 1st, so "now" is always inside the new month, we want the month before.
   const now = new Date()
   const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - 1, 1))
 

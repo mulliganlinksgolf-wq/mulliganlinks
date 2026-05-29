@@ -1,3 +1,5 @@
+import { TYPICAL_ANNUAL_BARTER_LABEL, HIGH_VOLUME_ANNUAL_BARTER_LABEL } from '@/lib/barter-math'
+
 export function TeeTimeSoftwareSchema() {
   const schemas = [
     {
@@ -7,11 +9,11 @@ export function TeeTimeSoftwareSchema() {
       applicationCategory: 'BusinessApplication',
       operatingSystem: 'Web',
       url: 'https://www.teeahead.com',
-      description: 'Free tee sheet software for golf courses — no barter tee times, no commissions, no lock-in. Includes online booking, golfer loyalty program, league management, and Stripe payments.',
+      description: 'Free tee sheet software for golf courses, no barter tee times, no commissions, no lock-in. Includes online booking, golfer loyalty program, league management, and Stripe payments.',
       offers: [
         {
           '@type': 'Offer',
-          name: 'Founding Partner — Free Year One',
+          name: 'Founding Partner, Free Year One',
           price: '0',
           priceCurrency: 'USD',
           description: 'Full platform free for the first year for Founding Partner courses (first 10 courses).',
@@ -27,7 +29,7 @@ export function TeeTimeSoftwareSchema() {
             priceCurrency: 'USD',
             unitCode: 'MON',
           },
-          description: 'Flat monthly rate — no barter tee times, no commissions, no booking fees.',
+          description: 'Flat monthly rate, no barter tee times, no commissions, no booking fees.',
         },
       ],
       publisher: { '@id': 'https://www.teeahead.com/#organization' },
@@ -41,7 +43,7 @@ export function TeeTimeSoftwareSchema() {
           name: 'What does TeeAhead tee time software cost?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'TeeAhead is free for the first year for Founding Partner courses (the first 10 to join). After year one, the standard rate is $349/month — a flat fee with no barter tee times, no per-booking commissions, and no hidden fees.',
+            text: 'TeeAhead is free for the first year for Founding Partner courses (the first 10 to join). After year one, the standard rate is $349/month, a flat fee with no barter tee times, no per-booking commissions, and no hidden fees.',
           },
         },
         {
@@ -49,7 +51,7 @@ export function TeeTimeSoftwareSchema() {
           name: 'Does TeeAhead require barter tee times like GolfNow?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'No. TeeAhead charges a flat monthly SaaS fee and never requires barter tee times. Courses keep 100% of every round they sell. GolfNow\'s barter model costs the average course roughly $94,500 per year in foregone revenue — TeeAhead has no such arrangement.',
+            text: `No. TeeAhead charges a flat monthly SaaS fee and never requires barter tee times. Courses keep 100% of every round they sell. GolfNow's barter model costs the average daily-fee course roughly ${TYPICAL_ANNUAL_BARTER_LABEL} per year in foregone revenue, and ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more for high-volume courses. TeeAhead has no such arrangement.`,
           },
         },
         {
@@ -68,7 +70,7 @@ export function TeeTimeSoftwareSchema() {
       '@id': 'https://www.teeahead.com/tee-time-software#article',
       headline: 'Free Tee Time Software for Golf Courses',
       description:
-        'Free tee sheet software for golf courses — no barter tee times, no commissions, no lock-in. Compare TeeAhead vs. GolfNow, foreUP, and Lightspeed Golf.',
+        'Free tee sheet software for golf courses, no barter tee times, no commissions, no lock-in. Compare TeeAhead vs. GolfNow, foreUP, and Lightspeed Golf.',
       url: 'https://www.teeahead.com/tee-time-software',
       mainEntityOfPage: {
         '@type': 'WebPage',

@@ -62,7 +62,7 @@ export default async function RoundsReportPage({
       <DateRangePicker />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-        <KpiTile label={`Rounds — ${latestMonthLabel}`} value={(latest?.rounds_booked ?? 0).toLocaleString()} accent />
+        <KpiTile label={`Rounds, ${latestMonthLabel}`} value={(latest?.rounds_booked ?? 0).toLocaleString()} accent />
         {momChange !== null && (
           <KpiTile label="Month-over-Month" value={`${momChange > 0 ? '+' : ''}${momChange}%`} />
         )}

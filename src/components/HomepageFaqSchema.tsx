@@ -1,3 +1,10 @@
+import {
+  OPERATING_DAYS,
+  TYPICAL_PEAK_RATE_LABEL,
+  TYPICAL_ANNUAL_BARTER_LABEL,
+  HIGH_VOLUME_ANNUAL_BARTER_LABEL,
+} from '@/lib/barter-math'
+
 export function HomepageFaqSchema() {
   const schema = {
     '@context': 'https://schema.org',
@@ -8,7 +15,7 @@ export function HomepageFaqSchema() {
         name: 'Is TeeAhead free for golf courses?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'Yes. TeeAhead is completely free for the first 10 Founding Partner courses — free for your first year. There are no barter tee times, no commissions, and no data extraction. TeeAhead makes money from golfer memberships, not from courses.',
+          text: 'Yes. TeeAhead is completely free for the first 10 Founding Partner courses, free for your first year. There are no barter tee times, no commissions, and no data extraction. TeeAhead makes money from golfer memberships, not from courses.',
         },
       },
       {
@@ -24,7 +31,7 @@ export function HomepageFaqSchema() {
         name: 'What is the TeeAhead Founding Partner program?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status — the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $349/month.',
+          text: 'The first 10 golf courses to join TeeAhead in Metro Detroit receive Founding Partner status, the full platform free for your first year. The only requirement is that partner courses promote TeeAhead membership to their golfers at the point of booking. Course #11 onward pays $349/month.',
         },
       },
       {
@@ -32,7 +39,7 @@ export function HomepageFaqSchema() {
         name: 'What does GolfNow actually cost a golf course?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'GolfNow takes approximately 2 barter tee times per day at rack rate. At 300 operating days per year, that equals roughly $94,500 per year in lost revenue for an average course. High-volume courses can lose $150,000 or more annually.',
+          text: `GolfNow takes approximately 2 barter tee times per day at rack rate. At a typical ${TYPICAL_PEAK_RATE_LABEL} peak rate across ${OPERATING_DAYS} operating days, that equals roughly ${TYPICAL_ANNUAL_BARTER_LABEL} per year in lost revenue for an average daily-fee course. High-volume courses at resort rates can lose ${HIGH_VOLUME_ANNUAL_BARTER_LABEL} or more annually.`,
         },
       },
       {
@@ -40,7 +47,7 @@ export function HomepageFaqSchema() {
         name: 'What are Fairway Points?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: "Fairway Points are TeeAhead's loyalty currency. Every dollar you spend on green fees at partner courses earns Fairway Points. Eagle members earn 2x points, Ace members earn 3x. Points can be redeemed for tee time credits at any partner course in the network.",
+          text: "Fairway Points are TeeAhead's loyalty currency. Every dollar you spend on green fees at partner courses earns Fairway Points. Eagle members earn 1.5x points, Ace members earn 2x. Points never expire, and 5,000 Fairway Points redeem for a complimentary round at any partner course in the network.",
         },
       },
     ],

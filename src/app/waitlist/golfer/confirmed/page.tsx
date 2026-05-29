@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: "You're on the list — TeeAhead",
+  title: "You're on the list, TeeAhead",
 }
 
 export default async function GolferConfirmedPage({
@@ -22,7 +22,7 @@ export default async function GolferConfirmedPage({
         <p className="text-[#6B7770] leading-relaxed">
           We&apos;ll email you when TeeAhead launches in Metro Detroit.
           {position && position <= 100 && (
-            <> You&apos;re in the first {position <= 10 ? '10' : position <= 50 ? '50' : '100'} — early access guaranteed.</>
+            <> You&apos;re in the first {position <= 10 ? '10' : position <= 50 ? '50' : '100'}, early access guaranteed.</>
           )}
         </p>
 
@@ -30,7 +30,7 @@ export default async function GolferConfirmedPage({
           <p className="text-sm font-semibold text-[#1A1A1A]">While you wait:</p>
           <ul className="text-sm text-[#6B7770] space-y-2">
             <li>• Know a course that should partner with us? Send them to <strong className="text-[#1A1A1A]">teeahead.com/waitlist/course</strong></li>
-            <li>• Share with golf friends — more local golfers = more partner courses</li>
+            <li>• Share with golf friends, more local golfers = more partner courses</li>
           </ul>
         </div>
 

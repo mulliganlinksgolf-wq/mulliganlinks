@@ -1,8 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Menu, X } from 'lucide-react'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { SiteHeader } from '@/components/SiteHeader'
 
 const HOLES = [
   { n: '01', par: 5, yds: 547, name: 'The Damage',     anchor: '#hole-01' },
@@ -24,7 +23,6 @@ export function YardageShell({
   children: React.ReactNode
 }) {
   const [currentHole, setCurrentHole] = useState(initialHole)
-  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>('section[id^="hole-"]')
@@ -47,76 +45,7 @@ export function YardageShell({
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <header className="sticky top-0 z-40 h-[60px] bg-[#082419] text-[#F4F1EA] border-b border-[#E0A800]/25 grid grid-cols-[auto_1fr_auto] items-center gap-8 px-6 sm:px-8 lg:px-10">
-
-        {/* Left — logo */}
-        <Link href="/" className="flex items-center">
-          <TeeAheadLogo className="h-8 w-auto brightness-0 invert" />
-        </Link>
-
-        {/* Center — nav, evenly spaced */}
-        <nav className="hidden md:flex items-center justify-center gap-8">
-          <Link href="/features" className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Features</Link>
-          <Link href="/pricing"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Pricing</Link>
-          <Link href="/about"    className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">About</Link>
-          <Link href="/contact"  className="text-[13.5px] font-medium text-[#F4F1EA] hover:text-[#E0A800] transition-colors">Contact</Link>
-        </nav>
-
-        {/* Right — CTA (desktop) + hamburger (mobile) */}
-        <div className="flex items-center gap-3 justify-end">
-          <Link
-            href="/waitlist/course"
-            className="rounded-md bg-[#E0A800] px-4 py-2 text-[13px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors whitespace-nowrap"
-          >
-            Claim a spot →
-          </Link>
-          <button
-            type="button"
-            onClick={() => setMobileNavOpen(true)}
-            aria-label="Open menu"
-            className="md:hidden inline-flex items-center justify-center rounded-md p-1.5 text-[#F4F1EA] hover:bg-white/10"
-          >
-            <Menu size={22} />
-          </button>
-        </div>
-      </header>
-
-      {/* Mobile nav drawer */}
-      {mobileNavOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div
-            className="absolute inset-0 bg-black/60"
-            onClick={() => setMobileNavOpen(false)}
-            aria-hidden
-          />
-          <div className="absolute top-0 right-0 h-full w-[80%] max-w-[320px] bg-[#082419] text-[#F4F1EA] flex flex-col p-6 shadow-2xl">
-            <div className="flex items-center justify-between mb-8">
-              <TeeAheadLogo className="h-7 w-auto brightness-0 invert" />
-              <button
-                type="button"
-                onClick={() => setMobileNavOpen(false)}
-                aria-label="Close menu"
-                className="inline-flex items-center justify-center rounded-md p-1.5 text-[#F4F1EA] hover:bg-white/10"
-              >
-                <X size={22} />
-              </button>
-            </div>
-            <nav className="flex flex-col gap-1 text-[#F4F1EA]">
-              <Link href="/features" onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] font-medium border-b border-white/10 hover:text-[#E0A800] transition-colors">Features</Link>
-              <Link href="/pricing"  onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] font-medium border-b border-white/10 hover:text-[#E0A800] transition-colors">Pricing</Link>
-              <Link href="/about"    onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] text-[#F4F1EA]/75 border-b border-white/10 hover:text-[#F4F1EA] transition-colors">About</Link>
-              <Link href="/contact"  onClick={() => setMobileNavOpen(false)} className="py-3 text-[15px] text-[#F4F1EA]/75 border-b border-white/10 hover:text-[#F4F1EA] transition-colors">Contact</Link>
-            </nav>
-            <Link
-              href="/waitlist/course"
-              onClick={() => setMobileNavOpen(false)}
-              className="mt-6 inline-flex items-center justify-center rounded-md bg-[#E0A800] px-4 py-3 text-[14px] font-bold text-[#082419] hover:bg-[#E0A800]/90 transition-colors"
-            >
-              Claim a spot →
-            </Link>
-          </div>
-        </div>
-      )}
+      <SiteHeader />
 
       <div className="flex-1 grid lg:grid-cols-[220px_1fr]">
         <aside className="hidden lg:flex flex-col bg-[#082419] text-[#F4F1EA] sticky top-[60px] self-start h-[calc(100vh-60px)] overflow-y-auto">
@@ -133,7 +62,9 @@ export function YardageShell({
               <Link
                 key={h.n}
                 href={h.anchor}
-                className={`grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-3 border-b border-[#F4F1EA]/8 items-center flex-1 min-h-[44px] ${
+                aria-label={`Hole ${h.n.replace(/^0/, '')}: ${h.name}, par ${h.par}, ${h.yds} yards`}
+                aria-current={on ? 'true' : undefined}
+                className={`grid grid-cols-[30px_1fr_26px_36px] gap-0 px-4 py-3 border-b border-[#F4F1EA]/8 items-center flex-1 min-h-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#E0A800] ${
                   on
                     ? 'bg-black/30 border-l-[3px] border-l-[#E0A800] pl-[13px]'
                     : 'border-l-[3px] border-l-transparent hover:bg-black/15'

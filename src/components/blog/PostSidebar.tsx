@@ -26,7 +26,7 @@ function GolfersCTA() {
   return (
     <div className="bg-[#0F3D2E] rounded-xl p-5 text-[#F4F1EA]">
       <p className="text-xs font-bold text-[#E0A800] uppercase tracking-wide mb-2">TeeAhead Membership</p>
-      <p className="text-sm font-bold mb-1">Eagle — $89/yr</p>
+      <p className="text-sm font-bold mb-1">Eagle, $89/yr</p>
       <p className="text-xs text-[#F4F1EA]/70 mb-4">Beats GolfPass+ on price and every benefit. Zero booking fees, 1 guest pass, priority access.</p>
       <Link
         href="/waitlist/golfer"

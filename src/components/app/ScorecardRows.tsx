@@ -54,7 +54,7 @@ export default function ScorecardRows({
       <>
         <RowTemplate icon="⛳" label="FIND" primary="Find a course near you" subLine="3 partner courses within 5 miles" link="/app/courses" />
         <RowTemplate icon="◎" label="EARN" primary="Bank your first 50 Fairway Points" subLine="100 pts = $1 toward future bookings" link="/app/points" />
-        <RowTemplate icon="↑" label="TRY" primary="Eagle preview — 2× points + fee waived" subLine="Upgrade — $50 less than Golf Pass" link="/app/membership" />
+        <RowTemplate icon="↑" label="TRY" primary="Eagle preview, 2× points + fee waived" subLine="Upgrade, $50 less than Golf Pass" link="/app/membership" />
       </>
     )
   }
@@ -94,8 +94,8 @@ export default function ScorecardRows({
       ? {
           icon: '↑',
           label: 'UPGRADE',
-          primary: 'Go Eagle — 2× points + fee waived',
-          subLine: '$89/yr — $50 less than Golf Pass',
+          primary: 'Go Eagle, 2× points + fee waived',
+          subLine: '$89/yr, $50 less than Golf Pass',
           link: '/app/membership',
         }
       : {

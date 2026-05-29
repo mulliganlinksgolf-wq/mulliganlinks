@@ -150,7 +150,7 @@ export async function waiveBooking(
         user_id: booking.user_id,
         booking_id: bookingId,
         amount: -awardedRow.amount,
-        reason: 'Points reversed — fee waived by course',
+        reason: 'Points reversed, fee waived by course',
       })
     }
   }
@@ -232,7 +232,7 @@ export async function sendWalkInConfirmation({
 }
 
 // Sends confirmation email directly from WalkInBookingModal using locally-available data.
-// Caller already has all booking details — no DB fetch needed.
+// Caller already has all booking details, no DB fetch needed.
 export async function sendWalkInEmail({
   guestName,
   guestEmail,

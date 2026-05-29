@@ -97,7 +97,7 @@ export function BenefitsSchedulePDF({ course, eagleRate, aceRate, priorityHours,
             'Ask the golfer to present their TeeAhead membership (app or email confirmation).',
             'Confirm the member name matches their ID and membership shows as "Active."',
             'Apply the applicable green fee rate for their tier (Eagle or Ace) as shown above.',
-            'Log the round as a TeeAhead member round — your TeeAhead rep reconciles monthly.',
+            'Log the round as a TeeAhead member round, your TeeAhead rep reconciles monthly.',
           ].map((text, i) => (
             <View key={i} style={S.stepRow}>
               <Text style={S.stepNum}>{i + 1}.</Text>
@@ -109,7 +109,7 @@ export function BenefitsSchedulePDF({ course, eagleRate, aceRate, priorityHours,
         <View style={S.noticeBox}>
           <Text style={S.noticeText}>
             <Text style={S.bold}>Important: </Text>
-            Barter credits are issued by TeeAhead and applied to future bookings — your course collects full green fees directly. Credits do not reduce payment owed to the course. If a member presents an expired membership, standard rates apply.
+            Barter credits are issued by TeeAhead and applied to future bookings, your course collects full green fees directly. Credits do not reduce payment owed to the course. If a member presents an expired membership, standard rates apply.
           </Text>
         </View>
 

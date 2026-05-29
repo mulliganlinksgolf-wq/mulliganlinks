@@ -1,30 +1,17 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'TeeAhead Privacy Policy — how we collect, use, and protect your information.',
+  description: 'TeeAhead Privacy Policy: how we collect, use, and protect your information.',
 }
 
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto" />
-          </Link>
-          <Link
-            href="/waitlist/course"
-            className="rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
-          >
-            Claim a spot →
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-16 sm:py-20">
         <p className="font-mono text-xs tracking-[0.16em] uppercase text-[#6B7770]">
@@ -43,7 +30,7 @@ export default function PrivacyPage() {
             <DashList items={[
               <><strong className="text-[#0F3D2E]">Account data:</strong> email address, full name, phone number</>,
               <><strong className="text-[#0F3D2E]">Booking data:</strong> tee time bookings, courses played, number of players</>,
-              <><strong className="text-[#0F3D2E]">Payment data:</strong> processed securely by Stripe — we do not store card numbers</>,
+              <><strong className="text-[#0F3D2E]">Payment data:</strong> processed securely by Stripe, we do not store card numbers</>,
               <><strong className="text-[#0F3D2E]">Profile data:</strong> optional partner-matching preferences (handicap, pace of play, play style, gender, bio) and profile photo</>,
               <><strong className="text-[#0F3D2E]">Service request data:</strong> in-round request type and optional note submitted to course staff</>,
               <><strong className="text-[#0F3D2E]">Usage data:</strong> pages visited, features used, session duration (including session recordings via LogRocket)</>,
@@ -65,7 +52,7 @@ export default function PrivacyPage() {
               'We do not sell your personal data to third parties',
               'We do not share your booking data with competing courses',
               'We do not use your data to market competitor products to you',
-              'We do not store payment card numbers — Stripe handles all payment data',
+              'We do not store payment card numbers, Stripe handles all payment data',
             ]} />
           </Section>
 
@@ -76,7 +63,7 @@ export default function PrivacyPage() {
               authentication; (c) Stripe, for payment processing; (d) Resend, for transactional
               email delivery; (e) Vercel, for platform hosting and analytics; (f) LogRocket, for
               session recording and error monitoring (records user interactions to help us diagnose
-              bugs — sensitive fields are masked).
+              bugs, sensitive fields are masked).
               All third-party providers are contractually bound to use your data only to provide
               services to TeeAhead.
             </p>
@@ -105,8 +92,8 @@ export default function PrivacyPage() {
           <Section n="7" title="Cookies">
             <p className="text-[#1A1A1A]/85 leading-[1.7]">
               We use session cookies required for authentication (managed by Supabase),
-              analytics cookies (Vercel Analytics — anonymized, no cross-site tracking), and a
-              referral attribution cookie (<strong className="text-[#0F3D2E]">ta_ref</strong> — set when you arrive via a
+              analytics cookies (Vercel Analytics, anonymized, no cross-site tracking), and a
+              referral attribution cookie (<strong className="text-[#0F3D2E]">ta_ref</strong>, set when you arrive via a
               course referral link, expires after 30 days, used only to credit the referring
               course). We do not use advertising cookies or third-party tracking pixels.
             </p>

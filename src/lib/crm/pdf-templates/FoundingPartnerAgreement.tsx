@@ -127,7 +127,7 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
           <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}>List {course.name} on the Platform as a Founding Partner, with permanent "Founding Partner" designation and priority placement in member search results and recommendations throughout the Founding Partner Period;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}>Actively market {course.name} to the TeeAhead member base through Platform features, email campaigns, and digital channels at TeeAhead's reasonable discretion;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(c)</Text><Text style={S.bulletText}>Provide Partner Course with a monthly activity report summarizing TeeAhead Member visits, round bookings, and benefit redemptions attributable to TeeAhead;</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}>Lock all material partner terms — including the Platform Fee, benefit rates, and Founding Partner placement — for the full Initial Term. No unilateral fee increase or material term change will be made without sixty (60) days written notice and Partner Course written consent.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}>Lock all material partner terms, including the Platform Fee, benefit rates, and Founding Partner placement, for the full Initial Term. No unilateral fee increase or material term change will be made without sixty (60) days written notice and Partner Course written consent.</Text></View>
         </View>
 
         {/* Section 4: Platform Fee */}

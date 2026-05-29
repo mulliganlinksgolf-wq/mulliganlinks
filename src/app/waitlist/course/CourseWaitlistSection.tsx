@@ -23,7 +23,7 @@ export function CourseWaitlistSection({ spotsRemaining }: CourseWaitlistSectionP
         <div className="max-w-xl mx-auto">
           <div className="bg-[#0F3D2E] rounded-2xl p-8 sm:p-10">
             <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">
-              COURSE WAITLIST — FOUNDING PARTNER PROGRAM
+              COURSE WAITLIST · FOUNDING PARTNER PROGRAM
             </p>
             <p className="text-lg font-semibold text-[#F4F1EA] mb-8">Bring TeeAhead to your course.</p>
             <Suspense fallback={null}>

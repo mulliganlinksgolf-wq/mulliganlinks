@@ -106,7 +106,7 @@ export default async function CoursePaymentsPage({
 
       {isOnboarding && !needsOnboarding && (
         <div className="bg-amber-50 border border-amber-300 rounded-xl px-5 py-5 space-y-3">
-          <p className="font-semibold text-amber-800">Almost there — Stripe needs a few more details</p>
+          <p className="font-semibold text-amber-800">Almost there, Stripe needs a few more details</p>
           <p className="text-sm text-amber-700">
             Your account status: <strong>{course.stripe_account_status}</strong>. Complete your Stripe setup to start accepting payments.
           </p>
@@ -128,7 +128,7 @@ export default async function CoursePaymentsPage({
           {disputes.map((d: any) => (
             <div key={d.id} className="flex items-center justify-between text-sm">
               <div>
-                <p className="text-red-700 font-medium">${(d.amount_cents / 100).toFixed(2)} — {d.reason ?? 'unknown reason'}</p>
+                <p className="text-red-700 font-medium">${(d.amount_cents / 100).toFixed(2)}, {d.reason ?? 'unknown reason'}</p>
                 {d.evidence_due_by && (
                   <p className="text-red-600 text-xs mt-0.5">
                     Evidence due by {new Date(d.evidence_due_by).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
@@ -194,7 +194,7 @@ export default async function CoursePaymentsPage({
         <div>
           <h2 className="text-lg font-semibold text-[#1A1A1A] mb-4">Recent payouts</h2>
           {!payouts || payouts.length === 0 ? (
-            <p className="text-sm text-[#6B7770]">No payouts yet — payouts begin 7 days after a booking.</p>
+            <p className="text-sm text-[#6B7770]">No payouts yet, payouts begin 7 days after a booking.</p>
           ) : (
             <div className="bg-white rounded-xl ring-1 ring-black/5 overflow-hidden">
               <table className="w-full text-sm">

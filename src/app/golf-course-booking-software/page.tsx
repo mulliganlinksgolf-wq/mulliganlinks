@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { captureReferralCode } from '@/lib/referrals/capture'
 
 export const metadata: Metadata = {
-  title: 'Free Golf Course Booking Software — No Commissions, No Barter',
+  title: 'Free Golf Course Booking Software: No Commissions, No Barter',
   description:
     'TeeAhead is free golf course booking software for independent and semi-private courses. No commissions per booking, no barter tee times, no long-term contracts. Built-in loyalty and Stripe payments.',
   alternates: {
@@ -61,7 +61,7 @@ export default async function GolfCourseBookingSoftwarePage({
           <>
             <p>
               {c['coursebooking.flow_intro'] ??
-                'Set available tee times and green-fee rates in the TeeAhead dashboard. You control inventory — no third party assigns your prime slots.'}
+                'Set available tee times and green-fee rates in the TeeAhead dashboard. You control inventory. No third party assigns your prime slots.'}
             </p>
             <p>
               Members in your area browse and book through the app. No phone tag. No third-party
@@ -103,7 +103,7 @@ export default async function GolfCourseBookingSoftwarePage({
         items: [
           {
             q: 'Is TeeAhead really free for the first year?',
-            a: 'For the first 10 Founding Partner courses in Metro Detroit, yes — $0 for year one. Course #11 onward pays $349/mo flat. No commissions either way.',
+            a: 'For the first 10 Founding Partner courses in Metro Detroit, yes: $0 for year one. Course #11 onward pays $349/mo flat. No commissions either way.',
           },
           {
             q: 'How do payments actually flow?',

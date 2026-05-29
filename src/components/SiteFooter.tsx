@@ -7,7 +7,7 @@ export function SiteFooter() {
       <div className="max-w-6xl mx-auto">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
 
-          {/* Column 1 — Brand */}
+          {/* Column 1, Brand */}
           <div className="col-span-2 sm:col-span-1 space-y-3">
             <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
             <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">
@@ -27,7 +27,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* Column 2 — For Courses */}
+          {/* Column 2, For Courses */}
           <div className="space-y-3">
             <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">For Courses</p>
             <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
@@ -40,7 +40,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          {/* Column 3 — Compare */}
+          {/* Column 3, Compare */}
           <div className="space-y-3">
             <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Compare</p>
             <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
@@ -51,7 +51,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          {/* Column 4 — Company */}
+          {/* Column 4, Company */}
           <div className="space-y-3">
             <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
             <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
@@ -63,9 +63,13 @@ export function SiteFooter() {
           </div>
 
         </div>
-        <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-1">
+        <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
           <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
           <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
+          <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
+            Competitor references are for comparative purposes only and based on publicly available
+            information. TeeAhead is not affiliated with or endorsed by GolfNow or NBC Sports Next.
+          </p>
         </div>
       </div>
     </footer>

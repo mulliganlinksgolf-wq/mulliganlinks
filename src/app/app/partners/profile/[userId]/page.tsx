@@ -5,7 +5,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import type { Metadata } from 'next'
 import { ProfileRatingButton } from './ProfileRatingButton'
 
-export const metadata: Metadata = { title: 'Partner Profile — TeeAhead' }
+export const metadata: Metadata = { title: 'Partner Profile, TeeAhead' }
 
 const PLAY_STYLE_LABELS: Record<string, string> = {
   casual: '🎉 Casual',

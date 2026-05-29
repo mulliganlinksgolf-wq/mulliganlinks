@@ -29,7 +29,7 @@ export async function getTodaysQueue(): Promise<CrmCourse[]> {
     .order('name')
 
   if (!candidates || candidates.length === 0) {
-    // All leads have been queued before — reset and start over
+    // All leads have been queued before, reset and start over
     const { data: allLeads } = await admin
       .from('crm_courses')
       .select('*')

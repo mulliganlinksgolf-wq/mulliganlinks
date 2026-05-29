@@ -55,7 +55,7 @@ export async function createMember(prevState: { error?: string; success?: boolea
     // Give the DB trigger a moment to create the profile row
     await new Promise(r => setTimeout(r, 500))
 
-    // Upsert profile (trigger may have already done this; no email column — stored in auth.users)
+    // Upsert profile (trigger may have already done this; no email column, stored in auth.users)
     await admin.from('profiles').upsert({
       id: userId,
       full_name: name,

@@ -5,7 +5,8 @@
 
 import { useState, useEffect, ReactNode } from 'react'
 import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
 import { VENDOR_PRICING, TEEAHEAD_PRICING, VENDOR_KEYS, type VendorKey } from '@/lib/vendorPricing'
 import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
 import {
@@ -79,18 +80,7 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
   return (
     <div className="min-h-screen bg-[#082419] text-[#F4F1EA] flex flex-col">
 
-      {/* Nav */}
-      <header className="border-b border-[#F4F1EA]/8 px-6 py-4 flex-shrink-0">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/"><TeeAheadLogo className="h-10 w-auto brightness-0 invert" /></Link>
-          <Link
-            href="/waitlist/course?tier=founding"
-            className="px-4 py-2 rounded-md bg-[#E0A800] text-[#082419] text-sm font-bold hover:bg-[#E0A800]/90"
-          >
-            Claim a spot →
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
 
@@ -116,10 +106,10 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
                 {fmt(displayedTotal)}<span className="text-[#E0A800]">.</span>
               </p>
               <p className="mt-4 text-base sm:text-lg text-[#F4F1EA]/78 leading-relaxed max-w-md">
-                <strong className="text-[#F4F1EA]">Per year.</strong> Subscription, processing markup, marketplace barter — added up. Adjust the sliders to match your setup.
+                <strong className="text-[#F4F1EA]">Per year.</strong> Subscription, processing markup, marketplace barter, added up. Adjust the sliders to match your setup.
               </p>
 
-              {/* Breakdown — editorial ledger */}
+              {/* Breakdown, editorial ledger */}
               <div className="mt-7 pt-5 border-t border-[#F4F1EA]/10">
                 <p className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-[#E0A800] font-bold mb-3">
                   Where it goes
@@ -171,11 +161,11 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
 
                 {isUnusuallyLean ? (
                   <p className="mt-4 text-[13px] text-[#F4F1EA]/70 leading-relaxed">
-                    Your current setup is unusually lean. The case for TeeAhead here is data ownership and the loyalty layer — not cost.
+                    Your current setup is unusually lean. The case for TeeAhead here is data ownership and the loyalty layer, not cost.
                   </p>
                 ) : (
                   <p className="mt-4 text-[13px] text-[#F4F1EA] leading-relaxed">
-                    You save <span className="text-[#E0A800] font-semibold">{fmt(savingsAsFounding)}</span> as a Founding Partner. Even at standard pricing — <span className="font-semibold">{fmt(savingsAsStandard)}</span>/yr.
+                    You save <span className="text-[#E0A800] font-semibold">{fmt(savingsAsFounding)}</span> as a Founding Partner. Even at standard pricing, <span className="font-semibold">{fmt(savingsAsStandard)}</span>/yr.
                   </p>
                 )}
               </div>
@@ -275,7 +265,7 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
               >
                 {isUnusuallyLean
                   ? 'Claim a founding spot →'
-                  : `Claim a founding spot — save ${fmt(savingsAsFounding)}/yr →`}
+                  : `Claim a founding spot, save ${fmt(savingsAsFounding)}/yr →`}
               </Link>
 
               <p className="text-[11px] text-[#F4F1EA]/40 text-center font-mono tracking-[0.06em]">
@@ -304,7 +294,7 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
           </div>
         </section>
 
-        {/* ── Proof — cream ─────────────────────────────────────── */}
+        {/* ── Proof, cream ─────────────────────────────────────── */}
         <section className="px-6 sm:px-10 lg:px-16 py-16 bg-[#FAF7F2] text-[#1A1A1A]">
           <div className="max-w-5xl mx-auto">
             <div className="flex items-baseline gap-3 mb-10">
@@ -388,7 +378,7 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
               </Link>
             </div>
             <p className="text-sm text-[#6B7770]">
-              Questions? Email Neil — <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">neil@teeahead.com</a>
+              Questions? Email Neil at <a href="mailto:neil@teeahead.com" className="text-[#0F3D2E] underline underline-offset-[3px] font-semibold">neil@teeahead.com</a>
             </p>
           </div>
         </section>
@@ -407,43 +397,7 @@ export function SoftwareCostPage({ spotsRemaining, content = {} }: SoftwareCostP
 
       </main>
 
-      {/* ── Footer ────────────────────────────────────────────── */}
-      <footer className="bg-[#0F3D2E] border-t border-black/5 px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 mb-12">
-            <div className="space-y-3">
-              <TeeAheadLogo className="h-10 w-auto brightness-0 invert" />
-              <p className="text-sm text-[#F4F1EA]/80 leading-relaxed">Book ahead. Play more. Own your golf.</p>
-              <p className="text-xs text-[#F4F1EA]/50">Built in Metro Detroit.</p>
-            </div>
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Product</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <Link href="/waitlist/golfer" className="hover:text-[#F4F1EA] transition-colors">For Golfers</Link>
-                <Link href="/waitlist/course" className="hover:text-[#F4F1EA] transition-colors">For Courses</Link>
-                <Link href="/#pricing" className="hover:text-[#F4F1EA] transition-colors">Pricing</Link>
-                <Link href="/barter" className="hover:text-[#F4F1EA] transition-colors">GolfNow Barter Calculator</Link>
-              </nav>
-            </div>
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-[#F4F1EA]/50 uppercase tracking-wider">Company</p>
-              <nav className="flex flex-col gap-2 text-sm text-[#F4F1EA]/70">
-                <a href="mailto:hello@teeahead.com" className="hover:text-[#F4F1EA] transition-colors">Contact</a>
-                <Link href="/terms" className="hover:text-[#F4F1EA] transition-colors">Terms</Link>
-                <Link href="/privacy" className="hover:text-[#F4F1EA] transition-colors">Privacy</Link>
-              </nav>
-            </div>
-          </div>
-          <div className="border-t border-[#F4F1EA]/10 pt-6 text-center space-y-2">
-            <p className="text-xs text-[#F4F1EA]/50">Metro Detroit, Michigan</p>
-            <p className="text-xs text-[#F4F1EA]/40">© 2026 TeeAhead, LLC. All rights reserved.</p>
-            <p className="text-xs text-[#F4F1EA]/30 max-w-2xl mx-auto leading-relaxed">
-              Competitor references are for comparative purposes only and based on publicly available information.
-              Vendor pricing and marketplace integration data sourced from public documentation as of April 2026.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   )

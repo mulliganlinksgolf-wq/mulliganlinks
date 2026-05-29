@@ -94,7 +94,7 @@ export function EditBookingModal({
         </div>
 
         <div className="px-5 py-4 space-y-4">
-          {/* Name / phone — walk-ins only */}
+          {/* Name / phone, walk-ins only */}
           {isWalkIn && (
             <div className="grid grid-cols-2 gap-3">
               <div>

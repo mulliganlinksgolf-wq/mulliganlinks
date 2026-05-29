@@ -1,4 +1,4 @@
-// Monthly NGCOA-methodology Barter Receipt — the strategic shareable
+// Monthly NGCOA-methodology Barter Receipt, the strategic shareable
 // artifact that goes to every active partner course on the 1st of each
 // month. Distinct from BarterPdf.tsx (which is the on-demand operator
 // dashboard download using the simpler 20% model).
@@ -74,7 +74,7 @@ export default function MonthlyBarterReceiptPdf({
         )}
 
         <Text style={s.title}>What GolfNow Would Have Cost You</Text>
-        <Text style={s.subtitle}>{courseName} — {monthLabel}</Text>
+        <Text style={s.subtitle}>{courseName}, {monthLabel}</Text>
 
         <View style={s.heroDark}>
           <Text style={s.heroLabel}>Estimated GolfNow barter cost this month</Text>

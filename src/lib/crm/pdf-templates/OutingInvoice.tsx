@@ -94,7 +94,7 @@ export function OutingInvoicePDF({ outing, invoiceNumber, dueDate, depositPaid, 
         <View style={S.section}>
           <Text style={S.sectionTitle}>Charges</Text>
           <View style={S.lineRow}>
-            <Text style={S.lineDesc}>Golf Outing{outing.num_golfers ? ` — ${outing.num_golfers} golfers` : ''}</Text>
+            <Text style={S.lineDesc}>Golf Outing{outing.num_golfers ? `, ${outing.num_golfers} golfers` : ''}</Text>
             <Text style={S.lineAmt}>{total > 0 ? `$${total.toLocaleString()}` : 'TBD'}</Text>
           </View>
           {depositPaid > 0 ? (

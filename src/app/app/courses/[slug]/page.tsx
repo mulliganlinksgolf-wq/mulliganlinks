@@ -49,7 +49,7 @@ export default async function CourseDetailPage({
     date: selectedDate,
   })
 
-  // Occupancy view doesn't carry price/special/tee_start fields — fetch those from tee_times and merge.
+  // Occupancy view doesn't carry price/special/tee_start fields, fetch those from tee_times and merge.
   const ids = availability.map(a => a.teeTimeId)
   const { data: teeTimeMeta } = ids.length > 0
     ? await supabase

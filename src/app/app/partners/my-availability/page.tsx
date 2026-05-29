@@ -5,7 +5,7 @@ import type { Metadata } from 'next'
 import { AvailabilityForm } from './AvailabilityForm'
 import { DeleteAvailabilityButton } from './DeleteAvailabilityButton'
 
-export const metadata: Metadata = { title: 'My Availability — TeeAhead' }
+export const metadata: Metadata = { title: 'My Availability, TeeAhead' }
 
 export default async function MyAvailabilityPage() {
   const supabase = await createClient()

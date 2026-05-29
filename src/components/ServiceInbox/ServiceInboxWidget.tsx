@@ -104,7 +104,7 @@ export function ServiceInboxWidget({
     })
   }, [])
 
-  // Supabase Realtime — stable subscription (no isOpen in deps, uses ref instead)
+  // Supabase Realtime, stable subscription (no isOpen in deps, uses ref instead)
   useEffect(() => {
     const supabase = createClient()
 
@@ -270,7 +270,7 @@ export function ServiceInboxWidget({
             {!enabled && (
               <div className="rounded-lg bg-amber-50 border border-amber-200 px-3 py-2.5">
                 <p className="text-xs text-amber-700 font-medium">
-                  Service requests are off — members can&apos;t reach you right now.
+                  Service requests are off, members can&apos;t reach you right now.
                 </p>
               </div>
             )}
@@ -278,7 +278,7 @@ export function ServiceInboxWidget({
             {displayedRequests.length === 0 ? (
               <p className="text-sm text-[#6B7770] py-8 text-center">
                 {activeTab === 'open'
-                  ? 'All clear — no requests right now.'
+                  ? 'All clear, no requests right now.'
                   : 'No acknowledged requests.'}
               </p>
             ) : (
@@ -299,7 +299,7 @@ export function ServiceInboxWidget({
             )}
           </div>
 
-          {/* Footer — enable/disable toggle */}
+          {/* Footer, enable/disable toggle */}
           <div className="shrink-0 border-t border-gray-100 px-4 py-3 flex items-center justify-between bg-gray-50">
             <div>
               <p className="text-xs font-medium text-[#1A1A1A]">Members can request help</p>

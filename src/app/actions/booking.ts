@@ -10,7 +10,7 @@ const MONTHLY_CREDIT_CENTS: Record<string, number> = { eagle: 1000, ace: 2000 }
 /**
  * Issues this month's tee-time credit if it hasn't been issued yet,
  * then returns the total available credit balance in cents.
- * Safe to call on every page load — the unique index prevents duplicates.
+ * Safe to call on every page load, the unique index prevents duplicates.
  */
 export async function getAndIssueMemberCredits(userId: string, tier: string): Promise<number> {
   const amountCents = MONTHLY_CREDIT_CENTS[tier] ?? 0
@@ -261,7 +261,7 @@ export async function confirmBooking({
   const discountCents = verifiedPassId ? 1500 : 0
   const adjustedTotal = total - discountCents / 100
 
-  // Redemption enforcement — runs for both complimentary and points free-round paths
+  // Redemption enforcement, runs for both complimentary and points free-round paths
   if (redemptionType === 'points' || redemptionType === 'complimentary') {
     const { checkRedemptionAllowed, resetCompRoundsIfNeeded } = await import('@/lib/redemption')
 
@@ -306,7 +306,7 @@ export async function confirmBooking({
   let isSelfGrouped = false
 
   if (joinExistingGroup) {
-    // Verify the course allows self-grouping (admin client — public course flag, no RLS issues)
+    // Verify the course allows self-grouping (admin client, public course flag, no RLS issues)
     const { data: course } = await guestPassAdmin
       .from('courses')
       .select('allow_self_grouping')
@@ -317,7 +317,7 @@ export async function confirmBooking({
       return { error: 'Self-grouping disabled for this course' }
     }
 
-    // Per-day override check — already have scheduled_at on teeTime
+    // Per-day override check, already have scheduled_at on teeTime
     const dateKey = (teeTime.scheduled_at as string).slice(0, 10)
     const { data: override } = await guestPassAdmin
       .from('course_tee_sheet_overrides')
@@ -330,7 +330,7 @@ export async function confirmBooking({
       return { error: 'Self-grouping disabled for this date' }
     }
 
-    // Find the host group (any existing active booking on this slot) — must use admin
+    // Find the host group (any existing active booking on this slot), must use admin
     // because members lack SELECT policy on other members' bookings.
     const { data: existing } = await guestPassAdmin
       .from('bookings')
@@ -409,7 +409,7 @@ export async function confirmBooking({
   // Points are awarded at round completion, not at booking time.
   // points_awarded on the booking row records what will be earned.
 
-  // Deduct redeemed points immediately — member already paid less
+  // Deduct redeemed points immediately, member already paid less
   if (pointsRedeemed > 0) {
     await supabase.from('fairway_points').insert({
       user_id: userId,
@@ -421,7 +421,7 @@ export async function confirmBooking({
   }
 
   // Supabase doesn't support inline arithmetic in .update(); fetch and decrement explicitly.
-  // Must use admin client — members have no UPDATE policy on memberships.
+  // Must use admin client, members have no UPDATE policy on memberships.
   if (redemptionType === 'complimentary') {
     const adminComp = createAdminClient()
     const { data: mem } = await adminComp
@@ -471,7 +471,7 @@ export async function confirmBooking({
       .eq('status', 'available')
   }
 
-  // Fire-and-forget emails — never block booking confirmation
+  // Fire-and-forget emails, never block booking confirmation
   const adminClient = createAdminClient()
   const [, { data: memberProfile }, { data: teeTimeFull }] = await Promise.all([
     sendBookingConfirmation({ userId, bookingId: booking.id, teeTimeId, players, total, pointsEarned }).catch(() => {}),
@@ -548,12 +548,12 @@ export async function cancelBooking(bookingId: string) {
       user_id: user.id,
       booking_id: bookingId,
       amount: -totalRedeemed,
-      reason: 'Booking canceled — redeemed points restored',
+      reason: 'Booking canceled, redeemed points restored',
     })
   }
 
   // Restore comp round if the canceled booking used one.
-  // Must use admin client — members have no UPDATE policy on memberships.
+  // Must use admin client, members have no UPDATE policy on memberships.
   if ((booking as any).redemption_type === 'complimentary') {
     const COMP_MAX: Record<string, number> = { eagle: 1, ace: 2 }
     const adminCancel = createAdminClient()

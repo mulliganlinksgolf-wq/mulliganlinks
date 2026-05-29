@@ -145,7 +145,7 @@ export async function checkRedemptionAllowed(
 }
 
 // Lazily resets comp rounds when anniversary has passed. Safe to call on
-// every booking — no-ops if reset_at is still in the future.
+// every booking, no-ops if reset_at is still in the future.
 export async function resetCompRoundsIfNeeded(
   supabase: SupabaseClient,
   userId: string,

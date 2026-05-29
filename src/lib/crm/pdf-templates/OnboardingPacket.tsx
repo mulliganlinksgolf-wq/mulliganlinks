@@ -57,14 +57,14 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
         <Text style={S.welcomeSub}>Founding Partner Onboarding Guide · {dateStr}</Text>
 
         <Text style={S.intro}>
-          You're officially part of the TeeAhead network — thank you for being a Founding Partner. This guide covers exactly what happens next, what your staff needs to know, and how to get the most out of your partnership from day one.
+          You're officially part of the TeeAhead network, thank you for being a Founding Partner. This guide covers exactly what happens next, what your staff needs to know, and how to get the most out of your partnership from day one.
         </Text>
 
         <View style={S.section}>
-          <Text style={S.sectionTitle}>What Happens Next — Your First 30 Days</Text>
+          <Text style={S.sectionTitle}>What Happens Next, Your First 30 Days</Text>
           {([
             ['Your listing is now live on TeeAhead.com', `Members searching for courses in your area will see ${course.name} with your Founding Partner badge. No action needed on your end.`],
-            ['Review your Benefits Schedule', 'Your customized Benefits Schedule is attached. Share it with your pro shop staff and post it at the check-in desk — it defines exactly what each member tier gets.'],
+            ['Review your Benefits Schedule', 'Your customized Benefits Schedule is attached. Share it with your pro shop staff and post it at the check-in desk, it defines exactly what each member tier gets.'],
             ['Brief your pro shop team', 'Let your staff know that TeeAhead members will start coming through. Process: verify active membership (app or email), apply the rate from the Benefits Schedule, record the round normally.'],
             ['Your first monthly report arrives on the 1st', "On the 1st of next month, you'll receive a TeeAhead activity report showing member visits, rounds played, and redemptions. This is your proof of performance."],
           ] as [string, string][]).map(([title, desc], i) => (
@@ -79,7 +79,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
         </View>
 
         <View style={S.section}>
-          <Text style={S.sectionTitle}>Member Tiers — Quick Reference for Staff</Text>
+          <Text style={S.sectionTitle}>Member Tiers, Quick Reference for Staff</Text>
           <View style={S.tiersRow} wrap={false}>
             <View style={S.tierBox}>
               <Text style={S.tierName}>Eagle Member</Text>
@@ -93,7 +93,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
               <Text style={S.tierBenefit}>{'• Premium green fee rate\n• Peak + off-peak priority\n• Enhanced barter credits + guest pass'}</Text>
             </View>
           </View>
-          <Text style={S.tierNote}>Exact rates for your course are on your Benefits Schedule. All green fees are collected directly by your course — no revenue goes through TeeAhead.</Text>
+          <Text style={S.tierNote}>Exact rates for your course are on your Benefits Schedule. All green fees are collected directly by your course, no revenue goes through TeeAhead.</Text>
         </View>
 
         <View style={S.infoBox}>
@@ -105,7 +105,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
         </View>
 
         <Text style={S.closingText}>
-          We're thrilled to have {course.name} as a Founding Partner. If anything is unclear, if you want to adjust your benefit rates, or if you just have a question — reply to any TeeAhead email or reach out directly.
+          We're thrilled to have {course.name} as a Founding Partner. If anything is unclear, if you want to adjust your benefit rates, or if you just have a question, reply to any TeeAhead email or reach out directly.
         </Text>
 
         <Text style={S.signature}>Neil Barris & Billy Eslock{'\n'}TeeAhead Co-Founders</Text>

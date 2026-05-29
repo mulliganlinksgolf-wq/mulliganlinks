@@ -40,7 +40,7 @@ export default async function CourseNetworkReportPage() {
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[#1A1A1A]">Course Network — {currentMonth}</h1>
+        <h1 className="text-2xl font-bold text-[#1A1A1A]">Course Network, {currentMonth}</h1>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

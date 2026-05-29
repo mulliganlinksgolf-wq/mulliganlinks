@@ -132,7 +132,7 @@ export default async function CourseDashboardPage({
           </div>
 
           {topMembers.length === 0 ? (
-            <p className="text-sm text-[#6B7770] py-6 text-center">No booking data yet — your top members will appear here once bookings start coming in.</p>
+            <p className="text-sm text-[#6B7770] py-6 text-center">No booking data yet, your top members will appear here once bookings start coming in.</p>
           ) : (
             <div className="overflow-x-auto">
               {topMembers.map((m, i) => (
@@ -157,7 +157,7 @@ function DayZeroOnboarding({ slug }: { slug: string }) {
     {
       n: '01',
       title: 'Set your first tee times',
-      desc: 'Open the tee sheet and create your booking window — 6:20 AM start, 10-minute intervals, your usual rack rates.',
+      desc: 'Open the tee sheet and create your booking window, 6:20 AM start, 10-minute intervals, your usual rack rates.',
       status: 'current' as const,
       cta: { label: 'Open tee sheet →', href: `/course/${slug}/tee-times/create` },
     },
@@ -171,7 +171,7 @@ function DayZeroOnboarding({ slug }: { slug: string }) {
     {
       n: '03',
       title: 'Email your regulars',
-      desc: 'A 3-sentence email to your existing list. We have a template — most courses see 60% sign up the first week.',
+      desc: 'A 3-sentence email to your existing list. We have a template, most courses see 60% sign up the first week.',
       status: 'next' as const,
       cta: { label: 'Open the template →', href: `/course/${slug}/help` },
     },

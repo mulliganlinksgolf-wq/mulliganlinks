@@ -158,7 +158,7 @@ function QueueCard({ course, index, onLogActivity, onSendEmail, onMarkDone }: Ca
                 <span className="text-xs bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-medium">Metro Detroit</span>
               )}
               {tier && (
-                <span className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">{tier.split(' — ')[0]}</span>
+                <span className="text-xs bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded">{tier.split(', ')[0]}</span>
               )}
               {software && (
                 <span className="text-xs bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{software}</span>

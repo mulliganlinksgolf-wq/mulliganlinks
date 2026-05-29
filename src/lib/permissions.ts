@@ -1,7 +1,7 @@
 // Server-only module. The createClient import below transitively pulls in
 // next/headers, which the Next.js bundler refuses to ship to the client.
 // Client components must import constants from @/lib/permission-constants
-// instead — see PermissionsEditor for an example.
+// instead, see PermissionsEditor for an example.
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'

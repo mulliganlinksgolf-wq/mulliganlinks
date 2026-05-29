@@ -2,7 +2,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { ApproveButton, BarterReceiptButton } from './ApproveButton'
 
 export const dynamic = 'force-dynamic'
-export const metadata = { title: 'Waitlist — Admin' }
+export const metadata = { title: 'Waitlist, Admin' }
 
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {

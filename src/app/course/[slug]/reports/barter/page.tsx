@@ -33,7 +33,7 @@ export default async function BarterReceiptPage({ params }: { params: Promise<{ 
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-[#1A1A1A]">The TeeAhead Difference</h1>
-          <p className="text-[#6B7770] text-sm mt-1">{currentMonthLabel} — {course.name}</p>
+          <p className="text-[#6B7770] text-sm mt-1">{currentMonthLabel}, {course.name}</p>
         </div>
         <a
           href={`/api/reports/course/barter-pdf?slug=${slug}`}

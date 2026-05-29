@@ -17,7 +17,7 @@ export function KbHelpfulWidget({ articleId }: { articleId: string }) {
     try {
       await voteKbArticle(articleId, vote)
     } catch {
-      // best-effort — don't block UI if vote fails
+      // best-effort, don't block UI if vote fails
     }
     localStorage.setItem(storageKey, vote)
     setVoted(true)

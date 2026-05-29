@@ -1,30 +1,17 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import type { ReactNode } from 'react'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { SiteFooter } from '@/components/SiteFooter'
+import { SiteHeader } from '@/components/SiteHeader'
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'TeeAhead Terms of Service — the rules of the road for using our platform.',
+  description: 'TeeAhead Terms of Service: the rules of the road for using our platform.',
 }
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
-      <header className="bg-white border-b border-[#0F3D2E]/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <Link href="/">
-            <TeeAheadLogo className="h-12 w-auto" />
-          </Link>
-          <Link
-            href="/waitlist/course"
-            className="rounded-md bg-[#0F3D2E] px-4 py-2.5 text-sm font-semibold text-[#F4F1EA] hover:bg-[#0F3D2E]/90 transition-colors"
-          >
-            Claim a spot →
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-16 sm:py-20">
         <p className="font-mono text-xs tracking-[0.16em] uppercase text-[#6B7770]">
@@ -42,7 +29,7 @@ export default function TermsPage() {
             <p className="text-[#1A1A1A]/85 leading-[1.7]">
               By creating a TeeAhead account or using any part of our platform, you agree to
               these Terms of Service. If you do not agree, do not use the platform. These terms
-              apply to all users — golfers, course operators, and visitors.
+              apply to all users, golfers, course operators, and visitors.
             </p>
           </Section>
 

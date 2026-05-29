@@ -22,7 +22,7 @@ export default function GlobalError({
         <div className="text-6xl">🏌️</div>
         <h1 className="text-3xl font-bold text-[#1A1A1A]">Something went wrong.</h1>
         <p className="text-[#6B7770] leading-relaxed">
-          We hit an unexpected snag. Try reloading — if it keeps happening, email us at{' '}
+          We hit an unexpected snag. Try reloading, if it keeps happening, email us at{' '}
           <a href="mailto:hello@teeahead.com" className="text-[#1B4332] underline">
             hello@teeahead.com
           </a>

@@ -70,7 +70,7 @@ export default function SocialIdeasPanel({ sentPosts }: Props) {
           rows={3}
           value={ideaText}
           onChange={e => setIdeaText(e.target.value)}
-          placeholder="Drop an idea here — topic, angle, anything..."
+          placeholder="Drop an idea here, topic, angle, anything..."
           className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
         />
         <button

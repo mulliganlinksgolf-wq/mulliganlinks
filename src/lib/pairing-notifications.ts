@@ -95,7 +95,7 @@ export async function sendPairingNotificationsForTomorrow(): Promise<{
 
   for (const [, members] of groups) {
     if (members.length < 2) {
-      // Solo "group" — no one to pair with
+      // Solo "group", no one to pair with
       skipped += members.length
       continue
     }
@@ -120,7 +120,7 @@ export async function sendPairingNotificationsForTomorrow(): Promise<{
       }
 
       if (!resend) {
-        // No Resend key (test/dev) — record the would-have-sent and stamp the row so we don't loop
+        // No Resend key (test/dev), record the would-have-sent and stamp the row so we don't loop
         await admin
           .from('bookings')
           .update({ pairing_notification_sent_at: new Date().toISOString() })
@@ -133,14 +133,14 @@ export async function sendPairingNotificationsForTomorrow(): Promise<{
         await resend.emails.send({
           from: 'TeeAhead <hello@teeahead.com>',
           to: m.email,
-          subject: `Tomorrow's pairing — ${m.course_name} at ${timeStr}`,
+          subject: `Tomorrow's pairing, ${m.course_name} at ${timeStr}`,
           html: `
             <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
               <h2 style="color: #1B4332;">You're paired tomorrow ⛳</h2>
               <p>Hi ${recipientFirst || 'there'},</p>
-              <p>Quick heads-up on your group for tomorrow's round at <strong>${m.course_name}</strong> — <strong>${timeStr}</strong>:</p>
+              <p>Quick heads-up on your group for tomorrow's round at <strong>${m.course_name}</strong>, <strong>${timeStr}</strong>:</p>
               <p style="font-size: 18px;">You'll be playing with <strong>${namesText}</strong>.</p>
-              <p>This was a self-grouped tee time — everyone booked separately and was paired by us. Show up 10 minutes early, introduce yourself on the first tee, and have a great round.</p>
+              <p>This was a self-grouped tee time, everyone booked separately and was paired by us. Show up 10 minutes early, introduce yourself on the first tee, and have a great round.</p>
               <p style="color: #6B7770; font-size: 13px; margin-top: 24px;">— TeeAhead</p>
             </div>
           `,

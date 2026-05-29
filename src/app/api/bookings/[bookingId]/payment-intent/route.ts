@@ -78,7 +78,7 @@ export async function POST(
       member_tier: tier,
       booking_type: 'tee_time',
     },
-    description: `Tee time at ${course.name} — ${teeTimeDate}`,
+    description: `Tee time at ${course.name}, ${teeTimeDate}`,
     statement_descriptor_suffix: course.name.substring(0, 22),
   })
 

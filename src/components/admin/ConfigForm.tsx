@@ -40,8 +40,8 @@ export default function ConfigForm({ config }: ConfigFormProps) {
             <p className="font-medium text-[#1A1A1A]">Site Mode</p>
             <p className="text-xs text-[#6B7770] mt-0.5">
               {isLive
-                ? 'Live Mode — full product active. Bookings and signups enabled.'
-                : 'Waitlist Mode — coming-soon page shown. Bookings and signups disabled.'}
+                ? 'Live Mode, full product active. Bookings and signups enabled.'
+                : 'Waitlist Mode, coming-soon page shown. Bookings and signups disabled.'}
             </p>
           </div>
           <form action={saveConfigValue}>

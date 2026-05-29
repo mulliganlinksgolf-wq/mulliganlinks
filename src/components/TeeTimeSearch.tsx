@@ -211,12 +211,12 @@ export function TeeTimeSearch({
           )}
         </button>
 
-        {/* Join an existing group toggle — only when course allows */}
+        {/* Join an existing group toggle, only when course allows */}
         {selfGroupingAvailable && (
           <button
             type="button"
             onClick={() => { setJoinMode(v => !v); if (!joinMode) { setFastOnly(false); setGolfers(null) } }}
-            title="Show only partial groups you can join — solo or small groups welcome"
+            title="Show only partial groups you can join, solo or small groups welcome"
             className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border-2 transition-all ${
               joinMode
                 ? 'border-[#8FA889] bg-[#8FA889]/15 text-white'
@@ -249,7 +249,7 @@ export function TeeTimeSearch({
           ))}
         </div>
 
-        {/* Golfers — hidden in join mode; helper text shown instead */}
+        {/* Golfers, hidden in join mode; helper text shown instead */}
         {!joinMode ? (
           <div className="flex gap-1 bg-[#163d2a] border border-[#0f2d1d] rounded-full p-1">
             <button
@@ -276,7 +276,7 @@ export function TeeTimeSearch({
 
       </div>
 
-      {/* Moving Fast carousel — hidden when joining an existing group */}
+      {/* Moving Fast carousel, hidden when joining an existing group */}
       {movingFast.length > 0 && !fastOnly && !joinMode && (
         <div>
           <h2 className="text-[9px] font-bold text-[#aaa] uppercase tracking-[0.2em] font-sans mb-4">

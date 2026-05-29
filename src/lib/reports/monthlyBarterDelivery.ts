@@ -120,7 +120,7 @@ export async function generateAndDeliverMonthlyBarterReceipt(opts: {
           .eq('id', receiptRow.id)
       } catch (err) {
         console.error('[monthlyBarterDelivery] email failed', err)
-        // Row + PDF are already persisted — the manager can re-trigger the
+        // Row + PDF are already persisted, the manager can re-trigger the
         // email from the archive page. Don't mark delivery as failed.
       }
     }

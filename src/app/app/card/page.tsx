@@ -45,7 +45,7 @@ export default async function MemberCardPage() {
         <p className="text-[11px] font-sans mt-1 text-[#8FA889]">Show this at check-in to earn Fairway Points.</p>
       </div>
       <div className="rounded-xl overflow-hidden" style={{ background: '#1C1C1C' }}>
-        {/* Physical card — unchanged */}
+        {/* Physical card, unchanged */}
         <div className="px-4 pt-4">
           <div className={`${TIER_BG[tier]} rounded-2xl p-6 text-[#FAF7F2] shadow-xl relative overflow-hidden`}>
             <div className="absolute -top-10 -right-10 size-40 rounded-full bg-white/5" />
@@ -92,7 +92,7 @@ export default async function MemberCardPage() {
           </div>
         </div>
 
-        {/* How it works — dark surface */}
+        {/* How it works, dark surface */}
         <div className="mx-4 mt-4 rounded-xl p-5 space-y-3" style={{ background: '#2a2a2a' }}>
           <h2 className="font-bold text-sm font-sans" style={{ color: '#888' }}>How it works</h2>
           <ul className="space-y-2 text-sm font-sans" style={{ color: '#ddd' }}>
@@ -115,7 +115,7 @@ export default async function MemberCardPage() {
           </ul>
         </div>
 
-        {/* Upgrade nudge — dark surface with gold accent */}
+        {/* Upgrade nudge, dark surface with gold accent */}
         {tier === 'fairway' && (
           <div
             className="mx-4 mt-3 mb-4 rounded-xl p-5 space-y-2 border border-[#E0A800]/40"

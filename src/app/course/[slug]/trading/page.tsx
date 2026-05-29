@@ -69,7 +69,7 @@ export default async function CourseTradingPage({
       <div>
         <h1 className="text-xl font-bold text-[#1A1A1A]">Member Trading Board</h1>
         <p className="text-sm text-[#6B7770] mt-1">
-          Members can list tee times they can&apos;t use. Other members claim them. You keep your revenue — no refunds, no admin work.
+          Members can list tee times they can&apos;t use. Other members claim them. You keep your revenue, no refunds, no admin work.
         </p>
       </div>
 
@@ -80,7 +80,7 @@ export default async function CourseTradingPage({
       )}
       {error === '1' && (
         <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3">
-          <p className="text-red-700 text-sm font-semibold">Failed to save settings — you may not have permission to update this course.</p>
+          <p className="text-red-700 text-sm font-semibold">Failed to save settings, you may not have permission to update this course.</p>
         </div>
       )}
 

@@ -30,7 +30,7 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
     setError(null)
 
     if (!executeRecaptcha) {
-      setError('Security check still loading — please try again in a moment.')
+      setError('Security check still loading, please try again in a moment.')
       return
     }
 
@@ -55,7 +55,7 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
         <p className="text-4xl">✅</p>
         <div className="space-y-2">
           <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
-          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll follow up at <span className="font-semibold text-[#F4F1EA]">{submitted}</span> — but if you&apos;d rather talk this week, grab a time now.</p>
+          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll follow up at <span className="font-semibold text-[#F4F1EA]">{submitted}</span>, but if you&apos;d rather talk this week, grab a time now.</p>
         </div>
         <a
           href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
@@ -78,7 +78,7 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
 
   return (
     <form action={handleSubmit} className="space-y-6">
-      {/* Hidden tier field — captures which pricing tier the applicant wants */}
+      {/* Hidden tier field, captures which pricing tier the applicant wants */}
       <input type="hidden" name="applied_tier" value={tier} />
 
       {error && (
@@ -237,7 +237,7 @@ export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: 
       </Button>
 
       <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
-        After you apply: Neil or Billy will email you personally within 48 hours. Founding Partner status is reviewed manually — we&apos;re selective so every course in the network is one golfers actually want to play.
+        After you apply: Neil or Billy will email you personally within 48 hours. Founding Partner status is reviewed manually, so we&apos;re selective: every course in the network is one golfers actually want to play.
       </p>
     </form>
   )
