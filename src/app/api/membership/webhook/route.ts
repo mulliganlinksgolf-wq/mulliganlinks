@@ -82,6 +82,14 @@ export async function POST(req: NextRequest) {
       const userId = sub.metadata?.user_id
       const tier = sub.metadata?.tier
       if (userId && tier) {
+        // Idempotency: detect whether we've already activated THIS subscription.
+        const { data: priorRow } = await admin
+          .from('memberships')
+          .select('stripe_subscription_id')
+          .eq('user_id', userId)
+          .maybeSingle()
+        const alreadyActivated = priorRow?.stripe_subscription_id === sub.id
+
         const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
         const { error } = await admin.from('memberships').upsert({
           user_id: userId,
@@ -95,7 +103,10 @@ export async function POST(req: NextRequest) {
           console.error('[webhook] mobile subscription.created upsert failed:', error)
           return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
         }
-        await issueGuestPasses(userId, tier)
+        // Only issue guest passes on the FIRST activation of this subscription.
+        if (!alreadyActivated) {
+          await issueGuestPasses(userId, tier)
+        }
       }
     }
   }
@@ -106,9 +117,13 @@ export async function POST(req: NextRequest) {
   if (event.type === 'customer.subscription.updated') {
     const sub = event.data.object as Stripe.Subscription
     const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-    await admin.from('memberships')
+    const { error: updError } = await admin.from('memberships')
       .update({ status: mapStatus(sub.status), current_period_end: periodEnd })
       .eq('stripe_subscription_id', sub.id)
+    if (updError) {
+      console.error('[webhook] customer.subscription.updated DB write failed:', updError)
+      return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+    }
   }
 
   // Resilient subscription-id extraction: across Stripe API versions the invoice's
@@ -122,7 +137,11 @@ export async function POST(req: NextRequest) {
       ((invoice as any).parent?.subscription_details?.subscription as string | null) ??
       null
     if (subId) {
-      await admin.from('memberships').update({ status: 'past_due' }).eq('stripe_subscription_id', subId)
+      const { error } = await admin.from('memberships').update({ status: 'past_due' }).eq('stripe_subscription_id', subId)
+      if (error) {
+        console.error('[webhook] invoice.payment_failed DB write failed:', error)
+        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+      }
     }
   }
 
@@ -135,9 +154,13 @@ export async function POST(req: NextRequest) {
     if (subId) {
       const sub = await stripe.subscriptions.retrieve(subId)
       const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-      await admin.from('memberships')
+      const { error } = await admin.from('memberships')
         .update({ status: 'active', current_period_end: periodEnd })
         .eq('stripe_subscription_id', subId)
+      if (error) {
+        console.error('[webhook] invoice.paid DB write failed:', error)
+        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+      }
     }
   }
 

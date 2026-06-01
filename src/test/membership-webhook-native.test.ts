@@ -13,6 +13,7 @@ const calls: any[] = []
 const mkChain = (table: string) => ({
   upsert: (vals: any, opts: any) => { calls.push({ table, op: 'upsert', vals, opts }); return Promise.resolve({ error: null }) },
   update: (vals: any) => ({ eq: (col: string, val: any) => { calls.push({ table, op: 'update', vals, col, val }); return Promise.resolve({ error: null }) } }),
+  select: (_cols: string) => ({ eq: (_col: string, _val: any) => ({ maybeSingle: async () => ({ data: null, error: null }) }) }),
 })
 vi.mock('@/lib/supabase/admin', () => ({ createAdminClient: () => ({ from: (t: string) => mkChain(t) }) }))
 
@@ -72,6 +73,23 @@ describe('membership webhook — native subscription events', () => {
     expect(res.status).toBe(200)
     const upd = calls.find((c) => c.op === 'update' && c.table === 'memberships')
     expect(upd.vals).toEqual({ status: 'past_due' })
+    expect(upd.col).toBe('stripe_subscription_id')
+    expect(upd.val).toBe('sub_1')
+  })
+
+  it('syncs status + period on customer.subscription.updated', async () => {
+    mockConstructEvent.mockReturnValue({
+      type: 'customer.subscription.updated',
+      data: { object: {
+        id: 'sub_1', customer: 'cus_1', status: 'past_due',
+        metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' },
+        items: { data: [{ current_period_end: 1900000000 }] },
+      } },
+    })
+    const res = await POST(webhookReq() as any)
+    expect(res.status).toBe(200)
+    const upd = calls.find((c) => c.op === 'update' && c.table === 'memberships')
+    expect(upd.vals.status).toBe('past_due')
     expect(upd.col).toBe('stripe_subscription_id')
     expect(upd.val).toBe('sub_1')
   })
