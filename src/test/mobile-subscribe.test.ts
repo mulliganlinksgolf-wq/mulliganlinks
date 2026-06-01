@@ -13,8 +13,23 @@ const mockSelect = vi.fn(() => ({ eq: mockEq }))
 const mockFrom = vi.fn(() => ({ select: mockSelect, insert: mockInsert, update: mockUpdate }))
 vi.mock('@/lib/supabase/admin', () => ({ createAdminClient: () => ({ from: mockFrom }) }))
 
-// Stripe mock (unused in free path, present so import resolves)
-vi.mock('@/lib/stripe', () => ({ stripe: {} }))
+const mockCustomersCreate = vi.fn()
+const mockSubsList = vi.fn()
+const mockSubsCreate = vi.fn()
+const mockSubsRetrieve = vi.fn()
+const mockEphemeralCreate = vi.fn()
+vi.mock('@/lib/stripe', () => ({
+  stripe: {
+    customers: { create: (...a: any[]) => mockCustomersCreate(...a) },
+    subscriptions: {
+      list: (...a: any[]) => mockSubsList(...a),
+      create: (...a: any[]) => mockSubsCreate(...a),
+      retrieve: (...a: any[]) => mockSubsRetrieve(...a),
+    },
+    ephemeralKeys: { create: (...a: any[]) => mockEphemeralCreate(...a) },
+  },
+}))
+vi.mock('@/lib/stripe/version', () => ({ STRIPE_API_VERSION: '2026-04-22.dahlia' }))
 
 import { POST } from '@/app/api/mobile/membership/subscribe/route'
 
@@ -60,5 +75,61 @@ describe('POST /api/mobile/membership/subscribe — free + guards', () => {
     const res = await post({ tier: 'free' })
     expect(res.status).toBe(200)
     expect(mockInsert).not.toHaveBeenCalled()
+  })
+})
+
+describe('POST /api/mobile/membership/subscribe — paid', () => {
+  beforeEach(() => {
+    process.env.STRIPE_PRICE_EAGLE = 'price_eagle'
+    process.env.STRIPE_PRICE_ACE = 'price_ace'
+    mockSubsList.mockResolvedValue({ data: [] })
+    mockCustomersCreate.mockResolvedValue({ id: 'cus_new' })
+    mockSubsCreate.mockResolvedValue({
+      id: 'sub_1',
+      latest_invoice: { payment_intent: { client_secret: 'pi_secret_123' } },
+    })
+    mockEphemeralCreate.mockResolvedValue({ secret: 'ek_secret_123' })
+  })
+
+  it('creates a customer + subscription and returns the client secret + ephemeral key', async () => {
+    const res = await post({ tier: 'eagle' })
+    expect(res.status).toBe(200)
+    const json = await res.json()
+    expect(json).toEqual({
+      paymentIntentClientSecret: 'pi_secret_123',
+      ephemeralKey: 'ek_secret_123',
+      customerId: 'cus_new',
+    })
+    expect(mockSubsCreate).toHaveBeenCalledWith(expect.objectContaining({
+      customer: 'cus_new',
+      items: [{ price: 'price_eagle' }],
+      payment_behavior: 'default_incomplete',
+      metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' },
+    }))
+  })
+
+  it('reuses the existing stripe_customer_id when present', async () => {
+    membershipRow.value = { tier: 'free', status: 'active', stripe_customer_id: 'cus_existing' }
+    const res = await post({ tier: 'ace' })
+    expect(res.status).toBe(200)
+    expect(mockCustomersCreate).not.toHaveBeenCalled()
+    expect(mockSubsCreate).toHaveBeenCalledWith(expect.objectContaining({
+      customer: 'cus_existing',
+      items: [{ price: 'price_ace' }],
+    }))
+  })
+
+  it('reuses an incomplete subscription for the same price instead of creating a new one', async () => {
+    membershipRow.value = { tier: 'free', status: 'active', stripe_customer_id: 'cus_existing' }
+    mockSubsList.mockResolvedValue({ data: [{ id: 'sub_old', items: { data: [{ price: { id: 'price_eagle' } }] } }] })
+    mockSubsRetrieve.mockResolvedValue({
+      id: 'sub_old',
+      latest_invoice: { payment_intent: { client_secret: 'pi_old_secret' } },
+    })
+    const res = await post({ tier: 'eagle' })
+    const json = await res.json()
+    expect(json.paymentIntentClientSecret).toBe('pi_old_secret')
+    expect(mockSubsCreate).not.toHaveBeenCalled()
+    expect(mockSubsRetrieve).toHaveBeenCalledWith('sub_old', { expand: ['latest_invoice.payment_intent'] })
   })
 })
