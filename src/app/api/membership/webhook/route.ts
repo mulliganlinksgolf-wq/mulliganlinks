@@ -10,6 +10,41 @@ function mapStatus(stripeStatus: string): 'active' | 'past_due' | 'canceled' {
   return 'canceled'
 }
 
+async function activateMembership(
+  admin: any,
+  sub: Stripe.Subscription,
+): Promise<{ error?: unknown }> {
+  const userId = sub.metadata?.user_id
+  const tier = sub.metadata?.tier
+  if (!userId || !tier) return {}
+  const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
+
+  const { data: prior } = await admin
+    .from('memberships')
+    .select('stripe_subscription_id, status, tier')
+    .eq('user_id', userId)
+    .maybeSingle()
+  const freshActivation = !(
+    prior?.stripe_subscription_id === sub.id && prior?.status === 'active' && prior?.tier === tier
+  )
+
+  const { error } = await admin.from('memberships').upsert({
+    user_id: userId,
+    tier,
+    status: 'active',
+    stripe_subscription_id: sub.id,
+    stripe_customer_id: sub.customer as string,
+    current_period_end: periodEnd,
+  }, { onConflict: 'user_id' })
+  if (error) return { error }
+
+  // Guest passes only for first-time mobile activation (web issues them via checkout.session.completed).
+  if (sub.metadata?.source === 'mobile' && freshActivation) {
+    await issueGuestPasses(userId, tier)
+  }
+  return {}
+}
+
 export async function POST(req: NextRequest) {
   const body = await req.text()
   const sig = req.headers.get('stripe-signature')!
@@ -73,56 +108,27 @@ export async function POST(req: NextRequest) {
       .eq('stripe_subscription_id', sub.id)
   }
 
-  // Native mobile flow: subscription created directly (no checkout.session). Activate
-  // membership + issue guest passes. Gated on metadata.source so the web Checkout path
-  // (which ALSO emits subscription.created) is not double-processed.
-  if (event.type === 'customer.subscription.created') {
-    const sub = event.data.object as Stripe.Subscription
-    if (sub.metadata?.source === 'mobile') {
-      const userId = sub.metadata?.user_id
-      const tier = sub.metadata?.tier
-      if (userId && tier) {
-        // Idempotency: detect whether we've already activated THIS subscription.
-        const { data: priorRow } = await admin
-          .from('memberships')
-          .select('stripe_subscription_id')
-          .eq('user_id', userId)
-          .maybeSingle()
-        const alreadyActivated = priorRow?.stripe_subscription_id === sub.id
+  // customer.subscription.created fires with status:'incomplete' BEFORE the user pays
+  // (payment_behavior:'default_incomplete'). Do nothing — leave the user on their free
+  // baseline row. Activation happens on payment confirmation below.
 
-        const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-        const { error } = await admin.from('memberships').upsert({
-          user_id: userId,
-          tier,
-          status: mapStatus(sub.status),
-          stripe_subscription_id: sub.id,
-          stripe_customer_id: sub.customer as string,
-          current_period_end: periodEnd,
-        }, { onConflict: 'user_id' })
-        if (error) {
-          console.error('[webhook] mobile subscription.created upsert failed:', error)
-          return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-        }
-        // Only issue guest passes on the FIRST activation of this subscription.
-        if (!alreadyActivated) {
-          await issueGuestPasses(userId, tier)
-        }
-      }
-    }
-  }
-
-  // Status/period sync for any subscription (renewals, dunning). Idempotent; keyed by
-  // subscription id, so the row must already exist (created by mobile created-handler or
-  // web checkout.session.completed). No guest-pass side effects here.
   if (event.type === 'customer.subscription.updated') {
     const sub = event.data.object as Stripe.Subscription
-    const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-    const { error: updError } = await admin.from('memberships')
-      .update({ status: mapStatus(sub.status), current_period_end: periodEnd })
-      .eq('stripe_subscription_id', sub.id)
-    if (updError) {
-      console.error('[webhook] customer.subscription.updated DB write failed:', updError)
-      return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+    if (sub.status === 'active') {
+      const { error } = await activateMembership(admin, sub)
+      if (error) {
+        console.error('[webhook] subscription.updated activation failed:', error)
+        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+      }
+    } else {
+      const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
+      const { error } = await admin.from('memberships')
+        .update({ status: mapStatus(sub.status), current_period_end: periodEnd })
+        .eq('stripe_subscription_id', sub.id)
+      if (error) {
+        console.error('[webhook] subscription.updated sync failed:', error)
+        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+      }
     }
   }
 
@@ -153,13 +159,12 @@ export async function POST(req: NextRequest) {
       null
     if (subId) {
       const sub = await stripe.subscriptions.retrieve(subId)
-      const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-      const { error } = await admin.from('memberships')
-        .update({ status: 'active', current_period_end: periodEnd })
-        .eq('stripe_subscription_id', subId)
-      if (error) {
-        console.error('[webhook] invoice.paid DB write failed:', error)
-        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+      if (sub.status === 'active') {
+        const { error } = await activateMembership(admin, sub)
+        if (error) {
+          console.error('[webhook] invoice.paid activation failed:', error)
+          return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
+        }
       }
     }
   }
