@@ -42,13 +42,35 @@ export default async function PublicBookingPage({
 
   const { data: teeTimes } = await supabase
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price, special_price, special_label')
+    .select(`
+      id, scheduled_at, available_players, base_price, special_price, special_label,
+      tee_time_computed_rates ( computed_rate, fired_rule_labels )
+    `)
     .eq('course_id', course.id)
     .eq('status', 'open')
     .gt('available_players', 0)
     .gte('scheduled_at', startOfDay)
     .lte('scheduled_at', endOfDay)
     .order('scheduled_at')
+
+  // Flatten the embedded computed-rate join into the shape PublicTeeTimeGrid expects.
+  // The join is one-to-one (tee_time_computed_rates PK = tee_time_id), so Supabase
+  // returns either an object or null on the embedded relation.
+  const flat = (teeTimes ?? []).map((t: any) => {
+    const cr = Array.isArray(t.tee_time_computed_rates)
+      ? t.tee_time_computed_rates[0]
+      : t.tee_time_computed_rates
+    return {
+      id: t.id,
+      scheduled_at: t.scheduled_at,
+      available_players: t.available_players,
+      base_price: t.base_price,
+      special_price: t.special_price,
+      special_label: t.special_label,
+      computed_rate: cr?.computed_rate != null ? Number(cr.computed_rate) : null,
+      fired_rule_labels: cr?.fired_rule_labels ?? null,
+    }
+  })
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -68,7 +90,7 @@ export default async function PublicBookingPage({
 
       <main className="max-w-3xl mx-auto px-4 py-6">
         <PublicTeeTimeGrid
-          teeTimes={teeTimes ?? []}
+          teeTimes={flat}
           courseName={course.name}
           courseSlug={slug}
           selectedDate={selectedDate}

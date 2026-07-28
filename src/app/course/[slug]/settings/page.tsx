@@ -65,6 +65,18 @@ export default async function CourseSettingsPage({
           Manage →
         </Link>
       </div>
+      <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 flex items-center justify-between">
+        <div>
+          <p className="font-semibold text-[#1A1A1A] text-sm">Pricing rules</p>
+          <p className="text-xs text-[#6B7770] mt-0.5">Peak, twilight, holiday, and occupancy-based rate adjustments.</p>
+        </div>
+        <Link
+          href={`/course/${slug}/settings/pricing`}
+          className="text-sm font-medium text-[#1B4332] hover:underline"
+        >
+          Manage →
+        </Link>
+      </div>
     </div>
   )
 }

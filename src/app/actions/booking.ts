@@ -65,7 +65,7 @@ export async function createPendingBooking({
 
   const { data: teeTime } = await admin
     .from('tee_times')
-    .select('id, available_players, status, base_price, course_id')
+    .select('id, available_players, status, base_price, special_price, course_id')
     .eq('id', teeTimeId)
     .single()
 
@@ -87,8 +87,25 @@ export async function createPendingBooking({
     verifiedPassId = pass?.id ?? null
   }
 
+  // Effective per-player rate: special_price > computed_rate > base_price
+  // The pricing engine (Sprint 6) writes to tee_time_computed_rates whenever
+  // rules change or a slot is touched. We lock the rate in at booking creation.
+  let effectiveRate = Number(teeTime.base_price)
+  if (teeTime.special_price != null) {
+    effectiveRate = Number(teeTime.special_price)
+  } else {
+    const { data: computed } = await admin
+      .from('tee_time_computed_rates')
+      .select('computed_rate')
+      .eq('tee_time_id', teeTimeId)
+      .maybeSingle()
+    if (computed?.computed_rate != null) {
+      effectiveRate = Number(computed.computed_rate)
+    }
+  }
+
   const discountCents = verifiedPassId ? 1500 : 0
-  const greenFeeCents = Math.round((teeTime.base_price as number) * players * 100)
+  const greenFeeCents = Math.round(effectiveRate * players * 100)
   const appFeeCents = platformFeeCents(tier)
   const totalCents = greenFeeCents + appFeeCents - discountCents
 

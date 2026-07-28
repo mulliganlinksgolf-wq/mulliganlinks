@@ -43,7 +43,7 @@ export default async function CourseDetailPage({
     return d.toISOString().split('T')[0]
   })()
 
-  // Fetch availability via the tee_time_occupancy view (Task 2 helper)
+  // Fetch availability via the tee_time_occupancy view (self-grouping Sprint 5 helper)
   const availability = await getAvailability({
     courseId: course.id,
     date: selectedDate,
@@ -62,6 +62,21 @@ export default async function CourseDetailPage({
     (teeTimeMeta ?? []).map(t => [t.id as string, t])
   )
 
+  // Sprint 6: also pull computed_rate / fired_rule_labels for any slot in view.
+  const { data: computedRates } = ids.length > 0
+    ? await supabase
+        .from('tee_time_computed_rates')
+        .select('tee_time_id, computed_rate, fired_rule_labels')
+        .in('tee_time_id', ids)
+    : { data: [] as Array<{ tee_time_id: string; computed_rate: number | string; fired_rule_labels: string[] | null }> }
+
+  const computedMap = new Map(
+    (computedRates ?? []).map(r => [r.tee_time_id as string, {
+      computed_rate: r.computed_rate != null ? Number(r.computed_rate) : null,
+      fired_rule_labels: r.fired_rule_labels ?? null,
+    }])
+  )
+
   const teeTimes = availability
     // Hide already-full slots, slots whose underlying tee_time isn't open,
     // and slots whose tee_start doesn't match the user's front/back choice
@@ -74,6 +89,7 @@ export default async function CourseDetailPage({
     })
     .map(a => {
       const meta = metaMap.get(a.teeTimeId)
+      const cr = computedMap.get(a.teeTimeId)
       const maxPlayers = (meta?.max_players ?? 4) as number
       return {
         id: a.teeTimeId,
@@ -82,6 +98,8 @@ export default async function CourseDetailPage({
         base_price: (meta?.base_price ?? 0) as number,
         special_price: (meta?.special_price ?? null) as number | null,
         special_label: (meta?.special_label ?? null) as string | null,
+        computed_rate: cr?.computed_rate ?? null,
+        fired_rule_labels: cr?.fired_rule_labels ?? null,
         max_players: maxPlayers,
         players_booked: maxPlayers - a.spotsRemaining,
         is_partially_booked: a.isPartiallyBooked,
