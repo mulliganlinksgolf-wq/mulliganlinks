@@ -1,0 +1,21 @@
+.footer {
+  background: #fff;
+  color: #142c23;
+  border-top: 1px solid #142c231a;
+  padding: 64px 6% 28px;
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+.logo {
+  width: 156px;
+  height: auto;
+  filter: brightness(0) saturate(100%) invert(14%) sepia(18%) saturate(847%)
+    hue-rotate(102deg) brightness(94%) contrast(96%);
+}
+.footer a:focus-visible {
+  outline: 3px solid #bc940d;
+  outline-offset: 4px;
+}
+.footer nav a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

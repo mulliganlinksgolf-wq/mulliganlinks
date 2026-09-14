@@ -1,3 +1,4 @@
+import { MemberHomePreview } from "@/components/marketing/MemberHomePreview"
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -74,14 +75,7 @@ function FeaturesHero() {
               priority
               className="absolute top-0 right-0 w-[400px] h-auto rounded-xl shadow-[0_18px_40px_rgba(0,0,0,0.18)] border border-black/8 rotate-[2deg]"
             />
-            <Image
-              src="/screenshots/member-home.png"
-              width={200}
-              height={400}
-              alt="TeeAhead member home"
-              priority
-              className="absolute bottom-0 left-0 w-[200px] h-[400px] object-cover rounded-[26px] shadow-[0_20px_40px_rgba(0,0,0,0.25)] border-[5px] border-[#1A1A1A] rotate-[-3deg]"
-            />
+            <MemberHomePreview className="absolute bottom-0 left-0 w-[200px] h-[400px] rounded-[26px] shadow-[0_20px_40px_rgba(0,0,0,0.25)] border-[5px] border-[#1A1A1A] rotate-[-3deg]" />
           </div>
         </div>
       </FadeIn>
@@ -317,13 +311,7 @@ function GolferChapter() {
               </svg>
               <div className="relative z-10 rounded-[28px] p-1.5 bg-[#1A1A1A] shadow-[0_40px_80px_rgba(8,36,25,0.25)]">
                 <div className="w-[240px] h-[494px] rounded-[22px] overflow-hidden bg-[#082419]">
-                  <Image
-                    src="/screenshots/member-home.png"
-                    alt="TeeAhead member home"
-                    width={240}
-                    height={494}
-                    className="w-full h-full object-cover object-top"
-                  />
+                  <MemberHomePreview className="w-full h-full" />
                 </div>
               </div>
             </div>

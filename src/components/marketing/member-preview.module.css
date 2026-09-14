@@ -1,0 +1,232 @@
+.preview {
+  container-type: inline-size;
+  overflow: hidden;
+  background: #102c22;
+  color: #fff;
+  aspect-ratio: 1/2;
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+.screen {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.top {
+  padding: 4cqw 6cqw 4cqw;
+  background: #102c22;
+}
+.status {
+  display: flex;
+  justify-content: space-between;
+  font-size: 3.2cqw;
+  font-weight: 700;
+  align-items: center;
+  margin-bottom: 4cqw;
+}
+.status > span:last-child {
+  display: flex;
+  gap: 2cqw;
+}
+.status svg {
+  width: 4.2cqw;
+  height: 4.2cqw;
+}
+.date {
+  font-size: 3.5cqw;
+  color: #b6c5ba;
+  margin: 0 0 3cqw;
+}
+.greeting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 3cqw;
+  margin-bottom: 4cqw;
+}
+.greeting h3 {
+  font-family: var(--font-sans), Arial, sans-serif !important;
+  font-size: 7cqw !important;
+  letter-spacing: -0.045em !important;
+  line-height: 1.2 !important;
+  font-weight: 600 !important;
+  margin: 0;
+  white-space: nowrap;
+}
+.greeting > span {
+  font-size: 2.7cqw;
+  letter-spacing: 0.08em;
+  color: #efcf51;
+  border: 1px solid #efcf5180;
+  padding: 1.8cqw 2.4cqw;
+  border-radius: 20px;
+}
+.points {
+  padding: 4cqw;
+  border: 1px solid #ffffff20;
+  background: #ffffff08;
+  border-radius: 3cqw;
+}
+.points > p {
+  font-size: 3cqw;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #efcf51;
+  margin: 0 0 3cqw;
+}
+.balance {
+  font-size: 17cqw;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.065em;
+  display: flex;
+  align-items: baseline;
+  gap: 3cqw;
+  white-space: nowrap;
+}
+.balance > span {
+  font-size: 3.4cqw;
+  color: #c7d1c9;
+  letter-spacing: 0;
+}
+.progress {
+  height: 1.3cqw;
+  background: #ffffff15;
+  margin: 3cqw 0 2cqw;
+  border-radius: 1cqw;
+}
+.progress > span {
+  display: block;
+  width: 43%;
+  height: 100%;
+  background: #efcf51;
+  border-radius: inherit;
+}
+.points small {
+  display: block;
+  color: #bfcfc3;
+  font-size: 2.9cqw;
+  line-height: 1.5;
+}
+.body {
+  background: #f5f6f2;
+  color: #142c23;
+  padding: 5cqw 5cqw 2cqw;
+  flex: 1;
+}
+.label,
+.recentTitle {
+  font-size: 2.6cqw;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: #65716b;
+}
+.label {
+  margin-bottom: 3cqw;
+}
+.booking {
+  padding: 4cqw;
+  background: white;
+  border: 1px solid #142c2315;
+  border-radius: 2cqw;
+}
+.bookingTitle {
+  display: flex;
+  justify-content: space-between;
+  font-size: 4.6cqw;
+  gap: 3cqw;
+}
+.bookingTitle strong {
+  font-weight: 600;
+}
+.booking > p {
+  font-size: 3cqw;
+  color: #65716b;
+  margin: 2cqw 0 4cqw;
+}
+.bookingActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2cqw;
+  font-size: 2.7cqw;
+  font-weight: 600;
+}
+.bookingActions span {
+  padding: 2.5cqw 1cqw;
+  border: 1px solid #142c2330;
+  text-align: center;
+  border-radius: 1cqw;
+  white-space: nowrap;
+}
+.bookingActions span:last-child {
+  background: #142c23;
+  color: white;
+}
+.recentTitle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 4cqw 0 2cqw;
+}
+.recentTitle > span:last-child {
+  font-size: 2.8cqw;
+  letter-spacing: 0;
+}
+.round {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2cqw 0;
+  border-bottom: 1px solid #142c2312;
+  font-size: 3.4cqw;
+}
+.round:last-child {
+  border: 0;
+}
+.round strong {
+  font-weight: 500;
+}
+.round small {
+  display: block;
+  font-size: 2.7cqw;
+  color: #65716b;
+  margin-top: 1cqw;
+}
+.round > span {
+  font-weight: 600;
+  text-align: right;
+  color: #80630d;
+}
+.round > span small {
+  font-size: 2cqw;
+  letter-spacing: 0.08em;
+  color: #80630d;
+}
+.navigation {
+  display: flex;
+  justify-content: space-around;
+  background: #fff;
+  padding: 3cqw 2cqw 3cqw;
+  border-top: 1px solid #142c2315;
+  color: #738078;
+}
+.navigation > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8cqw;
+  font-size: 2.5cqw;
+}
+.navigation svg {
+  height: 4cqw;
+  width: 4cqw;
+  stroke-width: 1.5;
+}
+.navigation > div:first-child {
+  color: #142c23;
+  font-weight: 700;
+}
+
+.top,
+.navigation {
+  flex-shrink: 0;
+}

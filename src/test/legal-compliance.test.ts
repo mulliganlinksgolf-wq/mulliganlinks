@@ -14,58 +14,29 @@ import path from 'path'
 const ROOT = path.resolve(__dirname, '../..')
 const PAGE = fs.readFileSync(path.join(ROOT, 'src/app/page.tsx'), 'utf-8')
 const SCORECARD = fs.readFileSync(path.join(ROOT, 'src/components/FoundersScorecard.tsx'), 'utf-8')
-const BARTER = fs.readFileSync(path.join(ROOT, 'src/components/BarterPage.tsx'), 'utf-8')
+const BARTER = fs.readFileSync(path.join(ROOT, 'src/components/BarterPage.tsx'), 'utf-8').replace(/\s+/g, ' ')
 
-describe('Homepage (page.tsx) — legal compliance', () => {
-  it('has legal review comment at top', () => {
-    expect(PAGE).toContain('Legal note: All competitor references are based on publicly available data')
+describe('Homepage — launch and marketing claims', () => {
+  it('does not reintroduce removed competitor loss claims without review', () => {
+    expect(PAGE).not.toMatch(/GolfNow|94,500|48,000|382%|39\.6%|Windsor Parke/)
   })
 
-  it('attributes $94,500 claim to NGCOA and Golf Inc.', () => {
-    expect(PAGE).toContain('NGCOA member survey data and Golf Inc. industry analysis')
+  it('makes the prelaunch status and free waitlist clear', () => {
+    expect(PAGE).toContain('Not yet.')
+    expect(PAGE).toContain('launch timing are confirmed')
+    expect(PAGE).toContain('no payment details required')
   })
 
-  it('has $94,500 footnote disclaimer near the figure', () => {
-    expect(PAGE).toContain('Based on 2 barter tee times/day at average rack rates across NGCOA member survey')
+  it('labels product imagery as sample data', () => {
+    expect(PAGE).toContain('Product preview · Sample data')
   })
 
-  it('attributes pull-quote to Neil Barris by name', () => {
-    // Founder attribution moved to FoundersScorecard component (April 2026 redesign)
+  it('preserves founder attribution in the founding scorecard', () => {
     expect(SCORECARD).toContain('Neil Barris')
   })
 
-  it('comparison table removed — source notes moved to stat section', () => {
-    // Comparison table was intentionally removed in redesign (April 2026).
-    // Source attributions are now in the stat moment section footnote.
-    expect(PAGE).toContain('NGCOA member survey data and Golf Inc. industry analysis')
-  })
-
-  it('attributes Windsor Parke exodus stat to Golf Inc.', () => {
-    expect(PAGE).toContain('Golf Inc. / industry reporting, Windsor Parke case study')
-  })
-
-  it('attributes NGCOA exodus stat to NGCOA Q1 2025', () => {
-    expect(PAGE).toContain('National Golf Course Owners Association (NGCOA), Q1 2025')
-  })
-
-  it('attributes $94,500 exodus stat to NGCOA & Golf Inc.', () => {
-    expect(PAGE).toContain('NGCOA member survey data & Golf Inc. industry analysis, 2024')
-  })
-
-  it('has not-affiliated disclaimer in source', () => {
-    // Footer disclaimer intentionally removed in redesign (April 2026); preserved in stat section footnote.
-    expect(PAGE).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
-  })
-
-  it('does not use "extract value" without attribution', () => {
-    // "extract value" was replaced with "barter model cost" — ensure the old phrase is gone
-    expect(PAGE).not.toContain('extract value from the courses')
-  })
-
-  it('does not contain unsourced superlatives (predatory, scam, steal)', () => {
-    expect(PAGE).not.toMatch(/\bpredatory\b/i)
-    expect(PAGE).not.toMatch(/\bscam\b/i)
-    expect(PAGE).not.toMatch(/\bsteal\b/i)
+  it('does not contain unsupported accusations', () => {
+    expect(PAGE).not.toMatch(/\b(predatory|scam|steal)\b/i)
   })
 })
 
@@ -97,7 +68,7 @@ describe('Barter page (BarterPage.tsx) — legal compliance', () => {
 
   it('has not-affiliated footer disclaimer', () => {
     expect(BARTER).toContain('<SiteFooter')
-    expect(fs.readFileSync(path.join(ROOT, 'src/components/SiteFooter.tsx'), 'utf-8')).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
+    expect(fs.readFileSync(path.join(ROOT, 'src/components/SiteFooter.tsx'), 'utf-8').replace(/\s+/g, ' ')).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
   })
 
   it('does not use "extracted" in hero subhead', () => {
