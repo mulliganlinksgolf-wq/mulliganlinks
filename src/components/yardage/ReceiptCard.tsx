@@ -55,10 +55,10 @@ export function ReceiptCard() {
             className="font-display text-[18px] text-[#0F3D2E] tracking-[-0.01em]"
             style={{ fontWeight: 400 }}
           >
-            Plum Hollow CC
+            Illustrative course
           </p>
           <p className="mt-1 text-[9px] tracking-[0.22em] uppercase text-[#6B7770] font-semibold">
-            Today · Sat 21 May · Wave 01
+            Example only · Not a partner receipt
           </p>
         </div>
 
@@ -136,7 +136,7 @@ export function ReceiptCard() {
         </div>
 
         <p className="mt-3 text-center text-[8.5px] italic text-[#6B7770]">
-          Receipt, Plum Hollow CC, today&apos;s wave
+          Illustrative example, not actual course revenue
         </p>
       </div>
     </div>

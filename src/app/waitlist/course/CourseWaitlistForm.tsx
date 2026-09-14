@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition, useCallback } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Button } from '@/components/ui/button'
@@ -8,237 +8,60 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { joinCourseWaitlist } from './actions'
 
-export function CourseWaitlistForm({ prefillExpiryDate }: { prefillExpiryDate?: string }) {
+export function CourseWaitlistForm() {
   const { executeRecaptcha } = useGoogleReCaptcha()
   const searchParams = useSearchParams()
-  const tier = searchParams.get('tier') ?? 'founding'
-
+  const [values, setValues] = useState({ course_name: '', contact_name: '', email: '' })
   const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
-  const [currentSoftware, setCurrentSoftware] = useState<string>('')
-  const [avgGreenFee, setAvgGreenFee] = useState<string>('')
-  const [submitted, setSubmitted] = useState<string | null>(null)
+  const [submitted, setSubmitted] = useState(false)
+  const [pending, startTransition] = useTransition()
+  const submitting = useRef(false)
 
-  const onGolfnow = currentSoftware === 'golfnow'
-
-  const estimatedBarter =
-    onGolfnow && avgGreenFee && !isNaN(parseInt(avgGreenFee, 10))
-      ? 2 * parseInt(avgGreenFee, 10) * 300
-      : null
-
-  const handleSubmit = useCallback(async (formData: FormData) => {
+  function submit(data: FormData) {
+    if (submitting.current) return
+    submitting.current = true
     setError(null)
-
-    if (!executeRecaptcha) {
-      setError('Security check still loading, please try again in a moment.')
-      return
-    }
-
-    const token = await executeRecaptcha('course_waitlist')
-    formData.set('recaptcha_token', token)
     startTransition(async () => {
-      const result = await joinCourseWaitlist(formData)
-      if (result.success) {
-        const emailVal = (formData.get('email') as string)?.toLowerCase().trim() ?? ''
-        setSubmitted(emailVal)
-      } else {
-        setError(result.error ?? 'Something went wrong.')
-      }
+      try {
+        if (!executeRecaptcha) {
+          setError('Security check is still loading. Please try again in a moment.')
+          return
+        }
+        data.set('recaptcha_token', await executeRecaptcha('course_waitlist'))
+        const result = await joinCourseWaitlist(data)
+        if (result.success) setSubmitted(true)
+        else setError(result.error ?? 'Please try again.')
+      } catch {
+        setError('We couldn’t send your request. Please try again. Your details are still here.')
+      } finally { submitting.current = false }
     })
-  }, [executeRecaptcha])
-
-  const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
-
-  if (submitted) {
-    return (
-      <div className="space-y-6 text-center py-4">
-        <p className="text-4xl">✅</p>
-        <div className="space-y-2">
-          <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
-          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll follow up at <span className="font-semibold text-[#F4F1EA]">{submitted}</span>, but if you&apos;d rather talk this week, grab a time now.</p>
-        </div>
-        <a
-          href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors"
-        >
-          Book a 30-min Demo with Neil →
-        </a>
-        <p className="text-xs text-[#F4F1EA]/50">Or use the barter calculator to see exactly what GolfNow cost you last year.</p>
-        <a
-          href="/barter"
-          className="text-sm text-[#E0A800]/80 hover:text-[#E0A800] underline underline-offset-2 transition-colors"
-        >
-          Run the Barter Calculator →
-        </a>
-      </div>
-    )
   }
 
+  if (submitted) return (
+    <div role="status" className="space-y-4 text-[#F4F1EA]">
+      <h2 className="text-2xl font-semibold">Thanks for the introduction.</h2>
+      <p>Neil or Billy will follow up at {values.email} to learn about your course and discuss next steps.</p>
+      <p className="text-sm text-white/80">No reservation, contract, or payment has been made.</p>
+      <a href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-lg bg-[#E0A800] px-5 py-3 font-semibold text-[#082419]">Want to talk sooner? Book a call →</a>
+    </div>
+  )
+
   return (
-    <form action={handleSubmit} className="space-y-6">
-      {/* Hidden tier field, captures which pricing tier the applicant wants */}
-      <input type="hidden" name="applied_tier" value={tier} />
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
-          {error}
+    <form action={submit} aria-busy={pending} className="space-y-5">
+      <input type="hidden" name="applied_tier" value={searchParams.get('tier') === 'standard' ? 'standard' : 'founding'} />
+      {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+      {([
+        ['course_name', 'Course name', 'Your golf course', 'organization'],
+        ['contact_name', 'Your name', 'Your name', 'name'],
+        ['email', 'Email address', 'you@course.com', 'email'],
+      ] as const).map(([key, label, placeholder, autoComplete]) => (
+        <div key={key} className="space-y-2">
+          <Label htmlFor={key} className="text-white">{label}</Label>
+          <Input id={key} name={key} type={key === 'email' ? 'email' : 'text'} autoComplete={autoComplete} maxLength={255} required disabled={pending} value={values[key]} onChange={e => setValues(v => ({ ...v, [key]: e.target.value }))} placeholder={placeholder} className="h-12 bg-white text-[#0F3D2E] text-base" />
         </div>
-      )}
-
-      <div className="space-y-1.5">
-        <Label htmlFor="course_name" className="text-[#F4F1EA]">Course name *</Label>
-        <Input id="course_name" name="course_name" required disabled={isPending} placeholder="Oakland Hills Country Club" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="contact_name" className="text-[#F4F1EA]">Your name *</Label>
-          <Input id="contact_name" name="contact_name" required disabled={isPending} placeholder="Alex Johnson" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="contact_role" className="text-[#F4F1EA]">Your role</Label>
-          <select id="contact_role" name="contact_role" disabled={isPending} className={selectClassName}>
-            <option value="">Select…</option>
-            <option value="owner">Owner</option>
-            <option value="gm">General Manager</option>
-            <option value="director_of_golf">Director of Golf</option>
-            <option value="pro">Head Pro</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="email" className="text-[#F4F1EA]">Email *</Label>
-          <Input id="email" name="email" type="email" required disabled={isPending} placeholder="alex@course.com" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="phone" className="text-[#F4F1EA]">Phone</Label>
-          <Input id="phone" name="phone" type="tel" disabled={isPending} placeholder="(248) 555-0100" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="city" className="text-[#F4F1EA]">City</Label>
-          <Input id="city" name="city" disabled={isPending} placeholder="Birmingham" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="state" className="text-[#F4F1EA]">State</Label>
-          <Input id="state" name="state" disabled={isPending} placeholder="MI" maxLength={2} className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="num_holes" className="text-[#F4F1EA]">Number of holes</Label>
-          <select id="num_holes" name="num_holes" disabled={isPending} className={selectClassName}>
-            <option value="">Select…</option>
-            <option value="9">9</option>
-            <option value="18">18</option>
-            <option value="27">27</option>
-            <option value="36">36</option>
-          </select>
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="annual_rounds" className="text-[#F4F1EA]">Est. annual rounds</Label>
-          <Input id="annual_rounds" name="annual_rounds" type="number" min="0" disabled={isPending} placeholder="15000" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        </div>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="current_software" className="text-[#F4F1EA]">Current tee sheet software</Label>
-        <select
-          id="current_software"
-          name="current_software"
-          disabled={isPending}
-          value={currentSoftware}
-          onChange={(e) => setCurrentSoftware(e.target.value)}
-          className={selectClassName}
-        >
-          <option value="">Select…</option>
-          <option value="golfnow">GolfNow</option>
-          <option value="foreup">foreUP</option>
-          <option value="lightspeed">Lightspeed</option>
-          <option value="club_prophet">Club Prophet</option>
-          <option value="other">Other</option>
-          <option value="none">None</option>
-        </select>
-      </div>
-
-      {onGolfnow && (
-        <div className="space-y-4 bg-white/8 rounded-xl p-4 ring-1 ring-white/15">
-          <div className="space-y-1.5">
-            <Label htmlFor="contract_expiry_date" className="text-[#F4F1EA]">
-              Contract expiry date{' '}
-              <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
-            </Label>
-            <Input
-              id="contract_expiry_date"
-              name="contract_expiry_date"
-              type="date"
-              disabled={isPending}
-              defaultValue={prefillExpiryDate ?? ''}
-              className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="avg_green_fee" className="text-[#F4F1EA]">Average green fee (rack rate, $)</Label>
-            <Input
-              id="avg_green_fee"
-              name="avg_green_fee"
-              type="number"
-              min="0"
-              disabled={isPending}
-              placeholder="175"
-              value={avgGreenFee}
-              onChange={(e) => setAvgGreenFee(e.target.value)}
-              className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-            />
-            {estimatedBarter && (
-              <div className="bg-red-50 border border-red-100 rounded-lg px-4 py-3 text-sm">
-                <p className="font-semibold text-red-700">
-                  Estimated annual barter cost: ${estimatedBarter.toLocaleString()}
-                </p>
-                <p className="text-red-600 text-xs mt-1">
-                  (2 tee times/day × ${avgGreenFee} rack rate × 300 operating days)
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className="space-y-1.5">
-        <Label htmlFor="biggest_frustration" className="text-[#F4F1EA]">
-          What&apos;s your biggest frustration with your current setup?{' '}
-          <span className="text-[#F4F1EA]/60 font-normal">(optional)</span>
-        </Label>
-        <textarea
-          id="biggest_frustration"
-          name="biggest_frustration"
-          disabled={isPending}
-          rows={3}
-          placeholder="Barter costs, lack of customer data, booking fees eating into revenue…"
-          className="flex min-h-[80px] w-full rounded-md border border-white/20 bg-white/10 px-3 py-2 text-sm text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50"
-        />
-      </div>
-
-      <Button
-        type="submit"
-        disabled={isPending}
-        className="w-full bg-[#E0A800] hover:bg-[#E0A800]/90 text-[#0a0a0a] font-bold py-3 rounded-lg"
-      >
-        {isPending ? 'Submitting…' : 'Reserve My Founding Partner Spot →'}
-      </Button>
-
-      <p className="text-sm text-[#F4F1EA]/60 leading-relaxed">
-        After you apply: Neil or Billy will email you personally within 48 hours. Founding Partner status is reviewed manually, so we&apos;re selective: every course in the network is one golfers actually want to play.
-      </p>
+      ))}
+      <Button type="submit" disabled={pending} className="h-12 w-full bg-[#E0A800] text-[#082419] hover:bg-[#E0A800]/90 font-semibold">{pending ? 'Sending…' : 'Talk to us about your course'}</Button>
+      <p className="text-sm text-white/80">Just an introduction. We’ll ask about your software and setup when we follow up.</p>
     </form>
   )
 }

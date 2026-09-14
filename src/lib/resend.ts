@@ -103,16 +103,9 @@ export async function sendGolferWaitlistConfirmation({
         <p>Hey ${firstName},</p>
         <p>You're officially on the TeeAhead waitlist. We're launching in Metro Detroit and you'll be
         among the first to know when we go live.</p>
-        <p>Here's what you're waiting for:</p>
-        <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>Tee-time booking at participating Metro Detroit courses</li>
-          <li>A free Fairway membership, with optional paid memberships when you’re ready</li>
-          <li>Real Fairway Points on every dollar played at local courses</li>
-        </ul>
-        <p>Which course would you like to see on TeeAhead? Reply to this email and tell us where you play.</p>
-        <p>Know a golf course that should partner with us? Send them to
-        <a href="https://teeahead.com/waitlist/course" style="color: #1B4332;">teeahead.com/waitlist/course</a>.
-        More partner courses = more value for you on day one.</p>
+        <p>We’ll email you when participating courses and launch timing are confirmed.
+        There’s nothing to buy or choose now.</p>
+        <p><strong>Where do you usually play?</strong> Reply with your favorite course. It helps us understand where golfers want TeeAhead.</p>
         <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
         <p style="color: #6B7770; font-size: 12px;">
           TeeAhead · Your home course, redone right.<br />
@@ -143,14 +136,14 @@ export async function sendCourseWaitlistConfirmation({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `${courseName}, Founding Partner application received`,
+    subject: `${courseName}, thanks for your interest in TeeAhead`,
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
-        <h2 style="color: #1B4332;">Application received 🏌️</h2>
+        <h2 style="color: #1B4332;">Let’s talk about your course</h2>
         <p>Hey ${firstName},</p>
-        <p>We received your Founding Partner application for <strong>${courseName}</strong>.
-        Neil or Billy will be in touch within 48 hours to confirm your spot and walk you through
-        what happens next.</p>
+        <p>Thanks for telling us about <strong>${courseName}</strong>.
+        Neil or Billy will follow up by email to learn about your current setup and discuss whether TeeAhead is a fit.
+        This is an introduction, not a reservation or commitment.</p>
         <p>As a quick reminder, Founding Partners get:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
           <li>The full TeeAhead platform, free for your first year</li>
@@ -187,7 +180,7 @@ export async function sendCourseAdminAlert({
   phone: string | null
   city: string | null
   state: string | null
-  onGolfnow: boolean
+  onGolfnow: boolean | null
   estimatedBarterCost: number | null
   biggestFrustration: string | null
 }) {
@@ -213,7 +206,7 @@ export async function sendCourseAdminAlert({
         <p><strong>Email:</strong> ${email}</p>
         ${phone ? `<p><strong>Phone:</strong> ${phone}</p>` : ''}
         ${city || state ? `<p><strong>Location:</strong> ${[city, state].filter(Boolean).join(', ')}</p>` : ''}
-        <p><strong>On GolfNow:</strong> ${onGolfnow ? 'Yes' : 'No'}</p>
+        <p><strong>On GolfNow:</strong> ${onGolfnow === null ? 'Not provided' : onGolfnow ? 'Yes' : 'No'}</p>
         ${barterLine}
         ${biggestFrustration ? `<p><strong>Biggest frustration:</strong><br /><em>${biggestFrustration}</em></p>` : ''}
         <hr style="border: none; border-top: 1px solid #eee; margin: 16px 0;" />

@@ -2,14 +2,14 @@ import { FadeIn } from '@/components/FadeIn'
 
 const COURSE_FAQS = [
   { q: 'Is TeeAhead really free for courses for founding partners?', a: 'Yes. The first ten Metro Detroit courses pay $0 for their first year. After that, $349/mo flat. No commissions, no barter, ever.' },
-  { q: 'What if my course already uses EZLinks, foreUP, or another system?', a: 'We can run alongside or replace. We handle the migration in under 48 hours. Reach out to billy@teeahead.com for a straight answer on your specific setup.' },
+  { q: 'What if my course already uses EZLinks, foreUP, or another system?', a: 'We’ll review compatibility, data migration, and a realistic timeline for your current setup. Reach out to billy@teeahead.com to talk through the details.' },
   { q: 'Do you actually pay rev share?', a: 'Yes. Stripe Connect auto-pays 10% of every membership you refer, monthly, for 12 months.' },
   { q: 'Can I export everything?', a: 'Always. Full CSV export from the Members page. Your data is yours.' },
 ]
 
 const GOLFER_FAQS = [
-  { q: 'When does TeeAhead launch?', a: 'Metro Detroit, summer 2026. Waitlist members get first access plus 250 bonus Fairway Points on signup.' },
-  { q: 'Will my home course actually be on TeeAhead?', a: "We're targeting all independent Metro Detroit courses. If yours isn't on the list yet, refer them, you'll earn priority access." },
+  { q: 'When does TeeAhead launch?', a: 'We’re building the Metro Detroit course network. We’ll email the waitlist when launch timing and participating courses are confirmed. Joining is free; no membership purchase is required.' },
+  { q: 'Will my home course actually be on TeeAhead?', a: "We’re talking with independent Metro Detroit courses. Joining the waitlist lets you tell us where you play; it does not guarantee that a particular course will participate." },
   { q: 'Why pay $89 for Eagle when GolfPass+ is $119?', a: 'Eagle has zero booking fees (GolfPass+ charges $2.49–$3.49/round), points that never expire, partner-finder access, and works at local courses, not national chains.' },
   { q: "Who's behind TeeAhead?", a: "Two Metro Detroit golfers: Neil (operator-side at Outing.golf) and Billy (lifelong member). See the founders' scorecard above." },
 ]
