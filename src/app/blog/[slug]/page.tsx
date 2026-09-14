@@ -1,33 +1,37 @@
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/blog'
-import { AUTHORS } from '@/lib/authors'
-import { PostSidebar } from '@/components/blog/PostSidebar'
-import { AuthorBio } from '@/components/blog/AuthorBio'
-import { Callout } from '@/components/blog/Callout'
-import { StatBlock } from '@/components/blog/StatBlock'
-import { ComparisonTable, Th, Td } from '@/components/blog/ComparisonTable'
-import { SiteFooter } from '@/components/SiteFooter'
-import { SiteHeader } from '@/components/SiteHeader'
-import { FadeIn } from '@/components/FadeIn'
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { getAllPosts, getPostBySlug, getRelatedPosts } from "@/lib/blog";
+import { AUTHORS } from "@/lib/authors";
+import { PostSidebar } from "@/components/blog/PostSidebar";
+import { AuthorBio } from "@/components/blog/AuthorBio";
+import { Callout } from "@/components/blog/Callout";
+import { StatBlock } from "@/components/blog/StatBlock";
+import { ComparisonTable, Th, Td } from "@/components/blog/ComparisonTable";
+import { SiteFooter } from "@/components/SiteFooter";
+import { SiteHeader } from "@/components/SiteHeader";
+import { FadeIn } from "@/components/FadeIn";
 
 const CATEGORY_LABELS: Record<string, string> = {
-  courses: 'For Courses',
-  golfers: 'For Golfers',
-  'case-studies': 'Case Study',
-}
+  courses: "For Courses",
+  golfers: "For Golfers",
+  "case-studies": "Case Study",
+};
 
-const MDX_COMPONENTS = { Callout, StatBlock, ComparisonTable, Th, Td }
+const MDX_COMPONENTS = { Callout, StatBlock, ComparisonTable, Th, Td };
 
 export async function generateStaticParams() {
-  return getAllPosts().map(p => ({ slug: p.slug }))
+  return getAllPosts().map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
-  if (!post) return {}
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  if (!post) return {};
   return {
     title: post.title,
     description: post.description,
@@ -37,63 +41,102 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: post.description,
       url: `https://www.teeahead.com/blog/${post.slug}`,
     },
-  }
+  };
 }
 
-function PostSchema({ post }: { post: NonNullable<ReturnType<typeof getPostBySlug>> }) {
-  const author = AUTHORS[post.author]
+function PostSchema({
+  post,
+}: {
+  post: NonNullable<ReturnType<typeof getPostBySlug>>;
+}) {
+  const author = AUTHORS[post.author];
   const schemas: object[] = [
     {
-      '@context': 'https://schema.org',
-      '@type': 'Article',
+      "@context": "https://schema.org",
+      "@type": "Article",
       headline: post.title,
       description: post.description,
       url: `https://www.teeahead.com/blog/${post.slug}`,
       datePublished: post.publishedAt,
       dateModified: post.updatedAt,
-      author: { '@id': author.schemaId },
-      publisher: { '@id': 'https://www.teeahead.com/#organization' },
-      image: { '@type': 'ImageObject', url: 'https://www.teeahead.com/og-image.png', width: 1200, height: 630 },
+      author: { "@id": author.schemaId },
+      publisher: { "@id": "https://www.teeahead.com/#organization" },
+      image: {
+        "@type": "ImageObject",
+        url: "https://www.teeahead.com/og-image.png",
+        width: 1200,
+        height: 630,
+      },
     },
     {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://www.teeahead.com' },
-        { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://www.teeahead.com/blog' },
-        { '@type': 'ListItem', position: 3, name: post.title, item: `https://www.teeahead.com/blog/${post.slug}` },
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://www.teeahead.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Blog",
+          item: "https://www.teeahead.com/blog",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: post.title,
+          item: `https://www.teeahead.com/blog/${post.slug}`,
+        },
       ],
     },
-  ]
+  ];
   if (post.faqs && post.faqs.length > 0) {
     schemas.push({
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: post.faqs.map(faq => ({
-        '@type': 'Question',
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: post.faqs.map((faq) => ({
+        "@type": "Question",
         name: faq.q,
-        acceptedAnswer: { '@type': 'Answer', text: faq.a },
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
       })),
-    })
+    });
   }
   return (
     <>
       {schemas.map((s, i) => (
-        <script key={i} type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }} />
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(s) }}
+        />
       ))}
     </>
-  )
+  );
 }
 
-export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
-  const post = getPostBySlug(slug)
-  if (!post) notFound()
+export default async function BlogPostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  if (!post) notFound();
 
-  const related = getRelatedPosts(post.slug, post.category)
-  const author = AUTHORS[post.author]
-  const initials = author.name.split(' ').map(n => n[0]).join('')
-  const publishDate = new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+  const related = getRelatedPosts(post.slug, post.category);
+  const author = AUTHORS[post.author];
+  const initials = author.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("");
+  const publishDate = new Date(post.publishedAt).toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <div className="min-h-screen bg-[#FAF7F2] flex flex-col">
@@ -105,7 +148,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <FadeIn>
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 lg:gap-16">
             {/* Article */}
-            <article>
+            <article className="min-w-0">
               {/* Eyebrow */}
               <div className="flex items-center gap-3 mb-6">
                 <span className="font-mono text-[10.5px] tracking-[0.18em] uppercase text-[#E0A800] font-bold">
@@ -120,7 +163,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {/* Headline */}
               <h1
                 className="font-display text-[#0F3D2E] tracking-[-0.025em] leading-[1.05]"
-                style={{ fontSize: 'clamp(36px, 5.5vw, 60px)', fontWeight: 400 }}
+                style={{
+                  fontSize: "clamp(36px, 5.5vw, 60px)",
+                  fontWeight: 400,
+                }}
               >
                 {post.title}
               </h1>
@@ -134,7 +180,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                   {initials}
                 </span>
                 <div className="font-mono text-[10.5px] tracking-[0.1em] uppercase text-[#6B7770]">
-                  <span className="text-[#0F3D2E] font-semibold">{author.name}</span>
+                  <span className="text-[#0F3D2E] font-semibold">
+                    {author.name}
+                  </span>
                   <span className="mx-2 text-[#0F3D2E]/30">·</span>
                   <span>{publishDate}</span>
                 </div>
@@ -160,5 +208,5 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
       <SiteFooter />
     </div>
-  )
+  );
 }
