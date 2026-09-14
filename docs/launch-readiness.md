@@ -22,6 +22,10 @@ npm run build
 
 `verify` requires zero ESLint warnings, TypeScript success, the complete Vitest suite, and three isolated PGlite database suites. Vercel's build command runs verification before building, so a failed check prevents a new deployment from replacing production.
 
+`main` requires a pull request and a successful `Verify website` check from GitHub Actions, including for admins. Force pushes and deletion are disabled. No second-person approval is required, so a solo founder can merge once checks pass.
+
+Unit tests explicitly use `NODE_ENV=test` even inside Vercel’s production build environment; the application build retains its production environment. Cancellation dates explicitly use Detroit time, including on UTC build servers.
+
 GitHub Actions also starts disposable Postgres 17 and runs real concurrent reservation tests. Each test forces two separate database connections to overlap on the final spot. Both member/member and member/walk-in scenarios must produce exactly one booking, no negative capacity, and no deadlock. This test refuses remote database hosts and requires an empty database named `teeahead_verification`. `TEST_PGHOST`, `TEST_PGPORT`, `TEST_PGUSER`, and `TEST_PGPASSWORD` configure this local fixture; never use production credentials.
 
 ## Verification evidence
