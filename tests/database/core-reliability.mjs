@@ -7,7 +7,7 @@ await db.exec(await readFile(new URL('./core-reliability-fixture.sql', import.me
 await db.exec(await readFile(new URL('../../supabase/migrations/20260914141750_core_reliability.sql', import.meta.url), 'utf8'))
 await db.exec(await readFile(new URL('../../supabase/migrations/20260914150213_booking_access_cutover.sql', import.meta.url), 'utf8'))
 const uid='00000000-0000-0000-0000-000000000001', cid='00000000-0000-0000-0000-000000000002', tid='00000000-0000-0000-0000-000000000003', pass='00000000-0000-0000-0000-000000000004'
-await db.query('INSERT INTO profiles VALUES ($1)',[uid])
+await db.query('INSERT INTO profiles(id) VALUES ($1)',[uid])
 await db.query('INSERT INTO courses(id) VALUES ($1)',[cid])
 await db.query("INSERT INTO memberships(user_id,tier,status) VALUES ($1,'eagle','active')",[uid])
 await db.query("INSERT INTO tee_times(id,course_id,scheduled_at) VALUES ($1,$2,now()+interval '10 days')",[tid,cid])

@@ -153,35 +153,26 @@ describe('Points deferred to completion — confirmBooking', () => {
   })
 })
 
-describe('Auto-award on Mark Complete — updateBookingStatus', () => {
-  beforeEach(() => vi.clearAllMocks())
-
-  it('inserts fairway_points when status is completed and booking has a member', async () => {
-    const mock = buildMock({ bookingPointsAwarded: 60, bookingUserId: 'user-1' })
+describe('Completion delegates authorization and points to one transaction', () => {
+  it('passes the signed-in actor to the completion RPC', async () => {
+    const mock = buildMock({})
     vi.mocked(createClient).mockResolvedValue(mock as never)
-
-    await updateBookingStatus('booking-1', 'completed')
-
-    const earned = pointInserts.filter(p => (p.amount as number) > 0)
-    expect(earned).toHaveLength(1)
-    expect(earned[0]).toMatchObject({ user_id: 'user-1', amount: 60, reason: 'Round completed' })
+    vi.mocked(createAdminClient).mockReturnValue(mock as never)
+    await updateBookingStatus('booking-1','completed')
+    expect(mock.rpc).toHaveBeenCalledWith('complete_member_booking', { p_booking_id: 'booking-1',p_actor_id: 'user-1',p_status: 'completed' })
   })
-
-  it('does NOT award points for no_show', async () => {
-    const mock = buildMock({ bookingPointsAwarded: 60, bookingUserId: 'user-1' })
+  it('routes no-show updates through the same authorized transaction', async () => {
+    const mock = buildMock({})
     vi.mocked(createClient).mockResolvedValue(mock as never)
-
-    await updateBookingStatus('booking-1', 'no_show')
-
-    expect(pointInserts).toHaveLength(0)
+    vi.mocked(createAdminClient).mockReturnValue(mock as never)
+    await updateBookingStatus('booking-1','no_show')
+    expect(mock.rpc).toHaveBeenCalledWith('complete_member_booking', { p_booking_id: 'booking-1',p_actor_id: 'user-1',p_status: 'no_show' })
   })
-
-  it('does NOT award points for a walk-in with no user_id', async () => {
-    const mock = buildMock({ bookingPointsAwarded: 0, bookingUserId: null })
+  it('reports a rejected database authorization check', async () => {
+    const mock = buildMock({})
     vi.mocked(createClient).mockResolvedValue(mock as never)
-
-    await updateBookingStatus('booking-1', 'completed')
-
-    expect(pointInserts).toHaveLength(0)
+    mock.rpc.mockResolvedValue({ data: null,error: { message: 'Not authorized' } } as never)
+    vi.mocked(createAdminClient).mockReturnValue(mock as never)
+    await expect(updateBookingStatus('booking-1','completed')).rejects.toThrow('Not authorized')
   })
 })

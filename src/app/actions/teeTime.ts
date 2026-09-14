@@ -13,34 +13,12 @@ export async function updateTeeTimeStatus(teeTimeId: string, status: 'open' | 'b
 
 export async function updateBookingStatus(bookingId: string, status: 'completed' | 'no_show') {
   const supabase = await createClient()
-  await supabase.from('bookings').update({ status }).eq('id', bookingId)
-
-  // Auto-award deferred Fairway Points when a member's round is marked complete
-  if (status === 'completed') {
-    const { data: booking } = await supabase
-      .from('bookings')
-      .select('user_id, points_awarded, tee_time_id')
-      .eq('id', bookingId)
-      .single()
-
-    if (booking?.user_id && booking.points_awarded > 0) {
-      const { data: tt } = await supabase
-        .from('tee_times')
-        .select('course_id')
-        .eq('id', booking.tee_time_id)
-        .single()
-
-      if (tt?.course_id) {
-        await supabase.from('fairway_points').insert({
-          user_id: booking.user_id,
-          course_id: tt.course_id,
-          booking_id: bookingId,
-          amount: booking.points_awarded,
-          reason: 'Round completed',
-        })
-      }
-    }
-  }
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Not authenticated')
+  const { error } = await createAdminClient().rpc('complete_member_booking', {
+    p_booking_id: bookingId, p_actor_id: user.id, p_status: status,
+  })
+  if (error) throw new Error(error.message)
 
   revalidatePath('/course/[slug]', 'page')
 }

@@ -41,6 +41,22 @@ const period='2099-01-01T00:00:00Z'
 const grant=()=>db.query("select issue_membership_guest_passes($1,'sub_test',$2,'eagle') n",[uid,period])
 assert.equal((await grant()).rows[0].n,1);assert.equal((await grant()).rows[0].n,0)
 assert.equal((await db.query('select count(*)::int n from guest_passes where user_id=$1',[uid])).rows[0].n,2)
+const round=await create({...q,guest_pass_id:null,credits_redeemed_cents:0,points_redeemed:0,players:1})
+await db.exec('SAVEPOINT unauthorized_staff')
+let deniedStaff=false
+try { await db.query("select complete_member_booking($1,$2,'completed')",[round,uid]) } catch { deniedStaff=true }
+assert.equal(deniedStaff,true)
+await db.exec('ROLLBACK TO SAVEPOINT unauthorized_staff')
+await db.exec('RESET ROLE')
+await db.query("INSERT INTO course_admins(course_id,user_id) VALUES($1,$2)",[cid,uid])
+await db.exec('SET ROLE service_role')
+const complete=()=>db.query("select complete_member_booking($1,$2,'completed') changed",[round,uid])
+assert.equal((await complete()).rows[0].changed,true)
+assert.equal((await complete()).rows[0].changed,false)
+assert.equal((await db.query('select sum(amount)::int n from fairway_points where booking_id=$1',[round])).rows[0].n,112)
+const noShow=await create({...q,guest_pass_id:null,credits_redeemed_cents:0,points_redeemed:0,players:1})
+await db.query("select complete_member_booking($1,$2,'no_show')",[noShow,uid])
+assert.equal((await db.query('select count(*)::int n from fairway_points where booking_id=$1',[noShow])).rows[0].n,0)
 await db.exec('RESET ROLE; SET ROLE authenticated')
 await db.query("select set_config('request.jwt.claim.sub',$1,true)",[uid])
 // Expected SQL failures must be isolated with savepoints inside this transaction.

@@ -98,3 +98,41 @@ BEGIN
 END $$;
 REVOKE ALL ON FUNCTION public.issue_membership_guest_passes(uuid,text,timestamptz,text) FROM PUBLIC,anon,authenticated;
 GRANT EXECUTE ON FUNCTION public.issue_membership_guest_passes(uuid,text,timestamptz,text) TO service_role;
+
+-- Completion and points must commit together. Ordinary clients cannot insert
+-- points directly; the authenticated staff actor is checked inside this RPC.
+CREATE OR REPLACE FUNCTION public.complete_member_booking(p_booking_id uuid,p_actor_id uuid,p_status text)
+RETURNS boolean LANGUAGE plpgsql SECURITY INVOKER SET search_path=public,pg_temp AS $$
+DECLARE b public.bookings%ROWTYPE; cid uuid; earned integer; occupied integer;
+BEGIN
+  IF p_status NOT IN ('completed','no_show') OR p_actor_id IS NULL THEN RAISE EXCEPTION 'Invalid booking update'; END IF;
+  SELECT * INTO b FROM public.bookings WHERE id=p_booking_id;
+  IF NOT FOUND THEN RAISE EXCEPTION 'Booking not found'; END IF;
+  SELECT course_id INTO cid FROM public.tee_times WHERE id=b.tee_time_id;
+  IF NOT EXISTS(SELECT 1 FROM public.course_admins WHERE course_id=cid AND user_id=p_actor_id)
+    AND NOT EXISTS(SELECT 1 FROM public.profiles WHERE id=p_actor_id AND is_admin) THEN
+    RAISE EXCEPTION 'Not authorized to manage this booking';
+  END IF;
+  PERFORM 1 FROM public.courses WHERE id=cid FOR UPDATE;
+  PERFORM 1 FROM public.profiles WHERE id=b.user_id FOR UPDATE;
+  PERFORM 1 FROM public.tee_times WHERE id=b.tee_time_id FOR UPDATE;
+  SELECT * INTO b FROM public.bookings WHERE id=p_booking_id FOR UPDATE;
+  IF b.status=p_status THEN RETURN false; END IF;
+  IF b.status<>'confirmed' OR b.cancellation_requested_at IS NOT NULL THEN RAISE EXCEPTION 'Booking cannot be completed'; END IF;
+  UPDATE public.bookings SET status=p_status,completed_at=CASE WHEN p_status='completed' THEN now() END WHERE id=b.id;
+  IF p_status='completed' AND b.user_id IS NOT NULL THEN
+    SELECT coalesce(sum(amount),0)::integer INTO earned FROM public.fairway_points WHERE booking_id=b.id AND amount>0;
+    IF b.points_awarded>earned THEN
+      INSERT INTO public.fairway_points(user_id,course_id,booking_id,amount,reason)
+      VALUES(b.user_id,cid,b.id,b.points_awarded-earned,'Round completed');
+    END IF;
+  END IF;
+  IF p_status='no_show' THEN
+    SELECT coalesce(sum(players),0)::integer INTO occupied FROM public.bookings WHERE tee_time_id=b.tee_time_id AND status NOT IN ('canceled','no_show');
+    UPDATE public.tee_times SET available_players=greatest(0,max_players-occupied),
+      status=CASE WHEN status='blocked' THEN status WHEN max_players<=occupied THEN 'booked' ELSE 'open' END WHERE id=b.tee_time_id;
+  END IF;
+  RETURN true;
+END $$;
+REVOKE ALL ON FUNCTION public.complete_member_booking(uuid,uuid,text) FROM PUBLIC,anon,authenticated;
+GRANT EXECUTE ON FUNCTION public.complete_member_booking(uuid,uuid,text) TO service_role;
