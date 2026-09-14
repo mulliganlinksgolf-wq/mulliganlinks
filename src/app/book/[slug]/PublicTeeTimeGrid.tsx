@@ -91,7 +91,6 @@ function sortWithFeaturedFirst(tts: TeeTime[]): TeeTime[] {
 export function PublicTeeTimeGrid({
   teeTimes,
   courseName,
-  courseSlug,
   selectedDate,
 }: {
   teeTimes: TeeTime[]

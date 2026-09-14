@@ -22,13 +22,13 @@ export default async function CourseSettingsPage({
 
   const { data: admins } = await supabase
     .from('course_admins')
-    .select('role, profiles(full_name)')
+    .select('user_id, role, profiles(full_name)')
     .eq('course_id', course.id)
 
   return (
     <div className="space-y-6 max-w-2xl">
       <h1 className="text-xl font-bold text-[#1A1A1A]">Course Settings</h1>
-      <CourseSettingsForm course={course} admins={admins as any ?? []} />
+      <CourseSettingsForm course={course} admins={admins ?? []} />
       <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 flex items-center justify-between">
         <div>
           <p className="font-semibold text-[#1A1A1A] text-sm">Team members</p>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- Standalone CommonJS Node script. */
 /**
  * Seed 5 test golfers for the Partner Finder feature.
  * Run: node scripts/seed-partner-finder.js

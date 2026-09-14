@@ -48,7 +48,7 @@ export async function togglePermissionAction(params: {
   } catch (e) {
     return {
       ok: false as const,
-      error: e instanceof Error ? e.message : 'unknown_error',
+      error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'unknown_error',
     }
   }
 }
@@ -92,7 +92,7 @@ export async function resetPermissionToDefaultAction(params: {
   } catch (e) {
     return {
       ok: false as const,
-      error: e instanceof Error ? e.message : 'unknown_error',
+      error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'unknown_error',
     }
   }
 }

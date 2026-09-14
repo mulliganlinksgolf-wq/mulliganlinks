@@ -1,10 +1,11 @@
+import { NextRequest } from 'next/server'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockGetUserFromBearer = vi.fn()
-vi.mock('@/lib/mobile-auth', () => ({ getUserFromBearer: (...a: any[]) => mockGetUserFromBearer(...a) }))
+vi.mock('@/lib/mobile-auth', () => ({ getUserFromBearer: (...a: unknown[]) => mockGetUserFromBearer(...a) }))
 
 // Chainable supabase admin mock
-const membershipRow = { value: null as any }
+const membershipRow = { value: null as { tier: string; status: string; stripe_customer_id: string | null } | null }
 const mockMaybeSingle = vi.fn(async () => ({ data: membershipRow.value, error: null }))
 const mockInsert = vi.fn(async () => ({ error: null }))
 const mockUpdate = vi.fn(() => ({ eq: vi.fn(async () => ({ error: null })) }))
@@ -20,26 +21,26 @@ const mockSubsRetrieve = vi.fn()
 const mockEphemeralCreate = vi.fn()
 vi.mock('@/lib/stripe', () => ({
   stripe: {
-    customers: { create: (...a: any[]) => mockCustomersCreate(...a) },
+    customers: { create: (...a: unknown[]) => mockCustomersCreate(...a) },
     subscriptions: {
-      list: (...a: any[]) => mockSubsList(...a),
-      create: (...a: any[]) => mockSubsCreate(...a),
-      retrieve: (...a: any[]) => mockSubsRetrieve(...a),
+      list: (...a: unknown[]) => mockSubsList(...a),
+      create: (...a: unknown[]) => mockSubsCreate(...a),
+      retrieve: (...a: unknown[]) => mockSubsRetrieve(...a),
     },
-    ephemeralKeys: { create: (...a: any[]) => mockEphemeralCreate(...a) },
+    ephemeralKeys: { create: (...a: unknown[]) => mockEphemeralCreate(...a) },
   },
 }))
 vi.mock('@/lib/stripe/version', () => ({ STRIPE_API_VERSION: '2026-04-22.dahlia' }))
 
 import { POST } from '@/app/api/mobile/membership/subscribe/route'
 
-function post(body: any, user: any = { id: 'u1', email: 'a@b.com' }) {
+function post(body: unknown, user: { id: string; email: string } | null = { id: 'u1', email: 'a@b.com' }) {
   mockGetUserFromBearer.mockResolvedValue(user)
-  return POST(new Request('http://x/api/mobile/membership/subscribe', {
+  return POST(new NextRequest('http://x/api/mobile/membership/subscribe', {
     method: 'POST',
     headers: { authorization: 'Bearer t', 'content-type': 'application/json' },
     body: JSON.stringify(body),
-  }) as any)
+  }))
 }
 
 beforeEach(() => { vi.clearAllMocks(); membershipRow.value = null })
@@ -47,7 +48,7 @@ beforeEach(() => { vi.clearAllMocks(); membershipRow.value = null })
 describe('POST /api/mobile/membership/subscribe — free + guards', () => {
   it('401 when not authenticated', async () => {
     mockGetUserFromBearer.mockResolvedValue(null)
-    const res = await POST(new Request('http://x', { method: 'POST', body: '{}' }) as any)
+    const res = await POST(new NextRequest('http://x', { method: 'POST', body: '{}' }))
     expect(res.status).toBe(401)
   })
 

@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { Suspense } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
@@ -26,17 +27,17 @@ export default async function AdminUsersPage({
   ])
 
   // Merge: prefer golfer_waitlist entries (they have name data); dedupe by email
-  const golferEmails = new Set((golferWaitlist ?? []).map((g: any) => g.email))
+  const golferEmails = new Set((golferWaitlist ?? []).map((g) => g.email))
   const combinedWaitlist = [
-    ...(golferWaitlist ?? []).map((g: any) => ({
+    ...(golferWaitlist ?? []).map((g) => ({
       id: `gw-${g.id}`,
       email: g.email,
       name: [g.first_name, g.last_name].filter(Boolean).join(' ') || null,
       created_at: g.created_at,
     })),
     ...(waitlist ?? [])
-      .filter((w: any) => !golferEmails.has(w.email))
-      .map((w: any) => ({ id: `w-${w.id}`, email: w.email, name: null, created_at: w.created_at })),
+      .filter((w) => !golferEmails.has(w.email))
+      .map((w) => ({ id: `w-${w.id}`, email: w.email, name: null, created_at: w.created_at })),
   ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   // profiles has no email column, email lives in auth.users
@@ -61,9 +62,7 @@ export default async function AdminUsersPage({
     .map(p => ({
       ...p,
       email: emailMap[p.id] ?? '',
-      hasPartnerProfile: Array.isArray((p as any).partner_preferences)
-        ? (p as any).partner_preferences[0]?.is_visible === true
-        : (p as any).partner_preferences?.is_visible === true,
+      hasPartnerProfile: related(p.partner_preferences)?.is_visible === true,
     }))
     .filter(m => {
       const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
@@ -131,7 +130,7 @@ export default async function AdminUsersPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {members.length > 0 ? members.map((m: any) => {
+                {members.length > 0 ? members.map((m) => {
                   const membership = Array.isArray(m.memberships) ? m.memberships[0] : m.memberships
                   const tier = membership?.tier ?? 'fairway'
                   const memberStatus = membership?.status ?? 'active'

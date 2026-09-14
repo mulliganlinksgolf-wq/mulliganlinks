@@ -130,7 +130,6 @@ export function TeeTimeSearch({
   teeTimes,
   courseName,
   selectedDate,
-  tier,
   selfGroupingAvailable,
 }: {
   teeTimes: TeeTime[]

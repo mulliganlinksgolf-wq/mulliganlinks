@@ -99,7 +99,7 @@ export default async function ListBookingPage({
 
       {errorParam === '1' && (
         <div className="rounded-xl p-4" style={{ background: '#163d2a', border: '1px solid #ef4444' }}>
-          <p className="text-red-400 text-sm font-semibold">Couldn't list this time</p>
+          <p className="text-red-400 text-sm font-semibold">Couldn&apos;t list this time</p>
           <p className="text-xs text-[#8FA889] mt-1">
             The course may have disabled trading, or this booking was already listed. Try again or contact support.
           </p>

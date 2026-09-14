@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
 
@@ -68,15 +69,15 @@ export async function sendPairingNotificationsForTomorrow(): Promise<{
 
   if (error) throw error
 
-  const rows: PairingMember[] = (data ?? []).map((b: any) => ({
+  const rows: PairingMember[] = (data ?? []).map((b) => ({
     booking_id: b.id,
     booking_group_id: b.booking_group_id,
-    scheduled_at: b.tee_times.scheduled_at,
+    scheduled_at: related(b.tee_times)!.scheduled_at,
     user_id: b.user_id,
-    full_name: b.profiles_with_email?.full_name ?? null,
-    email: b.profiles_with_email?.email ?? null,
-    course_name: b.tee_times.courses.name,
-    course_slug: b.tee_times.courses.slug,
+    full_name: related(b.profiles_with_email)?.full_name ?? null,
+    email: related(b.profiles_with_email)?.email ?? null,
+    course_name: related(related(b.tee_times)!.courses)!.name,
+    course_slug: related(related(b.tee_times)!.courses)!.slug,
   }))
 
   // Group by booking_group_id

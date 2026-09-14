@@ -53,8 +53,8 @@ export async function saveProfile(
     })
     revalidatePath(`/admin/users/${userId}`)
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -84,8 +84,8 @@ export async function addNote(
     })
     revalidatePath(`/admin/users/${userId}`)
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -114,8 +114,8 @@ export async function editTier(
     revalidatePath(`/admin/users/${userId}`)
     revalidatePath('/admin/users')
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -147,8 +147,8 @@ export async function addCredit(
     })
     revalidatePath(`/admin/users/${userId}`)
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -179,8 +179,8 @@ export async function adjustPoints(
     })
     revalidatePath(`/admin/users/${userId}`)
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -222,25 +222,37 @@ export async function cancelMembership(
       return { success: true }
     } else {
       const sub = await stripe.subscriptions.retrieve(membership.stripe_subscription_id, {
-        expand: ['latest_invoice.payment_intent'],
+        expand: ['latest_invoice'],
       })
 
-      let refundCents = 0
-      const subAny = sub as any
-      const invoice = subAny.latest_invoice
-      if (invoice?.payment_intent?.amount_received && subAny.current_period_start && subAny.current_period_end) {
-        const totalDays = (subAny.current_period_end - subAny.current_period_start) / 86400
-        const daysUsed = (Math.floor(Date.now() / 1000) - subAny.current_period_start) / 86400
-        const daysRemaining = Math.max(0, totalDays - daysUsed)
-        refundCents = Math.round((daysRemaining / totalDays) * invoice.payment_intent.amount_received)
+      // Modern Stripe stores periods on subscription items and payments on invoices.
+      // Accept the older expanded shape as well for existing recorded responses.
+      const legacy = sub as typeof sub & { current_period_start?: number; current_period_end?: number }
+      const periodStart = sub.items?.data[0]?.current_period_start ?? legacy.current_period_start
+      const periodEnd = sub.items?.data[0]?.current_period_end ?? legacy.current_period_end
+      const invoice = typeof sub.latest_invoice === 'object' ? sub.latest_invoice : null
+      let paymentIntent = (invoice as (import('stripe').default.Invoice & { payment_intent?: import('stripe').default.PaymentIntent }) | null)?.payment_intent
+      let paidAmount = paymentIntent?.amount_received ?? 0
+      if (!paymentIntent && invoice?.id && invoice.amount_paid > 0) {
+        const payments = await stripe.invoicePayments.list({ invoice: invoice.id, status: 'paid', limit: 2, expand: ['data.payment.payment_intent'] })
+        if (payments.has_more || payments.data.length !== 1) throw new Error('Review this invoice in Stripe before refunding multiple payments.')
+        const payment = payments.data[0]
+        const intent = payment.payment.payment_intent
+        paymentIntent = typeof intent === 'string' ? await stripe.paymentIntents.retrieve(intent) : intent
+        paidAmount = payment.amount_paid ?? 0
+        if (!paymentIntent) throw new Error('This invoice payment needs a manual refund in Stripe.')
       }
+      if (paidAmount > 0 && (!periodStart || !periodEnd || periodEnd <= periodStart)) throw new Error('Cannot determine the refundable billing period.')
+      if (paidAmount > 0 && !paymentIntent?.latest_charge) throw new Error('Cannot locate the paid charge. Review this invoice in Stripe before canceling.')
+      const canceled = sub.status === 'canceled' ? sub : await stripe.subscriptions.cancel(membership.stripe_subscription_id)
+      const canceledAt = canceled.canceled_at ?? Math.floor(Date.now() / 1000)
+      const ratio = periodStart && periodEnd ? Math.max(0, Math.min(1, (periodEnd - canceledAt) / (periodEnd - periodStart))) : 0
+      const refundCents = Math.round(ratio * paidAmount)
 
-      await stripe.subscriptions.cancel(membership.stripe_subscription_id)
-
-      if (refundCents > 0 && invoice?.payment_intent?.latest_charge) {
-        await stripe.refunds.create({
-          charge: invoice.payment_intent.latest_charge as string,
-          amount: refundCents,
+      if (refundCents > 0 && paymentIntent?.latest_charge) {
+        const charge = typeof paymentIntent.latest_charge === 'string' ? paymentIntent.latest_charge : paymentIntent.latest_charge.id
+        await stripe.refunds.create({ charge, amount: refundCents }, {
+          idempotencyKey: `membership-cancel-${membership.stripe_subscription_id}`,
         })
         await writeAuditLog({
           eventType: 'refund_issued',
@@ -266,7 +278,7 @@ export async function cancelMembership(
       revalidatePath('/admin/users')
       return { success: true, refundAmount: refundCents }
     }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }

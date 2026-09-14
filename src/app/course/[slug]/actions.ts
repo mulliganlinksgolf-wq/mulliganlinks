@@ -118,7 +118,7 @@ export async function toggleSplitTeeDay(
     revalidatePath(`/course/${slug}`)
     return { ok: true }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { ok: false, error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e) }
   }
 }
 
@@ -158,7 +158,7 @@ export async function manuallyOverrideOperatingDay(
     revalidatePath(`/course/${slug}`)
     return { ok: true }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { ok: false, error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e) }
   }
 }
 
@@ -179,6 +179,6 @@ export async function clearManualOverride(
     revalidatePath(`/course/${slug}`)
     return { ok: true }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { ok: false, error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e) }
   }
 }

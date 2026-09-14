@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
@@ -53,6 +54,7 @@ export default async function PartnersPage() {
   const canRequest = tier !== 'fairway'
 
   const today = new Date().toISOString().slice(0, 10)
+  // eslint-disable-next-line react-hooks/purity -- Request-time calculation in an async Server Component.
   const fourteenDays = new Date(Date.now() + 14 * 86_400_000).toISOString().slice(0, 10)
 
   const { count: pendingRequestCount } = await supabase
@@ -99,18 +101,16 @@ export default async function PartnersPage() {
 
   // Hoist preferences out of nested profile join; apply mutual gender filter
   const availabilities = (rows ?? [])
-    .map((row: any) => ({
+    .map((row) => ({
       ...row,
       profile: {
-        id: row.profile?.id,
-        full_name: row.profile?.full_name,
-        avatar_url: row.profile?.avatar_url ?? null,
+        id: related(row.profile)?.id,
+        full_name: related(row.profile)?.full_name,
+        avatar_url: related(row.profile)?.avatar_url ?? null,
       },
-      preferences: Array.isArray(row.profile?.partner_preferences)
-        ? row.profile.partner_preferences[0] ?? undefined
-        : row.profile?.partner_preferences ?? undefined,
+      preferences: related(related(row.profile)?.partner_preferences),
     }))
-    .filter((av: any) => {
+    .filter((av) => {
       const prefs = av.preferences
       if (!prefs) return true // no prefs set, show them
       const posterGender = (prefs.gender ?? 'prefer_not_to_say') as Gender

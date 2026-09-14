@@ -27,7 +27,7 @@ function tagLabel(eventType: string) {
   return eventType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
 }
 
-function detailSummary(details: any): string {
+function detailSummary(details: Record<string, unknown> | null): string {
   if (!details) return ''
   if (details.old_value !== undefined && details.new_value !== undefined) {
     return `${details.old_value ?? '—'} → ${details.new_value}`
@@ -104,7 +104,7 @@ export default async function AuditLogPage({
               <tr>
                 <td colSpan={4} className="px-4 py-8 text-center text-[#6B7770]">No actions found.</td>
               </tr>
-            ) : (rows ?? []).map((row: any) => (
+            ) : (rows ?? []).map((row) => (
               <tr key={row.id} className="hover:bg-[#FAF7F2]/40">
                 <td className="px-4 py-3">
                   <span className={`inline-block px-2 py-0.5 rounded text-xs font-semibold ${TAG_STYLE[row.event_type] ?? 'bg-slate-100 text-slate-600'}`}>

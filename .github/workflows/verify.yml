@@ -1,0 +1,45 @@
+name: Website checks
+on:
+  pull_request:
+  push:
+    branches: [main, 'codex/**']
+permissions:
+  contents: read
+concurrency:
+  group: website-checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    name: Verify website
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: local_test_only
+          POSTGRES_DB: teeahead_verification
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d teeahead_verification"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run verify
+      - run: npm run test:concurrency
+        env:
+          TEST_PGHOST: 127.0.0.1
+          TEST_PGPORT: '5432'
+          TEST_PGUSER: postgres
+          TEST_PGPASSWORD: local_test_only
+      - run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: build_only_placeholder
+          SUPABASE_SERVICE_ROLE_KEY: build_only_placeholder

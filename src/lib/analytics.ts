@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const TIER_PRICE: Record<string, number> = {
@@ -34,18 +35,18 @@ export async function computeAnalytics(_period: string): Promise<AnalyticsResult
   ])
 
   const memberships = membershipsResult.data ?? []
-  const active = memberships.filter((m: any) => m.status === 'active')
-  const canceled = memberships.filter((m: any) => m.status === 'canceled')
+  const active = memberships.filter((m) => m.status === 'active')
+  const canceled = memberships.filter((m) => m.status === 'canceled')
 
-  const mrr = active.reduce((sum: number, m: any) => sum + (TIER_PRICE[m.tier] ?? 0), 0)
+  const mrr = active.reduce((sum: number, m) => sum + (TIER_PRICE[m.tier] ?? 0), 0)
   const totalMembers = memberships.length
   const churnRate = totalMembers > 0 ? Math.round((canceled.length / totalMembers) * 100) : 0
-  const payingMembers = active.filter((m: any) => m.tier !== 'fairway').length
+  const payingMembers = active.filter((m) => m.tier !== 'fairway').length
   const avgRevenuePerMember = payingMembers > 0 ? Math.round((mrr / payingMembers) * 100) / 100 : 0
 
   const tierCounts = ['ace', 'eagle', 'fairway'].map(tier => ({
     tier,
-    count: active.filter((m: any) => m.tier === tier).length,
+    count: active.filter((m) => m.tier === tier).length,
   }))
 
   return {
@@ -66,11 +67,11 @@ export async function getRecentSignups(limit = 10): Promise<RecentSignup[]> {
     .order('created_at', { ascending: false })
     .limit(limit)
 
-  return (data ?? []).map((p: any) => ({
+  return (data ?? []).map((p) => ({
     id: p.id,
     full_name: p.full_name,
     email: p.email ?? '',
-    tier: Array.isArray(p.memberships) ? (p.memberships[0]?.tier ?? 'fairway') : (p.memberships?.tier ?? 'fairway'),
+    tier: related(p.memberships)?.tier ?? 'fairway',
     founding_member: p.founding_member,
     created_at: p.created_at,
   }))

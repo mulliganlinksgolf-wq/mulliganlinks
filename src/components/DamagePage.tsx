@@ -3,8 +3,9 @@
 // Last legal review: April 2026. Review again before major marketing campaigns.
 'use client'
 
-import { useState, useEffect, ReactNode } from 'react'
+import { useState, ReactNode } from 'react'
 import Link from 'next/link'
+import { useAnimatedNumber } from '@/lib/use-animated-number'
 import SoftwareCostLeadCapture from '@/components/SoftwareCostLeadCapture'
 import { METRO_DETROIT_COURSES } from '@/lib/metro-detroit-courses'
 import { TYPICAL_PEAK_RATE, OPERATING_DAYS } from '@/lib/barter-math'
@@ -39,51 +40,9 @@ export function DamagePage({ spotsRemaining }: DamagePageProps) {
   const annualBarterCost = greenFee * operatingDays * barterTeeTimes
   const totalDamage = annualBarterCost * yearsOnGolfNow
 
-  const [displayedAnnual, setDisplayedAnnual] = useState(annualBarterCost)
-  const [displayedTotal, setDisplayedTotal] = useState(totalDamage)
+  const displayedAnnual = useAnimatedNumber(annualBarterCost)
+  const displayedTotal = useAnimatedNumber(totalDamage)
   const [openLeadModal, setOpenLeadModal] = useState(0)
-
-  // Animate annualBarterCost
-  useEffect(() => {
-    const end = annualBarterCost
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDisplayedAnnual(end)
-      return
-    }
-    const start = displayedAnnual
-    const duration = 600
-    const startTime = performance.now()
-    const tick = (now: number) => {
-      const elapsed = now - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setDisplayedAnnual(Math.round(start + (end - start) * eased))
-      if (progress < 1) requestAnimationFrame(tick)
-    }
-    requestAnimationFrame(tick)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [annualBarterCost])
-
-  // Animate totalDamage
-  useEffect(() => {
-    const end = totalDamage
-    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      setDisplayedTotal(end)
-      return
-    }
-    const start = displayedTotal
-    const duration = 600
-    const startTime = performance.now()
-    const tick = (now: number) => {
-      const elapsed = now - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      setDisplayedTotal(Math.round(start + (end - start) * eased))
-      if (progress < 1) requestAnimationFrame(tick)
-    }
-    requestAnimationFrame(tick)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalDamage])
 
   // Tangibles breakdown (inline, mirroring SoftwareCostLeadCapture logic)
   const tangibles = [

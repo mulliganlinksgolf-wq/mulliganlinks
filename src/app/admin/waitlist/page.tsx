@@ -40,10 +40,10 @@ export default async function AdminWaitlistPage({
   ])
 
   // Merge simple email-only signups into golfer list, marking their source
-  const simpleEmails = new Set((golfers ?? []).map((g: any) => g.email))
+  const simpleEmails = new Set((golfers ?? []).map((g) => g.email))
   const emailOnlySignups = (simpleWaitlist ?? [])
-    .filter((w: any) => !simpleEmails.has(w.email))
-    .map((w: any) => ({ ...w, _email_only: true }))
+    .filter((w) => !simpleEmails.has(w.email))
+    .map((w) => ({ ...w, _email_only: true }))
 
   const spotsUsed = counter?.count ?? 0
   const spotsCap = counter?.cap ?? 10
@@ -106,7 +106,7 @@ export default async function AdminWaitlistPage({
               <tbody className="divide-y divide-black/5">
                 {((golfers?.length ?? 0) + emailOnlySignups.length) > 0 ? (
                   <>
-                    {(golfers ?? []).map((g: any) => (
+                    {(golfers ?? []).map((g) => (
                       <tr key={`gw-${g.id}`} className="hover:bg-[#FAF7F2] transition-colors">
                         <td className="px-4 py-3 text-[#6B7770]">{g.id}</td>
                         <td className="px-4 py-3 font-medium text-[#1A1A1A] whitespace-nowrap">
@@ -124,7 +124,7 @@ export default async function AdminWaitlistPage({
                         </td>
                       </tr>
                     ))}
-                    {emailOnlySignups.map((w: any) => (
+                    {emailOnlySignups.map((w) => (
                       <tr key={`w-${w.id}`} className="hover:bg-[#FAF7F2] transition-colors">
                         <td className="px-4 py-3 text-[#6B7770]">—</td>
                         <td className="px-4 py-3 text-[#6B7770] italic text-xs">email only</td>
@@ -173,7 +173,7 @@ export default async function AdminWaitlistPage({
               </thead>
               <tbody className="divide-y divide-black/5">
                 {courses && courses.length > 0 ? (
-                  courses.map((c: any) => (
+                  courses.map((c) => (
                     <tr key={c.id} className="hover:bg-[#FAF7F2] transition-colors">
                       <td className="px-4 py-3">
                         <div className="font-medium text-[#1A1A1A]">{c.course_name}</div>

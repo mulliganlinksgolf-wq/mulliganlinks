@@ -1,5 +1,5 @@
 import { describe, it, expectTypeOf } from 'vitest'
-import type { PartnerPreferences, PartnerRating, PlayStyle, Gender, OpenTo } from '@/types/partners'
+import type { PartnerPreferences, PartnerRating, PlayStyle } from '@/types/partners'
 
 describe('partner types', () => {
   it('PartnerPreferences includes v2 fields', () => {

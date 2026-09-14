@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { BookingForm } from '@/components/BookingForm'
@@ -42,8 +43,9 @@ export default async function BookPage({
   const tier = membership?.tier ?? 'free'
   teeTime.base_price = teeTime.special_price ?? teeTime.base_price
 
-  const course = teeTime.courses as any
-  const stripeEnabled = course?.stripe_charges_enabled === true
+  const course = related(teeTime.courses)
+  if (!course) notFound()
+  const stripeEnabled = related(course)?.stripe_charges_enabled === true
 
   // Display-correct comp rounds (if anniversary has passed, show the reset value without writing)
   const resetAt = membership?.comp_rounds_reset_at ? new Date(membership.comp_rounds_reset_at) : null
@@ -51,7 +53,7 @@ export default async function BookPage({
     ? (COMP_DEFAULT[tier] ?? 0)
     : (membership?.comp_rounds_remaining ?? 0)
 
-  const courseId = (teeTime.courses as any)?.id
+  const courseId = related((teeTime.courses))?.id
 
   const [{ data: pointsRows }, creditBalanceCents, availablePasses, { data: redemptionSettings }, teeSheetConfig, coursePricing] = await Promise.all([
     supabase.from('fairway_points').select('amount').eq('user_id', user.id),
@@ -67,10 +69,7 @@ export default async function BookPage({
   ])
 
   // Resolve cart fee from pricing tiers
-  const rateName = (teeTime as any).rate_name as string | undefined
-  const matchedTier = rateName
-    ? (coursePricing.find(p => p.rate_name === rateName) ?? coursePricing[0])
-    : coursePricing[0] // already ordered by display_order ascending
+  const matchedTier = coursePricing[0] // same default pricing tier used by the server quote
   const resolvedCartFeeCents = matchedTier?.cart_fee_cents ?? 0
 
   const pointsThreshold = (redemptionSettings as { points_threshold: number } | null)?.points_threshold ?? 5000
@@ -84,7 +83,7 @@ export default async function BookPage({
           {stripeEnabled ? 'Complete Booking' : 'Confirm Booking'}
         </h1>
         <p className="text-[#8FA889] mt-1">
-          {course?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
+          {related(course)?.name} · {new Date(teeTime.scheduled_at).toLocaleDateString('en-US', {
             weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
           })}
         </p>
@@ -102,7 +101,7 @@ export default async function BookPage({
 
       {stripeEnabled ? (
         <BookingPaymentForm
-          teeTime={teeTime as any}
+          teeTime={{ ...teeTime, courses: course! }}
           tier={tier}
           userId={user.id}
           availablePasses={availablePasses}
@@ -112,7 +111,7 @@ export default async function BookPage({
         />
       ) : (
         <BookingForm
-          teeTime={teeTime as any}
+          teeTime={{ ...teeTime, courses: course! }}
           tier={tier}
           pointsBalance={pointsBalance}
           creditBalanceCents={creditBalanceCents}

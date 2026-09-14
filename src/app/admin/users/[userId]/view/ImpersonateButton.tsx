@@ -14,8 +14,8 @@ export default function ImpersonateButton({ userId }: { userId: string }) {
       const json = await res.json()
       if (!res.ok || json.error) throw new Error(json.error ?? 'Failed')
       window.open(json.url, '_blank')
-    } catch (e: any) {
-      setError(e.message)
+    } catch (e) {
+      setError((e instanceof Error ? e.message : String(e)))
     } finally {
       setLoading(false)
     }

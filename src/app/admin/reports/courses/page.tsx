@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { requireAdmin } from '@/lib/auth/requireAdmin'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { getCourseNetworkData } from '@/lib/reports/courses'
 import KpiTile from '@/components/reports/KpiTile'
 import CsvExportButton from '@/components/reports/CsvExportButton'
@@ -20,7 +19,6 @@ const HEALTH_LABEL: Record<string, string> = {
 
 export default async function CourseNetworkReportPage() {
   await requireAdmin()
-  const admin = createAdminClient()
 
   const currentMonth = new Date().toISOString().slice(0, 7)
   const { kpis, rows } = await getCourseNetworkData(currentMonth)

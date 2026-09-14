@@ -14,5 +14,5 @@ export function getStripe(): Stripe {
 
 // Proxy so callers can do `import { stripe } from '@/lib/stripe'` and get lazy init
 export const stripe = new Proxy({} as Stripe, {
-  get(_, prop) { return (getStripe() as any)[prop] },
+  get(_, prop) { return Reflect.get(getStripe(), prop) },
 })

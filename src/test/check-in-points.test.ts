@@ -23,7 +23,7 @@ vi.mock('@/lib/stripe/fees', () => ({ platformFeeCents: vi.fn().mockReturnValue(
 // Track every fairway_points insert
 const pointInserts: Record<string, unknown>[] = []
 // Track tee_times updates
-let teeTimeUpdate: Record<string, unknown> | null = null
+let _teeTimeUpdate: Record<string, unknown> | null = null
 // Track booking insert args
 let bookingInsert: Record<string, unknown> | null = null
 
@@ -41,7 +41,7 @@ function buildMock({
   redeemedPointRows?: { amount: number }[]
 } = {}) {
   pointInserts.length = 0
-  teeTimeUpdate = null
+  _teeTimeUpdate = null
   bookingInsert = null
 
   const teeTimeRow = { id: 'tt-1', available_players: availablePlayers, status: 'open', base_price: 30, course_id: teeCourseId }
@@ -65,7 +65,7 @@ function buildMock({
         return Promise.resolve({ data: teeRow, error: null })
       }),
       update: vi.fn((args: Record<string, unknown>) => {
-        if (table === 'tee_times') teeTimeUpdate = args
+        if (table === 'tee_times') _teeTimeUpdate = args
         return chain
       }),
       insert: vi.fn((args: Record<string, unknown>) => {

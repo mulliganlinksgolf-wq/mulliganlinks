@@ -1,14 +1,14 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-function makeChain(data: any) {
-  const chain: any = {
+function makeChain(data: unknown) {
+  const chain = {
     select: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     ilike: vi.fn().mockReturnThis(),
     single: vi.fn().mockResolvedValue({ data, error: null }),
-    then: (resolve: any) => resolve({ data, error: null }),
+    then: (resolve: (value: { data?: unknown; error: null }) => unknown) => resolve({ data, error: null }),
   }
   return chain
 }
@@ -58,8 +58,8 @@ describe('addBlock', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('inserts a new content block', async () => {
-    const insertChain: any = {
-      then: (resolve: any) => resolve({ data: null, error: null }),
+    const insertChain = {
+      then: (resolve: (value: { data?: unknown; error: null }) => unknown) => resolve({ data: null, error: null }),
     }
     const insertFn = vi.fn().mockReturnValue(insertChain)
     mockFrom.mockImplementation((table: string) => {

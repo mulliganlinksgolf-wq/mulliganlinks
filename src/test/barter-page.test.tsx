@@ -18,6 +18,8 @@ vi.mock('next/link', () => ({
 // Mock TeeAheadLogo
 vi.mock('@/components/TeeAheadLogo', () => ({
   TeeAheadLogo: ({ className }: { className?: string }) => (
+    // A lightweight logo mock keeps this test independent of image loading.
+    // eslint-disable-next-line @next/next/no-img-element
     <img src="/brand/teeahead-logo-final.png" alt="TeeAhead" className={className} />
   ),
 }))

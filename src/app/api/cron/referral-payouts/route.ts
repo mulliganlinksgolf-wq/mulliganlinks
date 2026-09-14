@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -28,7 +29,7 @@ export async function POST(req: Request) {
   // Group by course, skipping courses without a Stripe account
   const byCourse = new Map<string, { ids: string[]; total: number; stripeAccount: string }>()
   for (const r of pending) {
-    const acct = (r.courses as any)?.stripe_account_id as string | undefined
+    const acct = related((r.courses))?.stripe_account_id as string | undefined
     if (!acct) continue
     const entry = byCourse.get(r.course_id) ?? { ids: [] as string[], total: 0, stripeAccount: acct }
     entry.ids.push(String(r.id))

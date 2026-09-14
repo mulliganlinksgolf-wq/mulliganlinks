@@ -55,3 +55,9 @@ it('does not let a delayed payment failure overwrite a confirmed payment', async
   expect(db.filters).toContainEqual({ table: 'bookings', key: 'status', value: 'pending_payment' })
   expect(db.filters).toContainEqual({ table: 'bookings', key: 'stripe_payment_intent_id', value: 'pi-1' })
 })
+it('disables the connected account identified by the event, not the application object', async () => {
+  vi.mocked(stripe.webhooks.constructEvent).mockReturnValue({ id: 'evt-disconnect', type: 'account.application.deauthorized', account: 'acct_course', data: { object: { id: 'ca_application' } } } as never)
+  expect((await post()).status).toBe(200)
+  expect(db.filters).toContainEqual({ table: 'courses', key: 'stripe_account_id', value: 'acct_course' })
+  expect(db.writes).toContainEqual(expect.objectContaining({ table: 'courses', value: { stripe_account_status: 'disabled', stripe_charges_enabled: false } }))
+})

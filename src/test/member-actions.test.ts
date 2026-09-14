@@ -18,6 +18,8 @@ const mockStripeSubscriptionsRetrieve = vi.fn().mockResolvedValue({
   current_period_end: Math.floor(Date.now() / 1000) + 86400 * 16,
 })
 const mockStripeSubscriptionsCancel = vi.fn().mockResolvedValue({})
+const mockInvoicePaymentsList = vi.fn()
+const mockPaymentIntentsRetrieve = vi.fn()
 const mockStripeRefundsCreate = vi.fn().mockResolvedValue({})
 
 vi.mock('stripe', () => {
@@ -28,6 +30,8 @@ vi.mock('stripe', () => {
         retrieve: mockStripeSubscriptionsRetrieve,
         cancel: mockStripeSubscriptionsCancel,
       },
+      invoicePayments: { list: mockInvoicePaymentsList },
+      paymentIntents: { retrieve: mockPaymentIntentsRetrieve },
       refunds: {
         create: mockStripeRefundsCreate,
       },
@@ -38,13 +42,13 @@ vi.mock('stripe', () => {
 
 // chainable object — every method returns the chain itself so callers can keep chaining.
 // The chain is also thenable so `await chain` resolves to { error: null }.
-const mockChain: any = {
+const mockChain = {
   select: mockSelect,
   insert: mockInsert,
   update: mockUpdate,
   eq: mockEq,
   single: mockSingle,
-  then: (resolve: any) => Promise.resolve({ error: null }).then(resolve),
+  then: (resolve: (value: { data?: unknown; error: null }) => unknown) => Promise.resolve({ error: null }).then(resolve),
 }
 
 function resetChain() {
@@ -209,6 +213,27 @@ describe('cancelMembership', () => {
     expect(writeAuditLog).toHaveBeenCalledWith(
       expect.objectContaining({ eventType: 'membership_cancelled' })
     )
+  })
+
+  it('refunds the invoice allocation using modern Stripe periods and reuses the cancellation time on retry', async () => {
+    const sub = { status: 'canceled', canceled_at: 1500, items: { data: [{ current_period_start: 1000, current_period_end: 2000 }] }, latest_invoice: { id: 'in_test', amount_paid: 10000 } }
+    mockStripeSubscriptionsRetrieve.mockResolvedValueOnce(sub).mockResolvedValueOnce(sub)
+    mockInvoicePaymentsList.mockResolvedValue({ has_more: false, data: [{ amount_paid: 10000, payment: { payment_intent: 'pi_test' } }] })
+    mockPaymentIntentsRetrieve.mockResolvedValue({ amount_received: 20000, latest_charge: { id: 'ch_test' } })
+    for (let attempt = 0; attempt < 2; attempt++) {
+      expect(await cancelMembership('user-1', 'now')).toEqual({ success: true, refundAmount: 5000 })
+    }
+    expect(mockStripeSubscriptionsCancel).not.toHaveBeenCalled()
+    expect(mockStripeRefundsCreate).toHaveBeenNthCalledWith(1, { charge: 'ch_test', amount: 5000 }, { idempotencyKey: 'membership-cancel-sub_abc' })
+    expect(mockStripeRefundsCreate).toHaveBeenNthCalledWith(2, { charge: 'ch_test', amount: 5000 }, { idempotencyKey: 'membership-cancel-sub_abc' })
+  })
+
+  it('stops before canceling when a paid invoice cannot be refunded safely', async () => {
+    mockStripeSubscriptionsRetrieve.mockResolvedValueOnce({ items: { data: [{ current_period_start: 1000, current_period_end: 2000 }] }, latest_invoice: { id: 'in_test', amount_paid: 10000 } })
+    mockInvoicePaymentsList.mockResolvedValueOnce({ has_more: true, data: [] })
+    expect((await cancelMembership('user-1', 'now')).error).toMatch(/multiple payments/)
+    expect(mockStripeSubscriptionsCancel).not.toHaveBeenCalled()
+    expect(mockStripeRefundsCreate).not.toHaveBeenCalled()
   })
 
   it('returns error when no stripe_subscription_id', async () => {

@@ -1,4 +1,6 @@
 'use server'
+import { related } from '@/lib/supabase/related'
+
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
@@ -45,9 +47,9 @@ export async function sendBroadcastEmail(formData: FormData): Promise<void> {
     .eq('status', 'active')
 
   const recipients = (members ?? [])
-    .map((m: any) => ({
-      email: m.profiles?.email ?? '',
-      name: m.profiles?.full_name ?? null,
+    .map((m) => ({
+      email: related(m.profiles)?.email ?? '',
+      name: related(m.profiles)?.full_name ?? null,
     }))
     .filter((r: { email: string; name: string | null }) => r.email)
 

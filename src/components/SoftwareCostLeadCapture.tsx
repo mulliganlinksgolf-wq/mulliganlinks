@@ -51,8 +51,6 @@ interface Props {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const SESSION_KEY = 'ta_lead_shown'
-const STANDARD_MONTHLY = 349
-const STANDARD_ANNUAL = STANDARD_MONTHLY * 12
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -87,7 +85,7 @@ export default function SoftwareCostLeadCapture({
   autoFireThreshold = 5000,
   openTrigger,
 }: Props) {
-  const [modalOpen, setModalOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(!!openTrigger && openTrigger > 0)
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
@@ -99,10 +97,11 @@ export default function SoftwareCostLeadCapture({
   })
   const [errors, setErrors] = useState<Partial<typeof form>>({})
 
-  // Open modal when parent increments openTrigger
-  useEffect(() => {
+  const [handledTrigger, setHandledTrigger] = useState(openTrigger)
+  if (openTrigger !== handledTrigger) {
+    setHandledTrigger(openTrigger)
     if (openTrigger && openTrigger > 0) setModalOpen(true)
-  }, [openTrigger])
+  }
 
   // Auto-fire modal once per session when total exceeds threshold
   useEffect(() => {
@@ -224,8 +223,8 @@ export default function SoftwareCostLeadCapture({
                   Get your full cost breakdown
                 </h2>
                 <p style={styles.modalSub}>
-                  We'll send you a personalized PDF showing your exact extraction
-                  numbers, and what you'd save with TeeAhead.
+                  We&apos;ll send you a personalized PDF showing your exact extraction
+                  numbers, and what you&apos;d save with TeeAhead.
                 </p>
 
                 {/* Pain summary */}
@@ -326,16 +325,16 @@ export default function SoftwareCostLeadCapture({
                 </div>
 
                 <p style={styles.modalFootnote}>
-                  No spam. We'll also let you know when TeeAhead launches in
+                  No spam. We&apos;ll also let you know when TeeAhead launches in
                   Metro Detroit.
                 </p>
               </>
             ) : (
               <div style={styles.successBox}>
                 <div style={styles.successIcon}>✓</div>
-                <h2 style={styles.successTitle}>You're on the list</h2>
+                <h2 style={styles.successTitle}>You&apos;re on the list</h2>
                 <p style={styles.successSub}>
-                  We'll send your cost breakdown to{' '}
+                  We&apos;ll send your cost breakdown to{' '}
                   <strong>{form.email}</strong> shortly. Neil will also reach
                   out personally before launch.
                 </p>

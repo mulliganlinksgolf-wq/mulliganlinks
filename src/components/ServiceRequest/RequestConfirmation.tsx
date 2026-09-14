@@ -38,7 +38,7 @@ export function RequestConfirmation({ onDismiss }: RequestConfirmationProps) {
             Got it, the pro shop has been notified.
           </p>
           <p className="text-[#86efac] font-sans text-xs mt-1">
-            You'll get a notification when they're on it.
+            You&apos;ll get a notification when they&apos;re on it.
           </p>
         </div>
       </div>

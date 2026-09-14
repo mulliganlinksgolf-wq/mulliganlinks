@@ -73,7 +73,7 @@ export default async function CourseTeamPage({
           </thead>
           <tbody className="divide-y divide-black/5">
             {(members ?? []).map(m => {
-              const p = profileMap[m.user_id] as any
+              const p = profileMap[m.user_id]
               const name = p?.full_name ?? '—'
               const email = p?.email ?? '—'
               const isPending = !p?.last_sign_in_at

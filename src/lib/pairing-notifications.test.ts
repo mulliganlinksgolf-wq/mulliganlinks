@@ -28,7 +28,7 @@ describe('parseFirstName', () => {
   })
   it('returns empty for empty input', () => {
     expect(parseFirstName('')).toBe('')
-    expect(parseFirstName(null as any)).toBe('')
-    expect(parseFirstName(undefined as any)).toBe('')
+    expect(parseFirstName(null)).toBe('')
+    expect(parseFirstName(undefined)).toBe('')
   })
 })

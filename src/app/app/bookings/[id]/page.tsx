@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
@@ -28,13 +29,14 @@ export default async function BookingDetailPage({
 
   if (!booking) notFound()
 
-  const tt = booking.tee_times as any
-  const course = tt?.courses
-  const scheduledAt = new Date(tt?.scheduled_at)
+  const tt = booking.tee_times
+  const course = related(tt)?.courses
+  const scheduledAt = new Date(related(tt)?.scheduled_at)
+  // eslint-disable-next-line react-hooks/purity -- Request-time calculation in an async Server Component.
   const canCancel = booking.status === 'pending_payment' || (booking.status === 'confirmed' && (booking.cancellation_requested_at || scheduledAt.getTime() - Date.now() > 60 * 60 * 1000))
 
   const calendarDate = scheduledAt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
-  const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tee+Time+at+${encodeURIComponent(course?.name ?? '')}&dates=${calendarDate}/${calendarDate}&details=Booked+via+TeeAhead`
+  const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tee+Time+at+${encodeURIComponent(related(course)?.name ?? '')}&dates=${calendarDate}/${calendarDate}&details=Booked+via+TeeAhead`
 
   return (
     <div className="max-w-lg space-y-6">
@@ -52,7 +54,7 @@ export default async function BookingDetailPage({
         <CardContent className="pt-5 pb-5 space-y-3 text-sm">
           <div className="flex justify-between">
             <span className="text-[#6B7770]">Course</span>
-            <span className="font-medium text-[#1A1A1A]">{course?.name}</span>
+            <span className="font-medium text-[#1A1A1A]">{related(course)?.name}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-[#6B7770]">Date & time</span>
@@ -102,12 +104,12 @@ export default async function BookingDetailPage({
 
       {canCancel && <CancelBookingButton bookingId={booking.id} />}
 
-      {tt?.course_id && tt?.scheduled_at && (
+      {related(tt)?.course_id && related(tt)?.scheduled_at && (
         <RequestButton
-          courseId={tt.course_id}
+          courseId={related(tt)!.course_id}
           bookingId={booking.id}
-          teeTime={tt.scheduled_at}
-          serviceRequestsEnabled={course?.service_requests_enabled ?? true}
+          teeTime={related(tt)!.scheduled_at}
+          serviceRequestsEnabled={related(course)?.service_requests_enabled ?? true}
         />
       )}
     </div>

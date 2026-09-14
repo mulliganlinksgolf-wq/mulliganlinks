@@ -41,7 +41,7 @@ export async function getMemberForCheckIn(memberId: string) {
       .eq('user_id', memberId),
   ])
 
-  const balance = (points ?? []).reduce((sum: number, r: any) => sum + r.amount, 0)
+  const balance = (points ?? []).reduce((sum: number, r) => sum + r.amount, 0)
   return { profile, balance }
 }
 

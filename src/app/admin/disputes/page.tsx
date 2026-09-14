@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import DisputeList from '@/components/admin/DisputeList'
 import { type DisputeRow } from '@/components/admin/DisputeDetailPanel'
@@ -20,8 +21,8 @@ export default async function DisputesPage() {
   const disputes = disputesResult.data ?? []
   const auditRows = auditResult.data ?? []
 
-  const bookingIds = disputes.map((d: any) => d.booking_id).filter(Boolean)
-  let memberMap: Record<string, { name: string | null; email: string | null }> = {}
+  const bookingIds = disputes.map((d) => d.booking_id).filter(Boolean)
+  const memberMap: Record<string, { name: string | null; email: string | null }> = {}
 
   if (bookingIds.length > 0) {
     const { data: bookings } = await admin
@@ -31,13 +32,13 @@ export default async function DisputesPage() {
 
     for (const b of bookings ?? []) {
       memberMap[b.id] = {
-        name: (b as any).profiles?.full_name ?? null,
-        email: (b as any).profiles?.email ?? null,
+        name: related((b).profiles)?.full_name ?? null,
+        email: related((b).profiles)?.email ?? null,
       }
     }
   }
 
-  const rows: DisputeRow[] = disputes.map((d: any) => ({
+  const rows: DisputeRow[] = disputes.map((d) => ({
     id: d.id,
     stripe_dispute_id: d.stripe_dispute_id ?? '',
     amount_cents: d.amount_cents ?? 0,
@@ -49,8 +50,8 @@ export default async function DisputesPage() {
     member_name: d.booking_id ? (memberMap[d.booking_id]?.name ?? null) : null,
     member_email: d.booking_id ? (memberMap[d.booking_id]?.email ?? null) : null,
     timeline: auditRows
-      .filter((a: any) => a.target_id === (d.stripe_dispute_id ?? d.id))
-      .map((a: any) => ({ event_type: a.event_type, created_at: a.created_at, details: a.details })),
+      .filter((a) => a.target_id === (d.stripe_dispute_id ?? d.id))
+      .map((a) => ({ event_type: a.event_type, created_at: a.created_at, details: a.details })),
   }))
 
   return (

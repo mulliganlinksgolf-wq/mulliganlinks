@@ -63,7 +63,7 @@ export default async function MyAvailabilityPage() {
       <div>
         <h1 className="text-2xl font-bold text-white">My Availability</h1>
         <p className="text-[#8FA889] mt-1">
-          Let other members know when you're free to play.
+          Let other members know when you&apos;re free to play.
         </p>
       </div>
 
@@ -92,7 +92,7 @@ export default async function MyAvailabilityPage() {
                     <span className="text-[#8FA889]">{s.holes === 'either' ? 'Any holes' : `${s.holes} holes`}</span>
                   </p>
                   {s.courses && <p className="text-xs text-[#8FA889]">{s.courses.name}</p>}
-                  {s.notes && <p className="text-xs text-[#8FA889] italic">"{s.notes}"</p>}
+                  {s.notes && <p className="text-xs text-[#8FA889] italic">&quot;{s.notes}&quot;</p>}
                 </div>
                 <DeleteAvailabilityButton availabilityId={s.id} />
               </div>

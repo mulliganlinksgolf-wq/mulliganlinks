@@ -102,11 +102,11 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
         {/* Section 1: Definitions */}
         <View style={S.section}>
           <Text style={S.sectionTitle}>1. Definitions</Text>
-          <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}><Text style={S.bold}>"Benefits Schedule"</Text> means the member benefit tiers, associated course discount rates, and barter credit values published by TeeAhead, as updated from time to time with thirty (30) days written notice to Partner Course.</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}><Text style={S.bold}>"Eagle Member"</Text> means a TeeAhead subscriber at the Eagle tier ($89/month), entitled to standard benefits at Partner Courses as defined in the Benefits Schedule.</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(c)</Text><Text style={S.bulletText}><Text style={S.bold}>"Ace Member"</Text> means a TeeAhead subscriber at the Ace tier ($159/month), entitled to premium benefits at Partner Courses as defined in the Benefits Schedule.</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}><Text style={S.bold}>"Platform"</Text> means TeeAhead's web application, member portal, booking tools, and associated services available at teeahead.com.</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(e)</Text><Text style={S.bulletText}><Text style={S.bold}>"Founding Partner Period"</Text> means the Initial Term defined in Section 5 below.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}><Text style={S.bold}>&quot;Benefits Schedule&quot;</Text> means the member benefit tiers, associated course discount rates, and barter credit values published by TeeAhead, as updated from time to time with thirty (30) days written notice to Partner Course.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}><Text style={S.bold}>&quot;Eagle Member&quot;</Text> means a TeeAhead subscriber at the Eagle tier ($89/month), entitled to standard benefits at Partner Courses as defined in the Benefits Schedule.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(c)</Text><Text style={S.bulletText}><Text style={S.bold}>&quot;Ace Member&quot;</Text> means a TeeAhead subscriber at the Ace tier ($159/month), entitled to premium benefits at Partner Courses as defined in the Benefits Schedule.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}><Text style={S.bold}>&quot;Platform&quot;</Text> means TeeAhead&apos;s web application, member portal, booking tools, and associated services available at teeahead.com.</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(e)</Text><Text style={S.bulletText}><Text style={S.bold}>&quot;Founding Partner Period&quot;</Text> means the Initial Term defined in Section 5 below.</Text></View>
         </View>
 
         {/* Section 2: Partner Course Obligations */}
@@ -116,7 +116,7 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
           <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}>Honor TeeAhead Member benefits for all Eagle and Ace Members presenting valid TeeAhead membership at the time of play, in accordance with the Benefits Schedule then in effect;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}>Maintain accurate tee time availability information on the Platform, or provide updated availability to TeeAhead within forty-eight (48) hours of any material change to the tee sheet;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(c)</Text><Text style={S.bulletText}>Designate a primary point of contact for TeeAhead communications and respond to TeeAhead inquiries within three (3) business days;</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}>Participate in a minimum of two (2) co-marketing initiatives per calendar year, which may include email promotions, seasonal tee time offers, or Platform feature placements, coordinated with TeeAhead's marketing team;</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}>Participate in a minimum of two (2) co-marketing initiatives per calendar year, which may include email promotions, seasonal tee time offers, or Platform feature placements, coordinated with TeeAhead&apos;s marketing team;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(e)</Text><Text style={S.bulletText}>Refrain from publicly disparaging TeeAhead or the TeeAhead Platform during the Term.</Text></View>
         </View>
 
@@ -124,8 +124,8 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
         <View style={S.section}>
           <Text style={S.sectionTitle}>3. TeeAhead Obligations</Text>
           <Text style={S.para}>During the Term, TeeAhead agrees to:</Text>
-          <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}>List {course.name} on the Platform as a Founding Partner, with permanent "Founding Partner" designation and priority placement in member search results and recommendations throughout the Founding Partner Period;</Text></View>
-          <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}>Actively market {course.name} to the TeeAhead member base through Platform features, email campaigns, and digital channels at TeeAhead's reasonable discretion;</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(a)</Text><Text style={S.bulletText}>List {course.name} on the Platform as a Founding Partner, with permanent &quot;Founding Partner&quot; designation and priority placement in member search results and recommendations throughout the Founding Partner Period;</Text></View>
+          <View style={S.bullet}><Text style={S.bulletMark}>(b)</Text><Text style={S.bulletText}>Actively market {course.name} to the TeeAhead member base through Platform features, email campaigns, and digital channels at TeeAhead&apos;s reasonable discretion;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(c)</Text><Text style={S.bulletText}>Provide Partner Course with a monthly activity report summarizing TeeAhead Member visits, round bookings, and benefit redemptions attributable to TeeAhead;</Text></View>
           <View style={S.bullet}><Text style={S.bulletMark}>(d)</Text><Text style={S.bulletText}>Lock all material partner terms, including the Platform Fee, benefit rates, and Founding Partner placement, for the full Initial Term. No unilateral fee increase or material term change will be made without sixty (60) days written notice and Partner Course written consent.</Text></View>
         </View>
@@ -134,7 +134,7 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
         <View style={S.section}>
           <Text style={S.sectionTitle}>4. Platform Fee</Text>
           <Text style={S.para}>
-            Partner Course agrees to pay TeeAhead a monthly Platform Fee of <Text style={S.bold}>${monthlyFeeStr} USD</Text> (the "Platform Fee"), due on the first (1st) calendar day of each month. The Platform Fee for the first full month following execution is waived as a complimentary onboarding period.
+            Partner Course agrees to pay TeeAhead a monthly Platform Fee of <Text style={S.bold}>${monthlyFeeStr} USD</Text> (the &quot;Platform Fee&quot;), due on the first (1st) calendar day of each month. The Platform Fee for the first full month following execution is waived as a complimentary onboarding period.
           </Text>
           <Text style={S.para}>
             Annual equivalent: <Text style={S.bold}>${annualFee} USD</Text>. The Platform Fee is all-inclusive and covers Platform listing, member traffic generation, monthly reporting, and co-marketing services. TeeAhead does not charge per-round commissions, booking fees, or revenue share of any kind.
@@ -148,7 +148,7 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
         <View style={S.section}>
           <Text style={S.sectionTitle}>5. Term and Renewal</Text>
           <Text style={S.para}>
-            This Agreement commences on the Effective Date and continues for a period of <Text style={S.bold}>{contractYears} {contractYears === 1 ? 'year' : 'years'}</Text> (the "Initial Term"), expiring on <Text style={S.bold}>{endDateStr}</Text>. Upon expiration of the Initial Term, this Agreement will automatically renew for successive one (1) year terms unless either party provides written notice of non-renewal no fewer than sixty (60) days prior to the end of the then-current term.
+            This Agreement commences on the Effective Date and continues for a period of <Text style={S.bold}>{contractYears} {contractYears === 1 ? 'year' : 'years'}</Text> (the &quot;Initial Term&quot;), expiring on <Text style={S.bold}>{endDateStr}</Text>. Upon expiration of the Initial Term, this Agreement will automatically renew for successive one (1) year terms unless either party provides written notice of non-renewal no fewer than sixty (60) days prior to the end of the then-current term.
           </Text>
         </View>
 
@@ -164,7 +164,7 @@ export function FoundingPartnerAgreementPDF({ course, generatedAt, contractYears
         <View style={S.section}>
           <Text style={S.sectionTitle}>7. Limitation of Liability</Text>
           <Text style={S.para}>
-            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NEITHER PARTY SHALL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. TEEAHEAD'S AGGREGATE LIABILITY FOR ANY AND ALL CLAIMS ARISING UNDER THIS AGREEMENT SHALL NOT EXCEED THE TOTAL PLATFORM FEES PAID BY PARTNER COURSE IN THE THREE (3) MONTHS IMMEDIATELY PRECEDING THE CLAIM.
+            TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, NEITHER PARTY SHALL BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, PUNITIVE, OR CONSEQUENTIAL DAMAGES ARISING OUT OF OR RELATED TO THIS AGREEMENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. TEEAHEAD&apos;S AGGREGATE LIABILITY FOR ANY AND ALL CLAIMS ARISING UNDER THIS AGREEMENT SHALL NOT EXCEED THE TOTAL PLATFORM FEES PAID BY PARTNER COURSE IN THE THREE (3) MONTHS IMMEDIATELY PRECEDING THE CLAIM.
           </Text>
         </View>
 

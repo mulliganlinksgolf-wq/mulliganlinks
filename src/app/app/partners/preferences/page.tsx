@@ -47,7 +47,7 @@ export default async function PreferencesPage() {
       ) : (
         <PreferencesForm
           existing={existing as PartnerPreferences | null}
-          avatarUrl={(profile as any)?.avatar_url ?? null}
+          avatarUrl={(profile)?.avatar_url ?? null}
         />
       )}
     </div>

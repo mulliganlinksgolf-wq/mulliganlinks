@@ -101,7 +101,7 @@ export function PartnerCard({ availability, canRequest, alreadyRequested, onRequ
 
       {course && <p className="text-xs text-[#8FA889]">📍 {course.name}</p>}
       {preferences?.bio && <p className="text-sm text-[#8FA889] line-clamp-2">{preferences.bio}</p>}
-      {availability.notes && <p className="text-xs text-[#8FA889] italic">"{availability.notes}"</p>}
+      {availability.notes && <p className="text-xs text-[#8FA889] italic">&quot;{availability.notes}&quot;</p>}
 
       {canRequest ? (
         alreadyRequested ? (

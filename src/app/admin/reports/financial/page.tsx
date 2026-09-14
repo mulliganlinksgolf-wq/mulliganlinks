@@ -1,5 +1,4 @@
 import { requireAdmin } from '@/lib/auth/requireAdmin'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { resolveDateRange } from '@/lib/reports/dateRange'
 import { getFinancialKpis, getRevenueByMonth, getMrrHistory, getPnlByMonth, EXPENSE_CATEGORIES } from '@/lib/reports/financial'
 import KpiTile from '@/components/reports/KpiTile'
@@ -16,7 +15,6 @@ export default async function FinancialReportPage({
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   await requireAdmin()
-  const admin = createAdminClient()
 
   const sp = await searchParams
   const range = resolveDateRange(sp.preset, sp.from, sp.to)

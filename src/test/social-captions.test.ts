@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockCreate = vi.fn()
@@ -15,7 +16,6 @@ vi.mock('@anthropic-ai/sdk', () => {
   }
 })
 
-import Anthropic from '@anthropic-ai/sdk'
 
 const mockCaptionsJson = {
   instagram: {
@@ -39,7 +39,7 @@ describe('caption generation route', () => {
 
   it('returns captions for requested platforms', async () => {
     const { POST } = await import('@/app/api/social/generate-caption/route')
-    const req = new Request('http://localhost/api/social/generate-caption', {
+    const req = new NextRequest('http://localhost/api/social/generate-caption', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -49,7 +49,7 @@ describe('caption generation route', () => {
         audience: 'Course Operators',
       }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req)
     const data = await res.json()
 
     expect(res.status).toBe(200)
@@ -64,7 +64,7 @@ describe('caption generation route', () => {
     })
 
     const { POST } = await import('@/app/api/social/generate-caption/route')
-    const req = new Request('http://localhost/api/social/generate-caption', {
+    const req = new NextRequest('http://localhost/api/social/generate-caption', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -74,7 +74,7 @@ describe('caption generation route', () => {
         audience: 'Golfers',
       }),
     })
-    const res = await POST(req as any)
+    const res = await POST(req)
     const data = await res.json()
 
     expect(res.status).toBe(500)

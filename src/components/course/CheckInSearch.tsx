@@ -20,8 +20,6 @@ type Member = {
 
 export default function CheckInSearch({
   courseId,
-  courseName,
-  slug,
 }: {
   courseId: string
   courseName: string

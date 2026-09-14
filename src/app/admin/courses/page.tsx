@@ -52,7 +52,7 @@ export default async function AdminCoursesPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-black/5">
-              {courses && courses.length > 0 ? courses.map((c: any) => (
+              {courses && courses.length > 0 ? courses.map((c) => (
                 <tr key={c.id} className="hover:bg-[#FAF7F2]/50 transition-colors">
                   <td className="px-5 py-3 font-medium text-[#1A1A1A]">{c.name}</td>
                   <td className="px-5 py-3 text-[#6B7770]">{c.city}, {c.state}</td>

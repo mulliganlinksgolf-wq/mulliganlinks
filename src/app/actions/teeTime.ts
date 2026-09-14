@@ -1,4 +1,6 @@
 'use server'
+import { related } from '@/lib/supabase/related'
+
 
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -193,14 +195,14 @@ export async function sendWalkInConfirmation({
   // Persist email so it pre-fills next time
   await supabase.from('bookings').update({ guest_email: email }).eq('id', bookingId)
 
-  const teeTime = (booking as any).tee_times
-  const courseName = teeTime?.courses?.name ?? 'your course'
+  const teeTime = (booking).tee_times
+  const courseName = related(related(teeTime)?.courses)?.name ?? 'your course'
 
   sendPhoneBookingConfirmation({
     guestName: booking.guest_name ?? 'Guest',
     guestEmail: email,
     courseName,
-    teeTimeIso: teeTime?.scheduled_at ?? new Date().toISOString(),
+    teeTimeIso: related(teeTime)?.scheduled_at ?? new Date().toISOString(),
     players: booking.players,
     totalPaid: booking.total_paid,
     paymentMethod: booking.payment_method as 'cash' | 'card' | 'unpaid',
@@ -288,6 +290,6 @@ export async function setTeeTimeDeal(
     revalidatePath('/app/courses/[slug]', 'page')
     return { ok: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

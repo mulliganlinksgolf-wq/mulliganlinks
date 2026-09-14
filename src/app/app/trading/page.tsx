@@ -145,6 +145,7 @@ export default async function TradingPage({
           listings.map(l => {
             const scheduledAt = new Date(l.tee_times?.scheduled_at)
             const expiresAt   = new Date(l.expires_at)
+            // eslint-disable-next-line react-hooks/purity -- Request-time calculation in an async Server Component.
             const hoursLeft   = Math.floor((expiresAt.getTime() - Date.now()) / (1000 * 60 * 60))
 
             async function handleClaim() {

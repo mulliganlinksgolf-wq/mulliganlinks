@@ -8,7 +8,7 @@ interface CourseWaitlistSectionProps {
   spotsRemaining: number
 }
 
-export function CourseWaitlistSection({ spotsRemaining }: CourseWaitlistSectionProps) {
+export function CourseWaitlistSection({}: CourseWaitlistSectionProps) {
   const [expiryDate, setExpiryDate] = useState('')
 
   return (

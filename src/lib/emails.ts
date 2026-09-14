@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { Resend } from 'resend'
 
@@ -18,7 +19,6 @@ function getResend(): Resend | null {
 
 export async function sendBookingConfirmation({
   userId,
-  bookingId,
   players,
   total,
   pointsEarned,
@@ -45,21 +45,20 @@ export async function sendBookingConfirmation({
     const email = profile?.email ?? user?.email
     if (!email) return
 
-    const course = (teeTime as any)?.courses
-    const courseSlug = course?.slug ?? ''
+    const course = (teeTime)?.courses
     const { date: dateStr, time: timeStr } = fmtDateTime(teeTime?.scheduled_at ?? '')
     const firstName = profile?.full_name?.split(' ')[0] ?? 'there'
 
     await resend.emails.send({
       from: 'TeeAhead <hello@teeahead.com>',
       to: email,
-      subject: `You're on the tee, ${course?.name} ${dateStr}`,
+      subject: `You're on the tee, ${related(course)?.name} ${dateStr}`,
       html: `
         <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
           <h2 style="color: #1B4332;">Booking confirmed ⛳</h2>
           <p>Hey ${firstName}, you're all set.</p>
           <table style="width: 100%; border-collapse: collapse; margin: 16px 0;">
-            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Course</td><td style="padding: 8px 0; font-weight: 600; border-bottom: 1px solid #eee;">${course?.name}</td></tr>
+            <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Course</td><td style="padding: 8px 0; font-weight: 600; border-bottom: 1px solid #eee;">${related(course)?.name}</td></tr>
             <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Date</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${dateStr}</td></tr>
             <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Tee time</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${timeStr}</td></tr>
             <tr><td style="padding: 8px 0; color: #6B7770; border-bottom: 1px solid #eee;">Players</td><td style="padding: 8px 0; border-bottom: 1px solid #eee;">${players}</td></tr>
@@ -115,7 +114,7 @@ export async function sendCourseBookingAlert({
       .eq('course_id', courseId)
 
     const adminEmails = (admins ?? [])
-      .map((a: any) => a.profiles?.email)
+      .map((a) => related(a.profiles)?.email)
       .filter(Boolean) as string[]
 
     if (adminEmails.length === 0) return

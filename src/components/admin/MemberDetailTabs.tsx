@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, type ComponentProps } from 'react'
 import ProfileTab from '@/components/admin/tabs/ProfileTab'
 import MembershipTab from '@/components/admin/tabs/MembershipTab'
 import PaymentsTab from '@/components/admin/tabs/PaymentsTab'
@@ -13,12 +13,12 @@ type Tab = typeof TABS[number]
 
 interface MemberDetailTabsProps {
   userId: string
-  profile: any
-  membership: any
-  bookings: any[]
-  credits: any[]
-  points: any[]
-  notes: any[]
+  profile: ComponentProps<typeof ProfileTab>['profile']
+  membership: ComponentProps<typeof MembershipTab>['membership']
+  bookings: ComponentProps<typeof BookingsTab>['bookings'] & ComponentProps<typeof PaymentsTab>['bookings']
+  credits: ComponentProps<typeof CreditsTab>['credits']
+  points: ComponentProps<typeof PointsTab>['points']
+  notes: ComponentProps<typeof NotesTab>['notes']
   courses: { id: string; name: string }[]
   homeCourse: { id: string; name: string } | null
 }

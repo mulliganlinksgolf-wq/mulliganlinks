@@ -529,16 +529,16 @@ export async function getGuestData(
     details = [
       ...guestUserIds.map(id => ({
         userId: id,
-        fullName: (profileMap.get(id) as any)?.full_name ?? 'Member',
+        fullName: (profileMap.get(id))?.full_name ?? 'Member',
         source: 'Guest Pass',
-        joinDate: (profileMap.get(id) as any)?.created_at?.slice(0, 10) ?? '',
+        joinDate: (profileMap.get(id))?.created_at?.slice(0, 10) ?? '',
         tier: tierMap.get(id) ?? 'fairway',
       })),
       ...referralProfileIds.map(id => ({
         userId: id,
-        fullName: (profileMap.get(id) as any)?.full_name ?? 'Member',
+        fullName: (profileMap.get(id))?.full_name ?? 'Member',
         source: 'Referral Link',
-        joinDate: (profileMap.get(id) as any)?.created_at?.slice(0, 10) ?? '',
+        joinDate: (profileMap.get(id))?.created_at?.slice(0, 10) ?? '',
         tier: tierMap.get(id) ?? 'fairway',
       })),
     ]
@@ -602,7 +602,7 @@ export async function getLeagueData(
     .order('month', { ascending: false })
     .limit(1)
     .maybeSingle()
-  const avgGreenFeeCents = Math.round(((kpisRow as any)?.avg_green_fee ?? 45) * 100)
+  const avgGreenFeeCents = Math.round(((kpisRow)?.avg_green_fee ?? 45) * 100)
 
   const confirmedUserIds = new Set(
     (slots ?? []).flatMap(s =>
