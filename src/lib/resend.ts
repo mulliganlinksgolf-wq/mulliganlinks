@@ -82,7 +82,6 @@ export async function sendWelcomeEmail({
 export async function sendGolferWaitlistConfirmation({
   email,
   firstName,
-  position,
 }: {
   email: string
   firstName: string
@@ -97,10 +96,10 @@ export async function sendGolferWaitlistConfirmation({
   await client.emails.send({
     from: 'TeeAhead <hello@teeahead.com>',
     to: email,
-    subject: `You're #${position} on the TeeAhead waitlist ⛳`,
+    subject: "You’re on the TeeAhead waitlist ⛳",
     html: `
       <div style="font-family: sans-serif; max-width: 480px; color: #1A1A1A;">
-        <h2 style="color: #1B4332;">You're #${position} on the list ⛳</h2>
+        <h2 style="color: #1B4332;">You’re on the list ⛳</h2>
         <p>Hey ${firstName},</p>
         <p>You're officially on the TeeAhead waitlist. We're launching in Metro Detroit and you'll be
         among the first to know when we go live.</p>
