@@ -75,7 +75,7 @@ export function BookingForm({
 
   // Comp/free round covers the member's own green fee (1 player), others still pay
   const memberFeeDiscount = (useCompRound || useFreeRound) ? teeTime.base_price : 0
-  const guestDiscount = useGuestPass ? 15 : 0
+  const guestDiscount = useGuestPass ? Math.min(15, teeTime.base_price) : 0
   const cartFeeAdded = (cartSelected && cartPolicy !== 'walking_only') ? cartFeeCents / 100 : 0
   const afterFreeDiscounts = subtotal - memberFeeDiscount - guestDiscount + cartFeeAdded
   const creditsValue = useCredits
@@ -101,7 +101,7 @@ export function BookingForm({
   function handleSubmit() {
     setError(null)
     startTransition(async () => {
-      const result = await (confirmBooking as any)({
+      const result = await confirmBooking({
         teeTimeId: teeTime.id,
         userId,
         players,

@@ -1,110 +1,62 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-
-const mockConstructEvent = vi.fn()
-const mockSubRetrieve = vi.fn()
-vi.mock('@/lib/stripe', () => ({
-  stripe: {
-    webhooks: { constructEvent: (...a: any[]) => mockConstructEvent(...a) },
-    subscriptions: { retrieve: (...a: any[]) => mockSubRetrieve(...a) },
-  },
-}))
-
-const calls: any[] = []
-const priorRow = { value: null as any }
-const mkChain = (table: string) => ({
-  upsert: (vals: any, opts: any) => { calls.push({ table, op: 'upsert', vals, opts }); return Promise.resolve({ error: null }) },
-  update: (vals: any) => ({ eq: (col: string, val: any) => { calls.push({ table, op: 'update', vals, col, val }); return Promise.resolve({ error: null }) } }),
-  select: (_cols?: string) => ({ eq: (_c: string, _v: any) => ({ maybeSingle: async () => ({ data: priorRow.value, error: null }) }) }),
-})
-vi.mock('@/lib/supabase/admin', () => ({ createAdminClient: () => ({ from: (t: string) => mkChain(t) }) }))
-
-const mockIssueGuestPasses = vi.fn(async (..._a: any[]) => {})
-vi.mock('@/app/actions/guestPasses', () => ({ issueGuestPasses: (...a: any[]) => mockIssueGuestPasses(...a) }))
-
+import { beforeEach, expect, it, vi } from 'vitest'
+import { NextRequest } from 'next/server'
+import { mockDatabase } from './helpers/database'
+vi.mock('@/lib/stripe', () => ({ stripe: { webhooks: { constructEvent: vi.fn() }, subscriptions: { retrieve: vi.fn() } } }))
+vi.mock('@/lib/supabase/admin', () => ({ createAdminClient: vi.fn() }))
+vi.mock('@/app/actions/guestPasses', () => ({ issueGuestPasses: vi.fn() }))
+import { stripe } from '@/lib/stripe'
+import { createAdminClient } from '@/lib/supabase/admin'
+import { issueGuestPasses } from '@/app/actions/guestPasses'
 import { POST } from '@/app/api/membership/webhook/route'
-
-function webhookReq() {
-  return new Request('http://x/api/membership/webhook', { method: 'POST', headers: { 'stripe-signature': 'sig' }, body: 'rawbody' })
-}
-
-beforeEach(() => { vi.clearAllMocks(); calls.length = 0; priorRow.value = null; process.env.STRIPE_WEBHOOK_SECRET = 'whsec' })
-
-describe('membership webhook — native subscription events', () => {
-  it('does NOT activate or issue passes on customer.subscription.created (incomplete, pre-payment)', async () => {
-    mockConstructEvent.mockReturnValue({
-      type: 'customer.subscription.created',
-      data: { object: { id: 'sub_1', customer: 'cus_1', status: 'incomplete', metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1893456000 }] } } },
-    })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    expect(calls.find((c) => c.op === 'upsert')).toBeUndefined()
-    expect(mockIssueGuestPasses).not.toHaveBeenCalled()
-  })
-
-  it('activates membership + issues guest passes on mobile subscription.updated→active (fresh)', async () => {
-    priorRow.value = { stripe_subscription_id: null, status: 'active', tier: 'free' }
-    mockConstructEvent.mockReturnValue({
-      type: 'customer.subscription.updated',
-      data: { object: { id: 'sub_1', customer: 'cus_1', status: 'active', metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1893456000 }] } } },
-    })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    const upsert = calls.find((c) => c.op === 'upsert' && c.table === 'memberships')
-    expect(upsert.vals).toMatchObject({ user_id: 'u1', tier: 'eagle', status: 'active', stripe_subscription_id: 'sub_1', stripe_customer_id: 'cus_1' })
-    expect(mockIssueGuestPasses).toHaveBeenCalledWith('u1', 'eagle')
-  })
-
-  it('does NOT issue guest passes for web subscription.updated→active (source not mobile)', async () => {
-    mockConstructEvent.mockReturnValue({
-      type: 'customer.subscription.updated',
-      data: { object: { id: 'sub_2', customer: 'cus_2', status: 'active', metadata: { user_id: 'u2', tier: 'eagle' }, items: { data: [{ current_period_end: 1893456000 }] } } },
-    })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    expect(calls.find((c) => c.op === 'upsert')).toBeTruthy()
-    expect(mockIssueGuestPasses).not.toHaveBeenCalled()
-  })
-
-  it('does NOT re-issue guest passes when already activated (not fresh)', async () => {
-    priorRow.value = { stripe_subscription_id: 'sub_1', status: 'active', tier: 'eagle' }
-    mockConstructEvent.mockReturnValue({
-      type: 'customer.subscription.updated',
-      data: { object: { id: 'sub_1', customer: 'cus_1', status: 'active', metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1893456000 }] } } },
-    })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    expect(mockIssueGuestPasses).not.toHaveBeenCalled()
-  })
-
-  it('syncs past_due on non-active subscription.updated', async () => {
-    mockConstructEvent.mockReturnValue({
-      type: 'customer.subscription.updated',
-      data: { object: { id: 'sub_1', customer: 'cus_1', status: 'past_due', metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1900000000 }] } } },
-    })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    const upd = calls.find((c) => c.op === 'update' && c.table === 'memberships')
-    expect(upd.vals.status).toBe('past_due')
-    expect(upd.col).toBe('stripe_subscription_id')
-    expect(upd.val).toBe('sub_1')
-  })
-
-  it('sets past_due on invoice.payment_failed', async () => {
-    mockConstructEvent.mockReturnValue({ type: 'invoice.payment_failed', data: { object: { subscription: 'sub_1' } } })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    const upd = calls.find((c) => c.op === 'update' && c.table === 'memberships')
-    expect(upd.vals).toEqual({ status: 'past_due' })
-    expect(upd.val).toBe('sub_1')
-  })
-
-  it('activates on invoice.paid when subscription is active', async () => {
-    mockConstructEvent.mockReturnValue({ type: 'invoice.paid', data: { object: { subscription: 'sub_1' } } })
-    mockSubRetrieve.mockResolvedValue({ id: 'sub_1', customer: 'cus_1', status: 'active', metadata: { user_id: 'u1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1900000000 }] } })
-    const res = await POST(webhookReq() as any)
-    expect(res.status).toBe(200)
-    const upsert = calls.find((c) => c.op === 'upsert' && c.table === 'memberships')
-    expect(upsert.vals.status).toBe('active')
-    expect(upsert.vals.current_period_end).toBe(new Date(1900000000 * 1000).toISOString())
-  })
+let db: ReturnType<typeof mockDatabase>
+const subscription = { id: 'sub-1', customer: 'cus-1', start_date: 1780272000, status: 'active', metadata: { user_id: 'user-1', tier: 'eagle', source: 'mobile' }, items: { data: [{ current_period_end: 1811808000 }] } }
+const post = () => POST(new NextRequest('http://localhost/api/membership/webhook', { method: 'POST', body: '{}', headers: { 'stripe-signature': 'sig' } }))
+function event(type: string, object: object) { vi.mocked(stripe.webhooks.constructEvent).mockReturnValue({ id: 'evt-1', type, data: { object } } as never) }
+beforeEach(() => {
+  vi.resetAllMocks()
+  db = mockDatabase()
+  vi.mocked(createAdminClient).mockReturnValue(db.client as never)
+  vi.mocked(stripe.subscriptions.retrieve).mockResolvedValue(subscription as never)
+  vi.mocked(issueGuestPasses).mockResolvedValue(undefined)
+  event('customer.subscription.updated', subscription)
+})
+it('ignores the unpaid subscription.created event', async () => {
+  event('customer.subscription.created', { ...subscription, status: 'incomplete' })
+  expect((await post()).status).toBe(200)
+  expect(db.writes).toHaveLength(0)
+  expect(issueGuestPasses).not.toHaveBeenCalled()
+})
+it('activates a paid native subscription and uses an anniversary grant key', async () => {
+  expect((await post()).status).toBe(200)
+  expect(db.writes[0].value).toMatchObject({ status: 'active', user_id: 'user-1', stripe_customer_id: 'cus-1' })
+  expect(issueGuestPasses).toHaveBeenCalledWith('user-1', 'eagle', 'sub-1', '2027-06-01T00:00:00.000Z')
+})
+it('web checkout and subscription events use the same grant key', async () => {
+  await post()
+  event('checkout.session.completed', { mode: 'subscription', subscription: 'sub-1' })
+  await post()
+  expect(vi.mocked(issueGuestPasses).mock.calls[0]).toEqual(vi.mocked(issueGuestPasses).mock.calls[1])
+})
+it('returns 500 when benefit issuance fails after the membership write, allowing a retry', async () => {
+  vi.mocked(issueGuestPasses).mockRejectedValueOnce(new Error('database unavailable'))
+  expect((await post()).status).toBe(500)
+  expect((await post()).status).toBe(200)
+  expect(issueGuestPasses).toHaveBeenCalledTimes(2)
+})
+it('uses current Stripe state instead of an out-of-order active event', async () => {
+  vi.mocked(stripe.subscriptions.retrieve).mockResolvedValue({ ...subscription, status: 'canceled' } as never)
+  expect((await post()).status).toBe(200)
+  expect(db.writes[0].value).toMatchObject({ status: 'canceled' })
+  expect(issueGuestPasses).not.toHaveBeenCalled()
+})
+it('reconciles failed invoices with current subscription state', async () => {
+  event('invoice.payment_failed', { parent: { subscription_details: { subscription: 'sub-1' } } })
+  vi.mocked(stripe.subscriptions.retrieve).mockResolvedValue({ ...subscription, status: 'past_due' } as never)
+  expect((await post()).status).toBe(200)
+  expect(db.writes[0].value).toMatchObject({ status: 'past_due' })
+})
+it('fails closed on an invalid signature', async () => {
+  vi.mocked(stripe.webhooks.constructEvent).mockImplementation(() => { throw new Error('invalid') })
+  expect((await post()).status).toBe(400)
+  expect(db.writes).toHaveLength(0)
 })

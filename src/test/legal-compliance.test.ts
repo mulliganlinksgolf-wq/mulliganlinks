@@ -96,7 +96,8 @@ describe('Barter page (BarterPage.tsx) — legal compliance', () => {
   })
 
   it('has not-affiliated footer disclaimer', () => {
-    expect(BARTER).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
+    expect(BARTER).toContain('<SiteFooter')
+    expect(fs.readFileSync(path.join(ROOT, 'src/components/SiteFooter.tsx'), 'utf-8')).toContain('not affiliated with or endorsed by GolfNow or NBC Sports Next')
   })
 
   it('does not use "extracted" in hero subhead', () => {
@@ -116,18 +117,17 @@ describe('Barter page (BarterPage.tsx) — legal compliance', () => {
   })
 })
 
-describe('Referral program — legal compliance', () => {
-  const REFERRAL_FORM = fs.readFileSync(
-    path.join(ROOT, 'src/app/waitlist/golfer/GolferWaitlistForm.tsx'),
-    'utf-8'
-  )
+describe('Waitlist does not attribute paid referrals', () => {
+  const form = fs.readFileSync(path.join(ROOT, 'src/app/waitlist/golfer/GolferWaitlistForm.tsx'), 'utf-8')
+  const action = fs.readFileSync(path.join(ROOT, 'src/app/waitlist/golfer/actions.ts'), 'utf-8')
 
-  it('referral disclosure exists in the signup form when a course is selected', () => {
-    // Disclosure required: golfer must be told their home course earns a commission
-    expect(REFERRAL_FORM).toContain('Your home course earns 10%')
+  it('collects launch interest without a home-course referral selector', () => {
+    expect(form).not.toContain('name="referring_course_id"')
+    expect(form).toContain('No payment or membership commitment is needed')
   })
 
-  it('disclosure includes "first year of membership" scoping', () => {
-    expect(REFERRAL_FORM).toContain('first year of membership')
+  it('does not assign a revenue-share referral when joining the waitlist', () => {
+    expect(action).not.toContain("from('course_referrals')")
+    expect(action).not.toContain('referring_course_id')
   })
 })

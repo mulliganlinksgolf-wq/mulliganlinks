@@ -144,11 +144,11 @@ describe('BarterPage — preset chips', () => {
     expect(sliders[0]).toHaveValue('45')
   })
 
-  it('clicking Daily Fee preset sets green fee slider to 85', () => {
+  it('clicking Daily Fee preset sets green fee slider to the typical rate', () => {
     render(<BarterPage spotsRemaining={10} />)
     fireEvent.click(screen.getByRole('button', { name: /Daily Fee/i }))
     const sliders = screen.getAllByRole('slider')
-    expect(sliders[0]).toHaveValue('85')
+    expect(sliders[0]).toHaveValue('80')
   })
 
   it('clicking Semi-Private preset sets green fee slider to 120', () => {

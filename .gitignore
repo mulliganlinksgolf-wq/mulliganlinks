@@ -52,3 +52,6 @@ supabase/.temp
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Reversible local cleanup archives
+.local-backups/

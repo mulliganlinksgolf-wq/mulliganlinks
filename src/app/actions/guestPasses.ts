@@ -1,23 +1,14 @@
-'use server'
+// Imported only by server pages and the verified Stripe webhook. Do not expose
+// privileged pass issuance as a browser-callable Server Action.
+import 'server-only'
 
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const PASSES_BY_TIER: Record<string, number> = { eagle: 1, ace: 2 }
-
-export async function issueGuestPasses(userId: string, tier: string): Promise<void> {
-  const count = PASSES_BY_TIER[tier] ?? 0
-  if (count === 0) return
-
-  const admin = createAdminClient()
-  const expiresAt = new Date()
-  expiresAt.setFullYear(expiresAt.getFullYear() + 1)
-
-  const passes = Array.from({ length: count }, () => ({
-    user_id: userId,
-    expires_at: expiresAt.toISOString(),
-  }))
-
-  await admin.from('guest_passes').insert(passes)
+export async function issueGuestPasses(userId: string, tier: string, subscriptionId: string, periodEnd: string): Promise<void> {
+  const { error } = await createAdminClient().rpc('issue_membership_guest_passes', {
+    p_user_id: userId, p_tier: tier, p_subscription_id: subscriptionId, p_period_end: periodEnd,
+  })
+  if (error) throw error
 }
 
 export async function getAvailablePasses(userId: string): Promise<{ id: string; expires_at: string }[]> {

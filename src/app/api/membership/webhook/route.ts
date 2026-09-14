@@ -1,173 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { issueGuestPasses } from '@/app/actions/guestPasses'
-import Stripe from 'stripe'
-
-function mapStatus(stripeStatus: string): 'active' | 'past_due' | 'canceled' {
-  if (stripeStatus === 'active' || stripeStatus === 'trialing') return 'active'
-  if (stripeStatus === 'past_due' || stripeStatus === 'unpaid' || stripeStatus === 'incomplete') return 'past_due'
-  return 'canceled'
-}
-
-async function activateMembership(
-  admin: any,
-  sub: Stripe.Subscription,
-): Promise<{ error?: unknown }> {
-  const userId = sub.metadata?.user_id
-  const tier = sub.metadata?.tier
-  if (!userId || !tier) return {}
-  const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-
-  const { data: prior } = await admin
-    .from('memberships')
-    .select('stripe_subscription_id, status, tier')
-    .eq('user_id', userId)
-    .maybeSingle()
-  const freshActivation = !(
-    prior?.stripe_subscription_id === sub.id && prior?.status === 'active' && prior?.tier === tier
-  )
-
-  const { error } = await admin.from('memberships').upsert({
-    user_id: userId,
-    tier,
-    status: 'active',
-    stripe_subscription_id: sub.id,
-    stripe_customer_id: sub.customer as string,
-    current_period_end: periodEnd,
-  }, { onConflict: 'user_id' })
-  if (error) return { error }
-
-  // Guest passes only for first-time mobile activation (web issues them via checkout.session.completed).
-  if (sub.metadata?.source === 'mobile' && freshActivation) {
-    await issueGuestPasses(userId, tier)
-  }
-  return {}
-}
-
+import { handleMembershipEvent } from '@/lib/membership-sync'
+import type Stripe from 'stripe'
 export async function POST(req: NextRequest) {
-  const body = await req.text()
-  const sig = req.headers.get('stripe-signature')!
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
-
   let event: Stripe.Event
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret)
+    event = stripe.webhooks.constructEvent(await req.text(), req.headers.get('stripe-signature') ?? '', process.env.STRIPE_WEBHOOK_SECRET!)
   } catch {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 })
   }
-
-  const admin = createAdminClient()
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object as Stripe.Checkout.Session
-    if (session.mode !== 'subscription') return NextResponse.json({ ok: true })
-
-    const userId = session.metadata?.user_id
-    const tier = session.metadata?.tier
-    if (!userId || !tier) return NextResponse.json({ error: 'Missing metadata' }, { status: 400 })
-
-    const sub = session.subscription as string
-    const stripeSubscription = await stripe.subscriptions.retrieve(sub)
-    const periodEnd = new Date(stripeSubscription.items.data[0].current_period_end * 1000).toISOString()
-
-    const { error: upsertError } = await admin.from('memberships').upsert({
-      user_id: userId,
-      tier,
-      status: 'active',
-      stripe_subscription_id: sub,
-      current_period_end: periodEnd,
-    }, { onConflict: 'user_id' })
-
-    if (upsertError) {
-      console.error('[webhook] Failed to upsert membership:', upsertError)
-      return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-    }
-
-    // Issue guest passes for the new membership tier
-    await issueGuestPasses(userId, tier)
-
-    // Mark founding_member permanently on the profile when payment is confirmed
-    if (session.metadata?.founding_golfer === 'true') {
-      const { error } = await admin.from('profiles')
-        .update({ founding_member: true })
-        .eq('id', userId)
-      if (error) {
-        console.error('[webhook] Failed to set founding_member on profile:', error)
-      }
-    }
+  try {
+    await handleMembershipEvent(event, createAdminClient())
+    return NextResponse.json({ ok: true })
+  } catch {
+    return NextResponse.json({ error: 'Membership sync failed; retry required' }, { status: 500 })
   }
-
-  if (event.type === 'customer.subscription.deleted') {
-    const sub = event.data.object as Stripe.Subscription
-    const userId = sub.metadata?.user_id
-    if (!userId) return NextResponse.json({ ok: true })
-
-    await admin.from('memberships')
-      .update({ status: 'canceled' })
-      .eq('stripe_subscription_id', sub.id)
-  }
-
-  // customer.subscription.created fires with status:'incomplete' BEFORE the user pays
-  // (payment_behavior:'default_incomplete'). Do nothing — leave the user on their free
-  // baseline row. Activation happens on payment confirmation below.
-
-  if (event.type === 'customer.subscription.updated') {
-    const sub = event.data.object as Stripe.Subscription
-    if (sub.status === 'active') {
-      const { error } = await activateMembership(admin, sub)
-      if (error) {
-        console.error('[webhook] subscription.updated activation failed:', error)
-        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-      }
-    } else {
-      const periodEnd = new Date(sub.items.data[0].current_period_end * 1000).toISOString()
-      const { error } = await admin.from('memberships')
-        .update({ status: mapStatus(sub.status), current_period_end: periodEnd })
-        .eq('stripe_subscription_id', sub.id)
-      if (error) {
-        console.error('[webhook] subscription.updated sync failed:', error)
-        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-      }
-    }
-  }
-
-  // Resilient subscription-id extraction: across Stripe API versions the invoice's
-  // subscription pointer is either `invoice.subscription` or
-  // `invoice.parent.subscription_details.subscription`. Cast to any to avoid coupling to
-  // one version's typings.
-  if (event.type === 'invoice.payment_failed') {
-    const invoice = event.data.object as Stripe.Invoice
-    const subId =
-      ((invoice as any).subscription as string | null) ??
-      ((invoice as any).parent?.subscription_details?.subscription as string | null) ??
-      null
-    if (subId) {
-      const { error } = await admin.from('memberships').update({ status: 'past_due' }).eq('stripe_subscription_id', subId)
-      if (error) {
-        console.error('[webhook] invoice.payment_failed DB write failed:', error)
-        return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-      }
-    }
-  }
-
-  if (event.type === 'invoice.paid') {
-    const invoice = event.data.object as Stripe.Invoice
-    const subId =
-      ((invoice as any).subscription as string | null) ??
-      ((invoice as any).parent?.subscription_details?.subscription as string | null) ??
-      null
-    if (subId) {
-      const sub = await stripe.subscriptions.retrieve(subId)
-      if (sub.status === 'active') {
-        const { error } = await activateMembership(admin, sub)
-        if (error) {
-          console.error('[webhook] invoice.paid activation failed:', error)
-          return NextResponse.json({ error: 'DB write failed' }, { status: 500 })
-        }
-      }
-    }
-  }
-
-  return NextResponse.json({ ok: true })
 }

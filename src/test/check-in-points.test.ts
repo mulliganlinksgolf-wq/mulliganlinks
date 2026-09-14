@@ -11,6 +11,8 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
+vi.mock('@/lib/booking-quote', () => ({ getBookingQuote: vi.fn(async (_user, input) => ({ points_awarded: 60, points_redeemed: input.pointsRedeemed ?? 0, total_charged_cents: 6000 })) }))
+
 vi.mock('next/cache', () => ({ revalidatePath: vi.fn() }))
 vi.mock('@/lib/emails', () => ({
   sendBookingConfirmation: vi.fn().mockResolvedValue(undefined),
@@ -89,7 +91,7 @@ function buildMock({
       table === 'tee_times' ? teeTimeRow : bookingRow,
       table,
     )),
-    rpc: vi.fn().mockResolvedValue({ data: null, error: null }),
+    rpc: vi.fn((_name, args) => { bookingInsert = args.p_quote; return Promise.resolve({ data: 'booking-1', error: null }) }),
   }
   return client
 }
@@ -135,7 +137,7 @@ describe('Points deferred to completion — confirmBooking', () => {
     expect(bookingInsert).toMatchObject({ points_awarded: 60 })
   })
 
-  it('inserts negative fairway_points row when member redeems points', async () => {
+  it('passes the verified points debit to the atomic transaction', async () => {
     const mock = buildMock({ availablePlayers: 4 })
     vi.mocked(createClient).mockResolvedValue(mock as never)
     vi.mocked(createAdminClient).mockReturnValue(mock as never)
@@ -146,9 +148,8 @@ describe('Points deferred to completion — confirmBooking', () => {
       total: 55, pointsEarned: 55, tier: 'eagle',
     })
 
-    const redeemed = pointInserts.filter(p => (p.amount as number) < 0)
-    expect(redeemed).toHaveLength(1)
-    expect(redeemed[0]).toMatchObject({ amount: -500 })
+    expect(bookingInsert).toMatchObject({ points_redeemed: 500 })
+    // Actual ledger deductions and rollback are verified in tests/database/core-reliability.mjs.
   })
 })
 

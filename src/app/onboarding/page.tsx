@@ -18,20 +18,9 @@ export default async function OnboardingEntryPage({
     return <InvalidInvite />
   }
 
-  // invite_used is set at go-live; block reuse of the link after completion
-  if (course.invite_used && course.onboarding_complete) {
-    redirect(`/onboarding/${course.id}/complete`)
-  }
-  if (course.invite_used && !course.onboarding_complete) {
-    return <InvalidInvite />
-  }
+  if (course.invite_used || course.onboarding_complete) return <InvalidInvite />
+  redirect(`/onboarding/accept?token=${encodeURIComponent(token)}`)
 
-  if (course.onboarding_complete) {
-    redirect(`/onboarding/${course.id}/complete`)
-  }
-
-  const step = course.onboarding_step ?? 1
-  redirect(`/onboarding/${course.id}/step-${step}`)
 }
 
 function InvalidInvite() {

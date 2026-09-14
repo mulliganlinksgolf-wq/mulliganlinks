@@ -5,6 +5,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { Card, CardContent } from '@/components/ui/card'
 import { createPendingBooking } from '@/app/actions/booking'
+import CartSelector from '@/components/CartSelector'
 import { platformFeeCents } from '@/lib/stripe/fees'
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
@@ -20,6 +21,7 @@ function CheckoutForm({
   pointsEarned,
   tier,
   guestDiscount,
+  cartFee,
 }: {
   bookingId: string
   total: number
@@ -28,6 +30,7 @@ function CheckoutForm({
   pointsEarned: number
   tier: string
   guestDiscount: number
+  cartFee: number
 }) {
   const stripe = useStripe()
   const elements = useElements()
@@ -62,10 +65,11 @@ function CheckoutForm({
             <span>Green fee</span>
             <span>${greenFee.toFixed(2)}</span>
           </div>
+          {cartFee > 0 && <div className="flex justify-between"><span>Cart fee</span><span>${cartFee.toFixed(2)}</span></div>}
           {guestDiscount > 0 && (
             <div className="flex justify-between text-[#1B4332]">
               <span>Guest pass</span>
-              <span>−$15.00</span>
+              <span>−${guestDiscount.toFixed(2)}</span>
             </div>
           )}
           {appFee > 0 && (
@@ -84,7 +88,7 @@ function CheckoutForm({
             <span>Total</span>
             <span>${total.toFixed(2)}</span>
           </div>
-          <p className="text-xs text-[#6B7770]">+{pointsEarned} Fairway Points earned after payment</p>
+          <p className="text-xs text-[#6B7770]">+{pointsEarned} Fairway Points earned after your round</p>
         </CardContent>
       </Card>
 
@@ -119,17 +123,22 @@ interface TeeTime {
 export function BookingPaymentForm({
   teeTime,
   tier,
-  userId,
   availablePasses = [],
   joinExistingGroup = false,
+  cartPolicy = 'optional',
+  cartFeeCents = 0,
 }: {
   teeTime: TeeTime
   tier: string
   userId: string
   availablePasses?: { id: string; expires_at: string }[]
   joinExistingGroup?: boolean
+  cartPolicy?: 'mandatory' | 'optional' | 'walking_only'
+  cartFeeCents?: number
 }) {
   const [players, setPlayers] = useState(1)
+  const [cartSelected, setCartSelected] = useState(cartPolicy === 'mandatory')
+  const [savedQuote, setSavedQuote] = useState<{ total_charged_cents: number; green_fee_cents: number; platform_fee_cents: number; discount_cents: number; cart_fee_cents: number; points_awarded: number } | null>(null)
   const [useGuestPass, setUseGuestPass] = useState(false)
   const [step, setStep] = useState<'select' | 'pay'>('select')
   const [clientSecret, setClientSecret] = useState<string | null>(null)
@@ -139,42 +148,49 @@ export function BookingPaymentForm({
 
   const multiplier = MULTIPLIER[tier] ?? 1
   const baseSubtotal = teeTime.base_price * players
-  const guestDiscount = useGuestPass ? 15 : 0
+  const guestDiscount = useGuestPass ? Math.min(15, teeTime.base_price) : 0
   const appFee = platformFeeCents(tier) / 100
-  const total = baseSubtotal - guestDiscount + appFee
-  const pointsEarned = Math.floor(baseSubtotal * multiplier)
+  const cartFee = cartSelected && cartPolicy !== 'walking_only' ? cartFeeCents / 100 : 0
+  const total = baseSubtotal - guestDiscount + appFee + cartFee
+  const pointsEarned = Math.floor((baseSubtotal - guestDiscount + cartFee) * multiplier)
   const selectedPass = availablePasses[0] ?? null
 
   function handleProceed() {
     setError(null)
     startTransition(async () => {
-      const result = await createPendingBooking({
+      const result = bookingId ? { bookingId, error: undefined } : await createPendingBooking({
         teeTimeId: teeTime.id,
         players,
         tier,
         guestPassId: useGuestPass && selectedPass ? selectedPass.id : undefined,
         joinExistingGroup,
+        cartSelected,
       })
       if (result.error || !result.bookingId) {
         setError(result.error ?? 'Failed to create booking')
         return
       }
 
-      // TODO: Cart selection (cartPolicy, cartFeeCents) not wired here, add alongside Stripe integration
-      const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
-      const data = await res.json()
-      if (!res.ok || !data.client_secret) {
-        setError(data.error ?? 'Failed to initialize payment')
-        return
-      }
-
       setBookingId(result.bookingId)
-      setClientSecret(data.client_secret)
-      setStep('pay')
+      if ('quote' in result && result.quote) setSavedQuote(result.quote)
+      try {
+        const res = await fetch(`/api/bookings/${result.bookingId}/payment-intent`, { method: 'POST' })
+        const data = await res.json()
+        if (!res.ok || !data.client_secret) {
+          setError(data.error ?? 'Failed to initialize payment')
+          return
+        }
+
+        setBookingId(result.bookingId)
+        setClientSecret(data.client_secret)
+        setStep('pay')
+      } catch {
+        setError('Payment could not load. Please retry; your booking selection is saved.')
+      }
     })
   }
 
-  if (step === 'pay' && clientSecret && bookingId) {
+  if (step === 'pay' && clientSecret && bookingId && savedQuote) {
     return (
       <Elements
         stripe={stripePromise}
@@ -188,12 +204,13 @@ export function BookingPaymentForm({
       >
         <CheckoutForm
           bookingId={bookingId}
-          total={total}
-          greenFee={baseSubtotal}
-          appFee={platformFeeCents(tier)}
-          pointsEarned={pointsEarned}
+          total={savedQuote.total_charged_cents / 100}
+          greenFee={savedQuote.green_fee_cents / 100}
+          appFee={savedQuote.platform_fee_cents}
+          pointsEarned={savedQuote.points_awarded}
           tier={tier}
-          guestDiscount={guestDiscount}
+          guestDiscount={savedQuote.discount_cents / 100}
+          cartFee={savedQuote.cart_fee_cents / 100}
         />
       </Elements>
     )
@@ -201,6 +218,7 @@ export function BookingPaymentForm({
 
   return (
     <div className="space-y-4">
+      {!bookingId && <CartSelector cartPolicy={cartPolicy} cartFeeCents={cartFeeCents} value={cartSelected} greenFeeCents={Math.round(baseSubtotal * 100)} onChange={setCartSelected} />}
       <Card className="bg-white border-0 shadow-sm">
         <CardContent className="pt-5 pb-5">
           <p className="text-sm font-medium text-[#1A1A1A] mb-3">Number of players</p>
@@ -209,7 +227,7 @@ export function BookingPaymentForm({
               <button
                 key={n}
                 onClick={() => { setPlayers(n); if (n <= 1) setUseGuestPass(false) }}
-                disabled={n > teeTime.available_players}
+                disabled={!!bookingId || n > teeTime.available_players}
                 className={`w-12 h-12 rounded-lg border text-sm font-semibold transition-colors ${
                   players === n
                     ? 'bg-[#1B4332] text-[#FAF7F2] border-[#1B4332]'
@@ -234,15 +252,16 @@ export function BookingPaymentForm({
           {selectedPass && players > 1 && (
             <div className="flex items-center justify-between pt-1 border-t border-gray-100">
               <button
+                disabled={!!bookingId}
                 onClick={() => setUseGuestPass(v => !v)}
                 className="flex items-center gap-2 text-[#6B7770] hover:text-[#1A1A1A]"
               >
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${useGuestPass ? 'bg-[#1B4332] border-[#1B4332]' : 'border-gray-300'}`}>
                   {useGuestPass && <span className="text-white text-xs">✓</span>}
                 </div>
-                Use a guest pass, save $15 ({availablePasses.length} remaining)
+                Use a guest pass, save ${Math.min(15, teeTime.base_price).toFixed(2)} ({availablePasses.length} remaining)
               </button>
-              {useGuestPass && <span className="text-[#1B4332] font-medium">−$15.00</span>}
+              {useGuestPass && <span className="text-[#1B4332] font-medium">−${guestDiscount.toFixed(2)}</span>}
             </div>
           )}
           {appFee > 0 ? (

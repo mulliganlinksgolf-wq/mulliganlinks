@@ -4,6 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 import { sendBookingConfirmation, sendCourseBookingAlert } from '@/lib/emails'
 import { deriveAccountStatus } from '@/lib/stripe/fees'
 import Stripe from 'stripe'
+import { handleMembershipEvent } from '@/lib/membership-sync'
 
 // App Router: raw body via req.text()
 export async function POST(req: NextRequest) {
@@ -33,9 +34,12 @@ export async function POST(req: NextRequest) {
       payload: event as any,
     })
 
-  if (insertError?.code === '23505') {
-    // Duplicate, already processed
-    return NextResponse.json({ received: true, duplicate: true })
+  if (insertError) {
+    if (insertError.code !== '23505') return NextResponse.json({ error: 'Could not record event' }, { status: 500 })
+    const { data: prior, error } = await admin.from('stripe_webhook_events')
+      .select('processed').eq('stripe_event_id', event.id).single()
+    if (error) return NextResponse.json({ error: 'Could not load event' }, { status: 500 })
+    if (prior?.processed) return NextResponse.json({ received: true, duplicate: true })
   }
 
   try {
@@ -43,19 +47,20 @@ export async function POST(req: NextRequest) {
     await admin
       .from('stripe_webhook_events')
       .update({ processed: true, processed_at: new Date().toISOString() })
-      .eq('stripe_event_id', event.id)
+      .eq('stripe_event_id', event.id).throwOnError()
   } catch (err) {
     await admin
       .from('stripe_webhook_events')
       .update({ processing_error: String(err) })
       .eq('stripe_event_id', event.id)
-    // Still return 200 so Stripe doesn't retry, error is logged in DB
+    return NextResponse.json({ error: 'Event processing failed; retry required' }, { status: 500 })
   }
 
   return NextResponse.json({ received: true })
 }
 
 async function handleEvent(event: Stripe.Event, admin: ReturnType<typeof createAdminClient>) {
+  await handleMembershipEvent(event, admin)
   switch (event.type) {
     case 'payment_intent.succeeded':
       await onPaymentSucceeded(event.data.object as Stripe.PaymentIntent, admin)
@@ -90,14 +95,7 @@ async function handleEvent(event: Stripe.Event, admin: ReturnType<typeof createA
       await onPayout(event.data.object as Stripe.Payout, event.type, admin)
       break
 
-    // Membership subscription events
-    case 'checkout.session.completed':
-      await onCheckoutCompleted(event.data.object as Stripe.Checkout.Session, admin)
-      break
 
-    case 'customer.subscription.deleted':
-      await onSubscriptionDeleted(event.data.object as Stripe.Subscription, admin)
-      break
   }
 }
 
@@ -107,55 +105,19 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
 
   const { data: booking } = await admin
     .from('bookings')
-    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, tee_times(scheduled_at, course_id, courses(id, name, slug))')
+    .select('id, user_id, tee_time_id, players, platform_fee_cents, total_charged_cents, points_awarded, payment_status, tee_times(scheduled_at, course_id, courses(id, name, slug))')
     .eq('id', bookingId)
     .single()
 
-  if (!booking || (booking as any).payment_status === 'succeeded') return
-
-  const tier = pi.metadata?.member_tier ?? 'free'
-  const MULTIPLIER: Record<string, number> = { free: 1, fairway: 1, eagle: 1.5, ace: 2 }
-  const multiplier = MULTIPLIER[tier] ?? 1
-  const greenFeeCents = (booking.total_charged_cents ?? 0) - (booking.platform_fee_cents ?? 0)
-  const pointsEarned = Math.floor((greenFeeCents / 100) * multiplier)
-
-  await admin
-    .from('bookings')
-    .update({
-      status: 'confirmed',
-      payment_status: 'succeeded',
-      paid_at: new Date().toISOString(),
-      stripe_charge_id: pi.latest_charge as string ?? null,
-      points_awarded: pointsEarned,
-    })
-    .eq('id', bookingId)
-
-  // Decrement tee time availability
-  const { data: teeTime } = await admin
-    .from('tee_times')
-    .select('available_players')
-    .eq('id', booking.tee_time_id)
-    .single()
-
-  if (teeTime) {
-    const remaining = teeTime.available_players - booking.players
-    await admin
-      .from('tee_times')
-      .update({ available_players: remaining, status: remaining <= 0 ? 'booked' : 'open' })
-      .eq('id', booking.tee_time_id)
-  }
-
-  // Award Fairway Points
-  if (pointsEarned > 0) {
-    const course = (booking.tee_times as any)?.courses
-    await admin.from('fairway_points').insert({
-      user_id: booking.user_id,
-      course_id: course?.id,
-      booking_id: bookingId,
-      amount: pointsEarned,
-      reason: `Booking (${tier} rate, ${multiplier}×)`,
-    })
-  }
+  if (!booking) throw new Error('Booking not found for payment')
+  const { data: settled, error } = await admin.rpc('settle_booking_payment', {
+    p_booking_id: bookingId, p_payment_intent_id: pi.id,
+    p_charge_id: typeof pi.latest_charge === 'string' ? pi.latest_charge : pi.latest_charge?.id ?? null,
+    p_amount: pi.amount_received,
+  })
+  if (error) throw error
+  if (!settled) return
+  const pointsEarned = booking.points_awarded ?? 0
 
   // Send emails fire-and-forget
   const course = (booking.tee_times as any)?.courses
@@ -198,7 +160,7 @@ async function onPaymentFailed(pi: Stripe.PaymentIntent, admin: ReturnType<typeo
   await admin
     .from('bookings')
     .update({ payment_status: 'failed' })
-    .eq('id', bookingId)
+    .eq('id', bookingId).eq('stripe_payment_intent_id', pi.id).eq('status', 'pending_payment').throwOnError()
 }
 
 async function onChargeRefunded(charge: Stripe.Charge, admin: ReturnType<typeof createAdminClient>) {
@@ -209,7 +171,7 @@ async function onChargeRefunded(charge: Stripe.Charge, admin: ReturnType<typeof 
     .from('bookings')
     .select('id')
     .eq('stripe_payment_intent_id', pi)
-    .maybeSingle()
+    .maybeSingle().throwOnError()
 
   if (!booking) return
 
@@ -222,7 +184,7 @@ async function onChargeRefunded(charge: Stripe.Charge, admin: ReturnType<typeof 
       payment_status: isFullRefund ? 'refunded' : 'partially_refunded',
       refunded_amount_cents: refundedTotal,
     })
-    .eq('id', booking.id)
+    .eq('id', booking.id).throwOnError()
 }
 
 async function onDisputeCreated(dispute: Stripe.Dispute, admin: ReturnType<typeof createAdminClient>) {
@@ -234,14 +196,14 @@ async function onDisputeCreated(dispute: Stripe.Dispute, admin: ReturnType<typeo
     .from('bookings')
     .select('id, tee_time_id, tee_times(course_id)')
     .eq('stripe_payment_intent_id', pi)
-    .maybeSingle()
+    .maybeSingle().throwOnError()
 
   if (!booking) return
 
   const courseId = (booking.tee_times as any)?.course_id
   if (!courseId) return
 
-  await admin.from('payment_disputes').insert({
+  await admin.from('payment_disputes').upsert({
     booking_id: booking.id,
     course_id: courseId,
     stripe_dispute_id: dispute.id,
@@ -251,9 +213,9 @@ async function onDisputeCreated(dispute: Stripe.Dispute, admin: ReturnType<typeo
     evidence_due_by: dispute.evidence_details?.due_by
       ? new Date(dispute.evidence_details.due_by * 1000).toISOString()
       : null,
-  })
+  }, { onConflict: 'stripe_dispute_id' }).throwOnError()
 
-  await admin.from('bookings').update({ payment_status: 'disputed' }).eq('id', booking.id)
+  await admin.from('bookings').update({ payment_status: 'disputed' }).eq('id', booking.id).throwOnError()
 }
 
 async function onDisputeClosed(dispute: Stripe.Dispute, admin: ReturnType<typeof createAdminClient>) {
@@ -264,7 +226,7 @@ async function onDisputeClosed(dispute: Stripe.Dispute, admin: ReturnType<typeof
       outcome: dispute.status === 'won' ? 'won' : 'lost',
       resolved_at: new Date().toISOString(),
     })
-    .eq('stripe_dispute_id', dispute.id)
+    .eq('stripe_dispute_id', dispute.id).throwOnError()
 }
 
 async function onAccountUpdated(account: Stripe.Account, admin: ReturnType<typeof createAdminClient>) {
@@ -279,7 +241,7 @@ async function onAccountUpdated(account: Stripe.Account, admin: ReturnType<typeo
       stripe_details_submitted: account.details_submitted,
       stripe_account_status: deriveAccountStatus(account),
     })
-    .eq('id', courseId)
+    .eq('id', courseId).throwOnError()
 }
 
 async function onAccountDeauthorized(data: any, admin: ReturnType<typeof createAdminClient>) {
@@ -289,7 +251,7 @@ async function onAccountDeauthorized(data: any, admin: ReturnType<typeof createA
   await admin
     .from('courses')
     .update({ stripe_account_status: 'disabled', stripe_charges_enabled: false })
-    .eq('stripe_account_id', accountId)
+    .eq('stripe_account_id', accountId).throwOnError()
 }
 
 async function onPayout(payout: Stripe.Payout, eventType: string, admin: ReturnType<typeof createAdminClient>) {
@@ -302,7 +264,7 @@ async function onPayout(payout: Stripe.Payout, eventType: string, admin: ReturnT
     .from('courses')
     .select('id')
     .eq('stripe_account_id', (payout as any).destination ?? '')
-    .maybeSingle()
+    .maybeSingle().throwOnError()
 
   if (!course) return
 
@@ -312,35 +274,5 @@ async function onPayout(payout: Stripe.Payout, eventType: string, admin: ReturnT
     amount_cents: payout.amount,
     arrival_date: new Date(payout.arrival_date * 1000).toISOString().split('T')[0],
     status: payout.status,
-  }, { onConflict: 'stripe_payout_id' })
-}
-
-async function onCheckoutCompleted(session: Stripe.Checkout.Session, admin: ReturnType<typeof createAdminClient>) {
-  if (session.mode !== 'subscription') return
-
-  const userId = session.metadata?.user_id
-  const tier = session.metadata?.tier
-  if (!userId || !tier) return
-
-  const sub = session.subscription as string
-  const stripeSubscription = await stripe.subscriptions.retrieve(sub) as any
-  const periodEnd = new Date(stripeSubscription.current_period_end * 1000).toISOString()
-
-  await admin.from('memberships').upsert({
-    user_id: userId,
-    tier,
-    status: 'active',
-    stripe_subscription_id: sub,
-    current_period_end: periodEnd,
-  }, { onConflict: 'user_id' })
-}
-
-async function onSubscriptionDeleted(sub: Stripe.Subscription, admin: ReturnType<typeof createAdminClient>) {
-  const userId = sub.metadata?.user_id
-  if (!userId) return
-
-  await admin
-    .from('memberships')
-    .update({ status: 'canceled' })
-    .eq('stripe_subscription_id', sub.id)
+  }, { onConflict: 'stripe_payout_id' }).throwOnError()
 }

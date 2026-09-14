@@ -1,0 +1,23 @@
+-- Minimal pre-migration schema for isolated transaction tests. No live credentials.
+CREATE ROLE anon;
+CREATE ROLE authenticated;
+CREATE ROLE service_role BYPASSRLS;
+CREATE SCHEMA auth;
+CREATE FUNCTION auth.uid() RETURNS uuid LANGUAGE sql AS $$ SELECT nullif(current_setting('request.jwt.claim.sub', true),'')::uuid $$;
+CREATE TABLE profiles(id uuid PRIMARY KEY);
+CREATE TABLE courses(id uuid PRIMARY KEY,status text DEFAULT 'active',timezone text DEFAULT 'America/Detroit',allow_self_grouping boolean DEFAULT true);
+CREATE TABLE course_admins(course_id uuid,user_id uuid);
+CREATE TABLE memberships(user_id uuid PRIMARY KEY,stripe_subscription_id text,tier text,status text,created_at timestamptz DEFAULT now(),comp_rounds_remaining integer DEFAULT 0,comp_rounds_reset_at timestamptz);
+CREATE TABLE tee_times(id uuid PRIMARY KEY,tee_start text DEFAULT 'front',holes integer DEFAULT 18,course_id uuid,scheduled_at timestamptz,max_players integer DEFAULT 4,available_players integer DEFAULT 4,status text DEFAULT 'open');
+CREATE TABLE bookings(id uuid PRIMARY KEY,tee_start text DEFAULT 'front',holes integer DEFAULT 18,tee_time_id uuid,course_id uuid,user_id uuid,players integer,total_paid numeric,status text,payment_status text,green_fee_cents integer,platform_fee_cents integer,total_charged_cents integer,points_awarded integer,discount_cents integer,guest_pass_id uuid,redemption_type text,cart_selected boolean,cart_fee_cents integer,booking_group_id uuid,is_self_grouped boolean,created_at timestamptz DEFAULT now(),stripe_payment_intent_id text,paid_at timestamptz,stripe_charge_id text,refunded_amount_cents integer DEFAULT 0,refunded_at timestamptz);
+CREATE TABLE guest_passes(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id uuid,redeemed_at timestamptz,expires_at timestamptz,booking_id uuid REFERENCES bookings(id));
+CREATE TABLE member_credits(id uuid PRIMARY KEY DEFAULT gen_random_uuid(),user_id uuid,type text,amount_cents integer CHECK(amount_cents>0),status text,period text,expires_at timestamptz,created_at timestamptz DEFAULT now(),redeemed_booking_id uuid REFERENCES bookings(id));
+CREATE TABLE rain_checks(id uuid PRIMARY KEY,user_id uuid,course_id uuid,amount_cents integer,status text,expires_at timestamptz,redeemed_booking_id uuid REFERENCES bookings(id));
+CREATE TABLE fairway_points(id uuid DEFAULT gen_random_uuid(),user_id uuid,course_id uuid,booking_id uuid,amount integer,reason text);
+CREATE TABLE course_redemption_settings(course_id uuid,monthly_redemption_cap integer,max_redemptions_eagle integer,max_redemptions_ace integer,max_redemptions_fairway integer);
+CREATE TABLE course_tee_sheet_overrides(course_id uuid,override_date date,self_grouping_disabled boolean);
+CREATE VIEW tee_time_occupancy AS SELECT id FROM tee_times;
+GRANT USAGE ON SCHEMA public,auth TO anon,authenticated,service_role;
+GRANT ALL ON ALL TABLES IN SCHEMA public TO service_role;
+GRANT SELECT,UPDATE ON bookings TO authenticated;
+GRANT SELECT ON course_admins TO authenticated;

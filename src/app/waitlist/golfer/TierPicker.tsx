@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState } from 'react'
 import { GolferWaitlistForm } from './GolferWaitlistForm'
 
 type Tier = {
@@ -12,18 +12,24 @@ type Tier = {
   features: string[]
 }
 
-type Course = { id: string; name: string }
-
-export function TierPicker({ tiers, initialTier, courses }: { tiers: Tier[]; initialTier: string; courses: Course[] }) {
+export function TierPicker({ tiers, initialTier }: { tiers: Tier[]; initialTier: string }) {
   const [selectedTier, setSelectedTier] = useState(initialTier)
 
   return (
     <>
-      <section className="bg-[#FAF7F2] px-6 py-16">
+      <section id="waitlist-form" tabIndex={-1} aria-label="Join the free waitlist" className="scroll-mt-24 px-6 pb-12 outline-none">
+        <div className="max-w-xl mx-auto bg-[#0F3D2E] rounded-2xl p-6 sm:p-8 text-[#F4F1EA]">
+          <h2 className="font-display text-2xl mb-2">Be first to hear when we launch.</h2>
+          <p className="text-sm text-white/80 mb-6">Free to join. No credit card. No membership commitment.</p>
+          <GolferWaitlistForm tier={selectedTier} />
+        </div>
+      </section>
+      <section id="pricing" className="scroll-mt-24 bg-[#FAF7F2] px-6 py-10 border-t border-[#0F3D2E]/10">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-center text-2xl font-display font-black text-[#0F3D2E] mb-10 tracking-[-0.01em]">
-            Pick your tier.
+          <h2 className="text-center text-2xl font-display font-black text-[#0F3D2E] mb-4 tracking-[-0.01em]">
+            Explore memberships for later.
           </h2>
+          <p className="text-center text-[#53645A] mb-10">No need to choose now. These are optional preferences for launch.</p>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {tiers.map((tierItem) => {
               const isEagle = tierItem.key === 'eagle'
@@ -32,7 +38,13 @@ export function TierPicker({ tiers, initialTier, courses }: { tiers: Tier[]; ini
                 <button
                   key={tierItem.key}
                   type="button"
-                  onClick={() => setSelectedTier(tierItem.key)}
+                  aria-pressed={isSelected}
+                  onClick={() => {
+                    setSelectedTier(tierItem.key)
+                    const form = document.getElementById('waitlist-form')
+                    form?.scrollIntoView({ block: 'start' })
+                    document.getElementById('email')?.focus({ preventScroll: true })
+                  }}
                   className={[
                     'relative rounded-2xl bg-white p-6 flex flex-col gap-4 cursor-pointer text-left w-full',
                     'transition-all duration-150 hover:-translate-y-1 hover:shadow-lg',
@@ -76,7 +88,7 @@ export function TierPicker({ tiers, initialTier, courses }: { tiers: Tier[]; ini
                         : 'border-2 border-[#0F3D2E] text-[#0F3D2E] hover:bg-[#0F3D2E]/8',
                     ].join(' ')}
                   >
-                    Select {tierItem.name}
+                    Continue with {tierItem.name} →
                   </div>
                 </button>
               )
@@ -88,17 +100,7 @@ export function TierPicker({ tiers, initialTier, courses }: { tiers: Tier[]; ini
         </div>
       </section>
 
-      <section className="px-6 py-16 bg-[#FAF7F2]">
-        <div className="max-w-xl mx-auto">
-          <div className="bg-[#0F3D2E] rounded-2xl p-8 sm:p-10">
-            <p className="text-xs font-bold tracking-[0.14em] uppercase text-[#E0A800] mb-2">GOLFER WAITLIST</p>
-            <p className="text-lg font-semibold text-[#F4F1EA] mb-8">Claim your spot. Earn every round.</p>
-            <Suspense fallback={null}>
-              <GolferWaitlistForm tier={selectedTier} courses={courses} />
-            </Suspense>
-          </div>
-        </div>
-      </section>
+
     </>
   )
 }

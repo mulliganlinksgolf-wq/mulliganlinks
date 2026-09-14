@@ -70,7 +70,7 @@ export default function MembershipActions({ tier, isPaused, pausedUntil, isCance
         <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 space-y-4 max-w-sm">
           <p className="font-medium text-[#1A1A1A]">How long would you like to pause?</p>
           <p className="text-sm text-[#6B7770]">
-            You won't be charged during your pause. Your membership resumes automatically.
+            New invoices during the pause will be waived. Billing resumes automatically; your annual renewal date stays the same. Existing unpaid invoices are not affected.
           </p>
           <div className="flex gap-3">
             {([1, 2] as const).map(m => (
@@ -108,7 +108,7 @@ export default function MembershipActions({ tier, isPaused, pausedUntil, isCance
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 space-y-4 max-w-sm">
           <p className="font-medium text-amber-900">Confirm pause for {pauseMonths} month{pauseMonths > 1 ? 's' : ''}</p>
           <p className="text-sm text-amber-800">
-            Your membership will be paused and you won't be charged. It resumes automatically after {pauseMonths} month{pauseMonths > 1 ? 's' : ''}.
+            New invoices will be waived for {pauseMonths} month{pauseMonths > 1 ? 's' : ''}. Billing then resumes automatically. This does not refund previous payments or change your renewal date.
           </p>
           <div className="flex gap-3">
             <button

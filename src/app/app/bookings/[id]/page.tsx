@@ -1,3 +1,4 @@
+import { createAdminClient } from '@/lib/supabase/admin'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -14,10 +15,11 @@ export default async function BookingDetailPage({
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: booking } = await supabase
+  if (!user) notFound()
+  const { data: booking } = await createAdminClient()
     .from('bookings')
     .select(`
-      id, players, total_paid, status, created_at, points_awarded,
+      id, players, total_paid, status, created_at, points_awarded, cancellation_requested_at, refunded_amount_cents,
       tee_times(scheduled_at, course_id, courses(name, city, state, slug, service_requests_enabled))
     `)
     .eq('id', id)
@@ -29,20 +31,23 @@ export default async function BookingDetailPage({
   const tt = booking.tee_times as any
   const course = tt?.courses
   const scheduledAt = new Date(tt?.scheduled_at)
-  const canCancel = booking.status === 'confirmed' && scheduledAt.getTime() - Date.now() > 60 * 60 * 1000
+  const canCancel = booking.status === 'pending_payment' || (booking.status === 'confirmed' && (booking.cancellation_requested_at || scheduledAt.getTime() - Date.now() > 60 * 60 * 1000))
 
   const calendarDate = scheduledAt.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z'
   const googleCalLink = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=Tee+Time+at+${encodeURIComponent(course?.name ?? '')}&dates=${calendarDate}/${calendarDate}&details=Booked+via+TeeAhead`
 
   return (
     <div className="max-w-lg space-y-6">
-      {booking.status === 'confirmed' && (
+      {booking.status === 'confirmed' && !booking.cancellation_requested_at && (
         <div className="bg-[#1B4332] text-[#FAF7F2] rounded-lg px-5 py-4">
           <p className="font-bold text-lg">You&apos;re on the tee. ⛳</p>
           <p className="text-[#FAF7F2]/80 text-sm mt-1">Booking confirmed. See you out there.</p>
         </div>
       )}
 
+      {booking.cancellation_requested_at && booking.status !== 'canceled' && <p role="status">Your cancellation is being processed. You can retry below to check its progress.</p>}
+      {booking.status === 'pending_payment' && !booking.cancellation_requested_at && <p role="status">Payment is awaiting confirmation. Refresh shortly if you just paid. Unpaid reservations expire after 15 minutes.</p>}
+      {booking.refunded_amount_cents > 0 && <p role="status">Refund issued: ${(booking.refunded_amount_cents / 100).toFixed(2)}. Your bank may take several days to show it.</p>}
       <Card className="bg-white border-0 shadow-sm">
         <CardContent className="pt-5 pb-5 space-y-3 text-sm">
           <div className="flex justify-between">
@@ -64,9 +69,9 @@ export default async function BookingDetailPage({
             <span className="text-[#6B7770]">Total paid</span>
             <span className="font-medium text-[#1A1A1A]">${booking.total_paid.toFixed(2)}</span>
           </div>
-          {booking.points_awarded > 0 && (
+          {booking.points_awarded > 0 && booking.status !== 'canceled' && (
             <div className="flex justify-between text-[#1B4332]">
-              <span>Points earned</span>
+              <span>{booking.status === 'completed' ? 'Points earned' : 'Points after your round'}</span>
               <span className="font-medium">+{booking.points_awarded}</span>
             </div>
           )}

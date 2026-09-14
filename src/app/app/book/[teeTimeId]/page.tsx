@@ -26,7 +26,7 @@ export default async function BookPage({
   const admin = createAdminClient()
   const { data: teeTime } = await admin
     .from('tee_times')
-    .select('id, scheduled_at, available_players, base_price, status, courses(id, name, slug, city, state, stripe_account_id, stripe_charges_enabled)')
+    .select('id, scheduled_at, available_players, base_price, special_price, status, courses(id, name, slug, city, state, stripe_account_id, stripe_charges_enabled)')
     .eq('id', teeTimeId)
     .single()
 
@@ -40,6 +40,7 @@ export default async function BookPage({
     .maybeSingle()
 
   const tier = membership?.tier ?? 'free'
+  teeTime.base_price = teeTime.special_price ?? teeTime.base_price
 
   const course = teeTime.courses as any
   const stripeEnabled = course?.stripe_charges_enabled === true
@@ -105,6 +106,8 @@ export default async function BookPage({
           tier={tier}
           userId={user.id}
           availablePasses={availablePasses}
+          cartPolicy={teeSheetConfig?.cart_policy ?? 'optional'}
+          cartFeeCents={resolvedCartFeeCents}
           joinExistingGroup={isJoinMode}
         />
       ) : (

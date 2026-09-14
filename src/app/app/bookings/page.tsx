@@ -1,4 +1,6 @@
 // src/app/app/bookings/page.tsx
+import { createAdminClient } from '@/lib/supabase/admin'
+import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 
@@ -6,7 +8,8 @@ export default async function BookingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  const { data: bookings } = await supabase
+  if (!user) redirect('/login')
+  const { data: bookings } = await createAdminClient()
     .from('bookings')
     .select('id, players, total_paid, status, created_at, tee_times(scheduled_at, courses(name))')
     .eq('user_id', user!.id)

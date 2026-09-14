@@ -1,285 +1,91 @@
 'use client'
 
-import { useState, useTransition, useRef, useCallback } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { trackWaitlist } from '@/lib/waitlist-tracking'
 import { joinGolferWaitlist } from './actions'
 
-type Course = { id: string; name: string }
-
-export function GolferWaitlistForm({ tier = '', courses = [] }: { tier?: string; courses?: Course[] }) {
+export function GolferWaitlistForm({ tier = 'fairway' }: { tier?: string }) {
   const { executeRecaptcha } = useGoogleReCaptcha()
-  const [selectedTier, setSelectedTier] = useState(tier)
-  const [hearAboutUs, setHearAboutUs] = useState('')
-  const [selectedCourseId, setSelectedCourseId] = useState('')
-  const [courseSearch, setCourseSearch] = useState('')
-  const [showCourseSuggestions, setShowCourseSuggestions] = useState(false)
+  const [email, setEmail] = useState('')
+  const [zip, setZip] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [submitted, setSubmitted] = useState(false)
   const [isPending, startTransition] = useTransition()
-  const [submitted, setSubmitted] = useState<string | null>(null)
-  const courseInputRef = useRef<HTMLInputElement>(null)
+  const started = useRef(false)
+  const submitting = useRef(false)
 
-  const filteredCourses = courseSearch.length >= 1
-    ? courses.filter(c => c.name.toLowerCase().includes(courseSearch.toLowerCase())).slice(0, 8)
-    : courses.slice(0, 8)
-
-  function handleCourseSelect(course: Course) {
-    setSelectedCourseId(course.id)
-    setCourseSearch(course.name)
-    setShowCourseSuggestions(false)
+  function markStarted() {
+    if (!started.current) {
+      started.current = true
+      trackWaitlist('golfer_waitlist_started')
+    }
   }
 
-  const handleSubmit = useCallback(async (formData: FormData) => {
+  function handleSubmit(formData: FormData) {
+    if (submitting.current) return
+    submitting.current = true
+    markStarted()
     setError(null)
-    if (selectedCourseId) formData.set('selected_course_id', selectedCourseId)
-
-    if (!executeRecaptcha) {
-      setError('Security check still loading, please try again in a moment.')
-      return
-    }
-
-    const token = await executeRecaptcha('golfer_waitlist')
-    formData.set('recaptcha_token', token)
-
+    trackWaitlist('golfer_waitlist_submitted')
     startTransition(async () => {
-      const result = await joinGolferWaitlist(formData)
-      if (result.success) {
-        const emailVal = (formData.get('email') as string)?.toLowerCase().trim() ?? ''
-        setSubmitted(emailVal)
-      } else {
-        setError(result.error ?? 'Something went wrong.')
+      let stage = 'security_check'
+      try {
+        if (!executeRecaptcha) {
+          setError('Security check is still loading. Please try again in a moment.')
+          trackWaitlist('golfer_waitlist_failed', 'security_loading')
+          return
+        }
+        formData.set('recaptcha_token', await executeRecaptcha('golfer_waitlist'))
+        stage = 'request'
+        const result = await joinGolferWaitlist(formData)
+        if (result.success) {
+          setSubmitted(true)
+          trackWaitlist(result.alreadyJoined ? 'golfer_waitlist_already_joined' : 'golfer_waitlist_succeeded')
+        } else {
+          setError(result.error ?? 'Something went wrong. Please try again.')
+          trackWaitlist('golfer_waitlist_failed', result.reason ?? 'server')
+        }
+      } catch {
+        setError('We couldn’t complete your request. Please try again. Your details are still here.')
+        trackWaitlist('golfer_waitlist_failed', stage)
+      } finally {
+        submitting.current = false
       }
     })
-  }, [executeRecaptcha, selectedCourseId])
-
-  const selectClassName = "flex h-9 w-full rounded-md border border-white/20 bg-white/10 px-3 py-1 text-sm text-[#F4F1EA] shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#E0A800] disabled:cursor-not-allowed disabled:opacity-50 placeholder:text-[#F4F1EA]/40"
+  }
 
   if (submitted) {
     return (
-      <div className="space-y-6 text-center py-4">
-        <p className="text-4xl">✅</p>
-        <div className="space-y-2">
-          <p className="text-lg font-semibold text-[#F4F1EA]">You&apos;re on the list.</p>
-          <p className="text-sm text-[#F4F1EA]/70">We&apos;ll reach out to <span className="font-semibold text-[#F4F1EA]">{submitted}</span> when TeeAhead launches in Metro Detroit.</p>
-        </div>
-        <div className="space-y-3 text-left bg-white/8 rounded-xl p-5">
-          <p className="text-sm font-semibold text-[#F4F1EA]">You&apos;re on the list. Here&apos;s what happens next:</p>
-          {[
-            "We'll email you when TeeAhead launches in your zip code area.",
-            "You'll get early access to lock in founding member pricing before public launch.",
-            "No credit card until you're ready to activate.",
-          ].map((step, i) => (
-            <div key={i} className="flex gap-3 items-start">
-              <span className="flex-shrink-0 size-5 rounded-full bg-[#E0A800] text-[#0a0a0a] text-xs font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
-              <p className="text-sm text-[#F4F1EA]/75">{step}</p>
-            </div>
-          ))}
-        </div>
-        <a href="/pricing" className="inline-flex items-center justify-center rounded-lg bg-[#E0A800] px-6 py-3 text-sm font-semibold text-[#0a0a0a] hover:bg-[#E0A800]/90 transition-colors">
-          Compare memberships →
-        </a>
+      <div role="status" className="space-y-4 py-3">
+        <h3 className="text-xl font-semibold">You’re on the list.</h3>
+        <p className="text-white/85">We’ll email {email} with news about the Metro Detroit launch. No payment or membership commitment is needed.</p>
+        <p className="text-sm text-white/80">Have a favorite course? Reply to your confirmation email and tell us where you’d like to play.</p>
       </div>
     )
   }
 
   return (
-    <form action={handleSubmit} className="space-y-6">
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3">
-          {error}
-        </div>
-      )}
-
-      {/* Required fields */}
-      <div className="space-y-1.5">
-        <Label htmlFor="first_name" className="text-[#F4F1EA]">First name *</Label>
-        <Input
-          id="first_name"
-          name="first_name"
-          required
-          disabled={isPending}
-          placeholder="Jack"
-          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-        />
+    <form action={handleSubmit} onChange={markStarted} onInvalidCapture={() => {
+      markStarted()
+      trackWaitlist('golfer_waitlist_failed', 'validation')
+    }} aria-busy={isPending} className="space-y-5">
+      <input type="hidden" name="interested_tier" value={tier} />
+      {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+      <div className="space-y-2">
+        <Label htmlFor="email">Email address</Label>
+        <Input id="email" name="email" type="email" autoComplete="email" required maxLength={255} value={email} onChange={e => setEmail(e.target.value)} disabled={isPending} placeholder="you@example.com" className="h-12 bg-white text-[#0F3D2E] text-base" />
       </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="last_name" className="text-[#F4F1EA]">Last name *</Label>
-        <Input
-          id="last_name"
-          name="last_name"
-          required
-          disabled={isPending}
-          placeholder="Nicklaus"
-          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-        />
+      <div className="space-y-2">
+        <Label htmlFor="zip_code">ZIP code</Label>
+        <Input id="zip_code" name="zip_code" autoComplete="postal-code" inputMode="numeric" pattern="[0-9]{5}(-[0-9]{4})?" title="Enter a five-digit ZIP code, such as 48009." required maxLength={10} value={zip} onChange={e => setZip(e.target.value)} disabled={isPending} placeholder="48009" aria-describedby="zip-help" className="h-12 bg-white text-[#0F3D2E] text-base" />
+        <p id="zip-help" className="text-xs text-white/80">So we can share launch updates for your area.</p>
       </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="email" className="text-[#F4F1EA]">Email address *</Label>
-        <Input id="email" name="email" type="email" required disabled={isPending} placeholder="jack@example.com" className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]" />
-        <p className="text-xs text-[#F4F1EA]/50">No spam, ever. We&apos;ll only contact you about your waitlist status and the Metro Detroit launch.</p>
-      </div>
-
-      <div className="space-y-1.5">
-        <Label htmlFor="zip_code" className="text-[#F4F1EA]">ZIP code *</Label>
-        <Input
-          id="zip_code"
-          name="zip_code"
-          required
-          disabled={isPending}
-          placeholder="48009"
-          maxLength={10}
-          className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-        />
-        <p className="text-xs text-[#F4F1EA]/60">We use this to prioritize by metro area.</p>
-      </div>
-
-      {/* ── How did you hear about us? ─────────────────────── */}
-      <div className="space-y-3 pt-2 border-t border-white/10">
-        <div className="space-y-1.5">
-          <Label htmlFor="hear_about_us" className="text-[#F4F1EA]">How did you hear about us?</Label>
-          <select
-            id="hear_about_us"
-            name="hear_about_us"
-            value={hearAboutUs}
-            onChange={e => {
-              setHearAboutUs(e.target.value)
-              if (e.target.value !== 'my_home_course') {
-                setSelectedCourseId('')
-                setCourseSearch('')
-              }
-            }}
-            disabled={isPending}
-            className={selectClassName}
-          >
-            <option value="">Select…</option>
-            <option value="my_home_course">My home course</option>
-            <option value="friend">A friend</option>
-            <option value="online_search">Online search</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        {/* Course picker, shown only when "My home course" is selected */}
-        {hearAboutUs === 'my_home_course' && (
-          <div className="space-y-1.5">
-            <Label htmlFor="course_search" className="text-[#F4F1EA]">Which course?</Label>
-            <div className="relative">
-              <Input
-                id="course_search"
-                ref={courseInputRef}
-                value={courseSearch}
-                onChange={e => {
-                  setCourseSearch(e.target.value)
-                  setSelectedCourseId('')
-                  setShowCourseSuggestions(true)
-                }}
-                onFocus={() => setShowCourseSuggestions(true)}
-                onBlur={() => setTimeout(() => setShowCourseSuggestions(false), 150)}
-                disabled={isPending}
-                placeholder="Search courses…"
-                autoComplete="off"
-                className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-              />
-              {showCourseSuggestions && filteredCourses.length > 0 && (
-                <ul className="absolute z-50 w-full mt-1 bg-[#0F3D2E] border border-white/20 rounded-md shadow-lg max-h-48 overflow-auto">
-                  {filteredCourses.map(course => (
-                    <li key={course.id}>
-                      <button
-                        type="button"
-                        className="w-full text-left px-3 py-2 text-sm text-[#F4F1EA] hover:bg-white/10 transition-colors"
-                        onMouseDown={() => handleCourseSelect(course)}
-                      >
-                        {course.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            {/* Legal disclosure required by plan */}
-            <p className="text-xs text-[#F4F1EA]/60">
-              Your home course earns 10% from your first year of membership. <a href="/terms" className="underline">Terms apply.</a>
-            </p>
-          </div>
-        )}
-      </div>
-
-      <Button
-        type="submit"
-        disabled={isPending}
-        className="w-full bg-[#E0A800] hover:bg-[#E0A800]/90 text-[#0a0a0a] font-bold py-3"
-      >
-        {isPending ? 'Joining…' : 'Claim My Spot ⛳'}
-      </Button>
-
-      {/* ── Optional fields ─────────────────────────── */}
-      <div className="space-y-5 pt-4 border-t border-white/10">
-        <p className="text-sm font-medium text-[#F4F1EA]/70">
-          Optional: help us personalize your experience
-        </p>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="home_course" className="text-[#F4F1EA]">Home course name</Label>
-          <Input
-            id="home_course"
-            name="home_course"
-            disabled={isPending}
-            placeholder="Oakland Hills, Detroit Golf Club, etc."
-            className="bg-white/10 border-white/20 text-[#F4F1EA] placeholder:text-[#F4F1EA]/40 focus-visible:ring-[#E0A800]"
-          />
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="rounds_per_year" className="text-[#F4F1EA]">Rounds per year</Label>
-          <select id="rounds_per_year" name="rounds_per_year" disabled={isPending} className={selectClassName}>
-            <option value="">Select…</option>
-            <option value="under_10">Under 10</option>
-            <option value="10_20">10–20</option>
-            <option value="20_40">20–40</option>
-            <option value="40_plus">40+</option>
-          </select>
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="current_membership" className="text-[#F4F1EA]">Current membership</Label>
-          <select id="current_membership" name="current_membership" disabled={isPending} className={selectClassName}>
-            <option value="">Select…</option>
-            <option value="none">None</option>
-            <option value="golfpass_plus">GolfPass+</option>
-            <option value="troon_access">Troon Access</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-
-        <fieldset className="space-y-2">
-          <legend className="text-sm font-medium text-[#F4F1EA]">Which tier interests you most?</legend>
-          <div className="space-y-2">
-            {[
-              { value: 'fairway', label: 'Fairway · Free forever' },
-              { value: 'eagle', label: 'Eagle · $89/yr (most popular)' },
-              { value: 'ace', label: 'Ace · $159/yr (all-in)' },
-              { value: 'not_sure', label: 'Not sure yet' },
-            ].map(({ value, label }) => (
-              <label key={value} className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="radio"
-                  name="interested_tier"
-                  value={value}
-                  disabled={isPending}
-                  checked={selectedTier === value}
-                  onChange={() => setSelectedTier(value)}
-                  className="accent-[#E0A800]"
-                />
-                <span className="text-sm text-[#F4F1EA]">{label}</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      </div>
+      <Button type="submit" disabled={isPending} className="h-12 w-full bg-[#E0A800] text-[#082419] hover:bg-[#E0A800]/90 font-semibold text-base">{isPending ? 'Joining…' : 'Notify me at launch'}</Button>
+      <p className="text-xs text-white/80">We’ll only email you about TeeAhead and the launch. Unsubscribe anytime.</p>
     </form>
   )
 }

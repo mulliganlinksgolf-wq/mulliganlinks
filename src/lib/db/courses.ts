@@ -1,10 +1,10 @@
+import { requireOnboardingAccess } from '@/lib/auth/onboarding'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export type CourseOnboarding = {
   id: string
   name: string
   slug: string
-  invite_token: string | null
   invite_used: boolean
   legal_entity_name: string | null
   gm_name: string | null
@@ -30,7 +30,7 @@ export async function getCourseByInviteToken(token: string): Promise<CourseOnboa
   const { data, error } = await supabase
     .from('courses')
     .select(
-      'id, name, slug, invite_token, invite_used, legal_entity_name, gm_name, email, phone, billing_email, website, address, city, state, zip, tax_id, holes, description, amenities, onboarding_step, onboarding_complete, is_live'
+      'id, name, slug, invite_used, legal_entity_name, gm_name, email, phone, billing_email, website, address, city, state, zip, tax_id, holes, description, amenities, onboarding_step, onboarding_complete, is_live'
     )
     .eq('invite_token', token)
     .single()
@@ -40,11 +40,12 @@ export async function getCourseByInviteToken(token: string): Promise<CourseOnboa
 }
 
 export async function getCourseById(id: string): Promise<CourseOnboarding | null> {
+  await requireOnboardingAccess(id, true)
   const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('courses')
     .select(
-      'id, name, slug, invite_token, invite_used, legal_entity_name, gm_name, email, phone, billing_email, website, address, city, state, zip, tax_id, holes, description, amenities, onboarding_step, onboarding_complete, is_live'
+      'id, name, slug, invite_used, legal_entity_name, gm_name, email, phone, billing_email, website, address, city, state, zip, tax_id, holes, description, amenities, onboarding_step, onboarding_complete, is_live'
     )
     .eq('id', id)
     .single()

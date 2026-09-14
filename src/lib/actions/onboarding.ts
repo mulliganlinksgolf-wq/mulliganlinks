@@ -1,5 +1,6 @@
 'use server'
 
+import { requireOnboardingAccess } from '@/lib/auth/onboarding'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendGoLiveAlert } from '@/lib/email/sendGoLiveAlert'
 import { sendCourseWelcome } from '@/lib/email/sendCourseWelcome'
@@ -57,6 +58,7 @@ export async function saveStep1(
   courseId: string,
   data: Step1Data,
 ): Promise<{ courseId: string }> {
+  await requireOnboardingAccess(courseId)
   const supabase = createAdminClient()
 
   const fields = {
@@ -85,6 +87,7 @@ export async function saveStep1(
 }
 
 export async function saveStep2(courseId: string, data: Step2Data): Promise<void> {
+  await requireOnboardingAccess(courseId)
   const supabase = createAdminClient()
 
   const { error: configError } = await supabase
@@ -134,6 +137,7 @@ export async function saveStep3(courseId: string, data: Step3Data): Promise<void
   if (data.pricing.some((p) => p.greenFeeCents < 0 || p.cartFeeCents < 0))
     throw new Error('Fees cannot be negative')
 
+  await requireOnboardingAccess(courseId)
   const supabase = createAdminClient()
 
   const { error: deleteError } = await supabase
@@ -178,6 +182,7 @@ export async function saveStep3(courseId: string, data: Step3Data): Promise<void
 }
 
 export async function saveStep4(courseId: string, data: Step4Data): Promise<void> {
+  await requireOnboardingAccess(courseId)
   const supabase = createAdminClient()
 
   const { error } = await supabase
@@ -193,6 +198,7 @@ export async function saveStep4(courseId: string, data: Step4Data): Promise<void
 }
 
 export async function goLive(courseId: string): Promise<void> {
+  await requireOnboardingAccess(courseId)
   const supabase = createAdminClient()
 
   const { data: course, error: fetchError } = await supabase
