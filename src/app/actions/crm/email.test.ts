@@ -33,7 +33,6 @@ describe('sendCrmEmail', () => {
     } as never)
 
     const insertMock = vi.fn().mockResolvedValue({ error: null })
-    const updateMock = vi.fn().mockReturnThis()
     const eqMock = vi.fn().mockResolvedValue({ error: null })
     vi.mocked(createAdminClient).mockReturnValue({
       from: vi.fn((table: string) => {

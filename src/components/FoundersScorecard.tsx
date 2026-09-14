@@ -94,7 +94,7 @@ const HOLES: Hole[] = [
   },
 ]
 
-export function FoundersScorecard({ spotsRemaining = 10 }: { spotsRemaining?: number }) {
+export function FoundersScorecard({}: { spotsRemaining?: number }) {
   return (
     <div className="max-w-3xl mx-auto">
       <div className="bg-[#FDFAF4] rounded-sm overflow-hidden shadow-[0_8px_32px_rgba(0,0,0,0.18)]">

@@ -132,7 +132,7 @@ export function RequestModal({ courseId, bookingId, onClose, onSubmitted }: Requ
         {/* Error */}
         {error && (
           <p className="px-4 pb-2 text-xs text-red-500 font-sans">
-            Couldn't send, try again
+            Couldn&apos;t send, try again
           </p>
         )}
 

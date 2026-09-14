@@ -63,7 +63,7 @@ export default function SocialIdeasPanel({ sentPosts }: Props) {
         <div>
           <h2 className="font-bold text-[#1A1A1A]">Content Ideas</h2>
           <p className="text-xs text-[#6B7770] mt-0.5">
-            Save content ideas to your Buffer backlog. Assign to a channel when you're ready to post.
+            Save content ideas to your Buffer backlog. Assign to a channel when you&apos;re ready to post.
           </p>
         </div>
         <textarea

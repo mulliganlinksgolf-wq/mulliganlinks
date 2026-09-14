@@ -13,8 +13,8 @@ export async function GET(request: Request) {
   try {
     const result = await sendPairingNotificationsForTomorrow()
     return NextResponse.json({ ok: true, ...result })
-  } catch (e: any) {
+  } catch (e) {
     console.error('[cron/pairing-notifications] error:', e)
-    return NextResponse.json({ ok: false, error: e?.message ?? 'unknown' }, { status: 500 })
+    return NextResponse.json({ ok: false, error: (e instanceof Error ? e.message : String(e)) ?? 'unknown' }, { status: 500 })
   }
 }

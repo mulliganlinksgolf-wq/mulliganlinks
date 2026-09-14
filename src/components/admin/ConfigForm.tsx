@@ -4,31 +4,31 @@ interface ConfigFormProps {
   config: Record<string, string>
 }
 
+function ConfigField({ config, label, configKey, type = 'text', hint }: { config: Record<string, string>; label: string; configKey: string; type?: string; hint?: string }) {
+  return (
+    <form action={saveConfigValue} className="flex items-center justify-between gap-4">
+      <input type="hidden" name="key" value={configKey} />
+      <div>
+        <p className="text-sm font-medium text-[#1A1A1A]">{label}</p>
+        {hint && <p className="text-xs text-[#6B7770]">{hint}</p>}
+      </div>
+      <div className="flex items-center gap-2">
+        <input
+          name="value"
+          type={type}
+          defaultValue={config[configKey] ?? ''}
+          className="w-44 rounded-lg border border-black/15 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
+        />
+        <button type="submit" className="rounded-lg bg-[#1B4332] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#1B4332]/90">
+          Save
+        </button>
+      </div>
+    </form>
+  )
+}
+
 export default function ConfigForm({ config }: ConfigFormProps) {
   const isLive = config['launch_mode'] === 'live'
-
-  function ConfigField({ label, configKey, type = 'text', hint }: { label: string; configKey: string; type?: string; hint?: string }) {
-    return (
-      <form action={saveConfigValue} className="flex items-center justify-between gap-4">
-        <input type="hidden" name="key" value={configKey} />
-        <div>
-          <p className="text-sm font-medium text-[#1A1A1A]">{label}</p>
-          {hint && <p className="text-xs text-[#6B7770]">{hint}</p>}
-        </div>
-        <div className="flex items-center gap-2">
-          <input
-            name="value"
-            type={type}
-            defaultValue={config[configKey] ?? ''}
-            className="w-44 rounded-lg border border-black/15 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]/30"
-          />
-          <button type="submit" className="rounded-lg bg-[#1B4332] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#1B4332]/90">
-            Save
-          </button>
-        </div>
-      </form>
-    )
-  }
 
   return (
     <div className="space-y-10">
@@ -60,8 +60,8 @@ export default function ConfigForm({ config }: ConfigFormProps) {
           </form>
         </div>
         <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 space-y-4">
-          <ConfigField label="Metro Area Name" configKey="metro_area_name" />
-          <ConfigField label="Founding Golfer Cap" configKey="founding_golfer_cap" type="number" />
+          <ConfigField config={config} label="Metro Area Name" configKey="metro_area_name" />
+          <ConfigField config={config} label="Founding Golfer Cap" configKey="founding_golfer_cap" type="number" />
         </div>
       </section>
 
@@ -70,10 +70,10 @@ export default function ConfigForm({ config }: ConfigFormProps) {
         <h2 className="font-bold text-[#1A1A1A]">Membership Pricing Display</h2>
         <p className="text-xs text-[#6B7770]">Display values only. Stripe product prices are managed in the Stripe dashboard.</p>
         <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 space-y-4">
-          <ConfigField label="Eagle annual price ($/yr)" configKey="price_eagle_annual" type="number" />
-          <ConfigField label="Ace annual price ($/yr)" configKey="price_ace_annual" type="number" />
-          <ConfigField label="Eagle monthly credit value ($)" configKey="price_eagle_monthly_credit" type="number" />
-          <ConfigField label="Ace monthly credit value ($)" configKey="price_ace_monthly_credit" type="number" />
+          <ConfigField config={config} label="Eagle annual price ($/yr)" configKey="price_eagle_annual" type="number" />
+          <ConfigField config={config} label="Ace annual price ($/yr)" configKey="price_ace_annual" type="number" />
+          <ConfigField config={config} label="Eagle monthly credit value ($)" configKey="price_eagle_monthly_credit" type="number" />
+          <ConfigField config={config} label="Ace monthly credit value ($)" configKey="price_ace_monthly_credit" type="number" />
         </div>
       </section>
 
@@ -82,8 +82,8 @@ export default function ConfigForm({ config }: ConfigFormProps) {
         <h2 className="font-bold text-[#1A1A1A]">Platform Fees</h2>
         <p className="text-xs text-[#6B7770]">Changes take effect immediately for new bookings.</p>
         <div className="bg-white rounded-xl ring-1 ring-black/5 p-5 space-y-4">
-          <ConfigField label="Fairway tier per-booking fee ($)" configKey="fee_fairway_booking" type="number" />
-          <ConfigField label="Eagle / Ace per-booking fee ($)" configKey="fee_paid_booking" type="number" hint="Expected: $0.00" />
+          <ConfigField config={config} label="Fairway tier per-booking fee ($)" configKey="fee_fairway_booking" type="number" />
+          <ConfigField config={config} label="Eagle / Ace per-booking fee ($)" configKey="fee_paid_booking" type="number" hint="Expected: $0.00" />
         </div>
       </section>
 

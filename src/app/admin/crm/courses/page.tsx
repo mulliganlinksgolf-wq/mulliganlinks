@@ -55,7 +55,7 @@ export default async function CoursesPage({
             href="/admin/crm/courses/outreach-queue"
             className="px-3 py-1.5 border border-emerald-600 text-emerald-700 text-sm font-medium rounded-lg hover:bg-emerald-50"
           >
-            Today's Queue
+            Today&apos;s Queue
           </Link>
           <Link
             href="/admin/crm/courses/new"

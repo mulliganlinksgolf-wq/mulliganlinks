@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { SelfGroupingOverrideControl } from '@/components/course/SelfGroupingOverrideControl'
@@ -139,10 +140,10 @@ export default async function CourseBookingsPage({
           <tbody className="divide-y divide-gray-100">
             {!bookings || bookings.length === 0 ? (
               <tr><td colSpan={6} className="px-4 py-8 text-center text-[#6B7770]">No bookings found.</td></tr>
-            ) : bookings.map((b: any) => (
+            ) : bookings.map((b) => (
               <tr key={b.id} className="hover:bg-gray-50">
                 <td className="px-4 py-2.5 font-medium text-[#1A1A1A]">
-                  {b.profiles?.full_name ?? b.guest_name ?? '—'}
+                  {related(b.profiles)?.full_name ?? b.guest_name ?? '—'}
                   {!b.profiles && b.guest_name && (
                     <span className="ml-1.5 text-xs text-[#6B7770] font-normal">walk-in</span>
                   )}
@@ -153,7 +154,7 @@ export default async function CourseBookingsPage({
                   )}
                 </td>
                 <td className="px-4 py-2.5 text-[#6B7770]">
-                  {new Date(b.tee_times?.scheduled_at).toLocaleString('en-US', {
+                  {new Date(related(b.tee_times)?.scheduled_at).toLocaleString('en-US', {
                     month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
                     timeZone: 'America/Detroit',
                   })}

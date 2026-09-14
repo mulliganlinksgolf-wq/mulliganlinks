@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -38,8 +39,8 @@ export default async function ViewAsCoursePage({
   const { data: teeTimes } = await admin
     .from('tee_times')
     .select(`
-      id, scheduled_at, max_players, available_players, base_price, status,
-      bookings(id, players, total_paid, status, user_id,
+      id, scheduled_at, max_players, available_players, base_price, status, special_price, special_label,
+      bookings(id, guest_name, players, total_paid, status, user_id,
         profiles(full_name)
       )
     `)
@@ -107,7 +108,7 @@ export default async function ViewAsCoursePage({
             <p className="text-[#6B7770]">No tee times for this date.</p>
           </div>
         ) : (
-          <TeeSheetGrid teeTimes={teeTimes as any} slug={slug} courseId={course.id} courseName={course.name} />
+          <TeeSheetGrid teeTimes={(teeTimes ?? []).map(t => ({ ...t, bookings: t.bookings.map(b => ({ ...b, profiles: related(b.profiles) ?? null })) }))} slug={slug} courseId={course.id} courseName={course.name} />
         )}
       </div>
 

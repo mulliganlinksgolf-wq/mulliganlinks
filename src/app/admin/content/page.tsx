@@ -87,7 +87,7 @@ export default async function ContentPage({
         )}
 
         <div className="space-y-4">
-          {(blocks ?? []).map((block: any) => (
+          {(blocks ?? []).map((block) => (
             <form key={block.key} action={saveBlock} className="bg-white rounded-xl ring-1 ring-black/5 p-5 space-y-3">
               <input type="hidden" name="key" value={block.key} />
               <input type="hidden" name="group" value={activeGroup.key} />

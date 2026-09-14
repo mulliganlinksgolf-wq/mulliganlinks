@@ -8,7 +8,7 @@ vi.mock('@/components/admin/EditTierModal', () => ({
   default: () => <button>Edit Tier</button>,
 }))
 vi.mock('next/link', () => ({
-  default: ({ href, children }: any) => <a href={href}>{children}</a>,
+  default: ({ href, children }: { href: string; children: React.ReactNode }) => <a href={href}>{children}</a>,
 }))
 
 import MemberDetailHeader from '@/components/admin/MemberDetailHeader'

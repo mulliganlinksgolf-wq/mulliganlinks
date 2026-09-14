@@ -28,8 +28,8 @@ export default function InviteStaffModal({
           setEmail('')
           setSuccess(false)
         }, 2000)
-      } catch (err: any) {
-        setError(err.message ?? 'Failed to send invite')
+      } catch (err) {
+        setError((err instanceof Error ? err.message : String(err)) ?? 'Failed to send invite')
       }
     })
   }

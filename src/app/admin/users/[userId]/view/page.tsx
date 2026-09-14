@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -38,7 +39,7 @@ export default async function ViewAsMemberPage({
       .order('created_at', { ascending: false })
       .limit(10),
     admin.from('fairway_points')
-      .select('amount, reason, created_at, courses(name)')
+      .select('id, amount, reason, created_at, courses(name)')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(10),
@@ -136,12 +137,12 @@ export default async function ViewAsMemberPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {(bookings as any[]).map(b => (
+                {(bookings).map(b => (
                   <tr key={b.id} className="hover:bg-[#FAF7F2]/50">
-                    <td className="px-4 py-3 font-medium text-[#1A1A1A]">{b.tee_times?.courses?.name ?? '—'}</td>
+                    <td className="px-4 py-3 font-medium text-[#1A1A1A]">{related(related(b.tee_times)?.courses)?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-[#6B7770]">
-                      {b.tee_times?.scheduled_at
-                        ? new Date(b.tee_times.scheduled_at).toLocaleDateString('en-US', {
+                      {related(b.tee_times)?.scheduled_at
+                        ? new Date(related(b.tee_times)!.scheduled_at).toLocaleDateString('en-US', {
                             weekday: 'short', month: 'short', day: 'numeric',
                             hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
                           })
@@ -183,10 +184,10 @@ export default async function ViewAsMemberPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5">
-                {(pointsLog as any[]).map(p => (
+                {(pointsLog).map(p => (
                   <tr key={p.id ?? p.created_at} className="hover:bg-[#FAF7F2]/50">
                     <td className="px-4 py-3 text-[#1A1A1A]">{p.reason}</td>
-                    <td className="px-4 py-3 text-[#6B7770]">{p.courses?.name ?? '—'}</td>
+                    <td className="px-4 py-3 text-[#6B7770]">{related(p.courses)?.name ?? '—'}</td>
                     <td className="px-4 py-3 text-[#6B7770]">
                       {new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                     </td>

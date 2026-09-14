@@ -25,7 +25,7 @@ export default async function MemberCardPage() {
   ])
 
   const tier = membership?.tier ?? 'fairway'
-  const balance = (pointRows ?? []).reduce((s: number, r: any) => s + r.amount, 0)
+  const balance = (pointRows ?? []).reduce((s: number, r) => s + r.amount, 0)
   const memberSince = new Date(user.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
   const shortId = user.id.slice(0, 8).toUpperCase()
 

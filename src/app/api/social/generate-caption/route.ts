@@ -155,7 +155,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ captions })
   } catch (err) {
-    const message = err instanceof Error ? err.message : 'Unknown error'
+    const message = err instanceof Error ? (err instanceof Error ? err.message : String(err)) : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
   }
 }

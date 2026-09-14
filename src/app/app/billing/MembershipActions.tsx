@@ -26,8 +26,8 @@ export default function MembershipActions({ tier, isPaused, pausedUntil, isCance
       try {
         await action()
         setScreen('idle')
-      } catch (e: any) {
-        setError(e.message ?? 'Something went wrong')
+      } catch (e) {
+        setError((e instanceof Error ? e.message : String(e)) ?? 'Something went wrong')
       }
     })
   }

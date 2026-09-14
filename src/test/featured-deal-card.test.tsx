@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, within } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { PublicTeeTimeGrid } from '@/app/book/[slug]/PublicTeeTimeGrid'
 
 // 7:30 AM and 8:00 AM Detroit (EDT = UTC-4)

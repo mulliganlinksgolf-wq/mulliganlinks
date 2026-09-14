@@ -25,7 +25,7 @@ function makeChain(overrides: Partial<{ data: unknown; error: unknown }> = {}) {
                    'order', 'limit', 'single', 'maybeSingle']
   for (const m of methods) chain[m] = vi.fn().mockReturnThis()
   chain['then'] = (resolve: (v: typeof base) => unknown) => Promise.resolve(resolve(base))
-  return chain as any
+  return chain
 }
 
 const COURSE_ID = 'course-uuid'

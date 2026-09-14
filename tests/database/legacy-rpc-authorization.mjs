@@ -1,0 +1,37 @@
+import { readFile } from 'node:fs/promises'
+import assert from 'node:assert/strict'
+import { PGlite } from '@electric-sql/pglite'
+const db = new PGlite()
+try {
+  for (const file of ['core-reliability-fixture.sql','legacy-rpc-fixture.sql']) await db.exec(await readFile(new URL(file,import.meta.url),'utf8'))
+  await db.exec(await readFile(new URL('../../supabase/migrations/20260914170525_legacy_rpc_authorization.sql',import.meta.url),'utf8'))
+  const owner='10000000-0000-0000-0000-000000000001', guest='10000000-0000-0000-0000-000000000002', course='10000000-0000-0000-0000-000000000003', time='10000000-0000-0000-0000-000000000004', listing='10000000-0000-0000-0000-000000000005'
+  await db.query('INSERT INTO profiles(id) VALUES($1),($2)',[owner,guest])
+  await db.query('INSERT INTO courses(id) VALUES($1)',[course])
+  await db.query('INSERT INTO course_admins(user_id,course_id) VALUES($1,$2)',[owner,course])
+  await db.query("INSERT INTO tee_times(id,course_id,scheduled_at) VALUES($1,$2,now()+interval '1 day')",[time,course])
+  await db.query("INSERT INTO tee_time_listings(id,status,expires_at,listed_by_member_id,credit_amount_cents,course_id) VALUES($1,'active',now()+interval '1 day',$2,1000,$3)",[listing,owner,course])
+  await db.exec('SET ROLE authenticated')
+  await db.query("SELECT set_config('request.jwt.claim.sub',$1,false)",[guest])
+  await assert.rejects(db.query('SELECT claim_listing($1,$2)',[listing,owner]),/Unauthorized claimant/)
+  assert.equal((await db.query("SELECT user_has_course_permission($1,$2,'manage_bookings') allowed",[owner,course])).rows[0].allowed,false)
+  assert.equal((await db.query('SELECT claim_listing($1,$2) result',[listing,guest])).rows[0].result.success,true)
+  assert.match((await db.query('SELECT claim_listing($1,$2) result',[listing,guest])).rows[0].result.error,/no longer available/)
+  await assert.rejects(db.query("SELECT create_walk_in_booking($1,'Guest','',1,10,'cash',NULL)",[time]),/Unauthorized/)
+  await db.query("SELECT set_config('request.jwt.claim.sub',$1,false)",[owner])
+  assert.equal((await db.query("SELECT user_has_course_permission($1,$2,'manage_bookings') allowed",[owner,course])).rows[0].allowed,true)
+  for (const players of [null,-1,0,5]) await assert.rejects(db.query("SELECT create_walk_in_booking($1,'Guest','',$2,10,'cash',NULL)",[time,players]),/Invalid walk-in booking/)
+  await assert.rejects(db.query("SELECT create_walk_in_booking($1,'Guest','',1,-1,'cash',NULL)",[time]),/Invalid walk-in booking/)
+  await db.query("SELECT create_walk_in_booking($1,'Guest','',1,10,'cash',NULL)",[time])
+  await db.exec('RESET ROLE')
+  assert.equal((await db.query('SELECT available_players FROM tee_times')).rows[0].available_players,3)
+  assert.equal((await db.query('SELECT teeahead_credit_cents FROM profiles WHERE id=$1',[owner])).rows[0].teeahead_credit_cents,1000)
+  assert.equal((await db.query('SELECT count(*)::int n FROM tee_time_transfers')).rows[0].n,1)
+  await db.exec('SET ROLE service_role')
+  await db.query("SELECT set_config('request.jwt.claims',$1,false)",[JSON.stringify({role:'service_role'})])
+  await db.query("SELECT set_config('request.jwt.claim.sub','',false)")
+  assert.equal((await db.query("SELECT user_has_course_permission($1,$2,'manage_bookings') allowed",[owner,course])).rows[0].allowed,true)
+  await db.exec('RESET ROLE; SET ROLE anon')
+  await assert.rejects(db.query('SELECT claim_listing($1,$2)',[listing,guest]),/permission denied/)
+  console.log('PASS: claimant identity, one-time credit, staff permission privacy, walk-in validation and role grants')
+} finally { await db.close() }

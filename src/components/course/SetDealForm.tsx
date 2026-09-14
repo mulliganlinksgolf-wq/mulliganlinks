@@ -39,7 +39,7 @@ export function SetDealForm({
         }
         onSuccess()
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to save deal')
+        setError(e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Failed to save deal')
       }
     })
   }
@@ -55,7 +55,7 @@ export function SetDealForm({
         }
         onSuccess()
       } catch (e) {
-        setError(e instanceof Error ? e.message : 'Failed to remove deal')
+        setError(e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Failed to remove deal')
       }
     })
   }

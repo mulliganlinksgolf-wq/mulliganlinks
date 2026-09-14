@@ -57,7 +57,7 @@ export default async function RequestsPage({
       .eq('rater_id', user.id),
   ])
 
-  const ratedRequestIds = new Set((myRatings ?? []).map((r: any) => r.connection_request_id))
+  const ratedRequestIds = new Set((myRatings ?? []).map((r) => r.connection_request_id))
 
   const receivedRequests = (received ?? []) as unknown as (ConnectionRequest & {
     availability: { available_date: string } | null
@@ -92,13 +92,13 @@ export default async function RequestsPage({
     ...historicReceived.filter(isRateable).map(r => ({
       requestId: r.id,
       rateeId: r.requester_id,
-      rateeName: shortName((r.requester as any)?.full_name ?? null),
+      rateeName: shortName((r.requester)?.full_name ?? null),
       dateLabel: r.availability?.available_date ? formatDate(r.availability.available_date) : '',
     })),
     ...sentRequests.filter(isRateable).map(r => ({
       requestId: r.id,
       rateeId: r.recipient_id,
-      rateeName: shortName((r.recipient as any)?.full_name ?? null),
+      rateeName: shortName((r.recipient)?.full_name ?? null),
       dateLabel: r.availability?.available_date ? formatDate(r.availability.available_date) : '',
     })),
   ]
@@ -142,7 +142,7 @@ export default async function RequestsPage({
                     <div>
                       <p className="text-white font-medium text-sm">
                         {(() => {
-                          const n = (r.requester as any)?.full_name?.trim() ?? ''
+                          const n = (r.requester)?.full_name?.trim() ?? ''
                           if (!n) return 'Member'
                           const p = n.split(' ')
                           return p.length === 1 ? p[0] : `${p[0]} ${p[p.length - 1][0]}.`

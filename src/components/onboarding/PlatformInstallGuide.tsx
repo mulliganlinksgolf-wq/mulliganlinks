@@ -58,7 +58,7 @@ export default function PlatformInstallGuide({ courseSlug }: Props) {
             <p className="text-sm font-medium text-gray-900">Install the TeeAhead plugin:</p>
             <ol className="list-decimal list-inside text-sm text-gray-700 space-y-1">
               <li>Go to Dashboard → Plugins → Add New</li>
-              <li>Search "TeeAhead" → Install &amp; Activate</li>
+              <li>Search &quot;TeeAhead&quot; → Install &amp; Activate</li>
               <li>Go to Settings → TeeAhead → paste your Course ID</li>
               <li>Add <code className="bg-gray-100 px-1 rounded text-xs">[teeahead_booking]</code> shortcode to your Tee Times page</li>
             </ol>

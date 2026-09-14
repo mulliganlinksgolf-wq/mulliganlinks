@@ -15,7 +15,7 @@ export function GolfNowCountdown({ expiryDate, onExpiryChange }: GolfNowCountdow
   } | null>(null)
 
   useEffect(() => {
-    if (!expiryDate) { setTimeLeft(null); return }
+    if (!expiryDate) return
     const target = new Date(expiryDate + 'T00:00:00').getTime()
     function tick() {
       const now = Date.now()
@@ -28,9 +28,9 @@ export function GolfNowCountdown({ expiryDate, onExpiryChange }: GolfNowCountdow
         seconds: Math.floor((diff % 60000) / 1000),
       })
     }
-    tick()
+    const initialTick = setTimeout(tick, 0)
     const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
+    return () => { clearTimeout(initialTick); clearInterval(id) }
   }, [expiryDate])
 
   return (
@@ -46,7 +46,7 @@ export function GolfNowCountdown({ expiryDate, onExpiryChange }: GolfNowCountdow
           onChange={e => onExpiryChange(e.target.value)}
         />
       </div>
-      {timeLeft ? (
+      {expiryDate && timeLeft ? (
         <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
           {[
             { value: timeLeft.days, label: 'Days' },

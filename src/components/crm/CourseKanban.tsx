@@ -35,6 +35,7 @@ export function CourseKanban({ initialCourses }: Props) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [now] = useState(Date.now)
   const [courses, setCourses] = useState(initialCourses)
   const [pages, setPages] = useState<Record<CrmCourseStage, number>>(EMPTY_PAGES)
 
@@ -68,7 +69,6 @@ export function CourseKanban({ initialCourses }: Props) {
     if (filterEmail === 'yes') list = list.filter(c => !!c.contact_email)
     if (filterEmail === 'no') list = list.filter(c => !c.contact_email)
     if (filterReached) {
-      const now = Date.now()
       const days = (iso: string) => Math.floor((now - new Date(iso).getTime()) / 86400000)
       list = list.filter(c => {
         if (filterReached === 'never') return !c.last_email_at
@@ -82,7 +82,7 @@ export function CourseKanban({ initialCourses }: Props) {
       })
     }
     return list
-  }, [courses, search, filterTier, filterMetro, filterHotDeals, filterEmail, filterReached])
+  }, [courses, search, filterTier, filterMetro, filterHotDeals, filterEmail, filterReached, now])
 
   function groupByStage(): Record<CrmCourseStage, CrmCourse[]> {
     const grouped = {} as Record<CrmCourseStage, CrmCourse[]>

@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -54,8 +55,8 @@ export default async function MemberBillingPage() {
 
   const csvData = (bookings ?? []).map(b => ({
     Date: new Date(b.created_at).toLocaleDateString('en-US'),
-    Course: (b.tee_times as any)?.courses?.name ?? '—',
-    'Tee Time': new Date((b.tee_times as any)?.scheduled_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }),
+    Course: related(related((b.tee_times))?.courses)?.name ?? '—',
+    'Tee Time': new Date(related((b.tee_times))?.scheduled_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }),
     Amount: `$${Number(b.total_paid).toFixed(2)}`,
     Status: b.status,
   }))
@@ -138,9 +139,9 @@ export default async function MemberBillingPage() {
                   <td className="px-6 py-3 text-[#ddd]">
                     {new Date(b.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </td>
-                  <td className="px-6 py-3 text-white font-medium">{(b.tee_times as any)?.courses?.name ?? '—'}</td>
+                  <td className="px-6 py-3 text-white font-medium">{related(related((b.tee_times))?.courses)?.name ?? '—'}</td>
                   <td className="px-6 py-3 text-[#ddd]">
-                    {new Date((b.tee_times as any)?.scheduled_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
+                    {new Date(related((b.tee_times))?.scheduled_at).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
                   </td>
                   <td className="px-6 py-3 text-white font-medium">${Number(b.total_paid).toFixed(2)}</td>
                 </tr>

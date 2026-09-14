@@ -4,7 +4,6 @@ const {
   mockRequirePermission,
   mockUpsert,
   mockDelete,
-  mockDeleteEq,
   mockWriteAuditLog,
   mockRevalidatePath,
 } = vi.hoisted(() => {

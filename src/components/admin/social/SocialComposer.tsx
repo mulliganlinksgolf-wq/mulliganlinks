@@ -68,11 +68,18 @@ export default function SocialComposer({ channels, fillSaturdaySlot, onFillHandl
   const [isScheduling, startScheduling] = useTransition()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Fill Saturday slot when triggered from queue panel
-  useEffect(() => {
+  const [handledFill, setHandledFill] = useState(false)
+  if (fillSaturdaySlot !== handledFill) {
+    setHandledFill(fillSaturdaySlot)
     if (fillSaturdaySlot) {
       setScheduleMode('custom')
       setScheduledAt(toLocalDatetimeValue(getNextSaturday8am()))
+    }
+  }
+
+  // Scroll and notify the parent after the slot request has been rendered.
+  useEffect(() => {
+    if (fillSaturdaySlot) {
       composerRef.current?.scrollIntoView({ behavior: 'smooth' })
       onFillHandled()
     }

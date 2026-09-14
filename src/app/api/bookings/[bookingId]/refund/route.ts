@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -28,7 +29,7 @@ export async function POST(
     return NextResponse.json({ error: 'No payment to refund' }, { status: 400 })
   }
 
-  const scheduledAt = new Date((booking.tee_times as any)?.scheduled_at)
+  const scheduledAt = new Date(related((booking.tee_times))?.scheduled_at)
   if (scheduledAt.getTime() - Date.now() < 60 * 60 * 1000) {
     return NextResponse.json({ error: 'Cancellations must be made at least 1 hour before tee time.' }, { status: 400 })
   }

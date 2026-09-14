@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import Link from 'next/link'
 
@@ -90,8 +91,8 @@ export default async function AdminReferralsPage() {
 
   for (const r of all) {
     const courseId = r.course_id
-    const courseName = (r.courses as any)?.name ?? 'Unknown'
-    const courseSlug = (r.courses as any)?.slug ?? ''
+    const courseName = related((r.courses))?.name ?? 'Unknown'
+    const courseSlug = related((r.courses))?.slug ?? ''
 
     // Find Stripe info from courses query
     const courseInfo = allCourses.find(c => c.id === courseId)
@@ -136,8 +137,8 @@ export default async function AdminReferralsPage() {
   // --- Top referring courses (by referral count, all time) ---
   const courseCountMap = new Map<string, { name: string; slug: string; count: number; earned: number }>()
   for (const r of all) {
-    const name = (r.courses as any)?.name ?? 'Unknown'
-    const slug = (r.courses as any)?.slug ?? ''
+    const name = related((r.courses))?.name ?? 'Unknown'
+    const slug = related((r.courses))?.slug ?? ''
     const key = r.course_id
     const existing = courseCountMap.get(key) ?? { name, slug, count: 0, earned: 0 }
     existing.count++
@@ -152,8 +153,8 @@ export default async function AdminReferralsPage() {
   const csvRows = [
     ['Course', 'Golfer', 'Method', 'Date', 'Tier', 'Rev Share', 'Status', 'Paid At', 'Expires At'].join(','),
     ...all.map(r => [
-      JSON.stringify((r.courses as any)?.name ?? ''),
-      JSON.stringify((r.profiles as any)?.full_name ?? ''),
+      JSON.stringify(related((r.courses))?.name ?? ''),
+      JSON.stringify(related((r.profiles))?.full_name ?? ''),
       r.attribution_method,
       r.attributed_at.split('T')[0],
       r.membership_tier ?? '',
@@ -355,10 +356,10 @@ export default async function AdminReferralsPage() {
               ) : all.map(r => (
                 <tr key={r.id} className="hover:bg-[#FAF7F2]/60">
                   <td className="px-4 py-3 text-[#1A1A1A] font-medium">
-                    {(r.courses as any)?.name ?? '—'}
+                    {related((r.courses))?.name ?? '—'}
                   </td>
                   <td className="px-4 py-3 text-[#6B7770]">
-                    {(r.profiles as any)?.full_name ?? '—'}
+                    {related((r.profiles))?.full_name ?? '—'}
                   </td>
                   <td className="px-4 py-3 text-[#6B7770] capitalize">{r.attribution_method}</td>
                   <td className="px-4 py-3 text-[#6B7770] whitespace-nowrap">{fmtDate(r.attributed_at)}</td>

@@ -27,7 +27,7 @@ async function assertAdmin() {
 
 // ─── Create a new member account ────────────────────────────────────────────
 
-export async function createMember(prevState: { error?: string; success?: boolean }, formData: FormData) {
+export async function createMember(prevState: { error?: string; success?: boolean }, formData: FormData): Promise<{ error?: string; success?: boolean }> {
   try {
     const admin = await assertAdmin()
 
@@ -77,8 +77,8 @@ export async function createMember(prevState: { error?: string; success?: boolea
 
     revalidatePath('/admin/users')
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 

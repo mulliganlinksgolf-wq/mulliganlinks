@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   try {
     const result = await sendPairingNotificationsForTomorrow()
     return NextResponse.json(result)
-  } catch (e: any) {
-    return NextResponse.json({ error: e?.message ?? 'unknown' }, { status: 500 })
+  } catch (e) {
+    return NextResponse.json({ error: (e instanceof Error ? e.message : String(e)) ?? 'unknown' }, { status: 500 })
   }
 }

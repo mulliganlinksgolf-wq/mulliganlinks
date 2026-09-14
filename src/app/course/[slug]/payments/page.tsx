@@ -1,7 +1,6 @@
-import { createClient } from '@/lib/supabase/server'
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { stripe } from '@/lib/stripe'
 import { requireManager } from '@/lib/courseRole'
 
@@ -15,7 +14,6 @@ export default async function CoursePaymentsPage({
   const { slug } = await params
   await requireManager(slug)
   const { stripe: stripeParam } = await searchParams
-  const supabase = await createClient()
   const admin = createAdminClient()
 
   const { data: course } = await admin
@@ -125,7 +123,7 @@ export default async function CoursePaymentsPage({
       {disputes && disputes.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-5 space-y-3">
           <p className="font-semibold text-red-800">Open disputes ({disputes.length})</p>
-          {disputes.map((d: any) => (
+          {disputes.map((d) => (
             <div key={d.id} className="flex items-center justify-between text-sm">
               <div>
                 <p className="text-red-700 font-medium">${(d.amount_cents / 100).toFixed(2)}, {d.reason ?? 'unknown reason'}</p>
@@ -160,13 +158,13 @@ export default async function CoursePaymentsPage({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5">
-                  {(recentBookings as any[]).map(b => {
+                  {(recentBookings).map(b => {
                     const total = b.total_charged_cents ?? 0
                     const platform = b.platform_fee_cents ?? 0
                     const coursePayout = (total - platform) / 100
                     return (
                       <tr key={b.id} className="hover:bg-[#FAF7F2]/50">
-                        <td className="px-4 py-3 font-medium text-[#1A1A1A]">{b.profiles?.full_name ?? 'Member'}</td>
+                        <td className="px-4 py-3 font-medium text-[#1A1A1A]">{related(b.profiles)?.full_name ?? 'Member'}</td>
                         <td className="px-4 py-3">
                           <div className="text-[#1B4332] font-semibold">${coursePayout.toFixed(2)}</div>
                           {platform > 0 && (
@@ -206,7 +204,7 @@ export default async function CoursePaymentsPage({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5">
-                  {(payouts as any[]).map(p => (
+                  {(payouts).map(p => (
                     <tr key={p.id} className="hover:bg-[#FAF7F2]/50">
                       <td className="px-4 py-3 text-[#6B7770]">
                         {new Date(p.arrival_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
