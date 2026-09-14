@@ -106,10 +106,11 @@ export async function sendGolferWaitlistConfirmation({
         among the first to know when we go live.</p>
         <p>Here's what you're waiting for:</p>
         <ul style="color: #6B7770; padding-left: 16px; line-height: 2;">
-          <li>Zero booking fees at partner courses, forever</li>
-          <li>Eagle membership ($89/yr) beats GolfPass+ ($119/yr) on every single metric</li>
+          <li>Tee-time booking at participating Metro Detroit courses</li>
+          <li>A free Fairway membership, with optional paid memberships when you’re ready</li>
           <li>Real Fairway Points on every dollar played at local courses</li>
         </ul>
+        <p>Which course would you like to see on TeeAhead? Reply to this email and tell us where you play.</p>
         <p>Know a golf course that should partner with us? Send them to
         <a href="https://teeahead.com/waitlist/course" style="color: #1B4332;">teeahead.com/waitlist/course</a>.
         More partner courses = more value for you on day one.</p>
