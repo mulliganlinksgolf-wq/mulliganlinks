@@ -26,7 +26,7 @@ Concurrent waitlist changes, `NavMenu.tsx`, `src/proxy 4.ts`, and migrations 098
 
 The release now includes durable cancellation requests, Stripe intent cancellation/refunds with stable retry keys, atomic inventory/benefit restoration, 15-minute pending-payment holds, availability-triggered cleanup and a daily Vercel cron backstop. Expiry preserves a payment that completes while cleanup runs. Member-requested cancellation refunds a paid booking before restoring inventory.
 
-Membership events share one handler and use a database grant ledger keyed by subscription and membership anniversary. Web checkout, invoice and native subscription events cannot issue duplicate passes for that year. The founding trial and first paid invoice use the same anniversary key. The existing production `/api/stripe/webhook` URL delegates to the shared handler; its event subscriptions need updating after the new handler is live.
+Membership events share one handler and use a database grant ledger keyed by subscription and membership anniversary. Web checkout, invoice and native subscription events cannot issue duplicate passes for that year. The founding trial and first paid invoice use the same anniversary key. The existing production `/api/stripe/webhook` URL delegates to the shared handler. Its live event subscriptions were updated after deployment, preserving the URL and signing secret.
 
 Waitlist tests now reflect the email/ZIP launch-interest form, which does not select a referring course or create paid referral attribution. Paid referral attribution is conditional on a paid invoice and uses the correct membership `user_id` column.
 
@@ -63,3 +63,23 @@ cd /Users/barris/Desktop/MulliganLinks
 PGLITE_MODULE=/private/tmp/teeahead-db-verification/node_modules/@electric-sql/pglite/dist/index.js node tests/database/core-reliability.mjs
 PGLITE_MODULE=/private/tmp/teeahead-db-verification/node_modules/@electric-sql/pglite/dist/index.js node tests/database/booking-lifecycle.mjs
 ```
+
+## Production release record
+
+On September 14, 2026, application commit `371162415249bfc69b944871b8ff9c2964cb6849` was pushed to main, built with production environment variables, smoke-tested on its staged URL, and promoted to the production domains. Deployment: `dpl_FerQTFCxyzZuY2q2GQG2Hh3RnbcG`. The subsequent migration-filename/documentation commit does not change application behavior.
+
+Applied Supabase migration versions (filenames match the remote history):
+
+- `20260914151313_core_reliability.sql`
+- `20260914151635_booking_lifecycle.sql`
+- `20260914151959_booking_access_cutover.sql`
+
+All six new financial/lifecycle RPCs deny execution to authenticated clients and allow service-role execution. The protection trigger is enabled; the broad occupancy and client insert policies are removed; raw occupancy-view access is revoked for anonymous and authenticated clients.
+
+The existing live Stripe endpoint now subscribes to 15 events covering booking payments, refunds, disputes, connected accounts/payouts, checkout, subscription changes and invoice success/failure. No live charge or refund was created during verification.
+
+Production smoke checks passed: homepage and golfer waitlist HTTP 200; unauthenticated payment creation and cron HTTP 401; unsigned Stripe webhook HTTP 400. The deployment had no error/fatal runtime logs during the immediate verification window. All 600 unit/component tests passed.
+
+Preview builds succeed but the Preview environment lacks Supabase credentials, so preview runtime checks fail until a separate preview database/configuration is supplied. Production uses its existing working credentials. `qa.teeahead.com` still shares production.
+
+The security advisor has existing warnings for legacy authenticated security-definer functions and disabled [leaked-password protection](https://supabase.com/docs/guides/auth/password-security#password-strength-and-leaked-password-protection). The new [public security-definer warning](https://supabase.com/docs/guides/database/database-linter?lint=0028_anon_security_definer_function_executable) is the deliberately public aggregate-only occupancy function. The new benefit ledger intentionally has RLS with no client policies (server-only access). These advisories are not a claim of a complete security audit.

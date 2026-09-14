@@ -4,8 +4,8 @@ import assert from 'node:assert/strict'
 const { PGlite } = await import(process.env.PGLITE_MODULE || '@electric-sql/pglite')
 const db = new PGlite()
 await db.exec(await readFile(new URL('./core-reliability-fixture.sql', import.meta.url), 'utf8'))
-await db.exec(await readFile(new URL('../../supabase/migrations/20260914141750_core_reliability.sql', import.meta.url), 'utf8'))
-await db.exec(await readFile(new URL('../../supabase/migrations/20260914150213_booking_access_cutover.sql', import.meta.url), 'utf8'))
+await db.exec(await readFile(new URL('../../supabase/migrations/20260914151313_core_reliability.sql', import.meta.url), 'utf8'))
+await db.exec(await readFile(new URL('../../supabase/migrations/20260914151959_booking_access_cutover.sql', import.meta.url), 'utf8'))
 const uid='00000000-0000-0000-0000-000000000001', cid='00000000-0000-0000-0000-000000000002', tid='00000000-0000-0000-0000-000000000003', pass='00000000-0000-0000-0000-000000000004'
 await db.query('INSERT INTO profiles(id) VALUES ($1)',[uid])
 await db.query('INSERT INTO courses(id) VALUES ($1)',[cid])

@@ -4,11 +4,11 @@ const { PGlite } = await import(process.env.PGLITE_MODULE || '@electric-sql/pgli
 const db = new PGlite(process.env.STAGING_DATABASE || undefined)
 if (!process.env.STAGING_DATABASE) {
  await db.exec(await readFile(new URL('./core-reliability-fixture.sql', import.meta.url),'utf8'))
- for (const f of ['20260914141750_core_reliability.sql','20260914144720_booking_lifecycle.sql']) await db.exec(await readFile(new URL('../../supabase/migrations/'+f,import.meta.url),'utf8'))
+ for (const f of ['20260914151313_core_reliability.sql','20260914151635_booking_lifecycle.sql']) await db.exec(await readFile(new URL('../../supabase/migrations/'+f,import.meta.url),'utf8'))
 }
 const uid='11111111-0000-0000-0000-000000000001',cid='11111111-0000-0000-0000-000000000002',tid='11111111-0000-0000-0000-000000000003',pass='11111111-0000-0000-0000-000000000004'
 await db.exec('BEGIN')
-await db.exec(await readFile(new URL('../../supabase/migrations/20260914150213_booking_access_cutover.sql', import.meta.url), 'utf8'))
+await db.exec(await readFile(new URL('../../supabase/migrations/20260914151959_booking_access_cutover.sql', import.meta.url), 'utf8'))
 if (process.env.STAGING_DATABASE) {
  await db.query('INSERT INTO auth.users(id,email) VALUES ($1,$2)',[uid,'isolated-test@example.invalid'])
  // The real auth/profile trigger is not cloned; public-table triggers are present.
