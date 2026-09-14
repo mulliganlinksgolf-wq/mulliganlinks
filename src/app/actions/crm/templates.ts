@@ -33,7 +33,7 @@ export async function createEmailTemplate(
     revalidatePath('/admin/crm/email-templates')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -51,7 +51,7 @@ export async function updateEmailTemplate(
     revalidatePath('/admin/crm/email-templates')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -63,6 +63,6 @@ export async function deleteEmailTemplate(id: string): Promise<{ error?: string;
     revalidatePath('/admin/crm/email-templates')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

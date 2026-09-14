@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import React from 'react'
 
 // vi.hoisted lets us define mocks that are available inside vi.mock factories
-const { mockRedirect, mockGetUser, mockFrom, mockSelect, mockEq, mockSingle } = vi.hoisted(() => {
+const { mockRedirect, mockGetUser, mockFrom, mockEq, mockSingle } = vi.hoisted(() => {
   const mockSingle = vi.fn()
   const mockEq = vi.fn(() => ({ single: mockSingle }))
   const mockSelect = vi.fn(() => ({ eq: mockEq }))

@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
     .insert({
       stripe_event_id: event.id,
       event_type: event.type,
-      payload: event as any,
+      payload: event,
     })
 
   if (insertError) {
@@ -87,7 +88,7 @@ async function handleEvent(event: Stripe.Event, admin: ReturnType<typeof createA
       break
 
     case 'account.application.deauthorized':
-      await onAccountDeauthorized(event.data.object as any, admin)
+      await onAccountDeauthorized(event.account, admin)
       break
 
     case 'payout.paid':
@@ -120,8 +121,8 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
   const pointsEarned = booking.points_awarded ?? 0
 
   // Send emails fire-and-forget
-  const course = (booking.tee_times as any)?.courses
-  const teeTimeIso = (booking.tee_times as any)?.scheduled_at ?? ''
+  const course = related((booking.tee_times))?.courses
+  const teeTimeIso = related((booking.tee_times))?.scheduled_at ?? ''
   const total = (booking.total_charged_cents ?? 0) / 100
 
   const { data: member } = await admin
@@ -141,14 +142,14 @@ async function onPaymentSucceeded(pi: Stripe.PaymentIntent, admin: ReturnType<ty
 
   if (course && member) {
     sendCourseBookingAlert({
-      courseId: course.id,
-      courseSlug: course.slug ?? '',
+      courseId: related(course)!.id,
+      courseSlug: related(course)!.slug ?? '',
       memberName: member.full_name ?? 'Member',
       memberEmail: member.email ?? '',
       players: booking.players,
       total,
       teeTimeIso,
-      courseName: course.name,
+      courseName: related(course)!.name,
     }).catch(() => {})
   }
 }
@@ -200,7 +201,7 @@ async function onDisputeCreated(dispute: Stripe.Dispute, admin: ReturnType<typeo
 
   if (!booking) return
 
-  const courseId = (booking.tee_times as any)?.course_id
+  const courseId = related((booking.tee_times))?.course_id
   if (!courseId) return
 
   await admin.from('payment_disputes').upsert({
@@ -244,8 +245,7 @@ async function onAccountUpdated(account: Stripe.Account, admin: ReturnType<typeo
     .eq('id', courseId).throwOnError()
 }
 
-async function onAccountDeauthorized(data: any, admin: ReturnType<typeof createAdminClient>) {
-  const accountId = data.account ?? data.id
+async function onAccountDeauthorized(accountId: string | undefined, admin: ReturnType<typeof createAdminClient>) {
   if (!accountId) return
 
   await admin
@@ -263,7 +263,7 @@ async function onPayout(payout: Stripe.Payout, eventType: string, admin: ReturnT
   const { data: course } = await admin
     .from('courses')
     .select('id')
-    .eq('stripe_account_id', (payout as any).destination ?? '')
+    .eq('stripe_account_id', (payout).destination ?? '')
     .maybeSingle().throwOnError()
 
   if (!course) return

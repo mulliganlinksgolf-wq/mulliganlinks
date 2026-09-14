@@ -49,6 +49,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
   const [previousEmail, setPreviousEmail] = useState<PreviousEmail | null>(null)
   const [replyMode, setReplyMode] = useState(false)
   const [showPrevExpanded, setShowPrevExpanded] = useState(false)
+  const [openedAt] = useState(Date.now)
   const [scheduleMode, setScheduleMode] = useState(false)
   const [scheduledFor, setScheduledFor] = useState('')
   const [loggedInSenderName, setLoggedInSenderName] = useState<string | null>(null)
@@ -68,25 +69,33 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
 
   // Look up the most recent email to this recipient so we can offer threading
   useEffect(() => {
-    if (!toEmail) { setPreviousEmail(null); return }
+    let active = true
+    if (!toEmail) return
     getLastEmailToContact({ recordType, recordId, toEmail }).then((prev) => {
+      if (!active) return
       setPreviousEmail(prev)
       // Auto-enable reply mode only when we can actually thread (message_id present)
-      if (prev?.message_id) setReplyMode(true)
+      setReplyMode(!!prev?.message_id)
     })
+    return () => { active = false }
   }, [recordType, recordId, toEmail])
 
-  // When reply mode flips on, force the subject to match the thread.
-  // (Email clients use Message-ID for threading, but a matching subject is still
-  // what humans see in the inbox preview, and it's standard email etiquette.)
-  useEffect(() => {
-    if (replyMode && previousEmail) {
-      const prevSubject = previousEmail.subject
-      const reSubject = prevSubject.match(/^re:\s*/i) ? prevSubject : `Re: ${prevSubject}`
-      setSubject(reSubject)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [replyMode, previousEmail])
+  const recipientKey = `${recordType}:${recordId}:${toEmail ?? ''}`
+  const [loadedRecipient, setLoadedRecipient] = useState(recipientKey)
+  if (recipientKey !== loadedRecipient) {
+    setLoadedRecipient(recipientKey)
+    setTo(toEmail ?? '')
+    setPreviousEmail(null)
+    setReplyMode(false)
+    setSubject('')
+  }
+
+  const [subjectThread, setSubjectThread] = useState<string | null>(null)
+  const currentThread = replyMode && previousEmail ? previousEmail.subject : null
+  if (currentThread !== subjectThread) {
+    setSubjectThread(currentThread)
+    if (currentThread) setSubject(/^re:\s*/i.test(currentThread) ? currentThread : `Re: ${currentThread}`)
+  }
 
   function substituteVars(text: string): string {
     // Auto-derive first_name from name and sender_name from sentBy
@@ -224,7 +233,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
                       {new Date(previousEmail.created_at).toLocaleString('en-US', {
                         month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
                         timeZone: 'America/Detroit',
-                      })} · "{previousEmail.subject}"
+                      })} · &quot;{previousEmail.subject}&quot;
                     </div>
                     <div className={`mt-1 ${previousEmail.message_id ? 'text-emerald-700' : 'text-amber-700'}`}>
                       {previousEmail.message_id
@@ -326,7 +335,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
                 })}
                 {filtered.length === 0 && (
                   <div className="col-span-2 text-xs text-slate-400 text-center py-3">
-                    No templates match "{filter}"
+                    No templates match &quot;{filter}&quot;
                   </div>
                 )}
               </div>
@@ -405,7 +414,7 @@ export function EmailComposerModal({ recordType, recordId, toEmail, sentBy, vari
                 type="datetime-local"
                 value={scheduledFor}
                 onChange={(e) => setScheduledFor(e.target.value)}
-                min={(() => { const d = new Date(Date.now() + 60000); const pad = (n: number) => String(n).padStart(2,'0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}` })()}
+                min={(() => { const d = new Date(openedAt + 60000); const pad = (n: number) => String(n).padStart(2,'0'); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}` })()}
                 className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-300"
               />
             )}

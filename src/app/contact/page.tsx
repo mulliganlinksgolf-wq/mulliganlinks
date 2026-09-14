@@ -94,7 +94,7 @@ export default async function ContactPage() {
                   Rather <em className="italic text-[#E0A800]">write&nbsp;it&nbsp;out?</em>
                 </h2>
                 <p className="text-sm text-[#1A1A1A]/72 leading-[1.55]">
-                  Use the form. We'll route it to whichever of us is best to answer and reply within one business day.
+                  Use the form. We&apos;ll route it to whichever of us is best to answer and reply within one business day.
                 </p>
               </div>
 
@@ -105,7 +105,7 @@ export default async function ContactPage() {
                 </div>
                 <Field id="course" label="Course or club (optional)" placeholder="Plum Hollow Country Club" />
                 <div>
-                  <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">I'm reaching out as a…</label>
+                  <label className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">I&apos;m reaching out as a…</label>
                   <div className="grid grid-cols-3 gap-1.5" role="radiogroup">
                     {[
                       { v: 'course',  l: 'Course operator' },
@@ -128,7 +128,7 @@ export default async function ContactPage() {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="message" className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">What's on your mind</label>
+                  <label htmlFor="message" className="block font-mono text-[10px] tracking-[0.12em] uppercase text-[#6B7770] font-semibold mb-1.5">What&apos;s on your mind</label>
                   <textarea
                     id="message"
                     name="message"

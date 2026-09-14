@@ -111,9 +111,6 @@ export default async function BenefitsPage() {
   const passesAvailable = allPasses.filter(p => !p.redeemed_at && new Date(p.expires_at) > new Date())
 
   // --- Complimentary rounds ---
-  const roundsAllotment = tier === 'ace' ? 2 : tier === 'eagle' ? 1 : 0
-  const freeRoundCredits = allCredits.filter(c => c.type === 'free_round')
-  const roundsUsedCount = freeRoundCredits.filter(c => c.status === 'used').length
 
   // --- Birthday credit ---
   const birthdayCredit = allCredits.find(c => c.type === 'birthday' && new Date(c.expires_at) > new Date())

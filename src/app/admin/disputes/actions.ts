@@ -37,8 +37,8 @@ export async function markDisputeWon(
     })
     revalidatePath('/admin/disputes')
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -62,8 +62,8 @@ export async function markDisputeLost(
     })
     revalidatePath('/admin/disputes')
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }
 
@@ -87,7 +87,7 @@ export async function addDisputeNote(
     })
     revalidatePath('/admin/disputes')
     return { success: true }
-  } catch (e: any) {
-    return { error: e.message ?? 'Something went wrong.' }
+  } catch (e) {
+    return { error: (e instanceof Error ? e.message : String(e)) ?? 'Something went wrong.' }
   }
 }

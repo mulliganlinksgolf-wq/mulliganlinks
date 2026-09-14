@@ -55,7 +55,7 @@ export async function updateOperationsSettings(
     revalidatePath(`/course/${slug}`)
     return { ok: true }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { ok: false, error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e) }
   }
 }
 
@@ -96,6 +96,6 @@ export async function previewSunTimes(input: {
     }
     return { ok: true, data: rows }
   } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : String(e) }
+    return { ok: false, error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e) }
   }
 }

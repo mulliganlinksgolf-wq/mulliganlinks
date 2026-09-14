@@ -43,7 +43,7 @@ export async function createCrmMember(
     revalidatePath('/admin/crm/members')
     return { success: true, id: data.id }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -62,7 +62,7 @@ export async function updateCrmMember(
     revalidatePath('/admin/crm/members')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -74,6 +74,6 @@ export async function deleteCrmMember(id: string): Promise<{ error?: string; suc
     revalidatePath('/admin/crm/members')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

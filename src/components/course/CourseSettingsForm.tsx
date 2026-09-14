@@ -1,4 +1,5 @@
 'use client'
+import { related } from '@/lib/supabase/related'
 
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
@@ -14,7 +15,7 @@ interface Course {
   base_green_fee: number | null;
 }
 
-export function CourseSettingsForm({ course, admins }: { course: Course; admins: any[] }) {
+export function CourseSettingsForm({ course, admins }: { course: Course; admins: { user_id: string; role: string; profiles: { full_name: string | null } | { full_name: string | null }[] | null }[] }) {
   const [form, setForm] = useState({
     name: course.name ?? '',
     address: course.address ?? '',
@@ -125,7 +126,7 @@ export function CourseSettingsForm({ course, admins }: { course: Course; admins:
           <div className="space-y-2">
             {admins.map((a, i) => (
               <div key={i} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
-                <span className="text-sm font-medium text-[#1A1A1A]">{(a.profiles as any)?.full_name ?? '—'}</span>
+                <span className="text-sm font-medium text-[#1A1A1A]">{related(a.profiles)?.full_name ?? '—'}</span>
                 <span className="text-xs text-[#6B7770] capitalize">{a.role}</span>
               </div>
             ))}

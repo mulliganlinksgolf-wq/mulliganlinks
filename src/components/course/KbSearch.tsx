@@ -14,13 +14,13 @@ export function KbSearch({ courseSlug }: KbSearchProps) {
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (!query.trim()) { setResults([]); setOpen(false); return }
+    if (!query.trim()) return
+    let active = true
     const timer = setTimeout(async () => {
       const data = await searchKbArticles(query)
-      setResults(data)
-      setOpen(true)
+      if (active) { setResults(data); setOpen(true) }
     }, 300)
-    return () => clearTimeout(timer)
+    return () => { active = false; clearTimeout(timer) }
   }, [query])
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function KbSearch({ courseSlug }: KbSearchProps) {
       <input
         type="search"
         value={query}
-        onChange={e => setQuery(e.target.value)}
+        onChange={e => { setQuery(e.target.value); setOpen(false); if (!e.target.value.trim()) setResults([]) }}
         placeholder="Search help articles…"
         className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 focus:border-[#1B4332] focus:outline-none focus:ring-1 focus:ring-[#1B4332]"
       />

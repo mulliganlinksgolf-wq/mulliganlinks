@@ -25,7 +25,7 @@ export default async function InstallPage({
       <div className="bg-[#F0F9E8] border border-[#C3E6A0] rounded-xl p-5">
         <p className="text-sm font-medium text-[#1B4332]">Need help setting this up?</p>
         <p className="text-sm text-[#3B6D11] mt-1">
-          We'll do it for you on a 15-minute screen share, no technical knowledge needed.
+          We&apos;ll do it for you on a 15-minute screen share, no technical knowledge needed.
         </p>
         <a
           href="https://cal.com/teeahead/widget-setup"

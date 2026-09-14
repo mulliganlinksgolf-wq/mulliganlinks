@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 // src/app/app/leagues/[leagueId]/page.tsx
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -59,8 +60,8 @@ export default async function MemberLeagueDetailPage({
   const ranked = calcStandingsRank(standings)
   const myRank = ranked.find(r => r.user_id === user.id)
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const course = league.courses as any
+
+  const course = league.courses
 
   return (
     <div className="space-y-6">
@@ -68,11 +69,11 @@ export default async function MemberLeagueDetailPage({
         <Link href="/app/leagues" className="text-xs text-[#8FA889] hover:text-white">← My Leagues</Link>
         <h1 className="text-2xl font-bold font-serif text-white italic mt-1">{league.name}</h1>
         <p className="text-sm text-[#8FA889] mt-0.5">
-          {course?.name}
+          {related(course)?.name}
           {' · '}
           {formatLeagueFormat(league.format)}
           {' · '}
-          {formatHoles((league as any).holes ?? 18)}
+          {formatHoles((league).holes ?? 18)}
           {' · '}
           {new Date(league.season_start).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })}
           {' – '}
@@ -140,7 +141,7 @@ export default async function MemberLeagueDetailPage({
             {sessions.map(sess => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               const myScore = (sess.league_scores as any[])?.find(
-                (s: any) => s.league_member_id === myMembership.id
+                (s) => s.league_member_id === myMembership.id
               )
               return (
                 <div key={sess.id} className="rounded-lg px-4 py-3 flex items-center justify-between" style={{ background: '#163d2a' }}>

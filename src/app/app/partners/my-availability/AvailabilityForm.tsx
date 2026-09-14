@@ -11,8 +11,9 @@ export function AvailabilityForm({ courses }: { courses: Course[] }) {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  const todayStr = new Date().toISOString().slice(0, 10)
-  const maxDate = new Date(Date.now() + 60 * 86_400_000).toISOString().slice(0, 10)
+  const [now] = useState(Date.now)
+  const todayStr = new Date(now).toISOString().slice(0, 10)
+  const maxDate = new Date(now + 60 * 86_400_000).toISOString().slice(0, 10)
 
   const [date, setDate] = useState(todayStr)
   const [timePreference, setTimePreference] = useState<TimePreference>('flexible')

@@ -44,7 +44,7 @@ export async function createOuting(
     revalidatePath('/admin/crm/outings')
     return { success: true, id: data.id }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -63,7 +63,7 @@ export async function updateOuting(
     revalidatePath('/admin/crm/outings')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -75,6 +75,6 @@ export async function deleteOuting(id: string): Promise<{ error?: string; succes
     revalidatePath('/admin/crm/outings')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

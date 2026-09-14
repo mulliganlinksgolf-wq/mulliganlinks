@@ -75,7 +75,7 @@ export function ImportClient() {
       const res = await importCourses(rows)
       setResult(res)
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Import failed')
+      setError(e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Import failed')
     } finally {
       setLoading(false)
     }

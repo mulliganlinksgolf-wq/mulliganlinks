@@ -7,8 +7,8 @@ vi.mock('@/lib/supabase/admin', () => ({
 const mockFrom = vi.fn()
 const mockAdminClient = { from: mockFrom }
 
-function makeChain(data: any) {
-  const chain: any = {
+function makeChain(data: unknown) {
+  const chain = {
     select: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     in: vi.fn().mockReturnThis(),
@@ -18,7 +18,7 @@ function makeChain(data: any) {
     limit: vi.fn().mockReturnThis(),
     neq: vi.fn().mockReturnThis(),
     single: vi.fn().mockReturnThis(),
-    then: (resolve: any) => resolve({ data, error: null }),
+    then: (resolve: (value: { data?: unknown; error: null }) => unknown) => resolve({ data, error: null }),
   }
   return chain
 }

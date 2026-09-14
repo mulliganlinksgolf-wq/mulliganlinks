@@ -1,32 +1,31 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { ThumbsUp, ThumbsDown } from 'lucide-react'
+import { useStoredValue } from '@/lib/use-stored-value'
 import { voteKbArticle } from '@/app/actions/knowledgeBase'
 
 export function KbHelpfulWidget({ articleId }: { articleId: string }) {
   const storageKey = `kb_voted_${articleId}`
   const [voted, setVoted] = useState(false)
 
-  useEffect(() => {
-    setVoted(!!localStorage.getItem(storageKey))
-  }, [storageKey])
+  const [storedVote, setStoredVote] = useStoredValue(storageKey)
 
   async function handleVote(vote: 'yes' | 'no') {
-    if (voted) return
+    if (voted || storedVote) return
     try {
       await voteKbArticle(articleId, vote)
     } catch {
       // best-effort, don't block UI if vote fails
     }
-    localStorage.setItem(storageKey, vote)
+    setStoredVote(vote)
     setVoted(true)
   }
 
   return (
     <div className="mt-12 border-t border-gray-200 pt-6">
       <p className="text-sm font-medium text-[#1A1A1A] mb-3">Was this article helpful?</p>
-      {voted ? (
+      {voted || storedVote ? (
         <p className="text-sm text-[#6B7770]">Thanks for your feedback!</p>
       ) : (
         <div className="flex gap-3">

@@ -3,7 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { revalidatePath } from 'next/cache'
-import { EXPENSE_CATEGORIES, type ExpenseCategory } from '@/lib/reports/financial'
+import { EXPENSE_CATEGORIES } from '@/lib/reports/financial'
 
 async function assertAdmin() {
   const supabase = await createClient()
@@ -22,7 +22,7 @@ export async function saveExpenses(
   try {
     createdBy = await assertAdmin()
   } catch (err) {
-    const msg = err instanceof Error ? err.message : ''
+    const msg = err instanceof Error ? (err instanceof Error ? err.message : String(err)) : ''
     if (msg === 'Unauthorized' || msg === 'Forbidden') return { error: 'Unauthorized' }
     console.error('[saveExpenses] unexpected error in assertAdmin', err)
     return { error: 'Server error. Please try again.' }

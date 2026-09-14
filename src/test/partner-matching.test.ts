@@ -45,7 +45,7 @@ function makeChain(overrides: Partial<{
                    'in','is','not','order','limit','single','maybeSingle','returns','or']
   for (const m of methods) chain[m] = vi.fn().mockReturnThis()
   chain['then'] = (resolve: (v: typeof base) => unknown) => Promise.resolve(resolve(base))
-  return chain as any
+  return chain
 }
 
 function authenticatedUser(tier: 'fairway' | 'eagle' | 'ace' = 'eagle') {
@@ -60,11 +60,6 @@ function authenticatedUser(tier: 'fairway' | 'eagle' | 'ace' = 'eagle') {
 import {
   upsertPartnerPreferences,
   upsertAvailability,
-  deleteAvailability,
-  sendConnectionRequest,
-  respondToRequest,
-  withdrawRequest,
-  blockMember,
 } from '@/app/app/partners/actions'
 
 describe('tier gate', () => {

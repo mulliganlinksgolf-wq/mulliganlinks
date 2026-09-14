@@ -1,5 +1,4 @@
 import { requireAdmin } from '@/lib/auth/requireAdmin'
-import { createAdminClient } from '@/lib/supabase/admin'
 import { getMemberKpis, getMemberGrowth, getAtRiskMembers } from '@/lib/reports/members'
 import KpiTile from '@/components/reports/KpiTile'
 import DateRangePicker from '@/components/reports/DateRangePicker'
@@ -9,12 +8,11 @@ import { GrowthLineChart, ChurnLineChart, TierDonut } from './MemberCharts'
 export const metadata = { title: 'Member Reports' }
 
 export default async function MemberReportPage({
-  searchParams,
+  searchParams: _searchParams,
 }: {
   searchParams: Promise<{ preset?: string; from?: string; to?: string }>
 }) {
   await requireAdmin()
-  const admin = createAdminClient()
 
   const [kpis, growth, atRisk] = await Promise.all([
     getMemberKpis(),

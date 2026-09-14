@@ -50,14 +50,14 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
       <Page size="LETTER" style={S.page}>
         <View style={S.headerBand}>
           <Text style={S.brand}>TeeAhead</Text>
-          <Text style={S.tagline}>Metro Detroit's Local Golf Loyalty Network · teeahead.com</Text>
+          <Text style={S.tagline}>Metro Detroit&apos;s Local Golf Loyalty Network · teeahead.com</Text>
         </View>
 
         <Text style={S.welcomeTitle}>Welcome to TeeAhead, {course.name}!</Text>
         <Text style={S.welcomeSub}>Founding Partner Onboarding Guide · {dateStr}</Text>
 
         <Text style={S.intro}>
-          You're officially part of the TeeAhead network, thank you for being a Founding Partner. This guide covers exactly what happens next, what your staff needs to know, and how to get the most out of your partnership from day one.
+          You&apos;re officially part of the TeeAhead network, thank you for being a Founding Partner. This guide covers exactly what happens next, what your staff needs to know, and how to get the most out of your partnership from day one.
         </Text>
 
         <View style={S.section}>
@@ -105,7 +105,7 @@ export function OnboardingPacketPDF({ course, generatedAt }: Props) {
         </View>
 
         <Text style={S.closingText}>
-          We're thrilled to have {course.name} as a Founding Partner. If anything is unclear, if you want to adjust your benefit rates, or if you just have a question, reply to any TeeAhead email or reach out directly.
+          We&apos;re thrilled to have {course.name} as a Founding Partner. If anything is unclear, if you want to adjust your benefit rates, or if you just have a question, reply to any TeeAhead email or reach out directly.
         </Text>
 
         <Text style={S.signature}>Neil Barris & Billy Eslock{'\n'}TeeAhead Co-Founders</Text>

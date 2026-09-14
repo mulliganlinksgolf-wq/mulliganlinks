@@ -52,7 +52,7 @@ export function CourseProposalPDF({ course }: Props) {
 
         <View style={S.headerBand}>
           <Text style={S.brand}>TeeAhead</Text>
-          <Text style={S.tagline}>Metro Detroit's Local Golf Loyalty Network · teeahead.com</Text>
+          <Text style={S.tagline}>Metro Detroit&apos;s Local Golf Loyalty Network · teeahead.com</Text>
         </View>
 
         <Text style={S.docTitle}>Partnership Proposal</Text>

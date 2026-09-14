@@ -14,7 +14,7 @@ export default function CancelMembershipModal({ userId, periodEndDate, hasMember
   const [error, setError] = useState<string | null>(null)
 
   const periodEndFormatted = periodEndDate
-    ? new Date(periodEndDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+    ? new Date(periodEndDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/Detroit' })
     : null
 
   function handle(mode: 'now' | 'period_end') {

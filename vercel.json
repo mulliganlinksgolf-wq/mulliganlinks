@@ -46,5 +46,6 @@
       "destination": "https://www.teeahead.com/:path*",
       "permanent": true
     }
-  ]
+  ],
+  "buildCommand": "npm run verify && npm run build"
 }

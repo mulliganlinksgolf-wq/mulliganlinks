@@ -49,7 +49,7 @@ export async function createCourse(
     revalidatePath('/admin/crm/courses')
     return { success: true, id: data.id }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -83,7 +83,7 @@ export async function updateCourse(
     revalidatePath('/admin/crm/courses')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -102,7 +102,7 @@ export async function updateCourseStage(
     revalidatePath('/admin/crm/courses')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -114,6 +114,6 @@ export async function deleteCourse(id: string): Promise<{ error?: string; succes
     revalidatePath('/admin/crm/courses')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

@@ -36,7 +36,7 @@ async function handler(req: Request) {
         slug: c.slug,
         updated: 0,
         skipped: 0,
-        error: e instanceof Error ? e.message : String(e),
+        error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : String(e),
       })
     }
   }

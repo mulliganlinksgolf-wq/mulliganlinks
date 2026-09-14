@@ -43,7 +43,7 @@ export function RequestsWithRating({ requests, rateableIds, otherPartyKey, statu
     <>
       <div className="space-y-2">
         {requests.map(r => {
-          const otherParty = (r as any)[otherPartyKey]
+          const otherParty = (r)[otherPartyKey]
           const name = displayName(otherParty?.full_name ?? null)
           const rateable = rateableSet.has(r.id) && !ratedIds.has(r.id)
           const otherPartyId = otherPartyKey === 'requester' ? r.requester_id : r.recipient_id

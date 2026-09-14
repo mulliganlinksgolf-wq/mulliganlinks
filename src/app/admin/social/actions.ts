@@ -53,7 +53,7 @@ export async function schedulePost(formData: FormData): Promise<{ success: boole
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    return { success: false, error: err instanceof Error ? (err instanceof Error ? err.message : String(err)) : 'Unknown error' }
   }
 }
 
@@ -91,7 +91,7 @@ export async function updateScheduledPost(formData: FormData): Promise<{ success
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    return { success: false, error: err instanceof Error ? (err instanceof Error ? err.message : String(err)) : 'Unknown error' }
   }
 }
 
@@ -115,7 +115,7 @@ export async function saveIdea(formData: FormData): Promise<{ success: boolean; 
 
     return { success: true }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    return { success: false, error: err instanceof Error ? (err instanceof Error ? err.message : String(err)) : 'Unknown error' }
   }
 }
 
@@ -136,6 +136,6 @@ export async function deleteScheduledPost(postId: string): Promise<{ success: bo
     revalidatePath('/admin/social')
     return { success: true }
   } catch (err) {
-    return { success: false, error: err instanceof Error ? err.message : 'Unknown error' }
+    return { success: false, error: err instanceof Error ? (err instanceof Error ? err.message : String(err)) : 'Unknown error' }
   }
 }

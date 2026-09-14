@@ -56,7 +56,7 @@ export function OutreachQueueClient({ courses }: Props) {
       {remaining.length === 0 && courses.length > 0 && (
         <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-6 text-center">
           <p className="text-emerald-700 font-semibold text-lg">All done for today!</p>
-          <p className="text-sm text-emerald-600 mt-1">You've worked through all {courses.length} leads. Check back tomorrow for a fresh queue.</p>
+          <p className="text-sm text-emerald-600 mt-1">You&apos;ve worked through all {courses.length} leads. Check back tomorrow for a fresh queue.</p>
         </div>
       )}
 

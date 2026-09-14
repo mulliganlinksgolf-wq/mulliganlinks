@@ -44,7 +44,7 @@ interface EditTarget {
   teeTime: TeeTime
 }
 
-export function TeeSheetGrid({ teeTimes, slug, courseId, courseName }: { teeTimes: TeeTime[]; slug: string; courseId: string; courseName: string }) {
+export function TeeSheetGrid({ teeTimes, courseId, courseName }: { teeTimes: TeeTime[]; slug: string; courseId: string; courseName: string }) {
   const [expanded, setExpanded] = useState<string | null>(null)
   const [bookingTeeTime, setBookingTeeTime] = useState<TeeTime | null>(null)
   const [editTarget, setEditTarget] = useState<EditTarget | null>(null)

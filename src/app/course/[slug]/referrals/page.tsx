@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createClient } from '@/lib/supabase/server'
 import { requireManager } from '@/lib/courseRole'
 import { notFound } from 'next/navigation'
@@ -86,7 +87,7 @@ export default async function ReferralsPage({
             </thead>
             <tbody className="divide-y divide-black/5">
               {referrals.map((r) => {
-                const fullName = (r.profiles as any)?.full_name ?? ''
+                const fullName = related((r.profiles))?.full_name ?? ''
                 const parts = fullName.trim().split(' ')
                 // Privacy: show first name + last initial only
                 const displayName = parts.length >= 2

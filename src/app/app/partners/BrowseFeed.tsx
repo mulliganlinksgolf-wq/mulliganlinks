@@ -18,7 +18,7 @@ export function BrowseFeed({ grouped, canRequest, sentToAvailabilityIds }: Brows
   if (grouped.length === 0) {
     return (
       <div className="text-center py-16">
-        <p className="text-[#8FA889] text-lg">No one's posted availability for the next two weeks.</p>
+        <p className="text-[#8FA889] text-lg">No one&apos;s posted availability for the next two weeks.</p>
         <p className="text-[#8FA889] text-sm mt-1">Be the first, add your availability.</p>
         <a
           href="/app/partners/my-availability"

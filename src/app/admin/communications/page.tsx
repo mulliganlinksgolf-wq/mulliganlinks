@@ -32,10 +32,10 @@ export default async function CommunicationsPage({
   const m = membershipResult.data ?? []
   const counts: Record<string, number> = {
     all: m.length,
-    eagle_ace: m.filter((r: any) => ['eagle', 'ace'].includes(r.tier)).length,
-    ace: m.filter((r: any) => r.tier === 'ace').length,
-    eagle: m.filter((r: any) => r.tier === 'eagle').length,
-    fairway: m.filter((r: any) => r.tier === 'fairway').length,
+    eagle_ace: m.filter((r) => ['eagle', 'ace'].includes(r.tier)).length,
+    ace: m.filter((r) => r.tier === 'ace').length,
+    eagle: m.filter((r) => r.tier === 'eagle').length,
+    fairway: m.filter((r) => r.tier === 'fairway').length,
   }
 
   const history = historyResult.data ?? []
@@ -106,7 +106,7 @@ export default async function CommunicationsPage({
         <div className="space-y-3">
           <h2 className="font-bold text-[#1A1A1A]">Sent History</h2>
           <div className="bg-white rounded-xl ring-1 ring-black/5 divide-y divide-black/5">
-            {history.map((row: any, i: number) => (
+            {history.map((row, i: number) => (
               <div key={i} className="px-5 py-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>

@@ -79,7 +79,7 @@ export async function approveTemplateDraft(
     revalidatePath('/admin/crm/email-templates/review')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }
 
@@ -122,6 +122,6 @@ export async function rejectTemplateDraft(
     revalidatePath('/admin/crm/email-templates/review')
     return { success: true }
   } catch (e) {
-    return { error: e instanceof Error ? e.message : 'Unknown error' }
+    return { error: e instanceof Error ? (e instanceof Error ? e.message : String(e)) : 'Unknown error' }
   }
 }

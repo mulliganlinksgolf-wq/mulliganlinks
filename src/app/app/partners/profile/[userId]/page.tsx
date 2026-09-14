@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
@@ -101,14 +102,14 @@ export default async function PartnerProfilePage({
   const name = displayName(profile.full_name)
   const initials = getInitials(profile.full_name)
   const avgRating = ratings && ratings.length > 0
-    ? ratings.reduce((sum: number, r: any) => sum + r.stars, 0) / ratings.length
+    ? ratings.reduce((sum: number, r) => sum + r.stars, 0) / ratings.length
     : null
   const ratingCount = ratings?.length ?? 0
 
   // Find a past accepted connection to rate (availability date already passed)
   const rateableConnection = [connAsReq, connAsRec]
     .filter(Boolean)
-    .find(c => (c as any)?.availability?.available_date < today) ?? null
+    .find(c => related((c)?.availability)?.available_date < today) ?? null
   const canRate = !!rateableConnection && !alreadyRated
 
   return (

@@ -1,4 +1,6 @@
 'use server'
+import { related } from '@/lib/supabase/related'
+
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
@@ -146,7 +148,7 @@ export async function sendConnectionRequest(
 
   // Send notification email (best-effort, non-fatal)
   try {
-    const { sendPartnerRequestEmail } = await import('@/lib/resend') as any
+    const { sendPartnerRequestEmail } = await import('@/lib/resend')
     const [{ data: requesterProfile }, { data: availability }] = await Promise.all([
       supabase!.from('profiles').select('full_name').eq('id', user!.id).single(),
       supabase!.from('partner_availability').select('available_date').eq('id', availabilityId).single(),
@@ -188,7 +190,7 @@ export async function respondToRequest(
 
   if (status === 'accepted') {
     try {
-      const { sendPartnerRequestAcceptedEmail } = await import('@/lib/resend') as any
+      const { sendPartnerRequestAcceptedEmail } = await import('@/lib/resend')
       const { data: req } = await supabase
         .from('partner_connection_requests')
         .select('requester_id, availability_id')
@@ -207,7 +209,7 @@ export async function respondToRequest(
           await sendPartnerRequestAcceptedEmail({
             recipientName: (recipientProfile?.full_name ?? '').split(' ')[0] || 'Your partner',
             requesterEmail: requesterAuthUser.email,
-            availabilityDate: (availability as any)?.available_date ?? '',
+            availabilityDate: (availability)?.available_date ?? '',
           })
         }
       }
@@ -360,17 +362,17 @@ export async function markBooked(
         .limit(1)
         .maybeSingle()
 
-      const tt = (booking as any)?.tee_times
-      if (tt?.scheduled_at) {
-        teeTime = new Date(tt.scheduled_at).toLocaleTimeString('en-US', {
+      const tt = (booking)?.tee_times
+      if (related(tt)?.scheduled_at) {
+        teeTime = new Date(related(tt)!.scheduled_at).toLocaleTimeString('en-US', {
           hour: 'numeric', minute: '2-digit', timeZone: 'America/Detroit',
         })
       }
-      if (tt?.courses?.name) courseName = tt.courses.name
+      if (related(related(tt)?.courses)?.name) courseName = related(related(tt)!.courses)!.name
 
       // Send notification email to the other party
       try {
-        const { sendPartnerBookedEmail } = await import('@/lib/resend') as any
+        const { sendPartnerBookedEmail } = await import('@/lib/resend')
         const otherId = isRequester ? req.recipient_id : req.requester_id
         const adminClient = (await import('@/lib/supabase/admin')).createAdminClient()
         const [{ data: bookerProfile }, { data: { user: otherAuthUser } }] = await Promise.all([

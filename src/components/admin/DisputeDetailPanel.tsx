@@ -13,7 +13,7 @@ export interface DisputeRow {
   resolved_at: string | null
   member_name: string | null
   member_email: string | null
-  timeline: { event_type: string; created_at: string; details: any }[]
+  timeline: { event_type: string; created_at: string; details: unknown }[]
 }
 
 interface DisputeDetailPanelProps {

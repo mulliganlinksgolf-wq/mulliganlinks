@@ -21,6 +21,7 @@ export default async function EmailPerformancePage() {
 
   const rows = activities ?? []
 
+  // eslint-disable-next-line react-hooks/purity -- Request-time calculation in an async Server Component.
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString()
   const recentRows = rows.filter(r => r.created_at >= thirtyDaysAgo)
 

@@ -19,6 +19,17 @@ interface Props {
   onExportCsv: () => void
 }
 
+function SortHeader({ label, k, sort, sortKey, sortAsc }: { label: string; k: SortKey; sort: (key: SortKey) => void; sortKey: SortKey; sortAsc: boolean }) {
+  return (
+    <th
+      className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2 cursor-pointer hover:text-slate-700 select-none"
+      onClick={() => sort(k)}
+    >
+      {label} {sortKey === k ? (sortAsc ? '↑' : '↓') : ''}
+    </th>
+  )
+}
+
 export function CourseTable({ initialCourses, onExportCsv }: Props) {
   const [courses, setCourses] = useState(initialCourses)
   const [sortKey, setSortKey] = useState<SortKey>('last_activity_at')
@@ -40,16 +51,6 @@ export function CourseTable({ initialCourses, onExportCsv }: Props) {
     await updateCourseStage(id, stage)
   }
 
-  function SortHeader({ label, k }: { label: string; k: SortKey }) {
-    return (
-      <th
-        className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2 cursor-pointer hover:text-slate-700 select-none"
-        onClick={() => sort(k)}
-      >
-        {label} {sortKey === k ? (sortAsc ? '↑' : '↓') : ''}
-      </th>
-    )
-  }
 
   return (
     <div>
@@ -62,12 +63,12 @@ export function CourseTable({ initialCourses, onExportCsv }: Props) {
         <table className="w-full text-sm">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <SortHeader label="Course" k="name" />
+              <SortHeader sort={sort} sortKey={sortKey} sortAsc={sortAsc} label="Course" k="name" />
               <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2">Contact</th>
-              <SortHeader label="Stage" k="stage" />
+              <SortHeader sort={sort} sortKey={sortKey} sortAsc={sortAsc} label="Stage" k="stage" />
               <th className="text-left text-xs font-semibold text-slate-500 uppercase tracking-wide px-3 py-2">Source</th>
-              <SortHeader label="Value" k="estimated_value" />
-              <SortHeader label="Last Activity" k="last_activity_at" />
+              <SortHeader sort={sort} sortKey={sortKey} sortAsc={sortAsc} label="Value" k="estimated_value" />
+              <SortHeader sort={sort} sortKey={sortKey} sortAsc={sortAsc} label="Last Activity" k="last_activity_at" />
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">

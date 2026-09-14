@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { redirect } from 'next/navigation'
@@ -25,7 +26,7 @@ export default async function CheckInPage({
   if (!adminRows || adminRows.length === 0) redirect('/')
 
   // Use first course if admin of one; show selector if multiple
-  const courses = adminRows.map((r: any) => r.courses).filter(Boolean)
+  const courses = adminRows.map((r) => related(r.courses)).filter((course): course is NonNullable<typeof course> => !!course)
 
   // Load member info
   const admin = createAdminClient()
@@ -37,7 +38,7 @@ export default async function CheckInPage({
 
   if (!profile) redirect('/')
 
-  const balance = (pointRows ?? []).reduce((sum: number, r: any) => sum + r.amount, 0)
+  const balance = (pointRows ?? []).reduce((sum: number, r) => sum + r.amount, 0)
   const tier = membership?.tier ?? 'fairway'
 
   return (

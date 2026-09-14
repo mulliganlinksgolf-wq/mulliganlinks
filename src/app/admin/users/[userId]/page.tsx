@@ -1,3 +1,4 @@
+import { related } from '@/lib/supabase/related'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { notFound } from 'next/navigation'
 import MemberDetailHeader from '@/components/admin/MemberDetailHeader'
@@ -40,12 +41,12 @@ export default async function MemberDetailPage({
 
   if (!profileResult.data) notFound()
 
-  const emailMap = Object.fromEntries((authUsers ?? []).map((u: any) => [u.id, u.email ?? '']))
+  const emailMap = Object.fromEntries((authUsers ?? []).map((u) => [u.id, u.email ?? '']))
   const profile = { ...profileResult.data, email: profileResult.data.email ?? emailMap[userId] ?? '' }
   const membership = membershipResult.data ?? null
   const courses = coursesResult.data ?? []
 
-  const bookings = (bookingsResult.data ?? []).map((b: any) => ({
+  const bookings = (bookingsResult.data ?? []).map((b) => ({
     id: b.id,
     created_at: b.created_at,
     paid_at: b.paid_at,
@@ -56,17 +57,17 @@ export default async function MemberDetailPage({
     payment_status: b.payment_status,
     stripe_charge_id: b.stripe_charge_id,
     status: b.status,
-    course_name: b.tee_times?.courses?.name ?? null,
-    scheduled_at: b.tee_times?.scheduled_at ?? null,
+    course_name: related(related(b.tee_times)?.courses)?.name ?? null,
+    scheduled_at: related(b.tee_times)?.scheduled_at ?? null,
   }))
 
-  const points = (pointsResult.data ?? []).map((p: any) => ({
+  const points = (pointsResult.data ?? []).map((p) => ({
     id: p.id,
     amount: p.amount,
     reason: p.reason,
     created_at: p.created_at,
     booking_id: p.booking_id,
-    course_name: (p.courses as any)?.name ?? null,
+    course_name: related((p.courses))?.name ?? null,
   }))
 
   return (
@@ -91,7 +92,7 @@ export default async function MemberDetailPage({
         points={points}
         notes={notesResult.data ?? []}
         courses={courses}
-        homeCourse={courses.find((c: any) => c.id === profile.home_course_id) ?? null}
+        homeCourse={courses.find((c) => c.id === profile.home_course_id) ?? null}
       />
     </div>
   )

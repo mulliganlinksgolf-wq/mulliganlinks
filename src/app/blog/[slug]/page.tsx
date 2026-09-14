@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import Link from 'next/link'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getAllPosts, getPostBySlug, getRelatedPosts } from '@/lib/blog'
 import { AUTHORS } from '@/lib/authors'
