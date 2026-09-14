@@ -2,6 +2,7 @@
 
 import { createAdminClient } from '@/lib/supabase/admin'
 import { sendGolferWaitlistConfirmation } from '@/lib/resend'
+import { createCoursePreferenceToken, readCoursePreferenceToken } from '@/lib/waitlist-preference-token'
 import { verifyRecaptcha } from '@/lib/recaptcha'
 
 export async function joinGolferWaitlist(formData: FormData) {
@@ -59,5 +60,18 @@ export async function joinGolferWaitlist(formData: FormData) {
     console.error('[golfer-waitlist] Confirmation email failed after signup was saved')
   }
 
-  return { success: true, alreadyJoined: false }
+  let coursePreferenceToken: string | undefined
+  try { coursePreferenceToken = createCoursePreferenceToken(email) } catch { /* Optional question must not block signup. */ }
+  return { success: true, alreadyJoined: false, coursePreferenceToken }
+}
+
+export async function saveCoursePreference(token: string, course: string) {
+  if (typeof token !== 'string' || typeof course !== 'string') return { error: 'Invalid request.' }
+  const email = readCoursePreferenceToken(token)
+  if (!email) return { error: 'This session has expired. Your signup is complete; reply to your confirmation email with your course instead.' }
+  const homeCourse = course.trim()
+  if (!homeCourse || homeCourse.length > 255) return { error: 'Please enter a course name of 255 characters or fewer.' }
+  const { data, error } = await createAdminClient().from('golfer_waitlist').update({ home_course: homeCourse }).eq('email', email).select('id').maybeSingle()
+  if (error || !data) return { error: 'We couldn’t save your course. Your waitlist signup is still complete. Please try again.' }
+  return { success: true }
 }

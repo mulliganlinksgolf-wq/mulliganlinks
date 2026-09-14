@@ -8,7 +8,7 @@ const HOLES = [
   { n: '02', par: 4, yds: 412, name: 'The Barter',     anchor: '#hole-02' },
   { n: '03', par: 4, yds: 389, name: 'The Product',    anchor: '#hole-03' },
   { n: '04', par: 3, yds: 178, name: 'The Membership', anchor: '#hole-04' },
-  { n: '05', par: 5, yds: 521, name: 'Live in 48hrs',  anchor: '#hole-05' },
+  { n: '05', par: 5, yds: 521, name: 'Your launch plan',  anchor: '#hole-05' },
   { n: '06', par: 4, yds: 401, name: 'The Pricing',    anchor: '#hole-06' },
   { n: '07', par: 4, yds: 423, name: 'The Proof',      anchor: '#hole-07' },
   { n: '08', par: 3, yds: 165, name: 'The Q&A',        anchor: '#hole-08' },

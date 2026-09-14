@@ -29,7 +29,7 @@ import {
 export const metadata: Metadata = {
   title: { absolute: 'TeeAhead | Golf Course Tee Sheet Software & Golfer Loyalty, Metro Detroit' },
   description:
-    'TeeAhead is free tee sheet software for golf courses with no barter and no commissions, paired with a golfer loyalty membership that beats GolfPass+ for $89/yr. Metro Detroit launch.',
+    'TeeAhead is free tee sheet software for golf courses with no barter and no commissions, paired with golf booking and rewards for Metro Detroit golfers. Join the golfer waitlist or talk to us about your course.',
 }
 
 export default async function HomePage({
@@ -58,6 +58,22 @@ export default async function HomePage({
       <HomepageFaqSchema />
 
       <YardageShell initialHole="01">
+        <section className="px-6 sm:px-10 lg:px-14 py-10 sm:py-14 bg-[#082419] text-[#F4F1EA]">
+          <p className="text-xs uppercase tracking-widest text-[#E0A800] mb-3">Built for Metro Detroit golf</p>
+          <h1 className="font-display text-4xl sm:text-6xl max-w-3xl leading-tight">Better days on both sides of the tee sheet.</h1>
+          <p className="mt-4 max-w-2xl text-white/80">Golf booking and rewards for players. Tee sheet software without barter for courses. Choose where you want to start.</p>
+          <div className="grid sm:grid-cols-2 gap-4 mt-7 max-w-3xl">
+            <Link href="/waitlist/golfer" className="rounded-xl bg-[#E0A800] p-5 text-[#082419] hover:bg-[#E0A800]/90 focus-visible:outline-2 focus-visible:outline-offset-4">
+              <span className="block text-xl font-semibold">I’m a golfer →</span>
+              <span className="block text-sm mt-2">Get notified when participating courses launch near you. Free to join.</span>
+            </Link>
+            <Link href="/waitlist/course" className="rounded-xl border border-white/50 p-5 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4">
+              <span className="block text-xl font-semibold">I run a course →</span>
+              <span className="block text-sm mt-2 text-white/80">Meet the team and explore the Founding Partner program.</span>
+            </Link>
+          </div>
+          <p className="mt-5 text-sm text-white/70">We’re building the Metro Detroit course network. Launch timing and participating courses will be shared with the waitlist as they’re confirmed.</p>
+        </section>
 
         {/* ── Hole 01, The Damage ──────────────────────────────── */}
         <section
@@ -71,12 +87,12 @@ export default async function HomePage({
               <p className="font-mono text-[11px] tracking-[0.2em] text-[#0F3D2E]/60 uppercase mb-2">
                 Software for Golf Course Operators
               </p>
-              <h1
+              <h2
                 className="font-display text-[#0F3D2E] leading-[0.9] tracking-[-0.035em]"
                 style={{ fontSize: 'clamp(80px, 11vw, 104px)', fontWeight: 400 }}
               >
                 {TYPICAL_ANNUAL_BARTER_LABEL}<span className="text-[#E0A800]">.</span>
-              </h1>
+              </h2>
               <p className="mt-5 text-[16.5px] leading-[1.6] text-[#1A1A1A]/82 max-w-[460px]">
                 That&apos;s what GolfNow&apos;s barter model takes from a typical Metro Detroit course each year.{' '}
                 <span
@@ -128,12 +144,11 @@ export default async function HomePage({
               {/* Three-number reconciliation: never show $0 without the $349 + barter context */}
               <p className="mt-4 text-[13.5px] leading-relaxed text-[#6B7770] max-w-[460px]">
                 <strong className="text-[#0F3D2E]">Free your first year</strong>, then{' '}
-                {MONTHLY_PRICE_LABEL}/mo flat. No barter, no commissions, no contract. Set
+                {MONTHLY_PRICE_LABEL}/mo flat. No barter or commissions. We’ll review terms together. Compare that
                 against {TYPICAL_ANNUAL_BARTER_LABEL}+ a year in surrendered tee times.
               </p>
               <p className="mt-2 text-[12.5px] leading-relaxed text-[#6B7770] max-w-[460px]">
-                We migrate you in under 48 hours, and if you ever leave we migrate you back
-                out, free. No lock-in either direction.
+                We’ll review your current system and agree on a migration plan before you commit.
               </p>
 
               {/* Golfer door, balanced second entry into the golfer narrative */}
@@ -142,10 +157,10 @@ export default async function HomePage({
                   Here for the golf, not the back office?
                 </p>
                 <Link
-                  href="#hole-04"
+                  href="/waitlist/golfer"
                   className="inline-flex items-center rounded-md border-2 border-[#E0A800] bg-[#E0A800]/10 px-5 py-3 text-sm font-bold text-[#0F3D2E] hover:bg-[#E0A800]/20 transition-colors"
                 >
-                  I&apos;m a golfer → see the membership
+                  Join the free golfer waitlist →
                 </Link>
               </div>
             </div>
@@ -306,7 +321,7 @@ export default async function HomePage({
               <div className="mt-7 grid grid-cols-3 gap-5 max-w-md">
                 {[
                   { k: '1×',   v: 'Fairway', sub: 'Free, forever' },
-                  { k: '1.5×', v: 'Eagle',   sub: '$89/yr · most picked' },
+                  { k: '1.5×', v: 'Eagle',   sub: '$89/yr · optional' },
                   { k: '2×',   v: 'Ace',     sub: '$159/yr · all-in' },
                 ].map(({ k, v, sub }) => (
                   <div key={k} className="border-t border-[#0F3D2E] pt-2.5">
@@ -351,22 +366,22 @@ export default async function HomePage({
           id="hole-05"
           className="scroll-mt-20 px-6 sm:px-10 lg:px-14 py-14 sm:py-20 border-b border-[#0F3D2E]/10 bg-[#082419] text-[#F4F1EA]"
         >
-          <HoleHeader num="05" par={5} yds={521} name="Live in 48hrs" dark />
+          <HoleHeader num="05" par={5} yds={521} name="Your launch plan" dark />
 
           <h2
             className="font-display leading-[0.96] tracking-[-0.025em] max-w-3xl mb-14"
             style={{ fontSize: 'clamp(40px, 6vw, 64px)', fontWeight: 400 }}
           >
-            Live in 48 hours.{' '}
-            <em className="italic text-[#E0A800]">Zero tech headaches.</em>
+            A launch plan for your course.{' '}
+            <em className="italic text-[#E0A800]">With help at each step.</em>
           </h2>
 
           <div className="relative sm:pt-20 pb-4">
             <div className="grid sm:grid-cols-3 gap-12 sm:gap-10">
               {[
-                { n: '01', t: '00:10', title: 'Sign the Founding Partner agreement', desc: 'One page. No lawyers required.' },
-                { n: '02', t: '00:15', title: 'Connect your bank via Stripe',        desc: 'Payments route directly to you. We never touch your revenue.' },
-                { n: '03', t: '48:00', title: 'Go live',                              desc: 'We handle the tech. Your golfers can book immediately.' },
+                { n: '01', t: 'First', title: 'Meet the team', desc: 'Tell us about your course and what you need.' },
+                { n: '02', t: 'Next', title: 'Review your setup and terms',        desc: 'We’ll discuss software, payments, and the Founding Partner program.' },
+                { n: '03', t: 'Together', title: 'Agree on your launch plan',                              desc: 'Set a realistic timeline for your data, staff, and golfers.' },
               ].map(({ n, t, title, desc }) => (
                 <div key={n} className="relative">
                   <div className="hidden sm:block absolute -top-16 inset-x-0 text-center">
@@ -467,7 +482,7 @@ export default async function HomePage({
                 price="$89"
                 unit="/yr"
                 subnote="~$7.42/mo"
-                badge="Most picked"
+                badge="For regular golfers"
                 features={[
                   '250 bonus Fairway Points on signup',
                   '1 complimentary round per year',
@@ -506,9 +521,9 @@ export default async function HomePage({
             </p>
 
             <p className="mt-6 text-sm text-[#6B7770] max-w-xl leading-relaxed">
-              Most golfers start on Fairway. About 1 in 4 upgrade to Eagle within 60 days,
-              once the included complimentary round and birthday credit have paid for the
-              membership on their own. Start free. Upgrade when it makes sense.
+              Start with free Fairway membership. Eagle and Ace are optional upgrades you can
+              consider when participating courses and benefits fit the way you play.
+              Joining the waitlist does not commit you to a paid membership.
             </p>
           </div>
 
@@ -527,7 +542,7 @@ export default async function HomePage({
               className="font-display text-[#0F3D2E] leading-[0.96] tracking-[-0.025em] mb-10"
               style={{ fontSize: 'clamp(40px, 5.5vw, 56px)', fontWeight: 400 }}
             >
-              The receipts <em className="italic text-[#E0A800]">are already in.</em>
+              Why courses <em className="italic text-[#E0A800]">explore alternatives.</em>
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-14">

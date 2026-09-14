@@ -21,13 +21,13 @@ export async function joinCourseWaitlist(formData: FormData) {
   const numHoles = formData.get('num_holes') ? parseInt(formData.get('num_holes') as string, 10) : null
   const annualRounds = formData.get('annual_rounds') ? parseInt(formData.get('annual_rounds') as string, 10) : null
   const currentSoftware = (formData.get('current_software') as string) || null
-  const onGolfnow = formData.get('on_golfnow') === 'yes'
+  const onGolfnow = formData.has('on_golfnow') ? formData.get('on_golfnow') === 'yes' : null
   const avgGreenFee = formData.get('avg_green_fee') ? parseInt(formData.get('avg_green_fee') as string, 10) : null
   const biggestFrustration = (formData.get('biggest_frustration') as string)?.trim() || null
   const rawTier = (formData.get('applied_tier') as string)?.trim() || null
   const appliedTier = rawTier === 'standard' ? 'standard' : 'founding'
 
-  if (!courseName || !contactName || !email || !email.includes('@')) {
+  if (!courseName || courseName.length > 255 || !contactName || contactName.length > 255 || !email || email.length > 255 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return { error: 'Course name, contact name, and a valid email are required.' }
   }
 
@@ -56,13 +56,13 @@ export async function joinCourseWaitlist(formData: FormData) {
 
   if (error) {
     if (error.code === '23505') {
-      return { error: 'We already have an application from this email address.' }
+      return { success: true }
     }
     console.error('[course-waitlist]', error)
     return { error: 'Something went wrong. Please try again.' }
   }
 
-  await Promise.all([
+  await Promise.allSettled([
     sendCourseWaitlistConfirmation({ email, contactName, courseName }),
     sendCourseAdminAlert({
       courseName,

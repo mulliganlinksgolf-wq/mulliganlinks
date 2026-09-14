@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { trackWaitlist } from '@/lib/waitlist-tracking'
+import { CoursePreferenceForm } from './CoursePreferenceForm'
 import { joinGolferWaitlist } from './actions'
 
 export function GolferWaitlistForm({ tier = 'fairway' }: { tier?: string }) {
@@ -14,6 +15,7 @@ export function GolferWaitlistForm({ tier = 'fairway' }: { tier?: string }) {
   const [zip, setZip] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitted, setSubmitted] = useState(false)
+  const [courseToken, setCourseToken] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
   const started = useRef(false)
   const submitting = useRef(false)
@@ -43,6 +45,7 @@ export function GolferWaitlistForm({ tier = 'fairway' }: { tier?: string }) {
         stage = 'request'
         const result = await joinGolferWaitlist(formData)
         if (result.success) {
+          setCourseToken(result.coursePreferenceToken ?? null)
           setSubmitted(true)
           trackWaitlist(result.alreadyJoined ? 'golfer_waitlist_already_joined' : 'golfer_waitlist_succeeded')
         } else {
@@ -60,10 +63,13 @@ export function GolferWaitlistForm({ tier = 'fairway' }: { tier?: string }) {
 
   if (submitted) {
     return (
-      <div role="status" className="space-y-4 py-3">
+      <div className="space-y-4 py-3">
+        <div role="status" className="space-y-4">
         <h3 className="text-xl font-semibold">You’re on the list.</h3>
         <p className="text-white/85">We’ll email {email} with news about the Metro Detroit launch. No payment or membership commitment is needed.</p>
-        <p className="text-sm text-white/80">Have a favorite course? Reply to your confirmation email and tell us where you’d like to play.</p>
+        <p className="text-sm text-white/80">We’ll share participating courses and launch timing when they’re confirmed.</p>
+        </div>
+        {courseToken ? <CoursePreferenceForm token={courseToken} /> : <p className="text-sm text-white/80">Have a favorite course? Reply to your confirmation email and tell us where you play.</p>}
       </div>
     )
   }
