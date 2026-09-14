@@ -4,7 +4,7 @@ import { PGlite } from '@electric-sql/pglite'
 const db = new PGlite()
 try {
   for (const file of ['core-reliability-fixture.sql','legacy-rpc-fixture.sql']) await db.exec(await readFile(new URL(file,import.meta.url),'utf8'))
-  await db.exec(await readFile(new URL('../../supabase/migrations/20260914164534_legacy_rpc_authorization.sql',import.meta.url),'utf8'))
+  await db.exec(await readFile(new URL('../../supabase/migrations/20260914170525_legacy_rpc_authorization.sql',import.meta.url),'utf8'))
   const owner='10000000-0000-0000-0000-000000000001', guest='10000000-0000-0000-0000-000000000002', course='10000000-0000-0000-0000-000000000003', time='10000000-0000-0000-0000-000000000004', listing='10000000-0000-0000-0000-000000000005'
   await db.query('INSERT INTO profiles(id) VALUES($1),($2)',[owner,guest])
   await db.query('INSERT INTO courses(id) VALUES($1)',[course])

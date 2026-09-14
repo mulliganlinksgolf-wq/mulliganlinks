@@ -13,7 +13,7 @@ try {
   const { rows } = await admin.query("SELECT count(*)::int n FROM pg_tables WHERE schemaname='public'")
   assert.equal(rows[0].n,0,'Use an empty disposable teeahead_verification database')
   for (const file of ['core-reliability-fixture.sql','legacy-rpc-fixture.sql']) await admin.query(await readFile(new URL(file,import.meta.url),'utf8'))
-  for (const file of ['20260914151313_core_reliability.sql','20260914151635_booking_lifecycle.sql','20260914151959_booking_access_cutover.sql','20260914164534_legacy_rpc_authorization.sql']) await admin.query(await readFile(new URL('../../supabase/migrations/'+file,import.meta.url),'utf8'))
+  for (const file of ['20260914151313_core_reliability.sql','20260914151635_booking_lifecycle.sql','20260914151959_booking_access_cutover.sql','20260914170525_legacy_rpc_authorization.sql']) await admin.query(await readFile(new URL('../../supabase/migrations/'+file,import.meta.url),'utf8'))
   const user='20000000-0000-0000-0000-000000000001',course='20000000-0000-0000-0000-000000000002'
   let time='20000000-0000-0000-0000-000000000003'
   await admin.query('INSERT INTO profiles(id) VALUES($1)',[user])
