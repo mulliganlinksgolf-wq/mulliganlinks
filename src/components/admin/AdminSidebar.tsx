@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { usePathname } from 'next/navigation'
 
 interface AdminSidebarProps {
@@ -14,9 +15,8 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
   return (
     <aside className="w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col min-h-screen">
       <div className="px-4 py-4 font-bold text-white border-b border-slate-800">
-        <span className="sr-only">TeeAhead</span>
-        <span aria-hidden="true">Tee<span className="text-emerald-400">Ahead</span></span>
-        {' '}Admin
+        <TeeAheadLogo className="h-6 w-auto brightness-0 invert mb-2" />
+        <span className="text-xs text-slate-400">Admin</span>
       </div>
 
       <nav className="flex-1 py-2">

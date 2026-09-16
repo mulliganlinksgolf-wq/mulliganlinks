@@ -65,7 +65,7 @@ export const metadata: Metadata = {
       { url: "/brand/teeahead-favicon-16.png", sizes: "16x16", type: "image/png" },
       { url: "/favicon.ico" },
     ],
-    apple: "/brand/teeahead-favicon-192.png",
+    apple: "/apple-touch-icon.png",
     other: [
       { rel: "icon", url: "/brand/teeahead-favicon-192.png", sizes: "192x192" },
       { rel: "icon", url: "/brand/teeahead-favicon-512.png", sizes: "512x512" },

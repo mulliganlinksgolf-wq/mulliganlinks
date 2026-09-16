@@ -8,10 +8,10 @@ interface Props {
 export function TeeAheadLogo({ className, priority }: Props) {
   return (
     <Image
-      src="/brand/teeahead-logo-final.png"
+      src="/brand/teeahead-logo-primary.svg"
       alt="TeeAhead"
-      width={374}
-      height={95}
+      width={492}
+      height={94}
       className={className}
       priority={priority}
     />

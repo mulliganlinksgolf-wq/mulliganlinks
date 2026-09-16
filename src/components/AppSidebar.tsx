@@ -14,8 +14,8 @@ export default function AppSidebar({ items }: { items: NavItem[] }) {
         <Image
           src="/brand/teeahead-logo-primary.svg"
           alt="TeeAhead"
-          width={140}
-          height={37}
+          width={492}
+          height={94}
           className="h-8 w-auto brightness-0 invert"
         />
       </div>
