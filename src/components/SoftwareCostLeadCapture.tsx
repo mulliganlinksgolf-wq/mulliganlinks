@@ -89,6 +89,8 @@ export default function SoftwareCostLeadCapture({
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [copyError, setCopyError] = useState('')
   const [form, setForm] = useState({
     name: '',
     email: '',
@@ -132,6 +134,7 @@ export default function SoftwareCostLeadCapture({
       return
     }
     setLoading(true)
+    setSubmitError('')
     try {
       await onLeadSubmit?.({
         name: form.name,
@@ -141,30 +144,32 @@ export default function SoftwareCostLeadCapture({
         calculatedSavings: costs.savingsAsFounder,
         vendor: costs.selectedVendor ?? 'Unknown',
       })
-    } catch (err) {
-      console.error('Lead submit error:', err)
+      setSubmitted(true)
+    } catch {
+      setSubmitError('We couldn’t send your request. Please try again, or email hello@teeahead.com.')
     } finally {
       setLoading(false)
-      setSubmitted(true)
     }
   }, [form, costs, onLeadSubmit, validate])
 
   const handleCopy = useCallback(() => {
+    setCopyError('')
     navigator.clipboard
-      .writeText('https://teeahead.com/software-cost')
+      .writeText(window.location.href)
       .then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
       })
-      .catch(() => setCopied(true))
+      .catch(() => setCopyError('Couldn’t copy the link. Please copy the address from your browser.'))
   }, [])
 
   const handleLinkedIn = useCallback(() => {
+    const pageUrl = window.location.href
     const text = encodeURIComponent(
-      `We just calculated what our golf management software is actually costing us: ${fmt(costs.totalExtraction)}/year in subscriptions, processing markups, and marketplace barter. TeeAhead charges $349/month flat. No barter. No commissions. No data extraction. Worth a look: https://teeahead.com/software-cost`
+      `We just calculated what our golf management software is actually costing us: ${fmt(costs.totalExtraction)}/year in subscriptions, processing markups, and marketplace barter. TeeAhead charges $349/month flat. No barter. No commissions. No data extraction. Worth a look: ${pageUrl}`
     )
     window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=https://teeahead.com/software-cost&summary=${text}`,
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}&summary=${text}`,
       '_blank'
     )
   }, [costs.totalExtraction])
@@ -189,6 +194,8 @@ export default function SoftwareCostLeadCapture({
             in Share on LinkedIn
           </button>
         </div>
+
+        {copyError && <p role="alert" style={styles.errorMsg}>{copyError}</p>}
 
         {tangibles.length > 0 && (
           <div style={styles.tangibleGrid}>
@@ -307,6 +314,8 @@ export default function SoftwareCostLeadCapture({
                     }
                   />
                 </div>
+
+                {submitError && <p role="alert" style={styles.errorMsg}>{submitError}</p>}
 
                 <div style={styles.modalActions}>
                   <button

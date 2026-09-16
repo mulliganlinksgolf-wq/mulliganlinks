@@ -103,11 +103,12 @@ export function SoftwareCostPage({
     calculatedSavings: number;
     vendor: string;
   }) {
-    await fetch("/api/lead", {
+    const response = await fetch("/api/lead", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(lead),
     });
+    if (!response.ok) throw new Error("Report request failed");
   }
 
   return (
