@@ -15,7 +15,7 @@ vi.mock('next/link', () => ({
 describe('AdminSidebar', () => {
   it('renders the brand name', () => {
     render(<AdminSidebar userEmail="neil@example.com" openDisputeCount={0} />)
-    expect(screen.getByText(/TeeAhead/i)).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: 'TeeAhead' })).toBeInTheDocument()
   })
 
   it('renders all nav sections', () => {

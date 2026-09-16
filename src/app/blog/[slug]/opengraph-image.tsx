@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og'
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
 import { getPostBySlug } from '@/lib/blog'
 
 export const size = { width: 1200, height: 630 }
@@ -16,8 +18,11 @@ const CATEGORY_COLORS: Record<string, string> = {
   'case-studies': '#7B9FCC',
 }
 
-export default async function Image({ params }: { params: { slug: string } }) {
-  const post = await getPostBySlug(params.slug)
+export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params
+  const post = getPostBySlug(slug)
+  const logo = await readFile(path.join(process.cwd(), 'public/brand/teeahead-logo-light.svg'))
+  const logoSrc = `data:image/svg+xml;base64,${logo.toString('base64')}`
 
   const title = post?.title ?? 'TeeAhead Blog'
   const category = post?.category ?? 'courses'
@@ -40,9 +45,8 @@ export default async function Image({ params }: { params: { slug: string } }) {
       >
         {/* Top: wordmark */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ color: '#F4F1EA', fontSize: 28, fontWeight: 700, letterSpacing: '-0.5px' }}>
-            TeeAhead
-          </span>
+          {/* ImageResponse requires a plain image element. */}
+          <img src={logoSrc} width={210} height={40} alt="TeeAhead" />
           <span style={{ color: '#F4F1EA', opacity: 0.3, fontSize: 28 }}>·</span>
           <span style={{ color: '#F4F1EA', opacity: 0.5, fontSize: 20 }}>teeahead.com</span>
         </div>
@@ -51,7 +55,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 960 }}>
           <div
             style={{
-              display: 'inline-flex',
+              display: 'flex',
               background: badgeColor,
               color: '#0F3D2E',
               fontSize: 16,
@@ -60,7 +64,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
               borderRadius: 999,
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
-              width: 'fit-content',
+              alignSelf: 'flex-start',
             }}
           >
             {label}
