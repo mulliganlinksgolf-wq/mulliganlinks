@@ -15,6 +15,7 @@ Reviewed the restored redesign at https://www.teeahead.com, based on main commit
 - Blog featured and standard cards now format calendar dates in UTC, avoiding server/client text differences and React hydration errors for visitors in other timezones. Verified in an America/Los_Angeles browser context.
 - Calculator copy/share buttons use the current page URL; the Damage calculator previously shared the Software Cost page.
 - Both calculator request handlers reject unsuccessful HTTP responses. The shared report form displays a retryable error, retains entered fields and shows success only after its callback succeeds.
+- Report dialogs use the shared sans-serif typography and yellow/forest primary button styling.
 - Clipboard failures show an explanatory message instead of claiming the link was copied.
 
 ## Limits

@@ -443,7 +443,7 @@ const styles: Record<string, React.CSSProperties> = {
   },
   modal: {
     background: 'white',
-    borderRadius: '16px',
+    borderRadius: '6px',
     padding: '2rem',
     width: '100%',
     maxWidth: '440px',
@@ -452,7 +452,7 @@ const styles: Record<string, React.CSSProperties> = {
     boxShadow: '0 24px 48px rgba(0,0,0,0.15)',
   },
   modalTitle: {
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'inherit',
     fontSize: '22px',
     fontWeight: 400,
     marginBottom: '0.5rem',
@@ -532,8 +532,8 @@ const styles: Record<string, React.CSSProperties> = {
   btnPrimary: {
     flex: 1,
     height: '42px',
-    background: '#D85A30',
-    color: 'white',
+    background: '#efcf51',
+    color: '#142c23',
     border: 'none',
     borderRadius: '8px',
     fontSize: '14px',
@@ -576,7 +576,7 @@ const styles: Record<string, React.CSSProperties> = {
     margin: '0 auto 1rem',
   },
   successTitle: {
-    fontFamily: 'Georgia, serif',
+    fontFamily: 'inherit',
     fontSize: '22px',
     fontWeight: 400,
     marginBottom: '0.5rem',
