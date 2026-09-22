@@ -1,3 +1,4 @@
+import { CourseSeasonalFeatures } from '@/components/marketing/CourseSeasonalFeatures'
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -196,6 +197,7 @@ export default async function HomePage({
             </div>
           </div>
         </section>
+        <CourseSeasonalFeatures />
         <section className={s.founder}>
           <p className={s.eyebrow}>LOCAL ROOTS. A BIGGER IDEA.</p>
           <h2>

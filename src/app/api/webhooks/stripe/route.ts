@@ -1,3 +1,5 @@
+import { courseBillingEnabled } from '@/lib/course-billing/access'
+import { handleCourseBillingEvent } from '@/lib/course-billing/stripe'
 import { related } from '@/lib/supabase/related'
 import { NextRequest, NextResponse } from 'next/server'
 import { stripe } from '@/lib/stripe'
@@ -61,6 +63,7 @@ export async function POST(req: NextRequest) {
 }
 
 async function handleEvent(event: Stripe.Event, admin: ReturnType<typeof createAdminClient>) {
+  if (courseBillingEnabled()) await handleCourseBillingEvent(event, admin)
   await handleMembershipEvent(event, admin)
   switch (event.type) {
     case 'payment_intent.succeeded':

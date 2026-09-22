@@ -13,9 +13,10 @@
     "test:e2e": "playwright test",
     "test:e2e:install": "playwright install --with-deps chromium",
     "typecheck": "tsc --noEmit",
-    "test:database": "node tests/database/core-reliability.mjs && node tests/database/booking-lifecycle.mjs && node tests/database/legacy-rpc-authorization.mjs",
+    "test:database": "node tests/database/core-reliability.mjs && node tests/database/booking-lifecycle.mjs && node tests/database/legacy-rpc-authorization.mjs && node tests/database/course-marketing.mjs && node tests/database/course-billing.mjs",
     "test:concurrency": "node tests/database/concurrency.mjs",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run test:database"
+    "verify": "npm run lint && npm run typecheck && npm test && npm run test:database",
+    "test:course-marketing": "NODE_ENV=test vitest run --config vitest.course-marketing.config.ts --maxWorkers=2 && node tests/database/course-marketing.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.30.0",
