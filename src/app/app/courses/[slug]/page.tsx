@@ -1,7 +1,11 @@
+import { getCourseBookingAccess } from '@/lib/course-billing/access'
+import { bookingsPaused } from '@/lib/course-billing/model'
+import BookingPaused from '@/components/course/BookingPaused'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { TeeTimeSearch } from '@/components/TeeTimeSearch'
+import { marketingEnabled } from '@/lib/course-marketing/server'
 import { getAvailability } from '@/lib/tee-time-availability'
 
 export default async function CourseDetailPage({
@@ -24,6 +28,8 @@ export default async function CourseDetailPage({
     .eq('status', 'active')
     .single()
   if (!course) notFound()
+  const bookingAccess = await getCourseBookingAccess(course.id)
+  if (bookingAccess && bookingsPaused(bookingAccess)) return <BookingPaused name={course.name} slug={slug} access={bookingAccess} />
 
   const { data: membership } = await supabase
     .from('memberships')
@@ -107,6 +113,11 @@ export default async function CourseDetailPage({
         <Link href="/app/courses" className="text-sm text-[#8FA889] hover:text-white">← All courses</Link>
         <h1 className="text-2xl font-bold text-white mt-2">{course.name}</h1>
         {course.city && <p className="text-[#8FA889]">{course.city}, {course.state}</p>}
+        {marketingEnabled() && (
+          <Link href={`/course-updates/${slug}`} className="inline-block mt-3 text-sm text-[#8FA889] underline hover:text-white">
+            Get course news and offers
+          </Link>
+        )}
       </div>
 
       {course.allow_back_nine_booking && (

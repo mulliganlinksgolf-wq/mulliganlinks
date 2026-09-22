@@ -28,7 +28,10 @@ export default function LoginPage() {
       setError(error.message)
       setLoading(false)
     } else {
-      const destination = ADMIN_EMAILS.includes(data.user?.email ?? '') ? '/admin' : '/app'
+      const next = new URLSearchParams(window.location.search).get('next')
+      const destination = next && /^\/course-updates\/[a-z0-9-]+$/.test(next)
+        ? next
+        : ADMIN_EMAILS.includes(data.user?.email ?? '') ? '/admin' : '/app'
       router.push(destination)
       router.refresh()
     }

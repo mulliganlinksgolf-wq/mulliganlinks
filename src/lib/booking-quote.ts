@@ -1,3 +1,5 @@
+import { getCourseBookingAccess } from '@/lib/course-billing/access'
+import { bookingsPaused } from '@/lib/course-billing/model'
 import { reconcileReservations } from '@/lib/booking-lifecycle'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { platformFeeCents } from '@/lib/stripe/fees'
@@ -30,6 +32,7 @@ export async function getBookingQuote(userId: string, input: BookingSelection, o
   if (teeError || !teeTime || teeTime.status !== 'open' || teeTime.available_players < input.players || new Date(teeTime.scheduled_at).getTime() <= Date.now()) {
     throw new Error('This tee time is no longer available.')
   }
+  if (bookingsPaused(await getCourseBookingAccess(teeTime.course_id), teeTime.scheduled_at)) throw new Error('This course is not accepting new bookings during its off-season. Please contact the course.')
   const [{ data: course, error: courseError }, { data: membership, error: memberError }, { data: config, error: configError }, { data: pricing, error: pricingError }] = await Promise.all([
     admin.from('courses').select('id, stripe_charges_enabled, allow_self_grouping, timezone').eq('id', teeTime.course_id).single(),
     admin.from('memberships').select('tier, created_at, comp_rounds_remaining, comp_rounds_reset_at').eq('user_id', userId).eq('status', 'active').maybeSingle(),

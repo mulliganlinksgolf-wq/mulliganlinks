@@ -11,6 +11,7 @@ const NAV_TEMPLATE: NavItem[] = [
   { href: 'payments',   glyph: '◈',  label: 'Payments',      managerOnly: true  },
   { href: 'dashboard',  glyph: '◆',  label: 'Dashboard',     managerOnly: true  },
   { href: 'reports',    glyph: '⊞',  label: 'Reports',       managerOnly: true  },
+  { href: 'marketing', glyph: '✉', label: 'Marketing', managerOnly: true },
   { href: 'leagues',    glyph: '◉',  label: 'Leagues',       managerOnly: true  },
   { href: 'trading',    glyph: '⇄',  label: 'Trading',       managerOnly: true  },
   { href: 'billing',    glyph: '◫',  label: 'Billing',       managerOnly: true  },
@@ -28,8 +29,8 @@ export function CourseSidebar({
   const items = NAV_TEMPLATE.filter(i => !i.managerOnly || isManager)
 
   return (
-    <aside className="w-[220px] bg-[#082419] text-[#F4F1EA] flex flex-col flex-shrink-0">
-      <div className="px-5 pt-5 pb-5 border-b border-white/8">
+    <aside className="w-16 sm:w-[220px] bg-[#082419] text-[#F4F1EA] flex flex-col flex-shrink-0">
+      <div className="hidden sm:block px-5 pt-5 pb-5 border-b border-white/8">
         <Link href="/app">
           <TeeAheadLogo className="h-7 w-auto brightness-0 invert" />
         </Link>
@@ -43,16 +44,18 @@ export function CourseSidebar({
             <Link
               key={item.label}
               href={href}
+              title={item.label}
+              aria-label={item.label}
               className="flex items-center gap-3 px-5 py-2.5 text-sm transition-colors border-l-2 text-[#F4F1EA]/65 border-transparent hover:text-[#F4F1EA] hover:bg-white/[0.04]"
             >
               <span className="text-[13px] w-3.5 text-center text-[#F4F1EA]/50">{item.glyph}</span>
-              <span>{item.label}</span>
+              <span className="hidden sm:inline">{item.label}</span>
             </Link>
           )
         })}
       </nav>
 
-      <div className="px-5 py-4 border-t border-white/8 flex items-center gap-2.5">
+      <div className="hidden sm:flex px-5 py-4 border-t border-white/8 items-center gap-2.5">
         <div className="size-8 rounded-full bg-[#E0A800] text-[#082419] font-display text-sm font-bold flex items-center justify-center flex-shrink-0">
           {userInitials}
         </div>

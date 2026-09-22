@@ -1,3 +1,6 @@
+import { getCourseBookingAccess } from '@/lib/course-billing/access'
+import { bookingsPaused } from '@/lib/course-billing/model'
+import BookingPaused from '@/components/course/BookingPaused'
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
@@ -32,6 +35,8 @@ export default async function PublicBookingPage({
     .single()
 
   if (!course) notFound()
+  const bookingAccess = await getCourseBookingAccess(course.id)
+  if (bookingAccess && bookingsPaused(bookingAccess)) return <BookingPaused name={course.name} slug={slug} access={bookingAccess} />
 
   const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
   const selectedDate = (dateParam && DATE_RE.test(dateParam))

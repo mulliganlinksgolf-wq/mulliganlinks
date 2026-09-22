@@ -1,3 +1,4 @@
+import { CourseSeasonalFeatures } from '@/components/marketing/CourseSeasonalFeatures'
 import styles from "./pricing.module.css";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -46,6 +47,7 @@ export default async function PricingPage() {
       <main className="flex-1">
         <PricingHero c={c} />
         <CourseAndGolferPricing c={c} spotsRemaining={spotsRemaining} />
+        <CourseSeasonalFeatures />
         <CompareAndFAQ />
         <FinalCTA />
       </main>
