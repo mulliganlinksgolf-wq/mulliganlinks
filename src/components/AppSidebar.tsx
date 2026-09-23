@@ -17,7 +17,10 @@ const playRoutes = [
 ];
 export default function AppSidebar({ items }: { items: NavItem[] }) {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
+  // Bottom shortcuts can navigate without clicking a link inside this menu.
+  if (openPath !== null && openPath !== pathname) setOpenPath(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const groups = [
     {
@@ -35,7 +38,7 @@ export default function AppSidebar({ items }: { items: NavItem[] }) {
         <Link
           href="/app"
           aria-label="TeeAhead member home"
-          onClick={() => setOpen(false)}
+          onClick={() => setOpenPath(null)}
         >
           <TeeAheadLogo className={s.logo} />
         </Link>
@@ -46,7 +49,7 @@ export default function AppSidebar({ items }: { items: NavItem[] }) {
           aria-label={open ? "Close member menu" : "Open member menu"}
           aria-expanded={open}
           aria-controls="member-navigation"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpenPath(open ? null : pathname)}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -57,7 +60,7 @@ export default function AppSidebar({ items }: { items: NavItem[] }) {
         data-open={open}
         onKeyDown={(event) => {
           if (event.key === "Escape") {
-            setOpen(false);
+            setOpenPath(null);
             toggle.current?.focus();
           }
         }}
@@ -80,7 +83,7 @@ export default function AppSidebar({ items }: { items: NavItem[] }) {
                       ? "page"
                       : undefined
                   }
-                  onClick={() => setOpen(false)}
+                  onClick={() => setOpenPath(null)}
                 >
                   <MemberNavIcon href={item.href} />
                   <span>{item.label}</span>

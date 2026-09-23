@@ -9,11 +9,27 @@ import {
 import AppSidebar from "@/components/AppSidebar";
 import AppBottomNav from "@/components/AppBottomNav";
 import { SIDEBAR_NAV_ITEMS, BOTTOM_NAV_ITEMS } from "@/lib/nav";
-vi.mock("next/navigation", () => ({
-  usePathname: () => "/app/bookings/example",
-}));
-afterEach(cleanup);
+const route = vi.hoisted(() => ({ path: "/app/bookings/example" }));
+vi.mock("next/navigation", () => ({ usePathname: () => route.path }));
+afterEach(() => {
+  cleanup();
+  route.path = "/app/bookings/example";
+});
 describe("member navigation", () => {
+  it("closes the menu when a bottom shortcut changes the route, including Back", () => {
+    const { rerender } = render(<AppSidebar items={SIDEBAR_NAV_ITEMS} />);
+    fireEvent.click(screen.getByRole("button", { name: "Open member menu" }));
+    route.path = "/app/points";
+    rerender(<AppSidebar items={SIDEBAR_NAV_ITEMS} />);
+    expect(
+      screen.getByRole("button", { name: "Open member menu" }),
+    ).toHaveAttribute("aria-expanded", "false");
+    route.path = "/app/bookings/example";
+    rerender(<AppSidebar items={SIDEBAR_NAV_ITEMS} />);
+    expect(
+      screen.getByRole("button", { name: "Open member menu" }),
+    ).toHaveAttribute("aria-expanded", "false");
+  });
   it("highlights a nested booking route and preserves every destination", () => {
     render(<AppSidebar items={SIDEBAR_NAV_ITEMS} />);
     const nav = within(
