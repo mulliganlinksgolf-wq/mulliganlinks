@@ -1,59 +1,117 @@
-'use client'
-
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import { isNavItemActive, type NavItem } from '@/lib/nav'
-
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useRef, useState } from "react";
+import { Menu, X, LogOut, ArrowUpRight } from "lucide-react";
+import { TeeAheadLogo } from "@/components/TeeAheadLogo";
+import { MemberNavIcon } from "@/components/app/MemberNavIcon";
+import { isNavItemActive, type NavItem } from "@/lib/nav";
+import s from "@/components/app/member-portal.module.css";
+const playRoutes = [
+  "/app",
+  "/app/courses",
+  "/app/bookings",
+  "/app/partners",
+  "/app/leagues",
+  "/app/trading",
+];
 export default function AppSidebar({ items }: { items: NavItem[] }) {
-  const pathname = usePathname()
-
+  const pathname = usePathname();
+  const [openPath, setOpenPath] = useState<string | null>(null);
+  const open = openPath === pathname;
+  // Bottom shortcuts can navigate without clicking a link inside this menu.
+  if (openPath !== null && openPath !== pathname) setOpenPath(null);
+  const toggle = useRef<HTMLButtonElement>(null);
+  const groups = [
+    {
+      label: "Get out and play",
+      items: items.filter((item) => playRoutes.includes(item.href)),
+    },
+    {
+      label: "Your membership",
+      items: items.filter((item) => !playRoutes.includes(item.href)),
+    },
+  ];
   return (
-    <aside className="hidden md:flex flex-col w-56 fixed top-0 left-0 bottom-0 bg-[#1B4332] border-r border-[#0f2d1d]">
-      <div className="p-5 border-b border-[#0f2d1d]">
-        <Image
-          src="/brand/teeahead-logo-primary.svg"
-          alt="TeeAhead"
-          width={492}
-          height={94}
-          className="h-8 w-auto brightness-0 invert"
-        />
+    <aside className={s.sidebar}>
+      <div className={s.brandRow}>
+        <Link
+          href="/app"
+          aria-label="TeeAhead member home"
+          onClick={() => setOpenPath(null)}
+        >
+          <TeeAheadLogo className={s.logo} />
+        </Link>
+        <button
+          ref={toggle}
+          type="button"
+          className={s.menuButton}
+          aria-label={open ? "Close member menu" : "Open member menu"}
+          aria-expanded={open}
+          aria-controls="member-navigation"
+          onClick={() => setOpenPath(open ? null : pathname)}
+        >
+          {open ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
-      <nav className="flex-1 p-3 space-y-1">
-        {items.map((item) => {
-          const active = isNavItemActive(pathname, item.href, item.exact)
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium ${
-                active
-                  ? 'bg-white/10 text-white font-semibold'
-                  : 'text-[#8FA889] hover:text-white hover:bg-white/5'
-              }`}
-            >
-              <span>{item.icon}</span>
-              <span className="flex-1">{item.label}</span>
-              {item.badge && item.badge > 0 && (
-                <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 min-w-[18px] text-center">
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          )
-        })}
-      </nav>
-      <div className="p-3 border-t border-[#0f2d1d]">
-        <form action="/api/auth/logout" method="post">
-          <button
-            type="submit"
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#8FA889] hover:text-white hover:bg-white/5"
-          >
-            <span>🚪</span>
-            <span>Sign out</span>
-          </button>
-        </form>
+      <div
+        id="member-navigation"
+        className={s.navigation}
+        data-open={open}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setOpenPath(null);
+            toggle.current?.focus();
+          }
+        }}
+      >
+        <div className={s.memberCard}>
+          <span>Good days start on the course.</span>
+          <p>Make time for your game.</p>
+        </div>
+        <nav aria-label="Member navigation" className={s.navGroups}>
+          {groups.map((group) => (
+            <div className={s.navGroup} key={group.label}>
+              <p className={s.groupLabel}>{group.label}</p>
+              {group.items.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={s.navLink}
+                  aria-current={
+                    isNavItemActive(pathname, item.href, item.exact)
+                      ? "page"
+                      : undefined
+                  }
+                  onClick={() => setOpenPath(null)}
+                >
+                  <MemberNavIcon href={item.href} />
+                  <span>{item.label}</span>
+                  {!!item.badge && item.badge > 0 && (
+                    <span
+                      className={s.badge}
+                      aria-label={`${item.badge} pending requests`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </nav>
+        <div className={s.footer}>
+          <Link href="/" className={s.siteLink}>
+            Visit TeeAhead <ArrowUpRight size={15} aria-hidden="true" />
+          </Link>
+          <form action="/api/auth/logout" method="post">
+            <button type="submit" className={s.signOut}>
+              <LogOut size={17} aria-hidden="true" />
+              Sign out
+            </button>
+          </form>
+        </div>
       </div>
     </aside>
-  )
+  );
 }

@@ -86,7 +86,9 @@ export function TeeSheetGrid({ teeTimes, courseId, courseName }: { teeTimes: Tee
 
   return (
     <>
-      <div className="space-y-1">
+      <p className="mb-2 text-xs text-[#65716b] sm:hidden">Swipe across to see all booking details.</p>
+      <div className="overflow-x-auto" role="region" aria-label="Tee sheet bookings" tabIndex={0}>
+      <div className="min-w-[640px] space-y-1">
         {/* Column headers */}
         <div className="grid grid-cols-12 gap-2 px-3 py-1 text-xs font-medium text-[#6B7770] uppercase tracking-wide">
           <div className="col-span-2">Time</div>
@@ -295,6 +297,8 @@ export function TeeSheetGrid({ teeTimes, courseId, courseName }: { teeTimes: Tee
             </div>
           )
         })}
+      </div>
+
       </div>
 
       {bookingTeeTime && (

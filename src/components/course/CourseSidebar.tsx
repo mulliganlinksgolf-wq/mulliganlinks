@@ -1,71 +1,209 @@
-import Link from 'next/link'
-import { TeeAheadLogo } from '@/components/TeeAheadLogo'
+"use client";
 
-type NavItem = { href: string; glyph: string; label: string; managerOnly?: boolean }
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import {
+  CalendarDays,
+  CircleCheck,
+  ClipboardList,
+  Users,
+  CreditCard,
+  LayoutDashboard,
+  ChartNoAxesCombined,
+  Mail,
+  Flag,
+  ArrowLeftRight,
+  ReceiptText,
+  Settings2,
+  BookOpen,
+  ArrowUpRight,
+  Menu,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { TeeAheadLogo } from "@/components/TeeAheadLogo";
+import s from "./course-portal.module.css";
 
-const NAV_TEMPLATE: NavItem[] = [
-  { href: '',           glyph: '◷',  label: 'Tee sheet',     managerOnly: false },
-  { href: 'check-in',   glyph: '◇',  label: 'Check-in',      managerOnly: false },
-  { href: 'bookings',   glyph: '◐',  label: 'Bookings',      managerOnly: false },
-  { href: 'members',    glyph: '◑',  label: 'Members',       managerOnly: false },
-  { href: 'payments',   glyph: '◈',  label: 'Payments',      managerOnly: true  },
-  { href: 'dashboard',  glyph: '◆',  label: 'Dashboard',     managerOnly: true  },
-  { href: 'reports',    glyph: '⊞',  label: 'Reports',       managerOnly: true  },
-  { href: 'marketing', glyph: '✉', label: 'Marketing', managerOnly: true },
-  { href: 'leagues',    glyph: '◉',  label: 'Leagues',       managerOnly: true  },
-  { href: 'trading',    glyph: '⇄',  label: 'Trading',       managerOnly: true  },
-  { href: 'billing',    glyph: '◫',  label: 'Billing',       managerOnly: true  },
-  { href: 'settings',   glyph: '✦',  label: 'Settings',      managerOnly: true  },
-  { href: 'help',       glyph: '?',  label: 'Knowledge base',managerOnly: false },
-]
+type NavItem = {
+  path: string;
+  icon: LucideIcon;
+  label: string;
+  managerOnly?: boolean;
+};
+const groups: { label: string; items: NavItem[] }[] = [
+  {
+    label: "Day to day",
+    items: [
+      { path: "", icon: CalendarDays, label: "Tee sheet" },
+      { path: "check-in", icon: CircleCheck, label: "Check-in" },
+      { path: "bookings", icon: ClipboardList, label: "Bookings" },
+      { path: "members", icon: Users, label: "Members" },
+    ],
+  },
+  {
+    label: "Your business",
+    items: [
+      {
+        path: "dashboard",
+        icon: LayoutDashboard,
+        label: "Dashboard",
+        managerOnly: true,
+      },
+      {
+        path: "payments",
+        icon: CreditCard,
+        label: "Payments",
+        managerOnly: true,
+      },
+      {
+        path: "reports",
+        icon: ChartNoAxesCombined,
+        label: "Reports",
+        managerOnly: true,
+      },
+      { path: "marketing", icon: Mail, label: "Marketing", managerOnly: true },
+      { path: "leagues", icon: Flag, label: "Leagues", managerOnly: true },
+      {
+        path: "trading",
+        icon: ArrowLeftRight,
+        label: "Trading",
+        managerOnly: true,
+      },
+    ],
+  },
+  {
+    label: "Course essentials",
+    items: [
+      {
+        path: "billing",
+        icon: ReceiptText,
+        label: "Billing",
+        managerOnly: true,
+      },
+      {
+        path: "settings",
+        icon: Settings2,
+        label: "Settings",
+        managerOnly: true,
+      },
+      { path: "help", icon: BookOpen, label: "Knowledge base" },
+    ],
+  },
+];
 
 export function CourseSidebar({
-  slug, courseName, role, isManager, userInitials, userName,
+  slug,
+  courseName,
+  role,
+  isManager,
+  userInitials,
+  userName,
 }: {
-  slug: string; courseName: string;
-  role: string; isManager: boolean;
-  userInitials: string; userName: string;
+  slug: string;
+  courseName: string;
+  role: string;
+  isManager: boolean;
+  userInitials: string;
+  userName: string;
 }) {
-  const items = NAV_TEMPLATE.filter(i => !i.managerOnly || isManager)
-
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const base = `/course/${slug}`;
   return (
-    <aside className="w-16 sm:w-[220px] bg-[#082419] text-[#F4F1EA] flex flex-col flex-shrink-0">
-      <div className="hidden sm:block px-5 pt-5 pb-5 border-b border-white/8">
-        <Link href="/app">
-          <TeeAheadLogo className="h-7 w-auto brightness-0 invert" />
+    <aside className={s.sidebar}>
+      <div className={s.brandRow}>
+        <Link
+          href="/app"
+          aria-label="TeeAhead golfer app"
+          className={s.brandLink}
+        >
+          <TeeAheadLogo className={s.logo} />
         </Link>
-        <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-[#E0A800] mt-1.5 truncate">{courseName}</p>
+        <button
+          type="button"
+          className={s.menuButton}
+          aria-label={open ? "Close course menu" : "Open course menu"}
+          aria-expanded={open}
+          aria-controls="course-navigation"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? (
+            <X size={21} aria-hidden="true" />
+          ) : (
+            <Menu size={21} aria-hidden="true" />
+          )}
+        </button>
       </div>
-
-      <nav className="flex flex-col py-3 flex-1 overflow-y-auto">
-        {items.map((item) => {
-          const href = item.href ? `/course/${slug}/${item.href}` : `/course/${slug}`
-          return (
-            <Link
-              key={item.label}
-              href={href}
-              title={item.label}
-              aria-label={item.label}
-              className="flex items-center gap-3 px-5 py-2.5 text-sm transition-colors border-l-2 text-[#F4F1EA]/65 border-transparent hover:text-[#F4F1EA] hover:bg-white/[0.04]"
-            >
-              <span className="text-[13px] w-3.5 text-center text-[#F4F1EA]/50">{item.glyph}</span>
-              <span className="hidden sm:inline">{item.label}</span>
-            </Link>
-          )
-        })}
-      </nav>
-
-      <div className="hidden sm:flex px-5 py-4 border-t border-white/8 items-center gap-2.5">
-        <div className="size-8 rounded-full bg-[#E0A800] text-[#082419] font-display text-sm font-bold flex items-center justify-center flex-shrink-0">
-          {userInitials}
+      <div
+        id="course-navigation"
+        className={s.navigation}
+        data-open={open}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setOpen(false);
+            event.currentTarget.parentElement
+              ?.querySelector<HTMLButtonElement>("button")
+              ?.focus();
+          }
+        }}
+      >
+        <div className={s.courseCard}>
+          <p className={s.courseEyebrow}>
+            <span aria-hidden="true" /> Course portal
+          </p>
+          <p className={s.courseName}>{courseName}</p>
         </div>
-        <div className="min-w-0">
-          <div className="text-[12.5px] truncate">{userName}</div>
-          <div className="text-[10.5px] uppercase tracking-[0.1em] text-[#F4F1EA]/50 truncate">
-            {role.replace('_', ' ')}
+        <nav aria-label="Course navigation" className={s.navGroups}>
+          {groups.map((group) => {
+            const items = group.items.filter(
+              (item) => !item.managerOnly || isManager,
+            );
+            if (!items.length) return null;
+            return (
+              <div key={group.label} className={s.navGroup}>
+                <p className={s.groupLabel}>{group.label}</p>
+                {items.map(({ path, icon: Icon, label }) => {
+                  const href = path ? `${base}/${path}` : base;
+                  const active = path
+                    ? pathname === href || pathname.startsWith(`${href}/`)
+                    : pathname === base ||
+                      pathname.startsWith(`${base}/tee-times/`);
+                  return (
+                    <Link
+                      key={label}
+                      href={href}
+                      className={s.navLink}
+                      aria-current={active ? "page" : undefined}
+                      onClick={() => setOpen(false)}
+                    >
+                      <Icon size={17} strokeWidth={1.7} aria-hidden="true" />
+                      <span>{label}</span>
+                      {active && (
+                        <span className={s.activeMark} aria-hidden="true" />
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </nav>
+        <div className={s.sidebarFooter}>
+          <div className={s.userRow}>
+            <div className={s.avatar} aria-hidden="true">
+              {userInitials}
+            </div>
+            <div>
+              <p className={s.userName}>{userName}</p>
+              <p className={s.userRole}>{role.replaceAll("_", " ")}</p>
+            </div>
           </div>
+          <Link href="/" className={s.siteLink}>
+            Visit TeeAhead <ArrowUpRight size={14} aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </aside>
-  )
+  );
 }
