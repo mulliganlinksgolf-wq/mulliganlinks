@@ -1,3 +1,4 @@
+import styles from '@/components/course/course-portal.module.css'
 import { redirect, notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -48,7 +49,8 @@ export default async function CourseAdminLayout({
   const userInitials = fullName.split(' ').filter(Boolean).map(p => p[0]).slice(0, 2).join('').toUpperCase() || 'U'
 
   return (
-    <div className="min-h-screen flex bg-[#FAF7F2] font-sans">
+    <div className={styles.shell}>
+      <a href="#course-content" className={styles.skipLink}>Skip to course content</a>
       <CourseSidebar
         slug={slug}
         courseName={course.name}
@@ -58,7 +60,7 @@ export default async function CourseAdminLayout({
         userName={fullName}
       />
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div id="course-content" tabIndex={-1} className={styles.content}>
         {children}
       </div>
 

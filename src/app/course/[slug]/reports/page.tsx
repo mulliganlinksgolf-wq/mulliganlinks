@@ -1,3 +1,5 @@
+import { Flag, Wallet, Users, ClipboardList, Trophy, Mail, CalendarDays, Repeat2, Ticket, Gift, ChartNoAxesCombined } from 'lucide-react'
+import portal from '@/components/course/course-portal.module.css'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
@@ -39,17 +41,17 @@ export default async function CourseReportsDashboard({
   }
 
   const subPages = [
-    { href: `/course/${slug}/reports/rounds`, label: 'Rounds & Utilization', icon: '⛳' },
-    { href: `/course/${slug}/reports/revenue`, label: 'Revenue', icon: '💰' },
-    { href: `/course/${slug}/reports/members`, label: 'Member Activity', icon: '👥' },
-    { href: `/course/${slug}/reports/waitlist`, label: 'Waitlist & Recovery', icon: '📋' },
-    { href: `/course/${slug}/reports/barter`, label: 'The TeeAhead Difference', icon: '🏆', highlight: true },
-    { href: `/course/${slug}/reports/barter-receipts`, label: 'Monthly Barter Receipts', description: 'NGCOA-methodology PDF archive, emailed on the 1st of every month', icon: '📨', highlight: true },
-    { href: `/course/${slug}/reports/utilization`, label: 'Tee Sheet Utilization', description: 'When members book, peak days, times, and party size', icon: '📅' },
-    { href: `/course/${slug}/reports/loyalty`, label: 'Member Loyalty', description: 'Repeat visit rates and your most frequent visitors', icon: '🔄' },
-    { href: `/course/${slug}/reports/guests`, label: 'Guest Passes & Referrals', description: 'Guest redemptions, conversions, and referral attribution', icon: '🎟️' },
-    { href: `/course/${slug}/reports/comps`, label: 'Comp Rounds', description: 'Comps redeemed, cost exposure, and member breakdown', icon: '🆓' },
-    { href: `/course/${slug}/reports/leagues`, label: 'League Performance', description: 'Active leagues, rounds played, and revenue contribution', icon: '🏌️' },
+    { href: `/course/${slug}/reports/rounds`, label: 'Rounds & Utilization', icon: Flag },
+    { href: `/course/${slug}/reports/revenue`, label: 'Revenue', icon: Wallet },
+    { href: `/course/${slug}/reports/members`, label: 'Member Activity', icon: Users },
+    { href: `/course/${slug}/reports/waitlist`, label: 'Waitlist & Recovery', icon: ClipboardList },
+    { href: `/course/${slug}/reports/barter`, label: 'The TeeAhead Difference', icon: Trophy, highlight: true },
+    { href: `/course/${slug}/reports/barter-receipts`, label: 'Monthly Barter Receipts', description: 'NGCOA-methodology PDF archive, emailed on the 1st of every month', icon: Mail, highlight: true },
+    { href: `/course/${slug}/reports/utilization`, label: 'Tee Sheet Utilization', description: 'When members book, peak days, times, and party size', icon: CalendarDays },
+    { href: `/course/${slug}/reports/loyalty`, label: 'Member Loyalty', description: 'Repeat visit rates and your most frequent visitors', icon: Repeat2 },
+    { href: `/course/${slug}/reports/guests`, label: 'Guest Passes & Referrals', description: 'Guest redemptions, conversions, and referral attribution', icon: Ticket },
+    { href: `/course/${slug}/reports/comps`, label: 'Comp Rounds', description: 'Comps redeemed, cost exposure, and member breakdown', icon: Gift },
+    { href: `/course/${slug}/reports/leagues`, label: 'League Performance', description: 'Active leagues, rounds played, and revenue contribution', icon: ChartNoAxesCombined },
   ]
 
   return (
@@ -76,7 +78,7 @@ export default async function CourseReportsDashboard({
                 ? 'border-[#E0A800] bg-amber-50 hover:bg-amber-100'
                 : 'border-gray-200 bg-white hover:border-[#1B4332]'
             }`}>
-            <div className="text-2xl mb-2">{p.icon}</div>
+            <span className={portal.reportIcon}><p.icon size={22} strokeWidth={1.6} aria-hidden="true" /></span>
             <h2 className={`font-semibold group-hover:text-[#1B4332] ${p.highlight ? 'text-amber-900' : 'text-[#1A1A1A]'}`}>
               {p.label}
             </h2>

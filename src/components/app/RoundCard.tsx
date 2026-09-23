@@ -47,7 +47,7 @@ export function RoundCard({
             <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#F4F1EA]/55 font-semibold">
               {greeting} round card
             </p>
-            <h1 className="font-display text-[#F4F1EA] mt-1 tracking-[-0.02em]" style={{ fontSize: 32, fontWeight: 400 }}>
+            <h1 className="font-display text-[#F4F1EA] mt-1 tracking-[-0.02em]">
               {greeting}, {firstName}.
             </h1>
           </div>
@@ -58,7 +58,7 @@ export function RoundCard({
         <p className="text-[12px] text-[#F4F1EA]/65 leading-relaxed">{subHeadline}</p>
       </div>
 
-      {/* Stats strip, Playfair 400 numbers */}
+      {/* Member balances */}
       <div className="grid grid-cols-3 bg-white/[0.04] border-y border-white/[0.06]">
         <div className="px-4 py-4 text-center border-r border-white/[0.06]">
           <p className="font-mono text-[9px] tracking-[0.14em] uppercase text-[#F4F1EA]/55 font-semibold mb-1.5">Points</p>

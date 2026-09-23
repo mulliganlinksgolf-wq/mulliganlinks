@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import AppSidebar from '@/components/AppSidebar'
+import s from '@/components/app/member-portal.module.css'
 import AppBottomNav from '@/components/AppBottomNav'
 import { SIDEBAR_NAV_ITEMS, BOTTOM_NAV_ITEMS } from '@/lib/nav'
 
@@ -30,10 +31,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   )
 
   return (
-    <div className="flex h-screen bg-[#0f2d1d] overflow-hidden">
+    <div className={s.shell}>
+      <a href="#member-content" className={s.skipLink}>Skip to content</a>
       <AppSidebar items={sidebarItems} />
-      <main className="flex-1 overflow-y-auto md:pl-56">
-        <div className="px-8 py-8 pb-24 md:pb-8">
+      <main id="member-content" tabIndex={-1} className={s.main}>
+        <header className={s.pageIntro}><p>Your next round starts here.</p><span>TeeAhead membership</span></header>
+        <div className={s.page}>
           {children}
         </div>
       </main>

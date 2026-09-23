@@ -60,9 +60,9 @@ export default async function PointsPage() {
   }
 
   return (
-    <div className="-mx-8 -my-8 md:-ml-56 md:-mr-8 md:-my-8 min-h-[calc(100vh-72px)] md:min-h-screen flex flex-col bg-[#FAF7F2]">
+    <div className="overflow-hidden rounded-md flex flex-col bg-[#FAF7F2]">
       {/* Dark hero block */}
-      <header className="bg-[#082419] text-[#F4F1EA] px-5 sm:px-8 md:pl-64 pt-6 pb-7">
+      <header className="bg-[#082419] text-[#F4F1EA] px-5 sm:px-8 pt-6 pb-7">
         <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#E0A800] font-semibold">
           Fairway points · balance
         </p>
@@ -92,7 +92,7 @@ export default async function PointsPage() {
       </header>
 
       {/* Activity */}
-      <section className="px-5 sm:px-8 md:pl-64 pt-5 pb-8 flex-1">
+      <section className="px-5 sm:px-8 pt-5 pb-8 flex-1">
         <div className="max-w-2xl">
           <p className="font-mono text-[10px] tracking-[0.14em] uppercase text-[#6B7770] font-semibold mb-3">
             Activity
