@@ -11,7 +11,7 @@ export default async function CourseLoginPage({
   const { slug } = await params
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (user) redirect(`/course/${slug}/reports`)
+  if (user) redirect(`/course/${slug}`)
 
   const { data: course } = await supabase
     .from('courses').select('name').eq('slug', slug).single()
