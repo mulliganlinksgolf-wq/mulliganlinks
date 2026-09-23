@@ -17,6 +17,7 @@ export default async function UnauthorizedPage({
       >
         ← Back to tee sheet
       </a>
+      <a href="/app" className="mt-4 text-sm text-[#1B4332] underline underline-offset-4">Back to member portal</a>
     </div>
   )
 }

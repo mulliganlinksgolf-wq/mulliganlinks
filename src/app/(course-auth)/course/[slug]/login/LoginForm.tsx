@@ -21,13 +21,13 @@ export default function LoginForm({ slug }: { slug: string }) {
         <div className="bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-sm text-red-700">{error}</div>
       )}
       <div>
-        <label className="block text-sm font-medium text-[#1A1A1A] mb-1">Email</label>
-        <input name="email" type="email" required autoComplete="email" disabled={loading}
+        <label htmlFor="course-email" className="block text-sm font-medium text-[#1A1A1A] mb-1">Email</label>
+        <input id="course-email" name="email" type="email" required autoComplete="email" disabled={loading}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]" />
       </div>
       <div>
-        <label className="block text-sm font-medium text-[#1A1A1A] mb-1">Password</label>
-        <input name="password" type="password" required autoComplete="current-password" disabled={loading}
+        <label htmlFor="course-password" className="block text-sm font-medium text-[#1A1A1A] mb-1">Password</label>
+        <input id="course-password" name="password" type="password" required autoComplete="current-password" disabled={loading}
           className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#1B4332]" />
       </div>
       <button type="submit" disabled={loading}

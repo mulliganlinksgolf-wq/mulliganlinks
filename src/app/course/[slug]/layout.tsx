@@ -38,7 +38,7 @@ export default async function CourseAdminLayout({
   ])
 
   const isGlobalAdmin = profile?.is_admin === true
-  if (!isGlobalAdmin && !courseAdmin && !courseUser) redirect(`/course/${slug}/login`)
+  if (!isGlobalAdmin && !courseAdmin && !courseUser) redirect(`/course/${slug}/unauthorized`)
 
   const role = isGlobalAdmin ? 'owner' : (courseAdmin?.role ?? courseUser?.role ?? 'staff')
   const isManager = isGlobalAdmin || MANAGER_ROLES.includes(role)

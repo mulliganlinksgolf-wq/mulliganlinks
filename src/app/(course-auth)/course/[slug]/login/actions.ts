@@ -40,5 +40,5 @@ export async function loginCoursePartner(
       .eq('id', courseUser.id)
   }
 
-  redirect(`/course/${slug}/reports`)
+  redirect(`/course/${slug}`)
 }
