@@ -24,3 +24,9 @@ A full `next build --webpack` fails in the installed Next.js Google font loader:
 After the build is healthy, validate the authenticated CRM against a designated test course: create and complete a follow-up, log activity, confirm refresh behavior and owner filters. Sending an actual email was not part of this task's verification.
 
 Research contacts have not been imported into the CRM. Their source and confirmation status must stay attached to them; a published contact is not proof of current purchasing authority.
+
+## Software-aware revision
+
+The playbook now compares recorded CRM software with public booking/store evidence for all 25 courses and tailors each conversation to switching requirements. Public service links do not verify the entire installed stack. Live CRM values were read only; no contacts or software records were changed.
+
+CRM cards now display the existing software value with a confirmation reminder. Integration on the latest main branch preserves the new brand logo and renders one responsive sidebar. CI caught duplicate sidebar instances in the original mobile layout; this revision removes the duplication and adds a mobile-menu toggle check. TypeScript passes in the clean integration checkout. Six focused workspace tests and the isolated browser checks pass again. Local jsdom-based tests cannot start with the original workspace's installed dependencies; GitHub CI reruns those tests using its clean installation.

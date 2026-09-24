@@ -11,7 +11,7 @@ export async function getWorkspaceData() {
     const rows: WorkspaceCourse[] = []
     for (let offset = 0; ; offset += size) {
       const { data, error } = await db.from('crm_courses')
-        .select('id,name,city,state,contact_name,contact_email,contact_phone,stage,assigned_to,notes,last_activity_at')
+        .select('id,name,city,state,contact_name,contact_email,contact_phone,stage,assigned_to,notes,last_activity_at,current_software')
         .not('stage', 'in', '(partner,churned)').order('id').range(offset, offset + size - 1)
       if (error) throw new Error(error.message)
       rows.push(...(data ?? []) as WorkspaceCourse[])

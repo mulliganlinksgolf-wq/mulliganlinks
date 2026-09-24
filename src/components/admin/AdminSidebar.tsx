@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { usePathname } from 'next/navigation'
 
@@ -11,6 +12,7 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSidebarProps) {
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <aside className="w-full lg:w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col lg:min-h-screen">
@@ -19,6 +21,8 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         <span className="text-xs text-slate-400">Admin</span>
       </div>
 
+      <button type="button" aria-expanded={menuOpen} aria-controls="admin-navigation" onClick={() => setMenuOpen(open => !open)} className="mx-4 mb-3 rounded-lg border border-slate-700 px-3 py-2 text-left text-sm text-white lg:hidden">{menuOpen ? 'Close admin menu' : 'Open admin menu'}</button>
+      <div id="admin-navigation" className={`${menuOpen ? 'flex' : 'hidden'} flex-1 flex-col lg:flex`}>
       <nav className="flex-1 py-2">
         <SidebarItem href="/admin" icon="📊" label="Dashboard" active={pathname === '/admin'} />
 
@@ -69,6 +73,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         <Link href="/app" className="text-emerald-400 hover:text-emerald-300 mt-1 block">
           ← Member view
         </Link>
+      </div>
       </div>
     </aside>
   )

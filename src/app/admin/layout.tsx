@@ -34,8 +34,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-[#FAF7F2]">
-      <div className="hidden lg:block"><AdminSidebar userEmail={userEmail} openDisputeCount={openDisputeCount} /></div>
-      <details className="bg-slate-900 text-white lg:hidden"><summary className="cursor-pointer px-4 py-4 text-sm font-semibold">TeeAhead Admin · Menu</summary><AdminSidebar userEmail={userEmail} openDisputeCount={openDisputeCount} /></details>
+      <AdminSidebar userEmail={userEmail} openDisputeCount={openDisputeCount} />
       <main className="min-w-0 flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         {children}
       </main>

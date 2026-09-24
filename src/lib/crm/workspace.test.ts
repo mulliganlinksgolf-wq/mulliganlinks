@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { courseTaskMap, detroitDate, filterWorkspaceCourses, isMetroCourse, phoneHref, type WorkspaceCourse } from './workspace'
 import type { CrmTask } from './types'
 
-const course = (id: string, extra: Partial<WorkspaceCourse> = {}): WorkspaceCourse => ({ id, name: id, city: 'Detroit', state: 'MI', contact_name: null, contact_email: null, contact_phone: null, stage: 'lead', assigned_to: 'billy', notes: null, last_activity_at: '2026-09-01T12:00:00Z', ...extra })
+const course = (id: string, extra: Partial<WorkspaceCourse> = {}): WorkspaceCourse => ({ id, name: id, city: 'Detroit', state: 'MI', contact_name: null, contact_email: null, contact_phone: null, current_software: null, stage: 'lead', assigned_to: 'billy', notes: null, last_activity_at: '2026-09-01T12:00:00Z', ...extra })
 const task = (id: string, record_id: string, due_date: string | null, extra: Partial<CrmTask> = {}): CrmTask => ({ id, record_id, record_type: 'course', due_date, title: id, notes: null, assigned_to: 'billy', completed_at: null, created_at: '', updated_at: '', ...extra })
 const filters = { today: '2026-09-24', owner: 'all' as const, view: 'all' as const, search: '', metroOnly: false }
 

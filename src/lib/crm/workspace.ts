@@ -1,6 +1,6 @@
 import type { CrmCourse, CrmTask, CrmAssignee } from './types'
 
-export type WorkspaceCourse = Pick<CrmCourse, 'id' | 'name' | 'city' | 'state' | 'contact_name' | 'contact_email' | 'contact_phone' | 'stage' | 'assigned_to' | 'notes' | 'last_activity_at'>
+export type WorkspaceCourse = Pick<CrmCourse, 'id' | 'name' | 'city' | 'state' | 'contact_name' | 'contact_email' | 'contact_phone' | 'stage' | 'assigned_to' | 'notes' | 'last_activity_at' | 'current_software'>
 export type WorkspaceView = 'all' | 'due' | 'unplanned' | 'new' | 'review'
 export type WorkspaceOwner = 'all' | 'unassigned' | CrmAssignee
 
