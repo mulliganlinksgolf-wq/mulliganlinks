@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useState } from 'react'
 import { TeeAheadLogo } from '@/components/TeeAheadLogo'
 import { usePathname } from 'next/navigation'
 
@@ -11,14 +12,17 @@ interface AdminSidebarProps {
 
 export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSidebarProps) {
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <aside className="w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col min-h-screen">
+    <aside className="w-full lg:w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col lg:min-h-screen">
       <div className="px-4 py-4 font-bold text-white border-b border-slate-800">
         <TeeAheadLogo className="h-6 w-auto brightness-0 invert mb-2" />
         <span className="text-xs text-slate-400">Admin</span>
       </div>
 
+      <button type="button" aria-expanded={menuOpen} aria-controls="admin-navigation" onClick={() => setMenuOpen(open => !open)} className="mx-4 mb-3 rounded-lg border border-slate-700 px-3 py-2 text-left text-sm text-white lg:hidden">{menuOpen ? 'Close admin menu' : 'Open admin menu'}</button>
+      <div id="admin-navigation" className={`${menuOpen ? 'flex' : 'hidden'} flex-1 flex-col lg:flex`}>
       <nav className="flex-1 py-2">
         <SidebarItem href="/admin" icon="📊" label="Dashboard" active={pathname === '/admin'} />
 
@@ -49,7 +53,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         <SidebarItem href="/admin/waitlist" icon="📋" label="Waitlist" active={pathname === '/admin/waitlist'} />
 
         <SidebarSection label="CRM" />
-        <SidebarItem href="/admin/crm" icon="🏢" label="CRM Dashboard" active={pathname === '/admin/crm'} />
+        <SidebarItem href="/admin/crm" icon="🏢" label="Outreach Workspace" active={pathname === '/admin/crm'} />
         <SidebarItem href="/admin/crm/tasks" icon="✅" label="Tasks" active={pathname.startsWith('/admin/crm/tasks')} />
         <SidebarItem href="/admin/crm/courses" icon="⛳" label="Courses" active={pathname.startsWith('/admin/crm/courses')} />
         <SidebarItem href="/admin/crm/outings" icon="🏌️" label="Outings" active={pathname.startsWith('/admin/crm/outings')} />
@@ -69,6 +73,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         <Link href="/app" className="text-emerald-400 hover:text-emerald-300 mt-1 block">
           ← Member view
         </Link>
+      </div>
       </div>
     </aside>
   )

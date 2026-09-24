@@ -1,0 +1,910 @@
+[
+  {
+    "name": "Cracklewood Golf Club",
+    "area": "Macomb • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Kevin Nicholl — General Manager",
+    "status": "Course-published leader",
+    "phone": "586-781-0808",
+    "email": "knicholl@cracklewood.com",
+    "alternate": "Paul Penzien — Pro Shop Manager; info@cracklewood.com; same main phone.",
+    "facts": "The course publishes both a general manager and a pro shop manager. Its league page invites league applications and asks individual players to contact the shop for help finding a league.",
+    "angle": "Start with the incumbent setup and a reason to change. Map one league placement from first call through tee-sheet entry. Identify the staff owner, existing league commitments and any customer data that would need to move.",
+    "script": "Kevin, this is Billy with TeeAhead in Metro Detroit. Before we compare anything, what system does your team actually use for the tee sheet and counter sales? I saw how your shop helps players find leagues. What works well today, and what would have to stay intact if you ever changed systems?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Who would test that workflow with us, and when would a review fit around next season's league setup?",
+    "subject": "Cracklewood Golf Club: what would need to stay the same?",
+    "email_body": "Hi Kevin, I'm Billy with TeeAhead in Metro Detroit. Before we compare anything, what system does your team actually use for the tee sheet and counter sales? I saw how your shop helps players find leagues. What works well today, and what would have to stay intact if you ever changed systems? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Confirm Kevin and Paul's current responsibilities by phone. Do not infer that league placement is manual or that their existing system is inadequate.  Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.cracklewood.com/contact/",
+      "https://www.cracklewood.com/golf-leagues/",
+      "https://www.cracklewood.com/",
+      "https://www.chronogolf.com/club/cracklewood-golf-club"
+    ],
+    "software": {
+      "crm_record": "Cracklewood Golf Club",
+      "crm_value": null,
+      "public_system": "Unconfirmed",
+      "status": "Directory clue only",
+      "evidence": "The course homepage does not identify its booking vendor. A Chronogolf listing exists, but a directory entry is not proof of a current Lightspeed installation.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.cracklewood.com/",
+        "https://www.chronogolf.com/club/cracklewood-golf-club"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Map one league placement from first call through tee-sheet entry. Identify the staff owner, existing league commitments and any customer data that would need to move."
+  },
+  {
+    "name": "Bello Woods Golf Course",
+    "area": "Macomb • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Todd — co-owner; Janet — co-owner",
+    "status": "Course-published owners",
+    "phone": "586-949-1200",
+    "email": "",
+    "alternate": "Ask the main shop for Todd regarding golf operations; Janet is the published contact for banquets and fundraisers. The source names them by first name; no surname or direct email is assumed.",
+    "facts": "The course's About Us page identifies Todd and Janet as the current owners and describes a family-operated, 27-hole public facility. Todd handles lessons and junior golf inquiries.",
+    "angle": "Start with the incumbent setup and a reason to change. Preserve nine-hole combinations, rate rules, junior/league blocks and gift balances. Ask whether website, booking distribution and payments are separate agreements.",
+    "script": "Todd or Janet, this is Billy with TeeAhead in Metro Detroit. Your website sends tee-time bookings through Tee It Up and describes changing rates. Does that also run the staff tee sheet and checkout? Across your three nines, what would make a change worth considering, and what would your team be most worried about losing?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we map one booking and one rate change with whoever works the counter before discussing a demo?",
+    "subject": "Bello Woods Golf Course: what would need to stay the same?",
+    "email_body": "Hi Todd or Janet, I'm Billy with TeeAhead in Metro Detroit. Your website sends tee-time bookings through Tee It Up and describes changing rates. Does that also run the staff tee sheet and checkout? Across your three nines, what would make a change worth considering, and what would your team be most worried about losing? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Call to obtain a confirmed email before sending. The website links to a TeeItUp gift store; that does not establish contract terms, barter, or the full operational software stack. Test 27-hole routing before proposing a rollout. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.bellowoodsgc.com/aboutus/",
+      "https://www.bellowoodsgc.com/",
+      "https://www.bellowoodsgc.com/teetimes_rates/"
+    ],
+    "software": {
+      "crm_record": "Bello Woods Golf Course",
+      "crm_value": "Tee It Up",
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "The official tee-time page links golfers to bello-woods-golf-club.book.teeitup.golf. It also describes changing rates.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.bellowoodsgc.com/teetimes_rates/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Preserve nine-hole combinations, rate rules, junior/league blocks and gift balances. Ask whether website, booking distribution and payments are separate agreements."
+  },
+  {
+    "name": "Fountains Golf and Banquet",
+    "area": "Clarkston • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Al Kuhn — General Manager and PGA Golf Professional",
+    "status": "Course-published leader",
+    "phone": "248-625-3731 ext. 102",
+    "email": "",
+    "alternate": "Sarah Smith — Operations Manager, ext. 108. Main pro shop: ext. 2. Use the official contact page's email link or confirm the address by phone; the extracted address was masked.",
+    "facts": "Fountains publishes a management team that includes a GM/golf professional and a separate operations manager. It operates an 18-hole course and offers corporate and private event packages.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm whether website, POS, payments and league registration are included or separate. Keep golf and banquet workflows distinct unless the course says they share a system.",
+    "script": "Al, this is Billy with TeeAhead in Metro Detroit. I saw the foreUP booking links on your site. How much of the operation uses foreUP beyond reservations? With leagues, golf and banquets, which handoff works well today and which one would need to improve enough to justify retraining staff?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Would you and the person handling league setup walk us through one process and the right review window?",
+    "subject": "Fountains Golf and Banquet: what would need to stay the same?",
+    "email_body": "Hi Al, I'm Billy with TeeAhead in Metro Detroit. I saw the foreUP booking links on your site. How much of the operation uses foreUP beyond reservations? With leagues, golf and banquets, which handoff works well today and which one would need to improve enough to justify retraining staff? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "No direct email address is transcribed because the source masks it. Confirm actual software decision authority; the published title alone does not establish signing authority. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://fountainsgolf.com/contact-us/",
+      "https://fountainsgolf.com/"
+    ],
+    "software": {
+      "crm_record": "Fountains Golf & Banquet",
+      "crm_value": "foreUP",
+      "public_system": "foreUP",
+      "status": "Booking link verified",
+      "evidence": "Official homepage tee-time links point to foreupsoftware.com booking account 19044/894; its footer also names foreUP.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://fountainsgolf.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm whether website, POS, payments and league registration are included or separate. Keep golf and banquet workflows distinct unless the course says they share a system."
+  },
+  {
+    "name": "Maple Lane Golf Club",
+    "area": "Sterling Heights • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Chad Byron — General Manager",
+    "status": "Course-published leader",
+    "phone": "586-795-4000",
+    "email": "",
+    "alternate": "Ask for Chad through the shop or the official contact form. Cedar Glen's website also publishes Maple Lane-domain addresses; clarify shared purchasing before treating those as independent accounts.",
+    "facts": "Maple Lane's official contact and outings pages name Chad as general manager. Its outings page explicitly markets customized events ranging from small groups to larger outings.",
+    "angle": "Start with the incumbent setup and a reason to change. Inventory course combinations, rate rules, tee-sheet blocks, gift cards and end-of-day reporting. Confirm whether Cedar Glen shares purchasing or configuration.",
+    "script": "Chad, this is Billy with TeeAhead in Metro Detroit. Your website routes the West, North and East courses through Club Caddie. What does Club Caddie handle behind the counter as well? If you ever evaluated a change, what would we have to prove about course routing and daily close before your staff would trust it?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we document one representative day's setup and a short list of must-pass checks?",
+    "subject": "Maple Lane Golf Club: what would need to stay the same?",
+    "email_body": "Hi Chad, I'm Billy with TeeAhead in Metro Detroit. Your website routes the West, North and East courses through Club Caddie. What does Club Caddie handle behind the counter as well? If you ever evaluated a change, what would we have to prove about course routing and daily close before your staff would trust it? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "The current contact page masks Chad's email; confirm it before sending. Club Caddie links are visible on the homepage, but no fees, dissatisfaction, or contract details are established. Do not quote a hole count: website descriptions need reconciliation. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.maplelanegolf.com/contact-us",
+      "https://www.maplelanegolf.com/outings-leagues/outings-info",
+      "https://www.maplelanegolf.com/",
+      "https://www.maplelanegolf.com/tee-times"
+    ],
+    "software": {
+      "crm_record": "Maple Lane Golf Club and Driving Range",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official tee-time page links West, North and East course bookings to apimanager-cc18.clubcaddie.com.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.maplelanegolf.com/tee-times"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Inventory course combinations, rate rules, tee-sheet blocks, gift cards and end-of-day reporting. Confirm whether Cedar Glen shares purchasing or configuration."
+  },
+  {
+    "name": "Boulder Pointe Golf Club",
+    "area": "Oxford • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Rick Fleming — General Manager",
+    "status": "Course-published leader",
+    "phone": "248-969-1500 ext. 4515",
+    "email": "rfleming@boulderpointe.net",
+    "alternate": "Eric Suran — Director of Golf / Head Golf Professional; 248-969-1500 ext. 4523; esuran@boulderpointe.net.",
+    "facts": "The official directory lists Rick and Eric with direct extensions and addresses. The course publishes three nines: Peaks, Dunes, and Bluffs.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm nine-hole routing, membership entitlements, future reservations and member account access. Ask about shared decisions with Metamora without assuming a common contract.",
+    "script": "Rick, this is Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking and member-portal links for Boulder Pointe. With three nines and existing members, what would need to be protected in any system change? Is there a real reason to review alternatives, or is the current setup working well?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could Eric and whoever owns member accounts help define the requirements before we propose anything?",
+    "subject": "Boulder Pointe Golf Club: what would need to stay the same?",
+    "email_body": "Hi Rick, I'm Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking and member-portal links for Boulder Pointe. With three nines and existing members, what would need to be protected in any system change? Is there a real reason to review alternatives, or is the current setup working well? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Some other staff addresses use metamoragolf.com; ask about purchasing scope rather than assuming ownership. Multi-nine and outing requirements must be demonstrated, not promised. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://boulderpointe.net/contact-us/",
+      "https://www.boulderpointe.net/about-us/scorecard/",
+      "https://boulderpointe.net/book-a-tee-time/",
+      "https://boulderpointe.net/home/"
+    ],
+    "software": {
+      "crm_record": "Boulder Pointe Golf Club",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official booking page embeds apimanager-cc19.clubcaddie.com. Its main site also links to Club Caddie member portals.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://boulderpointe.net/book-a-tee-time/",
+        "https://boulderpointe.net/home/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm nine-hole routing, membership entitlements, future reservations and member account access. Ask about shared decisions with Metamora without assuming a common contract."
+  },
+  {
+    "name": "Greystone Golf Club",
+    "area": "Washington Township • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Ashlyn Antenucci — General Manager",
+    "status": "Course-published leader",
+    "phone": "586-752-7030 ext. 6",
+    "email": "info@golfgreystone.com",
+    "alternate": "Jacky Brito — Director of Golf and PGA Professional, ext. 2. The email is the general business inbox, not Ashlyn's direct address.",
+    "facts": "Greystone publishes both management contacts. Its golf page lists distinct preseason, in-season, and fall-related pricing information and directs outing inquiries to Jacky.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm membership rules, existing reservations, payments, website and distribution contracts. Map decision authority across the related courses before proposing a switch.",
+    "script": "Ashlyn, this is Billy with TeeAhead in Metro Detroit. Your online tee times use a Tee It Up booking page. What system does the staff use for the tee sheet, checkout and member benefits? If you considered a change for next season, what benefit would justify it and what disruption would be unacceptable?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we meet with you and the golf operations lead to map those dependencies and the contract-review date?",
+    "subject": "Greystone Golf Club: what would need to stay the same?",
+    "email_body": "Hi Ashlyn, I'm Billy with TeeAhead in Metro Detroit. Your online tee times use a Tee It Up booking page. What system does the staff use for the tee sheet, checkout and member benefits? If you considered a change for next season, what benefit would justify it and what disruption would be unacceptable? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Greystone and Beacon Hill list the same accountant, Diane Kaatz. Confirm whether software decisions are shared; do not assume separate purchases or common ownership solely from that overlap. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.golfgreystone.com/contact/",
+      "https://www.golfgreystone.com/golf/",
+      "https://www.golfgreystone.com/book-a-tee-time/"
+    ],
+    "software": {
+      "crm_record": null,
+      "crm_value": null,
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official booking page embeds greystone-golf-club-2.book.teeitup.golf.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.golfgreystone.com/book-a-tee-time/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm membership rules, existing reservations, payments, website and distribution contracts. Map decision authority across the related courses before proposing a switch."
+  },
+  {
+    "name": "Cherry Creek Golf Club",
+    "area": "Shelby Township • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Ben Roznowski — Director of Golf",
+    "status": "Course-published leader",
+    "phone": "586-254-7700 ext. 1",
+    "email": "ben.roznowski@cherrycreekgolf.com",
+    "alternate": "Erle Webber — General Manager, named on the official About Us page; reach through the main line. Start with Ben for golf operations.",
+    "facts": "The pro shop page gives Ben's direct business address and extension. The About Us page identifies Pine Trace and Shepherd's Hollow as sister courses.",
+    "angle": "Start with the incumbent setup and a reason to change. Document prepaid reservations, cancellation windows, refunds, rain-check liabilities, pricing rules and separate specials distribution. Do not promise policy or payment parity without testing.",
+    "script": "Ben, this is Billy with TeeAhead in Metro Detroit. Your booking page links to Club Caddie and has specific payment, rain-check and pricing rules. Which of those processes works particularly well today? Before considering a switch, what would your team need to see us reproduce correctly?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we use one normal reservation and one rain-check scenario to build a pass-or-fail evaluation?",
+    "subject": "Cherry Creek Golf Club: what would need to stay the same?",
+    "email_body": "Hi Ben, I'm Billy with TeeAhead in Metro Detroit. Your booking page links to Club Caddie and has specific payment, rain-check and pricing rules. Which of those processes works particularly well today? Before considering a switch, what would your team need to see us reproduce correctly? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Do not contact all three sister courses with separate pitches until the decision structure is clear. Do not confuse this club with similarly named clubs in Colorado or New York. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.cherrycreekgolf.com/pro-shop",
+      "https://www.cherrycreekgolf.com/about-us",
+      "https://www.cherrycreekgolf.com/book-now"
+    ],
+    "software": {
+      "crm_record": "Cherry Creek Golf Club",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official Full Tee Sheet Availability link points to apimanager-cc19.clubcaddie.com; a separate specials link uses dailydeals.golf.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.cherrycreekgolf.com/book-now"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Document prepaid reservations, cancellation windows, refunds, rain-check liabilities, pricing rules and separate specials distribution. Do not promise policy or payment parity without testing."
+  },
+  {
+    "name": "Beacon Hill Golf Club",
+    "area": "Commerce Township • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Jerry Domeneck — General Manager",
+    "status": "Course-published leader",
+    "phone": "248-684-2200 ext. 2",
+    "email": "jerrydomeneck@gmail.com",
+    "alternate": "Evan Dennis — Director of Golf Operations; ext. 1; beaconhillgolf@gmail.com. These Gmail addresses are explicitly published as business contacts.",
+    "facts": "Beacon Hill offers outdoor golf and four TrackMan simulator bays. Evan is the published contact for fall/winter simulator leagues.",
+    "angle": "Start with the incumbent setup and a reason to change. Separate outdoor booking, cross-course entitlements and simulator systems. Confirm voucher handling and shared purchasing; do not propose replacing or integrating TrackMan without evidence.",
+    "script": "Jerry, this is Billy with TeeAhead in Metro Detroit. Your outdoor tee times run through a Tee It Up page. Is that connected to the same system your staff uses for passes and checkout? Between golf, cross-course passes and indoor golf, which workflow would make a change useful, and which must not be disturbed?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could Evan and the person handling passes help us map one customer journey and who would approve changes?",
+    "subject": "Beacon Hill Golf Club: what would need to stay the same?",
+    "email_body": "Hi Jerry, I'm Billy with TeeAhead in Metro Detroit. Your outdoor tee times run through a Tee It Up page. Is that connected to the same system your staff uses for passes and checkout? Between golf, cross-course passes and indoor golf, which workflow would make a change useful, and which must not be disturbed? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "No TrackMan or simulator-booking integration is promised. Coordinate with the Greystone account; shared accounting and cross-course season passes are signals to ask about group purchasing. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.beaconhillgolf.com/contact/",
+      "https://www.beaconhillgolf.com/indoor-golf/",
+      "https://www.beaconhillgolf.com/golf/",
+      "https://www.beaconhillgolf.com/book-a-tee-time/"
+    ],
+    "software": {
+      "crm_record": "Beacon Hill Golf Club and Banquet Center",
+      "crm_value": "Tee It Up",
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official booking page embeds beacon-hill-golf-club.book.teeitup.com.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.beaconhillgolf.com/book-a-tee-time/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Separate outdoor booking, cross-course entitlements and simulator systems. Confirm voucher handling and shared purchasing; do not propose replacing or integrating TrackMan without evidence."
+  },
+  {
+    "name": "WestWynd Golf Course",
+    "area": "Oakland Township • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Jimmy Mehlberg — Westwynd Manager",
+    "status": "Course-published leader",
+    "phone": "248-608-7820",
+    "email": "",
+    "alternate": "Use the golf number, not the separate grille number. The official contact form has a department selector; the displayed email is masked.",
+    "facts": "WestWynd's contact page identifies Jimmy as manager and publishes separate golf and restaurant contacts. The grille page promotes an email club for specials.",
+    "angle": "Start with the incumbent setup and a reason to change. Map phone/cash and online/card workflows, existing reservations and member access from the sister club. Verify merchant and member-system dependencies rather than assuming TeeWire handles everything.",
+    "script": "Jimmy, this is Billy with TeeAhead in Metro Detroit. Your site identifies TeeWire for tee times and offers both online booking and phone reservations. What other systems handle checkout and member access? If those arrangements work well, what would need to improve before a switch would be worth the effort?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we review those two booking paths and agree on the requirements for a fair comparison?",
+    "subject": "WestWynd Golf Course: what would need to stay the same?",
+    "email_body": "Hi Jimmy, I'm Billy with TeeAhead in Metro Detroit. Your site identifies TeeWire for tee times and offers both online booking and phone reservations. What other systems handle checkout and member access? If those arrangements work well, what would need to improve before a switch would be worth the effort? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Confirm a direct email by phone. No ownership, full software stack, or specific integration has been verified. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.westwyndgolf.com/contact-us",
+      "https://westwyndgolf.com/westwynd-grille",
+      "https://www.westwyndgolf.com/golf-course/course-info/book-a-tee-time"
+    ],
+    "software": {
+      "crm_record": "Westwynd Golf Course",
+      "crm_value": "TeeWire",
+      "public_system": "TeeWire",
+      "status": "Booking link verified",
+      "evidence": "Official booking page links to teewire.net/westwynd and explicitly credits TeeWire for tee-time software.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.westwyndgolf.com/golf-course/course-info/book-a-tee-time"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Map phone/cash and online/card workflows, existing reservations and member access from the sister club. Verify merchant and member-system dependencies rather than assuming TeeWire handles everything."
+  },
+  {
+    "name": "The Orchards Golf Club",
+    "area": "Washington Township • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Jeff Stalcup, PGA — Director of Golf",
+    "status": "Course-published leader",
+    "phone": "586-786-7200",
+    "email": "",
+    "alternate": "Stephen Devers — Clubhouse Manager. The website's Email Jeff link opens a contact form, not a published email address.",
+    "facts": "The official staff page names Jeff and Stephen. The site advertises public golf, outings, and tournaments and links gift cards and tournament registration to Club Caddie.",
+    "angle": "Start with the incumbent setup and a reason to change. Test refund versus rain-check cases, prepaid bookings, gift balances, player-pairing restrictions and staff permissions. Confirm the actual POS and payment scope first.",
+    "script": "Jeff, this is Billy with TeeAhead in Metro Detroit. Your booking, gift-card and event links point to Club Caddie. Your refund and rain-check rules are quite specific. If you reviewed another system, what would it have to do flawlessly before the shop would consider changing?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Would you be open to a short requirements session using a few real-world scenarios with anonymized examples?",
+    "subject": "The Orchards Golf Club: what would need to stay the same?",
+    "email_body": "Hi Jeff, I'm Billy with TeeAhead in Metro Detroit. Your booking, gift-card and event links point to Club Caddie. Your refund and rain-check rules are quite specific. If you reviewed another system, what would it have to do flawlessly before the shop would consider changing? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Published staff information is not phone-confirmed. Club Caddie links establish visible services, not all systems, contract terms, barter, or a desire to switch. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.orchards.com/contact-us/our-staff",
+      "https://www.orchards.com/",
+      "https://www.orchards.com/contact-director-of-golf",
+      "https://www.orchards.com/tee-times"
+    ],
+    "software": {
+      "crm_record": "The Orchards Golf Club",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official Book a Tee Time Now link points to apimanager-cc18.clubcaddie.com/webapi/view/gifdabab; gift-card and tournament links also use Club Caddie.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.orchards.com/tee-times"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Test refund versus rain-check cases, prepaid bookings, gift balances, player-pairing restrictions and staff permissions. Confirm the actual POS and payment scope first."
+  },
+  {
+    "name": "Myth Golf and Banquets",
+    "area": "Oakland Township • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Rob Vargo — owner of Vargo Golf Company",
+    "status": "Course-published owner",
+    "phone": "248-693-7170",
+    "email": "info@golfthemyth.com",
+    "alternate": "The official junior-golf page publishes mythgolf@vargogolf.com for the pro shop. Ask the shop to route a software conversation to Rob or the current operations lead.",
+    "facts": "Myth publishes an About Rob Vargo page and identifies Vargo Golf as its manager. Its website links separate booking routes for Myth and Little Myth and advertises junior programs.",
+    "angle": "Start with the incumbent setup and a reason to change. Separate the two course inventories, golfer accounts and gift balances; confirm group-wide distribution, payment and contract dependencies. Coordinate one buying-team conversation.",
+    "script": "Rob, this is Billy with TeeAhead in Metro Detroit. The Myth and Little Myth have separate Tee It Up booking links. Are their staff systems and software decisions shared across Vargo? What would justify considering a change, and what would the group need protected across those operations?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we identify the group decision owner and one representative course workflow before involving other properties?",
+    "subject": "Myth Golf and Banquets: what would need to stay the same?",
+    "email_body": "Hi Rob, I'm Billy with TeeAhead in Metro Detroit. The Myth and Little Myth have separate Tee It Up booking links. Are their staff systems and software decisions shared across Vargo? What would justify considering a change, and what would the group need protected across those operations? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "The general email is not Rob's direct address. Shared management is established, but contract authority and the current property portfolio must be confirmed. No one-course pilot capability is promised in advance. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://golfthemyth.com/about-rob-vargo/",
+      "https://golfthemyth.com/contact-us/",
+      "https://golfthemyth.com/"
+    ],
+    "software": {
+      "crm_record": "Myth Public Golf Course & Banquet Center",
+      "crm_value": "Tee It Up",
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official website provides separate Tee It Up booking links for The Myth and Little Myth, plus a gift-certificate store.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://golfthemyth.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Separate the two course inventories, golfer accounts and gift balances; confirm group-wide distribution, payment and contract dependencies. Coordinate one buying-team conversation."
+  },
+  {
+    "name": "Richmond Forest Golf Course",
+    "area": "Lenox Township • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Matt Chene — published pro shop contact for outings and leagues",
+    "status": "Course-published operational contact",
+    "phone": "586-727-4742",
+    "email": "richmondforestgolf@msn.com",
+    "alternate": "The official page also publishes Matt's business contact number: 586-405-6942. Use the general email until his direct address is confirmed; its displayed text is duplicated on the page.",
+    "facts": "The league page invites next-season league bookings and has a free-agent inquiry path. It explicitly says outings are hosted Monday through Friday.",
+    "angle": "Start with the incumbent setup and a reason to change. Do not equate phone booking with a paper tee sheet. First establish the actual system, callback process, league blocks and staff comfort with online inventory.",
+    "script": "Matt, this is Billy with TeeAhead in Metro Detroit. Your tee-time page asks golfers to call the course. What system does the shop use after taking that call? If adding or changing software ever made sense, which parts of the current phone service and league scheduling would you want to keep?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could the person responsible for the tee sheet walk us through a normal phone booking and say whether there is anything worth improving?",
+    "subject": "Richmond Forest Golf Course: what would need to stay the same?",
+    "email_body": "Hi Matt, I'm Billy with TeeAhead in Metro Detroit. Your tee-time page asks golfers to call the course. What system does the shop use after taking that call? If adding or changing software ever made sense, which parts of the current phone service and league scheduling would you want to keep? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Matt's operational role is verified on the course site; purchasing authority is not. Keep the general inbox distinct from a personal direct email. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://richmondforestgolf.com/more-info/contact-us-directions",
+      "https://www.richmondforestgolf.com/leagues-outings",
+      "https://richmondforestgolf.com/tee-times"
+    ],
+    "software": {
+      "crm_record": "Richmond Forest Golf Course",
+      "crm_value": "Manual / Phone Only",
+      "public_system": "Phone booking advertised; internal system unknown",
+      "status": "Phone route verified",
+      "evidence": "Official tee-time information asks golfers to call and leave their name and number. It contains dated operating details, so confirm that the policy remains current. This does not prove the staff tee sheet is manual.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://richmondforestgolf.com/tee-times"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Do not equate phone booking with a paper tee sheet. First establish the actual system, callback process, league blocks and staff comfort with online inventory."
+  },
+  {
+    "name": "Cedar Glen Golf and Outing",
+    "area": "New Baltimore mailing address • Macomb County",
+    "wave": "Metro Detroit first",
+    "contact": "Evan Verschaeve — published pro shop contact",
+    "status": "Course-published operational contact",
+    "phone": "586-725-8156",
+    "email": "everschaeve@cedarglengolfclub.com",
+    "alternate": "The contact page also lists cbyron@maplelanegolf.com and other Maple Lane-domain addresses. Start with Evan and confirm whether Chad Byron or another group manager handles software.",
+    "facts": "The homepage is explicitly accepting 2026 and 2027 outings and advertises league availability. It names Evan for those pro shop inquiries.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm booking deposits, holds, gift balances and staff ownership; preserve next-season commitments. Ask whether Maple Lane shares the buying decision.",
+    "script": "Evan, this is Billy with TeeAhead in Metro Detroit. Your booking link uses Club Caddie, and the site is taking outing bookings for next season. Who owns the system decision? Before anyone discussed changing it, what would need to be protected about those reservations, outing holds and staff routines?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could you introduce us to the operator who can review one outing-to-tee-sheet workflow and the renewal timing?",
+    "subject": "Cedar Glen Golf and Outing: what would need to stay the same?",
+    "email_body": "Hi Evan, I'm Billy with TeeAhead in Metro Detroit. Your booking link uses Club Caddie, and the site is taking outing bookings for next season. Who owns the system decision? Before anyone discussed changing it, what would need to be protected about those reservations, outing holds and staff routines? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Treat Evan as the published entry point, not a confirmed buyer. Coordinate with Maple Lane to avoid duplicate outreach. The homepage links a Club Caddie booking endpoint; terms and full stack are unknown. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://cedarglengolfclub.com/",
+      "https://cedarglengolfclub.com/contact-us/"
+    ],
+    "software": {
+      "crm_record": "Cedar Glen Golf and Outing",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official homepage Book a Tee Time button points to apimanager-cc18.clubcaddie.com/webapi/view/jagdabab.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://cedarglengolfclub.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm booking deposits, holds, gift balances and staff ownership; preserve next-season commitments. Ask whether Maple Lane shares the buying decision."
+  },
+  {
+    "name": "Copper Hills Golf Club",
+    "area": "Oxford • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Laura Nicholson — published golf-outing contact",
+    "status": "Course-published routing contact",
+    "phone": "248-969-9808",
+    "email": "laura@copperhills.com",
+    "alternate": "General pro shop inbox: info@copperhills.com. Laura's official page does not establish that she manages the course or purchases software.",
+    "facts": "The outing page describes 27 holes, a clubhouse opened in fall 2025, and staff support for check-in and tee assignments. It names Laura as the outing contact.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm app usage, customer access, existing bookings, deposits and any counter/restaurant dependencies. Do not assume the new clubhouse means the course wants a new vendor.",
+    "script": "Laura, this is Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking links and a course app on your website. Who would lead a discussion about the systems behind golf and outings? With the clubhouse changes, what would have to improve to justify another operational change?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could you route us to that person for a short conversation about must-keep workflows and timing?",
+    "subject": "Copper Hills Golf Club: what would need to stay the same?",
+    "email_body": "Hi Laura, I'm Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking links and a course app on your website. Who would lead a discussion about the systems behind golf and outings? With the clubhouse changes, what would have to improve to justify another operational change? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Do not label Laura a decision-maker. The website links a Club Caddie app; this does not establish integration requirements or contract terms. Multi-nine scheduling needs validation. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://copperhills.com/golf-outings/",
+      "https://copperhills.com/contact-us/",
+      "https://copperhills.com/",
+      "https://copperhills.com/book-a-tee-time/"
+    ],
+    "software": {
+      "crm_record": "Copper Hills Golf Club",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official tee-time page embeds apimanager-cc36.clubcaddie.com/webapi/view/gdfdabab. Homepage also links to a Club Caddie-branded course app.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://copperhills.com/book-a-tee-time/",
+        "https://copperhills.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm app usage, customer access, existing bookings, deposits and any counter/restaurant dependencies. Do not assume the new clubhouse means the course wants a new vendor."
+  },
+  {
+    "name": "The Links of Novi Singh",
+    "area": "Novi • Oakland County",
+    "wave": "Metro Detroit first",
+    "contact": "Ken Johnston — named by the official website's contact email; title unconfirmed",
+    "status": "Course-published routing contact",
+    "phone": "248-380-9595",
+    "email": "Ken.Johnston@singhmail.com",
+    "alternate": "Sara Barnhill is named on the official outings page for outing information. Do not assign Ken or Sara an unverified management title.",
+    "facts": "The homepage describes a public course focused on outings, leagues, and banquets. It also promotes a golfer mobile app and publishes Ken's email.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm Club Prophet's actual role, the live booking engine, Noteefy routing, customer accounts, store balances and app dependencies. Resolve the mismatched waitlist link before making integration assumptions.",
+    "script": "Ken, this is Billy with TeeAhead in Metro Detroit. Your site links to a Club Prophet store and a tee-time waitlist, but I haven't confirmed what runs the staff tee sheet. What systems do you use across reservations, checkout and waitlist alerts? What would a new system have to preserve for a change to be worthwhile?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we map a reservation, a store purchase and a waitlist alert with your operations lead?",
+    "subject": "The Links of Novi Singh: what would need to stay the same?",
+    "email_body": "Hi Ken, I'm Billy with TeeAhead in Metro Detroit. Your site links to a Club Prophet store and a tee-time waitlist, but I haven't confirmed what runs the staff tee sheet. What systems do you use across reservations, checkout and waitlist alerts? What would a new system have to preserve for a change to be worthwhile? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Ken's title and buying authority remain unconfirmed. The public store link includes cps.golf; that is a visible software signal, not proof of the entire stack. The homepage contains conflicting hole-count details, so the script avoids that claim. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.linksofnovi.com/",
+      "https://www.linksofnovi.com/outings-packages",
+      "https://www.linksofnovi.com/bookteetimes",
+      "https://onlinehelp.cps.golf/help/Content/1-Getting%20Started/cps-about.htm"
+    ],
+    "software": {
+      "crm_record": "Link of Novi",
+      "crm_value": "Club Prophet",
+      "public_system": "Club Prophet store; booking vendor not independently confirmed",
+      "status": "Partial — store verified",
+      "evidence": "Official site links its store to novisinghmi.cps.golf/onlinewebstore, consistent with the CRM Club Prophet entry. The booking page exposes a custom form and Noteefy links; the store alone does not establish the tee-sheet/POS installation. One waitlist link names a different course; confirm the intended link.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.linksofnovi.com/",
+        "https://www.linksofnovi.com/bookteetimes",
+        "https://onlinehelp.cps.golf/help/Content/1-Getting%20Started/cps-about.htm"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm Club Prophet's actual role, the live booking engine, Noteefy routing, customer accounts, store balances and app dependencies. Resolve the mismatched waitlist link before making integration assumptions."
+  },
+  {
+    "name": "Rammler Golf Club",
+    "area": "Sterling Heights • Macomb County",
+    "wave": "Metro Detroit contact confirmation",
+    "contact": "Current owner or golf operations manager — name not verified",
+    "status": "Official business route only",
+    "phone": "586-264-4101",
+    "email": "info@rammler.golf",
+    "alternate": "Ask the shop for the person who evaluates the tee sheet. Directory-only names were deliberately excluded.",
+    "facts": "The official site lists an 18-hole course and a separate nine-hole par-three course, along with 2026 rates and outing packages.",
+    "angle": "Start with the incumbent setup and a reason to change. CRM says Manual / Phone Only, but this remains unverified. Establish the real tee sheet, checkout system, staff training needs and how the two course inventories are handled.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. What system does your team use to manage tee times after a golfer calls? I saw the main course and par-three offerings. If you ever considered changing the process, what would need to improve and what would the staff want to keep?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could whoever runs the shop show us one booking workflow and decide whether a further conversation would be useful?",
+    "subject": "Rammler Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. What system does your team use to manage tee times after a golfer calls? I saw the main course and par-three offerings. If you ever considered changing the process, what would need to improve and what would the staff want to keep? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "A current individual buyer has not been verified. Call first; do not personalize to a directory name or claim phone-only booking. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.rammler.golf/"
+    ],
+    "software": {
+      "crm_record": "Rammler Golf Club",
+      "crm_value": "Manual / Phone Only",
+      "public_system": "Unconfirmed",
+      "status": "Internal system unverified",
+      "evidence": "Reviewed official homepage publishes a phone contact but no identifiable public booking engine. Absence of a visible engine does not establish that operations are manual or phone-only.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.rammler.golf/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "CRM says Manual / Phone Only, but this remains unverified. Establish the real tee sheet, checkout system, staff training needs and how the two course inventories are handled."
+  },
+  {
+    "name": "Sycamore Hills Golf Club",
+    "area": "Macomb • Macomb County",
+    "wave": "Metro Detroit contact confirmation",
+    "contact": "Current general manager or owner — name not verified",
+    "status": "Official business route only",
+    "phone": "586-598-9500 ext. 1",
+    "email": "proshop@sycamorehills.com",
+    "alternate": "Use the Macomb pro shop, not similarly named clubs in Indiana or Ohio. The banquet extension is 2 and is not the first route for software.",
+    "facts": "The Michigan course publishes three nines, an online booking page, and a 2026 season pass with exclusions for leagues, outings, tournaments, seniors, and juniors.",
+    "angle": "Start with the incumbent setup and a reason to change. Clarify the broad CRM GolfNow label. Map course rotations, pass restrictions, existing bookings and any separate distribution or payment commitments.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. Your website's booking page uses Tee It Up. Which system runs the staff tee sheet and checkout? With three nines and your pass rules, what would have to be materially better before you would consider changing the way the team works?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we review one pass-holder booking and one public booking, then decide whether an evaluation is worthwhile?",
+    "subject": "Sycamore Hills Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. Your website's booking page uses Tee It Up. Which system runs the staff tee sheet and checkout? With three nines and your pass rules, what would have to be materially better before you would consider changing the way the team works? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "An owner name found in a 2013 story is too old to present as current. No named buyer is claimed. Website vendor branding does not prove barter or commercial terms. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.sycamorehills.com/",
+      "https://www.sycamorehills.com/contact-us/",
+      "https://www.sycamorehills.com/book-a-tee-time/"
+    ],
+    "software": {
+      "crm_record": "Sycamore Hills Golf Club MICHIGAN",
+      "crm_value": "GolfNow",
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official booking page embeds sycamore-hills-golf-club.book.teeitup.com and displays GolfNow branding. CRM GolfNow is a broad label; identify the staff tee-sheet/POS product directly.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.sycamorehills.com/book-a-tee-time/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Clarify the broad CRM GolfNow label. Map course rotations, pass restrictions, existing bookings and any separate distribution or payment commitments."
+  },
+  {
+    "name": "Fern Hill Golf Club",
+    "area": "Clinton Township • Macomb County",
+    "wave": "Metro Detroit contact confirmation",
+    "contact": "Current golf operations manager or owner — name not verified",
+    "status": "Official business route only",
+    "phone": "586-286-4700",
+    "email": "",
+    "alternate": "Use the official contact form only if the shop cannot provide the appropriate business email. Do not confuse the banquet-sales contact with the tee-sheet buyer.",
+    "facts": "Fern Hill's official site separates golf, weddings, and Floodz Bar and Grill. Its golf navigation includes outings, leagues, and tee times.",
+    "angle": "Start with the incumbent setup and a reason to change. Preserve league blocks, outing reservations, balances and any existing devices or payment routines. Confirm who handles training and the available off-season window.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. Your golf page links to Teesnap. Does that handle the shop's checkout and league work as well? With leagues and outings, what would need to improve enough to make training the team on something new worthwhile?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could the golf operations lead walk us through one league day and identify the conditions for considering a change?",
+    "subject": "Fern Hill Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. Your golf page links to Teesnap. Does that handle the shop's checkout and league work as well? With leagues and outings, what would need to improve enough to make training the team on something new worthwhile? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "No individual name or direct email has been verified. The live CRM records Teesnap, supported by the official golf page's booking link. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.fernhillgc.com/",
+      "https://www.fernhillgc.com/contact-us",
+      "https://www.fernhillgc.com/golf"
+    ],
+    "software": {
+      "crm_record": "Fern Hill Golf Club",
+      "crm_value": "TeeSnap",
+      "public_system": "Teesnap",
+      "status": "Booking link verified",
+      "evidence": "Official golf page directs View Tee Times to fernhillgc.teesnap.net.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.fernhillgc.com/golf"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Preserve league blocks, outing reservations, balances and any existing devices or payment routines. Confirm who handles training and the available off-season window."
+  },
+  {
+    "name": "Pine Knob Golf Club",
+    "area": "Clarkston • Oakland County",
+    "wave": "Metro Detroit contact confirmation",
+    "contact": "Current golf manager or ownership representative — name not verified",
+    "status": "Official business route only",
+    "phone": "248-625-4430",
+    "email": "",
+    "alternate": "Call the golf pro shop. The separate events number, 248-625-0700, serves the Mansion and Carriage House and is not the preferred software route.",
+    "facts": "The official site describes a family business with three nine-hole courses named Hawk, Eagle, and Falcon and separate golf and event contact routes.",
+    "angle": "Start with the incumbent setup and a reason to change. Map nine-hole combinations, gift balances, advance bookings and actual staff/POS products. Clarify the software approver before involving banquet staff.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. Your tee times and gift certificates link to Tee It Up. What does the staff use for the tee sheet and payments? With Hawk, Eagle and Falcon, what would another system have to prove about routing and existing reservations before you would consider it?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we document a busy-day routing example and your next realistic contract-review window?",
+    "subject": "Pine Knob Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. Your tee times and gift certificates link to Tee It Up. What does the staff use for the tee sheet and payments? With Hawk, Eagle and Falcon, what would another system have to prove about routing and existing reservations before you would consider it? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Older directory names are excluded. Current individual authority and direct email require phone confirmation. No multi-nine implementation promise is made. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.pineknobgolfclub.com/",
+      "https://www.pineknobgolfclub.com/golf/tee-times"
+    ],
+    "software": {
+      "crm_record": "Pine Knob Golf Club",
+      "crm_value": "Tee It Up",
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official tee-time page links to pine-knob-golf.book.teeitup.com. Gift certificates use the same provider domain.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.pineknobgolfclub.com/golf/tee-times"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Map nine-hole combinations, gift balances, advance bookings and actual staff/POS products. Clarify the software approver before involving banquet staff."
+  },
+  {
+    "name": "Huntmore Golf Club",
+    "area": "Brighton • Livingston County",
+    "wave": "Expansion after Metro Detroit",
+    "contact": "Current golf operations lead — name requires confirmation",
+    "status": "Official business route only",
+    "phone": "810-225-4498",
+    "email": "",
+    "alternate": "A course-hosted 2024 league contract names Matt Horn and mhorn@huntmoregolfclub.com. Because that document is historical, confirm through the main line before using the name or address.",
+    "facts": "Huntmore's current homepage advertises public golf, seasonal memberships, leagues, outings, and a separate teaching studio.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm membership eligibility/rates, existing reservations, balances and login expectations. Establish whether payments, hardware and reporting also sit with the same vendor.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking and member-login links on Huntmore's site. How are the different seasonal and resident memberships managed today? If you reviewed an alternative, what would have to stay intact for members and the shop team?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could the golf and membership leads help define a few member and public-player scenarios to evaluate?",
+    "subject": "Huntmore Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. I saw Club Caddie booking and member-login links on Huntmore's site. How are the different seasonal and resident memberships managed today? If you reviewed an alternative, what would have to stay intact for members and the shop team? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Do not present Matt Horn's historical listing as a confirmed current appointment. Membership rules and any required integrations must be established in discovery. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://huntmoregolfclub.com/",
+      "https://huntmoregolfclub.com/contact/directions-contact-info",
+      "https://www.huntmoregolfclub.com/media/attachments/2024/11/20/league_contract_2024.pdf"
+    ],
+    "software": {
+      "crm_record": "Huntmore Golf Club",
+      "crm_value": "Club Caddie",
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Rendered official homepage links Rates / Tee Times to apimanager-cc6.clubcaddie.com/webapi/view/jgijdaab and Member Login to membership-cc6.clubcaddie.com.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://huntmoregolfclub.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm membership eligibility/rates, existing reservations, balances and login expectations. Establish whether payments, hardware and reporting also sit with the same vendor."
+  },
+  {
+    "name": "Dunham Hills",
+    "area": "Hartland • Livingston County",
+    "wave": "Expansion after Metro Detroit",
+    "contact": "Chris Moore — PGA Head Golf Professional",
+    "status": "Course-published leader",
+    "phone": "248-714-5090",
+    "email": "chris.moore@dunhamhills.com",
+    "alternate": "Ask Chris to identify the owner or manager responsible for commercial approval. His published role is head golf professional, not general manager.",
+    "facts": "The official team page names Chris and describes the club's future as The Proving Grounds. A 2026 employment page repeats his contact address.",
+    "angle": "Start with the incumbent setup and a reason to change. Separate future facility planning from actual software intent. Confirm deposits, event commitments, tee-sheet configuration, payments and the person authorized to choose the timing.",
+    "script": "Chris, this is Billy with TeeAhead in Metro Detroit. Your tee-time link uses Club Caddie. With Dunham Hills planning ahead, is a software review even on the agenda? If it is, what would need to improve, and what reservations, staff routines and other systems would a change have to protect?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we map the current workflow and decision calendar before discussing product or cutover dates?",
+    "subject": "Dunham Hills: what would need to stay the same?",
+    "email_body": "Hi Chris, I'm Billy with TeeAhead in Metro Detroit. Your tee-time link uses Club Caddie. With Dunham Hills planning ahead, is a software review even on the agenda? If it is, what would need to improve, and what reservations, staff routines and other systems would a change have to protect? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "The site links Club Caddie booking services. Do not infer that a rebrand means available budget, a new contract, or dissatisfaction. Verify the transition's scope and timing. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.dunhamhills.com/our-team",
+      "https://www.dunhamhills.com/contact",
+      "https://www.dunhamhills.com/"
+    ],
+    "software": {
+      "crm_record": null,
+      "crm_value": null,
+      "public_system": "Club Caddie",
+      "status": "Booking link verified",
+      "evidence": "Official homepage Book a Tee Time link points to apimanager-cc36.clubcaddie.com/webapi/view/ebfdabab.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.dunhamhills.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Separate future facility planning from actual software intent. Confirm deposits, event commitments, tee-sheet configuration, payments and the person authorized to choose the timing."
+  },
+  {
+    "name": "Timber Trace Golf Club",
+    "area": "Pinckney • Livingston County",
+    "wave": "Expansion after Metro Detroit",
+    "contact": "Clif McLellan — General Manager",
+    "status": "Course-published leader",
+    "phone": "734-878-1800",
+    "email": "info@timbertracegolf.com",
+    "alternate": "The published email is a general course address, not a direct personal address. Ask for Clif through the pro shop.",
+    "facts": "The official contact page names Clif. The homepage promotes an email list for course offers and events and links a foreUP booking page.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm scope beyond online booking, future reservations, customer records, gift/rain-check balances, reports and staff training. Avoid assuming dissatisfaction from an ownership announcement.",
+    "script": "Clif, this is Billy with TeeAhead in Metro Detroit. Your booking link runs through foreUP. What else does the team use it for, and what is working well? If you ever reviewed alternatives, which improvement would justify moving bookings and retraining the shop?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Would a short review of one booking-to-checkout workflow help establish whether there is a fit?",
+    "subject": "Timber Trace Golf Club: what would need to stay the same?",
+    "email_body": "Hi Clif, I'm Billy with TeeAhead in Metro Detroit. Your booking link runs through foreUP. What else does the team use it for, and what is working well? If you ever reviewed alternatives, which improvement would justify moving bookings and retraining the shop? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Do not date the homepage's undated ownership announcement as a recent event. No outside list import, email integration, new golfers, or revenue result is promised. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://timbertracegolf.com/contact/",
+      "https://timbertracegolf.com/"
+    ],
+    "software": {
+      "crm_record": "Timber Trace Golf Club",
+      "crm_value": "foreUP",
+      "public_system": "foreUP",
+      "status": "Booking link verified",
+      "evidence": "Official homepage Book Tee Time links to foreupsoftware.com booking account 21781.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://timbertracegolf.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm scope beyond online booking, future reservations, customer records, gift/rain-check balances, reports and staff training. Avoid assuming dissatisfaction from an ownership announcement."
+  },
+  {
+    "name": "Lake Forest Golf Club",
+    "area": "Ann Arbor • Washtenaw County",
+    "wave": "Expansion after Metro Detroit",
+    "contact": "Gilda Johnson — Owner",
+    "status": "Course-published owner",
+    "phone": "734-994-8580",
+    "email": "",
+    "alternate": "The employment page names Steve Scheuermann as PGA Director of Golf, while another page names a different PGA professional. Ask the main shop to confirm the current golf operations lead.",
+    "facts": "The official course-details page identifies Gilda as owner. The employment page describes a daily-fee operation, and the outings page markets service for groups of different sizes.",
+    "angle": "Start with the incumbent setup and a reason to change. Map website ownership, booking links, communications permissions, customer records and any POS/payment dependencies. Confirm the current golf operations lead and the scope of the actual agreement.",
+    "script": "Gilda, this is Billy with TeeAhead in Metro Detroit. Your website links to foreUP booking and credits foreUP Marketing Services. Are the website, booking system and other services part of one arrangement? What would need to improve enough to justify a change without disrupting the team or your golfers?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we map those service dependencies and the review date before making a replacement proposal?",
+    "subject": "Lake Forest Golf Club: what would need to stay the same?",
+    "email_body": "Hi Gilda, I'm Billy with TeeAhead in Metro Detroit. Your website links to foreUP booking and credits foreUP Marketing Services. Are the website, booking system and other services part of one arrangement? What would need to improve enough to justify a change without disrupting the team or your golfers? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "No direct owner email is verified. Staff-page inconsistencies mean the golf lead should be reconfirmed. Do not pitch course marketing features that have not been activated and tested. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://lakeforestgc.com/course-details/",
+      "https://lakeforestgc.com/employment/",
+      "https://lakeforestgc.com/special-events/",
+      "https://lakeforestgc.com/"
+    ],
+    "software": {
+      "crm_record": "Lake Forest Golf Club",
+      "crm_value": "foreUP",
+      "public_system": "foreUP",
+      "status": "Booking link verified",
+      "evidence": "Official homepage tee-time link points to foreupsoftware.com booking account 20267/4159; its footer names foreUP Marketing Services.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://lakeforestgc.com/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Map website ownership, booking links, communications permissions, customer records and any POS/payment dependencies. Confirm the current golf operations lead and the scope of the actual agreement."
+  },
+  {
+    "name": "Stonebridge Golf Club",
+    "area": "Ann Arbor • Washtenaw County",
+    "wave": "Expansion contact confirmation",
+    "contact": "Current general manager — name not verified",
+    "status": "Official business route only",
+    "phone": "734-429-8383",
+    "email": "info@stonebridge.golf",
+    "alternate": "Use the official general contact route. A staff page contains repeated John Smith / 888-888-8888 placeholders; those are excluded entirely.",
+    "facts": "The official contact page provides the main number and inbox. The golf lessons page offers adult instruction, and the site markets golf outings and events.",
+    "angle": "Start with the incumbent setup and a reason to change. Confirm local versus group approval; preserve league commitments, loyalty entitlements, reservations and records. Do not assume the course controls its own vendor contract.",
+    "script": "Hi, this is Billy with TeeAhead in Metro Detroit. Your online tee-time link uses foreUP, and the site identifies Wilson Golf Group. Are software choices made here or at the group level? If there were a reason to review alternatives, what would need to remain consistent for staff, leagues and loyalty customers?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could you connect us with the right decision owner for a requirements and timing conversation?",
+    "subject": "Stonebridge Golf Club: what would need to stay the same?",
+    "email_body": "Hi, I'm Billy with TeeAhead in Metro Detroit. Your online tee-time link uses foreUP, and the site identifies Wilson Golf Group. Are software choices made here or at the group level? If there were a reason to review alternatives, what would need to remain consistent for staff, leagues and loyalty customers? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "No current named buyer has been verified. A teaching biography describes a past GM role; that does not establish a current appointment. Do not use the placeholder staff directory. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://stonebridge.golf/contact/",
+      "https://stonebridge.golf/golf-lessons/",
+      "https://stonebridge.golf/meet-our-staff/",
+      "https://stonebridge.golf/"
+    ],
+    "software": {
+      "crm_record": "Stonebridge Golf Club",
+      "crm_value": "ForeUp",
+      "public_system": "foreUP",
+      "status": "Booking link verified",
+      "evidence": "Official homepage Book a Tee Time link points to foreupsoftware.com booking account 22956/12517. The homepage also identifies Wilson Golf Group ownership.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://stonebridge.golf/"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Confirm local versus group approval; preserve league commitments, loyalty entitlements, reservations and records. Do not assume the course controls its own vendor contract."
+  },
+  {
+    "name": "Fox Hills Golf and Banquet Center",
+    "area": "Plymouth mailing address • Washtenaw County",
+    "wave": "Strategic relationship after local first wave",
+    "contact": "Bill Durham — General Manager",
+    "status": "Course-published leader",
+    "phone": "734-453-7272",
+    "email": "bdurham@heritagegolfgroup.com",
+    "alternate": "Audrey Woodmansee — Assistant General Manager; awoodmansee@heritagegolfgroup.com. The published team also includes an information technology contact.",
+    "facts": "The current staff directory publishes Heritage Golf Group email addresses. The course contact page distinguishes Fox Classic, Golden Fox, Strategic Fox, and its learning/performance facilities.",
+    "angle": "Start with the incumbent setup and a reason to change. Treat this as an enterprise discovery conversation. Establish group standards, purchasing authority, course routing, existing bookings, gift liabilities, staff rollout and approved evaluation process.",
+    "script": "Bill, this is Billy with TeeAhead in Metro Detroit. Your public booking page uses Tee It Up for the three Fox Hills courses. Does Heritage set the underlying tee-sheet and payment systems? What would a proposed change have to prove operationally before the group would even consider it?",
+    "question": "What is working well enough that you would want to keep it? Who would need to approve and test a change, and when does your current agreement come up for review?",
+    "ask": "Could we first identify the Heritage system owner and their review process, before asking the course team for a demo?",
+    "subject": "Fox Hills Golf and Banquet Center: what would need to stay the same?",
+    "email_body": "Hi Bill, I'm Billy with TeeAhead in Metro Detroit. Your public booking page uses Tee It Up for the three Fox Hills courses. Does Heritage set the underlying tee-sheet and payment systems? What would a proposed change have to prove operationally before the group would even consider it? If a review is relevant, could we spend 15 minutes mapping those requirements before discussing a demo?",
+    "check": "Do not present older family-ownership stories as current. A group-level vendor review may be required; qualify it before investing in a custom demo. No existing partnership is implied. Confirm the actual system scope, approval owner and contract timing. Do not promise data migration, integrations, feature parity or a cutover date before validating them.",
+    "sources": [
+      "https://www.foxhills.com/contact/meet-the-team",
+      "https://www.foxhills.com/contact/contact-us",
+      "https://www.foxhills.com/tee-times"
+    ],
+    "software": {
+      "crm_record": null,
+      "crm_value": null,
+      "public_system": "Tee It Up",
+      "status": "Booking link verified",
+      "evidence": "Official tee-time page embeds fox-hills-golf-club.book.teeitup.com with three course IDs. This identifies the booking interface, not Heritage-wide systems or contracts.",
+      "checked": "2026-09-24",
+      "sources": [
+        "https://www.foxhills.com/tee-times"
+      ],
+      "scope_limit": "Public evidence identifies only the linked service. Staff tee sheet, POS, payments, contract terms, renewal date, exports and migration feasibility require direct confirmation."
+    },
+    "change_focus": "Treat this as an enterprise discovery conversation. Establish group standards, purchasing authority, course routing, existing bookings, gift liabilities, staff rollout and approved evaluation process."
+  }
+]

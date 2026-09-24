@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 
 vi.mock('next/navigation', () => ({
@@ -13,6 +13,17 @@ vi.mock('next/link', () => ({
 }))
 
 describe('AdminSidebar', () => {
+  it('toggles the mobile menu without duplicating navigation', () => {
+    render(<AdminSidebar userEmail="neil@example.com" openDisputeCount={0} />)
+    const toggle = screen.getByRole('button', { name: 'Open admin menu' })
+    expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    expect(document.querySelectorAll('#admin-navigation')).toHaveLength(1)
+    fireEvent.click(toggle)
+    expect(screen.getByRole('button', { name: 'Close admin menu' })).toHaveAttribute('aria-expanded', 'true')
+    fireEvent.click(toggle)
+    expect(screen.getByRole('button', { name: 'Open admin menu' })).toHaveAttribute('aria-expanded', 'false')
+  })
+
   it('renders the brand name', () => {
     render(<AdminSidebar userEmail="neil@example.com" openDisputeCount={0} />)
     expect(screen.getByRole('img', { name: 'TeeAhead' })).toBeInTheDocument()
