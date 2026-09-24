@@ -13,7 +13,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
   const pathname = usePathname()
 
   return (
-    <aside className="w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col min-h-screen">
+    <aside className="w-full lg:w-52 flex-shrink-0 bg-slate-900 text-slate-200 flex flex-col lg:min-h-screen">
       <div className="px-4 py-4 font-bold text-white border-b border-slate-800">
         <TeeAheadLogo className="h-6 w-auto brightness-0 invert mb-2" />
         <span className="text-xs text-slate-400">Admin</span>
@@ -49,7 +49,7 @@ export default function AdminSidebar({ userEmail, openDisputeCount }: AdminSideb
         <SidebarItem href="/admin/waitlist" icon="📋" label="Waitlist" active={pathname === '/admin/waitlist'} />
 
         <SidebarSection label="CRM" />
-        <SidebarItem href="/admin/crm" icon="🏢" label="CRM Dashboard" active={pathname === '/admin/crm'} />
+        <SidebarItem href="/admin/crm" icon="🏢" label="Outreach Workspace" active={pathname === '/admin/crm'} />
         <SidebarItem href="/admin/crm/tasks" icon="✅" label="Tasks" active={pathname.startsWith('/admin/crm/tasks')} />
         <SidebarItem href="/admin/crm/courses" icon="⛳" label="Courses" active={pathname.startsWith('/admin/crm/courses')} />
         <SidebarItem href="/admin/crm/outings" icon="🏌️" label="Outings" active={pathname.startsWith('/admin/crm/outings')} />

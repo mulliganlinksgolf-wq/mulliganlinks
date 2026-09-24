@@ -9,12 +9,13 @@ import type { CrmTask } from '@/lib/crm/types'
 interface Props {
   task: CrmTask
   recordTitle?: string | null
+  today?: string
 }
 
-function dueLabel(due: string | null): { label: string; tone: 'red' | 'amber' | 'slate' | 'green' } {
+function dueLabel(due: string | null, todayDate?: string): { label: string; tone: 'red' | 'amber' | 'slate' | 'green' } {
   if (!due) return { label: 'No due date', tone: 'slate' }
   const dueDate = new Date(due + 'T00:00:00')
-  const today = new Date()
+  const today = todayDate ? new Date(todayDate + 'T00:00:00') : new Date()
   today.setHours(0, 0, 0, 0)
   const diffDays = Math.round((dueDate.getTime() - today.getTime()) / 86400000)
   if (diffDays < 0) return { label: `${Math.abs(diffDays)}d overdue`, tone: 'red' }
@@ -31,11 +32,11 @@ const TONE_CLASSES = {
   green: 'bg-emerald-50 text-emerald-700 border-emerald-200',
 } as const
 
-export function TaskItem({ task, recordTitle }: Props) {
+export function TaskItem({ task, recordTitle, today }: Props) {
   const [pending, startTransition] = useTransition()
   const router = useRouter()
   const completed = !!task.completed_at
-  const due = dueLabel(task.due_date)
+  const due = dueLabel(task.due_date, today)
 
   function toggle() {
     startTransition(async () => {
