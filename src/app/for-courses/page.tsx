@@ -31,12 +31,9 @@ export default function CoursesPage() {
             in return.
           </p>
           <div className={s.buttonRow}>
-            <a
-              href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead"
-              className={s.primary}
-            >
-              Book a walkthrough <ArrowUpRight size={18} />
-            </a>
+            <Link href="/waitlist/course" className={s.primary}>
+              Request a walkthrough <ArrowUpRight size={18} />
+            </Link>
             <Link href="/waitlist/course" className={s.textLink}>
               Explore becoming a founding partner →
             </Link>
