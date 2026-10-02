@@ -42,7 +42,7 @@ export function CourseWaitlistForm() {
       <h2 className="text-2xl font-semibold">Thanks for the introduction.</h2>
       <p>Neil or Billy will follow up at {values.email} to learn about your course and discuss next steps.</p>
       <p className="text-sm text-white/80">No reservation, contract, or payment has been made.</p>
-      <a href="https://scheduler.zoom.us/neil-barris-yro2rr/30-mins-with-teeahead" target="_blank" rel="noopener noreferrer" className="inline-flex rounded-lg bg-[#E0A800] px-5 py-3 font-semibold text-[#082419]">Want to talk sooner? Book a call →</a>
+      <a href="mailto:info@teeahead.com?subject=TeeAhead%20walkthrough" className="inline-flex rounded-lg bg-[#E0A800] px-5 py-3 font-semibold text-[#082419]">Have a question? Email us →</a>
     </div>
   )
 
