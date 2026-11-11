@@ -1,0 +1,58 @@
+[
+  {
+    "id": "2b11e026-0001-4000-8000-000000000001",
+    "name": "Michigan Winter: 01 Cold Open - Before spring (recommended)",
+    "subject": "{{course_name}} before spring",
+    "use_when": "New owner or GM contact. Default opener; choose this OR 02.",
+    "body": "Hi {{first_name}},\n\nWith Michigan's golf season winding down, this is a good time to look at what you'd want to run differently next spring at {{course_name}}.\n\nI'm with TeeAhead, a Metro Detroit company building tee sheet and online booking software. Our model has no barter tee times or booking commissions.\n\nI'd like to compare your current setup with ours: the cost, the day-to-day work, and what a change would actually involve for your staff.\n\nWould that be worth a look this winter?\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0002-4000-8000-000000000002",
+    "name": "Michigan Winter: 02 Cold Open - Pro shop workload",
+    "subject": "next spring's pro shop",
+    "use_when": "Alternative opener for a pro shop or operations lead; do not send after 01.",
+    "body": "Hi {{first_name}},\n\nWhen the pro shop gets busy at {{course_name}}, the booking system should take work off your staff's plate.\n\nI'm with TeeAhead here in Metro Detroit. We build tee sheet and online booking software, and I'd like to show you how it handles an everyday booking, a change, and check-in. You can judge it against how your team works today.\n\nWith the season winding down, would that be worth comparing before spring?\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0003-4000-8000-000000000003",
+    "name": "Michigan Winter: 03 Re-Engage - Earlier email unanswered",
+    "subject": "better timing for {{course_name}}?",
+    "use_when": "An earlier email went unanswered; no prior conversation required. Check contact history and do not restart an exhausted sequence.",
+    "body": "Hi {{first_name}},\n\nI emailed earlier about TeeAhead. With Michigan's season winding down, I thought the timing might be better for {{course_name}}.\n\nWe're a Metro Detroit tee sheet and online booking company with no barter tee times or booking commissions. I'd like to give you a clear comparison before next season, including what switching would mean for your staff.\n\nWould you be open to taking a look this winter?\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0004-4000-8000-000000000004",
+    "name": "Michigan Winter: 04 Follow-Up - A useful comparison",
+    "subject": "a practical comparison",
+    "use_when": "First no-response follow-up, 5–7 business days after 01, 02, or 03. Use reply mode.",
+    "body": "Hi {{first_name}},\n\nFor {{course_name}}, I'd suggest comparing three things before considering a different tee sheet: the full cost, the tasks your staff handles every day, and the work needed to be ready for opening day.\n\nI can put TeeAhead's side on one page so you have something useful to weigh against your current setup.\n\nWould you like me to send that over?\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0005-4000-8000-000000000005",
+    "name": "Michigan Winter: 05 Follow-Up - Right person",
+    "subject": "who handles the tee sheet?",
+    "use_when": "Optional routing note when the decision-maker is unconfirmed; use instead of another follow-up, not as an extra touch. Use reply mode.",
+    "body": "Hi {{first_name}},\n\nWho handles booking software decisions for {{course_name}}?\n\nI'm with TeeAhead in Metro Detroit. I'd like to get a tee sheet comparison to the right person while next season's plans are taking shape.\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0006-4000-8000-000000000006",
+    "name": "Michigan Winter: 06 Break-Up - Leave it here",
+    "subject": "leave it here",
+    "use_when": "Final note 7–10 business days after the follow-up. Stop afterward; no automatic spring restart. Use reply mode.",
+    "body": "Hi {{first_name}},\n\nI'll leave it here after this note.\n\nIf a tee sheet comparison becomes useful while you're planning next season at {{course_name}}, I'd be glad to pick this up.\n\nIf you'd rather I not follow up again, just let me know and I'll update my notes.\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0007-4000-8000-000000000007",
+    "name": "Michigan Winter: 07 Re-Engage - Previously said offseason",
+    "subject": "the offseason conversation",
+    "use_when": "Only when the contact actually asked to revisit in the offseason. Confirm the conversation in CRM history.",
+    "body": "Hi {{first_name}},\n\nYou mentioned the offseason would be a better time to talk about TeeAhead for {{course_name}}, so I'm following up now.\n\nWe can start with one booking workflow your team would want to improve and see whether there's enough value to consider a change before spring.\n\nIs now a good time to pick that up?\n\n{{sender_name}}\nTeeAhead"
+  },
+  {
+    "id": "2b11e026-0008-4000-8000-000000000008",
+    "name": "Michigan Winter: 08 Demo - After a positive reply",
+    "subject": "a closer look at TeeAhead",
+    "use_when": "Only after an interested reply. Use reply mode and replace the final question with two real available times when possible.",
+    "body": "Hi {{first_name}},\n\nGlad you're open to a look. Let's keep it to 15 minutes and focus on how {{course_name}} handles bookings today, what you'd want to improve, and whether TeeAhead fits.\n\nI'll walk through the relevant workflow and the costs, and we can identify what would need checking before any change.\n\nWhat day next week works best for you?\n\n{{sender_name}}\nTeeAhead"
+  }
+]
